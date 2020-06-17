@@ -381,7 +381,7 @@ var global = __webpack_require__(4);
 var hide = __webpack_require__(7);
 var has = __webpack_require__(12);
 var SRC = __webpack_require__(18)('src');
-var $toString = __webpack_require__(111);
+var $toString = __webpack_require__(112);
 var TO_STRING = 'toString';
 var TPL = ('' + $toString).split(TO_STRING);
 
@@ -3189,7 +3189,7 @@ module.exports = Array.isArray || function isArray(arg) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject = __webpack_require__(10);
-var dPs = __webpack_require__(117);
+var dPs = __webpack_require__(118);
 var enumBugKeys = __webpack_require__(47);
 var IE_PROTO = __webpack_require__(46)('IE_PROTO');
 var Empty = function () { /* empty */ };
@@ -3204,7 +3204,7 @@ var createDict = function () {
   var gt = '>';
   var iframeDocument;
   iframe.style.display = 'none';
-  __webpack_require__(118).appendChild(iframe);
+  __webpack_require__(119).appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
   // createDict = iframe.contentWindow.Object;
   // html.removeChild(iframe);
@@ -7491,9 +7491,31 @@ exports.types = types;
 /* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var dP = __webpack_require__(5).f;
+var FProto = Function.prototype;
+var nameRE = /^\s*function ([^ (]*)/;
+var NAME = 'name';
+
+// 19.2.4.2 name
+NAME in FProto || __webpack_require__(3) && dP(FProto, NAME, {
+  configurable: true,
+  get: function () {
+    try {
+      return ('' + this).match(nameRE)[1];
+    } catch (e) {
+      return '';
+    }
+  }
+});
+
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
-__webpack_require__(110);
+__webpack_require__(111);
 var anObject = __webpack_require__(10);
 var $flags = __webpack_require__(71);
 var DESCRIPTORS = __webpack_require__(3);
@@ -7520,7 +7542,7 @@ if (__webpack_require__(6)(function () { return $toString.call({ source: 'a', fl
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 21.2.5.3 get RegExp.prototype.flags()
@@ -7531,14 +7553,14 @@ if (__webpack_require__(3) && /./g.flags != 'g') __webpack_require__(5).f(RegExp
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(33)('native-function-to-string', Function.toString);
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var DateProto = Date.prototype;
@@ -7556,14 +7578,14 @@ if (new Date(NaN) + '' != INVALID_DATE) {
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(72)('asyncIterator');
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7574,7 +7596,7 @@ var has = __webpack_require__(12);
 var DESCRIPTORS = __webpack_require__(3);
 var $export = __webpack_require__(8);
 var redefine = __webpack_require__(11);
-var META = __webpack_require__(115).KEY;
+var META = __webpack_require__(116).KEY;
 var $fails = __webpack_require__(6);
 var shared = __webpack_require__(33);
 var setToStringTag = __webpack_require__(35);
@@ -7582,7 +7604,7 @@ var uid = __webpack_require__(18);
 var wks = __webpack_require__(2);
 var wksExt = __webpack_require__(73);
 var wksDefine = __webpack_require__(72);
-var enumKeys = __webpack_require__(116);
+var enumKeys = __webpack_require__(117);
 var isArray = __webpack_require__(48);
 var anObject = __webpack_require__(10);
 var isObject = __webpack_require__(17);
@@ -7591,7 +7613,7 @@ var toIObject = __webpack_require__(19);
 var toPrimitive = __webpack_require__(32);
 var createDesc = __webpack_require__(20);
 var _create = __webpack_require__(49);
-var gOPNExt = __webpack_require__(119);
+var gOPNExt = __webpack_require__(120);
 var $GOPD = __webpack_require__(78);
 var $GOPS = __webpack_require__(77);
 var $DP = __webpack_require__(5);
@@ -7816,7 +7838,7 @@ setToStringTag(global.JSON, 'JSON', true);
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var META = __webpack_require__(18)('meta');
@@ -7875,7 +7897,7 @@ var meta = module.exports = {
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
@@ -7896,7 +7918,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(5);
@@ -7915,7 +7937,7 @@ module.exports = __webpack_require__(3) ? Object.defineProperties : function def
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var document = __webpack_require__(4).document;
@@ -7923,7 +7945,7 @@ module.exports = document && document.documentElement;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
@@ -7948,35 +7970,13 @@ module.exports.f = function getOwnPropertyNames(it) {
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
 var $export = __webpack_require__(8);
 
 $export($export.S, 'Array', { isArray: __webpack_require__(48) });
-
-
-/***/ }),
-/* 121 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP = __webpack_require__(5).f;
-var FProto = Function.prototype;
-var nameRE = /^\s*function ([^ (]*)/;
-var NAME = 'name';
-
-// 19.2.4.2 name
-NAME in FProto || __webpack_require__(3) && dP(FProto, NAME, {
-  configurable: true,
-  get: function () {
-    try {
-      return ('' + this).match(nameRE)[1];
-    } catch (e) {
-      return '';
-    }
-  }
-});
 
 
 /***/ }),
@@ -23523,23 +23523,23 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, "createRandomValueWorker", function() { return /* binding */ createRandomValueWorker; });
 __webpack_require__.d(__webpack_exports__, "serialize", function() { return /* binding */ serialize; });
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
+var es6_function_name = __webpack_require__(109);
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.regexp.to-string.js
-var es6_regexp_to_string = __webpack_require__(109);
+var es6_regexp_to_string = __webpack_require__(110);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.date.to-string.js
-var es6_date_to_string = __webpack_require__(112);
+var es6_date_to_string = __webpack_require__(113);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.symbol.async-iterator.js
-var es7_symbol_async_iterator = __webpack_require__(113);
+var es7_symbol_async_iterator = __webpack_require__(114);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.symbol.js
-var es6_symbol = __webpack_require__(114);
+var es6_symbol = __webpack_require__(115);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.is-array.js
-var es6_array_is_array = __webpack_require__(120);
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
-var es6_function_name = __webpack_require__(121);
+var es6_array_is_array = __webpack_require__(121);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom.iterable.js
 var web_dom_iterable = __webpack_require__(79);
@@ -23591,15 +23591,7 @@ var presets = {
 };
 function typeNames(types) {
   return Object.keys(types).sort();
-} // export function typeName<T>(type: Type<T>, types: Record<string, Type<T>>): string {
-//   console.log('typeName happening...');
-//   for (const [name, typ] of Object.entries(types)) {
-//     if (deepEqual(type, typ)) {
-//       return name;
-//     }
-//   }
-//   return "unknown";
-// }
+}
 // EXTERNAL MODULE: ./node_modules/@chainsafe/ssz/lib/index.js
 var lib = __webpack_require__(1);
 
@@ -23665,48 +23657,43 @@ function randomByteVector(length) {
 }
 
 function createRandomValue(type) {
-  try {
-    if (Object(lib["isNumberUintType"])(type)) {
-      return randomNumberUint(type.byteLength);
-    } else if (Object(lib["isBigIntUintType"])(type)) {
-      return randomBigUint(type.byteLength);
-    } else if (Object(lib["isBooleanType"])(type)) {
-      return randomBoolean();
-    } else if (Object(lib["isBitVectorType"])(type)) {
-      return randomBooleanArray(type.length);
-    } else if (Object(lib["isByteVectorType"])(type)) {
-      return randomByteVector(type.length);
-    } else if (Object(lib["isBitListType"])(type)) {
-      var listLength = Math.min(Math.floor(Math.random() * 16), type.limit);
-      return randomBooleanArray(listLength);
-    } else if (Object(lib["isListType"])(type)) {
-      var _listLength = Math.min(Math.floor(Math.random() * 16), type.limit);
+  if (Object(lib["isNumberUintType"])(type)) {
+    return randomNumberUint(type.byteLength);
+  } else if (Object(lib["isBigIntUintType"])(type)) {
+    return randomBigUint(type.byteLength);
+  } else if (Object(lib["isBooleanType"])(type)) {
+    return randomBoolean();
+  } else if (Object(lib["isBitVectorType"])(type)) {
+    return randomBooleanArray(type.length);
+  } else if (Object(lib["isByteVectorType"])(type)) {
+    return randomByteVector(type.length);
+  } else if (Object(lib["isBitListType"])(type)) {
+    var listLength = Math.min(Math.floor(Math.random() * 16), type.limit);
+    return randomBooleanArray(listLength);
+  } else if (Object(lib["isListType"])(type)) {
+    var _listLength = Math.min(Math.floor(Math.random() * 16), type.limit);
 
-      return Array.from({
-        length: _listLength
-      }, function () {
-        return createRandomValue(type.elementType);
-      });
-    } else if (Object(lib["isVectorType"])(type)) {
-      return Array.from({
-        length: type.length
-      }, function () {
-        return createRandomValue(type.elementType);
-      });
-    } else if (Object(lib["isContainerType"])(type)) {
-      var obj = {};
-      Object.entries(type.fields).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            fieldName = _ref2[0],
-            fieldType = _ref2[1];
+    return Array.from({
+      length: _listLength
+    }, function () {
+      return createRandomValue(type.elementType);
+    });
+  } else if (Object(lib["isVectorType"])(type)) {
+    return Array.from({
+      length: type.length
+    }, function () {
+      return createRandomValue(type.elementType);
+    });
+  } else if (Object(lib["isContainerType"])(type)) {
+    var obj = {};
+    Object.entries(type.fields).forEach(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 2),
+          fieldName = _ref2[0],
+          fieldType = _ref2[1];
 
-        obj[fieldName] = createRandomValue(fieldType);
-      });
-      return obj;
-    }
-  } catch (e) {
-    console.error(e.message, e.name);
-    return;
+      obj[fieldName] = createRandomValue(fieldType);
+    });
+    return obj;
   }
 }
 
@@ -23732,4 +23719,4 @@ addEventListener('message', function (e) {var _e$data = e.data,type = _e$data.ty
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=2cbb14bf60a93bdb584a.worker.js.map
+//# sourceMappingURL=df55b9eea463906acd92.worker.js.map
