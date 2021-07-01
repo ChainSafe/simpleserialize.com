@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 264);
+/******/ 	return __webpack_require__(__webpack_require__.s = 288);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,7 +92,7 @@
 
 
 if (true) {
-  module.exports = __webpack_require__(142);
+  module.exports = __webpack_require__(151);
 } else {}
 
 
@@ -110,7 +110,7 @@ if (true) {
 if (false) { var throwOnDirectAccess, ReactIs; } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(246)();
+  module.exports = __webpack_require__(270)();
 }
 
 
@@ -118,10 +118,59 @@ if (false) { var throwOnDirectAccess, ReactIs; } else {
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var global = __webpack_require__(5);
+var core = __webpack_require__(25);
+var hide = __webpack_require__(11);
+var redefine = __webpack_require__(17);
+var ctx = __webpack_require__(51);
+var PROTOTYPE = 'prototype';
+
+var $export = function (type, name, source) {
+  var IS_FORCED = type & $export.F;
+  var IS_GLOBAL = type & $export.G;
+  var IS_STATIC = type & $export.S;
+  var IS_PROTO = type & $export.P;
+  var IS_BIND = type & $export.B;
+  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {})[PROTOTYPE];
+  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+  var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
+  var key, own, out, exp;
+  if (IS_GLOBAL) source = name;
+  for (key in source) {
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    // export native or passed
+    out = (own ? target : source)[key];
+    // bind timers to global for call from export context
+    exp = IS_BIND && own ? ctx(out, global) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // extend global
+    if (target) redefine(target, key, out, type & $export.U);
+    // export
+    if (exports[key] != out) hide(exports, key, exp);
+    if (IS_PROTO && expProto[key] != out) expProto[key] = out;
+  }
+};
+global.core = core;
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library`
+module.exports = $export;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
-var YAMLException = __webpack_require__(42);
+var YAMLException = __webpack_require__(46);
 
 var TYPE_CONSTRUCTOR_OPTIONS = [
   'kind',
@@ -183,11 +232,11 @@ module.exports = Type;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var store = __webpack_require__(45)('wks');
-var uid = __webpack_require__(23);
+var store = __webpack_require__(50)('wks');
+var uid = __webpack_require__(21);
 var Symbol = __webpack_require__(5).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
 
@@ -200,7 +249,29 @@ $exports.store = store;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, exports) {
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(9)(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -219,7 +290,7 @@ Object.defineProperty(exports, "hash", {
   }
 });
 
-var _interface = __webpack_require__(161);
+var _interface = __webpack_require__(169);
 
 Object.keys(_interface).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -245,7 +316,7 @@ Object.keys(_types).forEach(function (key) {
   });
 });
 
-var _backings = __webpack_require__(21);
+var _backings = __webpack_require__(84);
 
 Object.keys(_backings).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -258,100 +329,42 @@ Object.keys(_backings).forEach(function (key) {
   });
 });
 
-var _compat = __webpack_require__(59);
+var _compat = __webpack_require__(87);
+
+var _byteArray = __webpack_require__(24);
+
+Object.keys(_byteArray).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _byteArray[key];
+    }
+  });
+});
+
+var _tree = __webpack_require__(112);
+
+Object.keys(_tree).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _tree[key];
+    }
+  });
+});
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self
-  // eslint-disable-next-line no-new-func
-  : Function('return this')();
-if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(8)(function () {
-  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-});
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__(5);
-var core = __webpack_require__(25);
-var hide = __webpack_require__(10);
-var redefine = __webpack_require__(16);
-var ctx = __webpack_require__(46);
-var PROTOTYPE = 'prototype';
-
-var $export = function (type, name, source) {
-  var IS_FORCED = type & $export.F;
-  var IS_GLOBAL = type & $export.G;
-  var IS_STATIC = type & $export.S;
-  var IS_PROTO = type & $export.P;
-  var IS_BIND = type & $export.B;
-  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {})[PROTOTYPE];
-  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
-  var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
-  var key, own, out, exp;
-  if (IS_GLOBAL) source = name;
-  for (key in source) {
-    // contains in native
-    own = !IS_FORCED && target && target[key] !== undefined;
-    // export native or passed
-    out = (own ? target : source)[key];
-    // bind timers to global for call from export context
-    exp = IS_BIND && own ? ctx(out, global) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
-    // extend global
-    if (target) redefine(target, key, out, type & $export.U);
-    // export
-    if (exports[key] != out) hide(exports, key, exp);
-    if (IS_PROTO && expProto[key] != out) expProto[key] = out;
-  }
-};
-global.core = core;
-// type bitmap
-$export.F = 1;   // forced
-$export.G = 2;   // global
-$export.S = 4;   // static
-$export.P = 8;   // proto
-$export.B = 16;  // bind
-$export.W = 32;  // wrap
-$export.U = 64;  // safe
-$export.R = 128; // real proto method for `library`
-module.exports = $export;
-
-
-/***/ }),
 /* 8 */
-/***/ (function(module, exports) {
-
-module.exports = function (exec) {
-  try {
-    return !!exec();
-  } catch (e) {
-    return true;
-  }
-};
-
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(12);
-var IE8_DOM_DEFINE = __webpack_require__(95);
-var toPrimitive = __webpack_require__(44);
+var IE8_DOM_DEFINE = __webpack_require__(97);
+var toPrimitive = __webpack_require__(49);
 var dP = Object.defineProperty;
 
 exports.f = __webpack_require__(6) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
@@ -368,11 +381,178 @@ exports.f = __webpack_require__(6) ? Object.defineProperty : function defineProp
 
 
 /***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = function (exec) {
+  try {
+    return !!exec();
+  } catch (e) {
+    return true;
+  }
+};
+
+
+/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dP = __webpack_require__(9);
-var createDesc = __webpack_require__(36);
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isTypeOf = isTypeOf;
+exports.Type = void 0;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/* eslint-disable @typescript-eslint/member-ordering */
+
+/* eslint-disable @typescript-eslint/camelcase */
+
+/**
+ * Check if `type` is an instance of `typeSymbol` type
+ *
+ * Used by various isFooType functions
+ */
+function isTypeOf(type, typeSymbol) {
+  return type._typeSymbols.has(typeSymbol);
+}
+/**
+ * A Type is either a BasicType of a CompositeType
+ */
+
+
+class Type {
+  /**
+   * Symbols used to track the identity of a type
+   *
+   * Used by various isFooType functions
+   */
+  constructor() {
+    _defineProperty(this, "_typeSymbols", void 0);
+
+    this._typeSymbols = new Set();
+  }
+
+  /**
+   * Valid value assertion
+   */
+  assertValidValue(value) {
+    return this.struct_assertValidValue(value);
+  }
+  /**
+   * Default constructor
+   */
+
+
+  defaultValue() {
+    return this.struct_defaultValue();
+  }
+  /**
+   * Clone / copy
+   */
+
+
+  clone(value) {
+    return this.struct_clone(value);
+  }
+  /**
+   * Equality
+   */
+
+
+  equals(value1, value2) {
+    return this.struct_equals(value1, value2);
+  } // Serialization / Deserialization
+
+  /**
+   * Check if type has a variable number of elements (or subelements)
+   *
+   * For basic types, this is always false
+   */
+
+
+  /**
+   * Serialized byte length
+   */
+  size(value) {
+    return this.struct_getSerializedLength(value);
+  }
+  /**
+   * Low-level deserialization
+   */
+
+
+  fromBytes(data, start, end) {
+    return this.struct_deserializeFromBytes(data, start, end);
+  }
+  /**
+   * Deserialization
+   */
+
+
+  deserialize(data) {
+    return this.fromBytes(data, 0, data.length);
+  }
+  /**
+   * Low-level serialization
+   *
+   * Serializes to a pre-allocated Uint8Array
+   */
+
+
+  toBytes(value, output, offset) {
+    return this.struct_serializeToBytes(value, output, offset);
+  }
+  /**
+   * Serialization
+   */
+
+
+  serialize(value) {
+    const output = new Uint8Array(this.size(value));
+    this.toBytes(value, output, 0);
+    return output;
+  }
+  /**
+   * Merkleization
+   */
+
+
+  hashTreeRoot(value) {
+    return this.struct_hashTreeRoot(value);
+  }
+  /**
+   * Convert from JSON-serializable object
+   */
+
+
+  fromJson(data, options) {
+    return this.struct_convertFromJson(data, options);
+  }
+  /**
+   * Convert to JSON-serializable object
+   */
+
+
+  toJson(value, options) {
+    return this.struct_convertToJson(value, options);
+  }
+
+}
+
+exports.Type = Type;
+//# sourceMappingURL=type.js.map
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(8);
+var createDesc = __webpack_require__(26);
 module.exports = __webpack_require__(6) ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
 } : function (object, key, value) {
@@ -382,7 +562,18 @@ module.exports = __webpack_require__(6) ? function (object, key, value) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(14);
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -766,18 +957,7 @@ var serialize_browser_esm_serializeStyles = function serializeStyles(args, regis
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(13);
-module.exports = function (it) {
-  if (!isObject(it)) throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-
-/***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -786,7 +966,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -815,12 +995,12 @@ if (true) {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(143);
+  module.exports = __webpack_require__(152);
 } else {}
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -869,14 +1049,14 @@ var insertStyles = function insertStyles(cache, serialized, isStringTag) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(5);
-var hide = __webpack_require__(10);
-var has = __webpack_require__(18);
-var SRC = __webpack_require__(23)('src');
-var $toString = __webpack_require__(140);
+var hide = __webpack_require__(11);
+var has = __webpack_require__(19);
+var SRC = __webpack_require__(21)('src');
+var $toString = __webpack_require__(149);
 var TO_STRING = 'toString';
 var TPL = ('' + $toString).split(TO_STRING);
 
@@ -906,18 +1086,18 @@ __webpack_require__(25).inspectSource = function (it) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.13 ToObject(argument)
-var defined = __webpack_require__(47);
+var defined = __webpack_require__(52);
 module.exports = function (it) {
   return Object(defined(it));
 };
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 var hasOwnProperty = {}.hasOwnProperty;
@@ -927,7 +1107,7 @@ module.exports = function (it, key) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.15 ToLength
@@ -939,7 +1119,236 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
+/***/ (function(module, exports) {
+
+var id = 0;
+var px = Math.random();
+module.exports = function (key) {
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(72);
+var defined = __webpack_require__(52);
+module.exports = function (it) {
+  return IObject(defined(it));
+};
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// 19.1.3.6 Object.prototype.toString()
+var classof = __webpack_require__(60);
+var test = {};
+test[__webpack_require__(4)('toStringTag')] = 'z';
+if (test + '' != '[object z]') {
+  __webpack_require__(17)(Object.prototype, 'toString', function toString() {
+    return '[object ' + classof(this) + ']';
+  }, true);
+}
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toHexString = toHexString;
+exports.fromHexString = fromHexString;
+exports.byteArrayEquals = byteArrayEquals;
+exports.getByteBits = getByteBits;
+// Caching this info costs about ~1000 bytes and speeds up toHexString() by x6
+const hexByByte = [];
+
+function toHexString(bytes) {
+  let hex = "0x";
+
+  for (const byte of bytes) {
+    if (!hexByByte[byte]) {
+      hexByByte[byte] = byte < 16 ? "0" + byte.toString(16) : byte.toString(16);
+    }
+
+    hex += hexByByte[byte];
+  }
+
+  return hex;
+}
+
+function fromHexString(hex) {
+  if (typeof hex !== "string") {
+    throw new Error("Expected hex string to be a string");
+  }
+
+  if (hex.startsWith("0x")) {
+    hex = hex.slice(2);
+  }
+
+  if (hex.length % 2 !== 0) {
+    throw new Error("Expected an even number of characters");
+  }
+
+  const bytes = [];
+
+  for (let i = 0, len = hex.length; i < len; i += 2) {
+    const byte = parseInt(hex.slice(i, i + 2), 16);
+    bytes.push(byte);
+  }
+
+  return new Uint8Array(bytes);
+}
+
+function byteArrayEquals(a, b) {
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+
+  return true;
+}
+
+function getByteBits(target, offset) {
+  const byte = target[offset];
+
+  if (!byte) {
+    return [false, false, false, false, false, false, false, false];
+  }
+
+  const bits = Array.prototype.map.call(byte.toString(2).padStart(8, "0"), c => c === "1" ? true : false).reverse();
+  return bits;
+}
+//# sourceMappingURL=byteArray.js.map
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.6.11' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = function (bitmap, value) {
+  return {
+    enumerable: !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable: !(bitmap & 4),
+    value: value
+  };
+};
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = false;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys = __webpack_require__(99);
+var enumBugKeys = __webpack_require__(76);
+
+module.exports = Object.keys || function keys(O) {
+  return $keys(O, enumBugKeys);
+};
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+// 7.1.4 ToInteger
+var ceil = Math.ceil;
+var floor = Math.floor;
+module.exports = function (it) {
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+__webpack_require__(159);
+var anObject = __webpack_require__(12);
+var $flags = __webpack_require__(77);
+var DESCRIPTORS = __webpack_require__(6);
+var TO_STRING = 'toString';
+var $toString = /./[TO_STRING];
+
+var define = function (fn) {
+  __webpack_require__(17)(RegExp.prototype, TO_STRING, fn, true);
+};
+
+// 21.2.5.14 RegExp.prototype.toString()
+if (__webpack_require__(9)(function () { return $toString.call({ source: 'a', flags: 'b' }) != '/a/b'; })) {
+  define(function toString() {
+    var R = anObject(this);
+    return '/'.concat(R.source, '/',
+      'flags' in R ? R.flags : !DESCRIPTORS && R instanceof RegExp ? $flags.call(R) : undefined);
+  });
+// FF44- RegExp#toString has a wrong name
+} else if ($toString.name != TO_STRING) {
+  define(function toString() {
+    return $toString.call(this);
+  });
+}
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var DateProto = Date.prototype;
+var INVALID_DATE = 'Invalid Date';
+var TO_STRING = 'toString';
+var $toString = DateProto[TO_STRING];
+var getTime = DateProto.getTime;
+if (new Date(NaN) + '' != INVALID_DATE) {
+  __webpack_require__(17)(DateProto, TO_STRING, function toString() {
+    var value = getTime.call(this);
+    // eslint-disable-next-line no-self-compare
+    return value === value ? $toString.call(this) : INVALID_DATE;
+  });
+}
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+module.exports = {};
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -949,7 +1358,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _abstract = __webpack_require__(76);
+var _abstract = __webpack_require__(82);
 
 Object.keys(_abstract).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -985,7 +1394,7 @@ Object.keys(_uint).forEach(function (key) {
   });
 });
 
-var _wellKnown = __webpack_require__(162);
+var _wellKnown = __webpack_require__(170);
 
 Object.keys(_wellKnown).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -999,79 +1408,7 @@ Object.keys(_wellKnown).forEach(function (key) {
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _object = __webpack_require__(164);
-
-Object.keys(_object).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _object[key];
-    }
-  });
-});
-
-var _structural = __webpack_require__(165);
-
-Object.keys(_structural).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _structural[key];
-    }
-  });
-});
-
-var _tree = __webpack_require__(184);
-
-Object.keys(_tree).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _tree[key];
-    }
-  });
-});
-
-var _byteArray = __webpack_require__(40);
-
-Object.keys(_byteArray).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _byteArray[key];
-    }
-  });
-});
-
-var _backedValue = __webpack_require__(83);
-
-Object.keys(_backedValue).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _backedValue[key];
-    }
-  });
-});
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 22 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1085,9 +1422,9 @@ Object.keys(_backedValue).forEach(function (key) {
 
 
 
-var base64 = __webpack_require__(166)
-var ieee754 = __webpack_require__(167)
-var isArray = __webpack_require__(168)
+var base64 = __webpack_require__(177)
+var ieee754 = __webpack_require__(178)
+var isArray = __webpack_require__(179)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -2868,144 +3205,106 @@ function isnan (val) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(108)))
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-var id = 0;
-var px = Math.random();
-module.exports = function (key) {
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-
-
-/***/ }),
-/* 24 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-// 19.1.3.6 Object.prototype.toString()
-var classof = __webpack_require__(56);
-var test = {};
-test[__webpack_require__(3)('toStringTag')] = 'z';
-if (test + '' != '[object z]') {
-  __webpack_require__(16)(Object.prototype, 'toString', function toString() {
-    return '[object ' + classof(this) + ']';
-  }, true);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.compose = exports.identity = exports.LeafNode = exports.BranchNode = exports.Node = void 0;
+const hash_1 = __webpack_require__(113);
+const ERR_INVALID_TREE = "Invalid tree";
+const ERR_NOT_IMPLEMENTED = "Not implemented";
+class Node {
+    get root() {
+        throw new Error(ERR_NOT_IMPLEMENTED);
+    }
+    isLeaf() {
+        throw new Error(ERR_NOT_IMPLEMENTED);
+    }
+    get left() {
+        throw new Error(ERR_NOT_IMPLEMENTED);
+    }
+    get right() {
+        throw new Error(ERR_NOT_IMPLEMENTED);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rebindLeft(left) {
+        throw new Error(ERR_NOT_IMPLEMENTED);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rebindRight(right) {
+        throw new Error(ERR_NOT_IMPLEMENTED);
+    }
 }
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-var core = module.exports = { version: '2.6.11' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-module.exports = false;
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(97);
-var enumBugKeys = __webpack_require__(68);
-
-module.exports = Object.keys || function keys(O) {
-  return $keys(O, enumBugKeys);
-};
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(65);
-var defined = __webpack_require__(47);
-module.exports = function (it) {
-  return IObject(defined(it));
-};
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
-// 7.1.4 ToInteger
-var ceil = Math.ceil;
-var floor = Math.floor;
-module.exports = function (it) {
-  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-};
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-__webpack_require__(151);
-var anObject = __webpack_require__(12);
-var $flags = __webpack_require__(71);
-var DESCRIPTORS = __webpack_require__(6);
-var TO_STRING = 'toString';
-var $toString = /./[TO_STRING];
-
-var define = function (fn) {
-  __webpack_require__(16)(RegExp.prototype, TO_STRING, fn, true);
-};
-
-// 21.2.5.14 RegExp.prototype.toString()
-if (__webpack_require__(8)(function () { return $toString.call({ source: 'a', flags: 'b' }) != '/a/b'; })) {
-  define(function toString() {
-    var R = anObject(this);
-    return '/'.concat(R.source, '/',
-      'flags' in R ? R.flags : !DESCRIPTORS && R instanceof RegExp ? $flags.call(R) : undefined);
-  });
-// FF44- RegExp#toString has a wrong name
-} else if ($toString.name != TO_STRING) {
-  define(function toString() {
-    return $toString.call(this);
-  });
+exports.Node = Node;
+class BranchNode extends Node {
+    constructor(_left, _right) {
+        super();
+        this._left = _left;
+        this._right = _right;
+        this._root = null;
+        if (!_left || !_right)
+            throw new Error(ERR_INVALID_TREE);
+    }
+    get root() {
+        if (!this._root) {
+            this._root = hash_1.hash(this.left.root, this.right.root);
+        }
+        return this._root;
+    }
+    isLeaf() {
+        return false;
+    }
+    get left() {
+        return this._left;
+    }
+    set left(n) {
+        this._left = n;
+    }
+    get right() {
+        return this._right;
+    }
+    set right(n) {
+        this._right = n;
+    }
+    rebindLeft(left) {
+        return new BranchNode(left, this.right);
+    }
+    rebindRight(right) {
+        return new BranchNode(this.left, right);
+    }
 }
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var DateProto = Date.prototype;
-var INVALID_DATE = 'Invalid Date';
-var TO_STRING = 'toString';
-var $toString = DateProto[TO_STRING];
-var getTime = DateProto.getTime;
-if (new Date(NaN) + '' != INVALID_DATE) {
-  __webpack_require__(16)(DateProto, TO_STRING, function toString() {
-    var value = getTime.call(this);
-    // eslint-disable-next-line no-self-compare
-    return value === value ? $toString.call(this) : INVALID_DATE;
-  });
+exports.BranchNode = BranchNode;
+class LeafNode extends Node {
+    constructor(_root) {
+        super();
+        this._root = _root;
+        if (_root.length !== 32)
+            throw new Error(ERR_INVALID_TREE);
+    }
+    get root() {
+        return this._root;
+    }
+    isLeaf() {
+        return true;
+    }
 }
+exports.LeafNode = LeafNode;
+function identity(n) {
+    return n;
+}
+exports.identity = identity;
+function compose(inner, outer) {
+    return function (n) {
+        return outer(inner(n));
+    };
+}
+exports.compose = compose;
 
 
 /***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-module.exports = {};
-
-
-/***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3071,7 +3370,7 @@ module.exports.extend         = extend;
 
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3079,9 +3378,9 @@ module.exports.extend         = extend;
 
 /*eslint-disable max-len*/
 
-var common        = __webpack_require__(33);
-var YAMLException = __webpack_require__(42);
-var Type          = __webpack_require__(2);
+var common        = __webpack_require__(36);
+var YAMLException = __webpack_require__(46);
+var Type          = __webpack_require__(3);
 
 
 function compileList(schema, name, result) {
@@ -3186,35 +3485,7 @@ module.exports = Schema;
 
 
 /***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-
-var yaml = __webpack_require__(196);
-
-
-module.exports = yaml;
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports) {
-
-module.exports = function (bitmap, value) {
-  return {
-    enumerable: !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable: !(bitmap & 4),
-    value: value
-  };
-};
-
-
-/***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -3224,402 +3495,39 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(12);
-var dPs = __webpack_require__(148);
-var enumBugKeys = __webpack_require__(68);
-var IE_PROTO = __webpack_require__(67)('IE_PROTO');
-var Empty = function () { /* empty */ };
-var PROTOTYPE = 'prototype';
-
-// Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function () {
-  // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(96)('iframe');
-  var i = enumBugKeys.length;
-  var lt = '<';
-  var gt = '>';
-  var iframeDocument;
-  iframe.style.display = 'none';
-  __webpack_require__(149).appendChild(iframe);
-  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-  // createDict = iframe.contentWindow.Object;
-  // html.removeChild(iframe);
-  iframeDocument = iframe.contentWindow.document;
-  iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-  iframeDocument.close();
-  createDict = iframeDocument.F;
-  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
-  return createDict();
-};
-
-module.exports = Object.create || function create(O, Properties) {
-  var result;
-  if (O !== null) {
-    Empty[PROTOTYPE] = anObject(O);
-    result = new Empty();
-    Empty[PROTOTYPE] = null;
-    // add "__proto__" for Object.getPrototypeOf polyfill
-    result[IE_PROTO] = O;
-  } else result = createDict();
-  return Properties === undefined ? result : dPs(result, Properties);
-};
-
-
-/***/ }),
 /* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var addToUnscopables = __webpack_require__(154);
-var step = __webpack_require__(155);
-var Iterators = __webpack_require__(32);
-var toIObject = __webpack_require__(28);
-
-// 22.1.3.4 Array.prototype.entries()
-// 22.1.3.13 Array.prototype.keys()
-// 22.1.3.29 Array.prototype.values()
-// 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(156)(Array, 'Array', function (iterated, kind) {
-  this._t = toIObject(iterated); // target
-  this._i = 0;                   // next index
-  this._k = kind;                // kind
-// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-}, function () {
-  var O = this._t;
-  var kind = this._k;
-  var index = this._i++;
-  if (!O || index >= O.length) {
-    this._t = undefined;
-    return step(1);
-  }
-  if (kind == 'keys') return step(0, index);
-  if (kind == 'values') return step(0, O[index]);
-  return step(0, [index, O[index]]);
-}, 'values');
-
-// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-Iterators.Arguments = Iterators.Array;
-
-addToUnscopables('keys');
-addToUnscopables('values');
-addToUnscopables('entries');
-
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _abstract = __webpack_require__(82);
-
-Object.keys(_abstract).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _abstract[key];
-    }
-  });
-});
-
-var _array = __webpack_require__(84);
-
-Object.keys(_array).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _array[key];
-    }
-  });
-});
-
-var _vector = __webpack_require__(176);
-
-Object.keys(_vector).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _vector[key];
-    }
-  });
-});
-
-var _list = __webpack_require__(177);
-
-Object.keys(_list).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _list[key];
-    }
-  });
-});
-
-var _container = __webpack_require__(178);
-
-Object.keys(_container).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _container[key];
-    }
-  });
-});
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(114));
-__export(__webpack_require__(115));
-__export(__webpack_require__(60));
-__export(__webpack_require__(86));
-__export(__webpack_require__(185));
-__export(__webpack_require__(186));
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// YAML error class. http://stackoverflow.com/questions/8458984
-//
-
-
-function YAMLException(reason, mark) {
-  // Super constructor
-  Error.call(this);
-
-  this.name = 'YAMLException';
-  this.reason = reason;
-  this.mark = mark;
-  this.message = (this.reason || '(unknown reason)') + (this.mark ? ' ' + this.mark.toString() : '');
-
-  // Include stack trace in error object
-  if (Error.captureStackTrace) {
-    // Chrome and NodeJS
-    Error.captureStackTrace(this, this.constructor);
-  } else {
-    // FF, IE 10+ and Safari 6+. Fallback for others
-    this.stack = (new Error()).stack || '';
-  }
-}
-
-
-// Inherit from Error
-YAMLException.prototype = Object.create(Error.prototype);
-YAMLException.prototype.constructor = YAMLException;
-
-
-YAMLException.prototype.toString = function toString(compact) {
-  var result = this.name + ': ';
-
-  result += this.reason || '(unknown reason)';
-
-  if (!compact && this.mark) {
-    result += ' ' + this.mark.toString();
-  }
-
-  return result;
-};
-
-
-module.exports = YAMLException;
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// JS-YAML's default schema for `safeLoad` function.
-// It is not described in the YAML specification.
-//
-// This schema is based on standard YAML's Core schema and includes most of
-// extra types described at YAML tag repository. (http://yaml.org/type/)
-
-
-
-
-
-var Schema = __webpack_require__(34);
-
-
-module.exports = new Schema({
-  include: [
-    __webpack_require__(119)
-  ],
-  implicit: [
-    __webpack_require__(206),
-    __webpack_require__(207)
-  ],
-  explicit: [
-    __webpack_require__(208),
-    __webpack_require__(209),
-    __webpack_require__(210),
-    __webpack_require__(211)
-  ]
-});
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(13);
-// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-// and the second argument - flag - preferred type is a string
-module.exports = function (it, S) {
-  if (!isObject(it)) return it;
-  var fn, val;
-  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
-  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
-  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
-  throw TypeError("Can't convert object to primitive value");
-};
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var core = __webpack_require__(25);
-var global = __webpack_require__(5);
-var SHARED = '__core-js_shared__';
-var store = global[SHARED] || (global[SHARED] = {});
-
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
-})('versions', []).push({
-  version: core.version,
-  mode: __webpack_require__(26) ? 'pure' : 'global',
-  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
-});
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// optional / simple context binding
-var aFunction = __webpack_require__(37);
-module.exports = function (fn, that, length) {
-  aFunction(fn);
-  if (that === undefined) return fn;
-  switch (length) {
-    case 1: return function (a) {
-      return fn.call(that, a);
-    };
-    case 2: return function (a, b) {
-      return fn.call(that, a, b);
-    };
-    case 3: return function (a, b, c) {
-      return fn.call(that, a, b, c);
-    };
-  }
-  return function (/* ...args */) {
-    return fn.apply(that, arguments);
-  };
-};
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports) {
-
-// 7.2.1 RequireObjectCoercible(argument)
-module.exports = function (it) {
-  if (it == undefined) throw TypeError("Can't call method on  " + it);
-  return it;
-};
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toInteger = __webpack_require__(29);
-var max = Math.max;
-var min = Math.min;
-module.exports = function (index, length) {
-  index = toInteger(index);
-  return index < 0 ? max(index + length, 0) : min(index, length);
-};
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports) {
-
-exports.f = {}.propertyIsEnumerable;
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(100)('asyncIterator');
-
-
-/***/ }),
-/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // ECMAScript 6 symbols shim
 var global = __webpack_require__(5);
-var has = __webpack_require__(18);
+var has = __webpack_require__(19);
 var DESCRIPTORS = __webpack_require__(6);
-var $export = __webpack_require__(7);
-var redefine = __webpack_require__(16);
-var META = __webpack_require__(146).KEY;
-var $fails = __webpack_require__(8);
-var shared = __webpack_require__(45);
-var setToStringTag = __webpack_require__(52);
-var uid = __webpack_require__(23);
-var wks = __webpack_require__(3);
-var wksExt = __webpack_require__(101);
-var wksDefine = __webpack_require__(100);
-var enumKeys = __webpack_require__(147);
-var isArray = __webpack_require__(102);
+var $export = __webpack_require__(2);
+var redefine = __webpack_require__(17);
+var META = __webpack_require__(155).KEY;
+var $fails = __webpack_require__(9);
+var shared = __webpack_require__(50);
+var setToStringTag = __webpack_require__(57);
+var uid = __webpack_require__(21);
+var wks = __webpack_require__(4);
+var wksExt = __webpack_require__(102);
+var wksDefine = __webpack_require__(101);
+var enumKeys = __webpack_require__(156);
+var isArray = __webpack_require__(103);
 var anObject = __webpack_require__(12);
-var isObject = __webpack_require__(13);
-var toObject = __webpack_require__(17);
-var toIObject = __webpack_require__(28);
-var toPrimitive = __webpack_require__(44);
-var createDesc = __webpack_require__(36);
-var _create = __webpack_require__(38);
-var gOPNExt = __webpack_require__(150);
-var $GOPD = __webpack_require__(70);
-var $GOPS = __webpack_require__(69);
-var $DP = __webpack_require__(9);
-var $keys = __webpack_require__(27);
+var isObject = __webpack_require__(14);
+var toObject = __webpack_require__(18);
+var toIObject = __webpack_require__(22);
+var toPrimitive = __webpack_require__(49);
+var createDesc = __webpack_require__(26);
+var _create = __webpack_require__(40);
+var gOPNExt = __webpack_require__(158);
+var $GOPD = __webpack_require__(58);
+var $GOPS = __webpack_require__(54);
+var $DP = __webpack_require__(8);
+var $keys = __webpack_require__(28);
 var gOPD = $GOPD.f;
 var dP = $DP.f;
 var gOPN = gOPNExt.f;
@@ -3742,11 +3650,11 @@ if (!USE_NATIVE) {
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
-  __webpack_require__(53).f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(49).f = $propertyIsEnumerable;
+  __webpack_require__(41).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(55).f = $propertyIsEnumerable;
   $GOPS.f = $getOwnPropertySymbols;
 
-  if (DESCRIPTORS && !__webpack_require__(26)) {
+  if (DESCRIPTORS && !__webpack_require__(27)) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
@@ -3830,7 +3738,7 @@ $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
 });
 
 // 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(10)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(11)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 // 19.4.3.5 Symbol.prototype[@@toStringTag]
 setToStringTag($Symbol, 'Symbol');
 // 20.2.1.9 Math[@@toStringTag]
@@ -3840,25 +3748,59 @@ setToStringTag(global.JSON, 'JSON', true);
 
 
 /***/ }),
-/* 52 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var def = __webpack_require__(9).f;
-var has = __webpack_require__(18);
-var TAG = __webpack_require__(3)('toStringTag');
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject = __webpack_require__(12);
+var dPs = __webpack_require__(104);
+var enumBugKeys = __webpack_require__(76);
+var IE_PROTO = __webpack_require__(75)('IE_PROTO');
+var Empty = function () { /* empty */ };
+var PROTOTYPE = 'prototype';
 
-module.exports = function (it, tag, stat) {
-  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function () {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = __webpack_require__(98)('iframe');
+  var i = enumBugKeys.length;
+  var lt = '<';
+  var gt = '>';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  __webpack_require__(157).appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+  if (O !== null) {
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty();
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
 };
 
 
 /***/ }),
-/* 53 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = __webpack_require__(97);
-var hiddenKeys = __webpack_require__(68).concat('length', 'prototype');
+var $keys = __webpack_require__(99);
+var hiddenKeys = __webpack_require__(76).concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return $keys(O, hiddenKeys);
@@ -3866,30 +3808,392 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 
 
 /***/ }),
-/* 54 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(7);
+var $export = __webpack_require__(2);
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !__webpack_require__(6), 'Object', { defineProperty: __webpack_require__(9).f });
+$export($export.S + $export.F * !__webpack_require__(6), 'Object', { defineProperty: __webpack_require__(8).f });
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var addToUnscopables = __webpack_require__(162);
+var step = __webpack_require__(163);
+var Iterators = __webpack_require__(32);
+var toIObject = __webpack_require__(22);
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+module.exports = __webpack_require__(164)(Array, 'Array', function (iterated, kind) {
+  this._t = toIObject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function () {
+  var O = this._t;
+  var kind = this._k;
+  var index = this._i++;
+  if (!O || index >= O.length) {
+    this._t = undefined;
+    return step(1);
+  }
+  if (kind == 'keys') return step(0, index);
+  if (kind == 'values') return step(0, O[index]);
+  return step(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+Iterators.Arguments = Iterators.Array;
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var fails = __webpack_require__(9);
+
+module.exports = function (method, arg) {
+  return !!method && fails(function () {
+    // eslint-disable-next-line no-useless-call
+    arg ? method.call(null, function () { /* empty */ }, 1) : method.call(null);
+  });
+};
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(__webpack_require__(65), exports);
+__exportStar(__webpack_require__(113), exports);
+__exportStar(__webpack_require__(35), exports);
+__exportStar(__webpack_require__(86), exports);
+__exportStar(__webpack_require__(180), exports);
+__exportStar(__webpack_require__(181), exports);
+__exportStar(__webpack_require__(115), exports);
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// YAML error class. http://stackoverflow.com/questions/8458984
+//
+
+
+function YAMLException(reason, mark) {
+  // Super constructor
+  Error.call(this);
+
+  this.name = 'YAMLException';
+  this.reason = reason;
+  this.mark = mark;
+  this.message = (this.reason || '(unknown reason)') + (this.mark ? ' ' + this.mark.toString() : '');
+
+  // Include stack trace in error object
+  if (Error.captureStackTrace) {
+    // Chrome and NodeJS
+    Error.captureStackTrace(this, this.constructor);
+  } else {
+    // FF, IE 10+ and Safari 6+. Fallback for others
+    this.stack = (new Error()).stack || '';
+  }
+}
+
+
+// Inherit from Error
+YAMLException.prototype = Object.create(Error.prototype);
+YAMLException.prototype.constructor = YAMLException;
+
+
+YAMLException.prototype.toString = function toString(compact) {
+  var result = this.name + ': ';
+
+  result += this.reason || '(unknown reason)';
+
+  if (!compact && this.mark) {
+    result += ' ' + this.mark.toString();
+  }
+
+  return result;
+};
+
+
+module.exports = YAMLException;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// JS-YAML's default schema for `safeLoad` function.
+// It is not described in the YAML specification.
+//
+// This schema is based on standard YAML's Core schema and includes most of
+// extra types described at YAML tag repository. (http://yaml.org/type/)
+
+
+
+
+
+var Schema = __webpack_require__(37);
+
+
+module.exports = new Schema({
+  include: [
+    __webpack_require__(120)
+  ],
+  implicit: [
+    __webpack_require__(203),
+    __webpack_require__(204)
+  ],
+  explicit: [
+    __webpack_require__(205),
+    __webpack_require__(206),
+    __webpack_require__(207),
+    __webpack_require__(208)
+  ]
+});
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _exportNames = {
+  ssz: true
+};
+exports.ssz = void 0;
+
+var _types = __webpack_require__(237);
+
+Object.keys(_types).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _types[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _types[key];
+    }
+  });
+});
+
+var _ssz = _interopRequireWildcard(__webpack_require__(268));
+
+exports.ssz = _ssz;
+
+var _StringType = __webpack_require__(269);
+
+Object.keys(_StringType).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _StringType[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _StringType[key];
+    }
+  });
+});
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = __webpack_require__(14);
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function (it, S) {
+  if (!isObject(it)) return it;
+  var fn, val;
+  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var core = __webpack_require__(25);
+var global = __webpack_require__(5);
+var SHARED = '__core-js_shared__';
+var store = global[SHARED] || (global[SHARED] = {});
+
+(module.exports = function (key, value) {
+  return store[key] || (store[key] = value !== undefined ? value : {});
+})('versions', []).push({
+  version: core.version,
+  mode: __webpack_require__(27) ? 'pure' : 'global',
+  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
+});
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// optional / simple context binding
+var aFunction = __webpack_require__(38);
+module.exports = function (fn, that, length) {
+  aFunction(fn);
+  if (that === undefined) return fn;
+  switch (length) {
+    case 1: return function (a) {
+      return fn.call(that, a);
+    };
+    case 2: return function (a, b) {
+      return fn.call(that, a, b);
+    };
+    case 3: return function (a, b, c) {
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function (/* ...args */) {
+    return fn.apply(that, arguments);
+  };
+};
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports) {
+
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(29);
+var max = Math.max;
+var min = Math.min;
+module.exports = function (index, length) {
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports) {
+
+exports.f = Object.getOwnPropertySymbols;
 
 
 /***/ }),
 /* 55 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var $export = __webpack_require__(7);
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', { create: __webpack_require__(38) });
+exports.f = {}.propertyIsEnumerable;
 
 
 /***/ }),
 /* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
+__webpack_require__(101)('asyncIterator');
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var def = __webpack_require__(8).f;
+var has = __webpack_require__(19);
+var TAG = __webpack_require__(4)('toStringTag');
+
+module.exports = function (it, tag, stat) {
+  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+};
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var pIE = __webpack_require__(55);
+var createDesc = __webpack_require__(26);
+var toIObject = __webpack_require__(22);
+var toPrimitive = __webpack_require__(49);
+var has = __webpack_require__(19);
+var IE8_DOM_DEFINE = __webpack_require__(97);
+var gOPD = Object.getOwnPropertyDescriptor;
+
+exports.f = __webpack_require__(6) ? gOPD : function getOwnPropertyDescriptor(O, P) {
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if (IE8_DOM_DEFINE) try {
+    return gOPD(O, P);
+  } catch (e) { /* empty */ }
+  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
+};
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(2);
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', { create: __webpack_require__(40) });
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = __webpack_require__(66);
-var TAG = __webpack_require__(3)('toStringTag');
+var cof = __webpack_require__(73);
+var TAG = __webpack_require__(4)('toStringTag');
 // ES3 wrong here
 var ARG = cof(function () { return arguments; }()) == 'Arguments';
 
@@ -3913,17 +4217,17 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
-var $export = __webpack_require__(7);
-var create = __webpack_require__(38);
-var aFunction = __webpack_require__(37);
+var $export = __webpack_require__(2);
+var create = __webpack_require__(40);
+var aFunction = __webpack_require__(38);
 var anObject = __webpack_require__(12);
-var isObject = __webpack_require__(13);
-var fails = __webpack_require__(8);
-var bind = __webpack_require__(103);
+var isObject = __webpack_require__(14);
+var fails = __webpack_require__(9);
+var bind = __webpack_require__(105);
 var rConstruct = (__webpack_require__(5).Reflect || {}).construct;
 
 // MS Edge supports only 2 arguments and argumentsList argument is optional
@@ -3966,144 +4270,620 @@ $export($export.S + $export.F * (NEW_TARGET_BUG || ARGS_BUG), 'Reflect', {
 
 
 /***/ }),
-/* 58 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = __webpack_require__(7);
-$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(153).set });
+var $export = __webpack_require__(2);
+$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(161).set });
 
 
 /***/ }),
-/* 59 */
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 0 -> Array#forEach
+// 1 -> Array#map
+// 2 -> Array#filter
+// 3 -> Array#some
+// 4 -> Array#every
+// 5 -> Array#find
+// 6 -> Array#findIndex
+var ctx = __webpack_require__(51);
+var IObject = __webpack_require__(72);
+var toObject = __webpack_require__(18);
+var toLength = __webpack_require__(20);
+var asc = __webpack_require__(167);
+module.exports = function (TYPE, $create) {
+  var IS_MAP = TYPE == 1;
+  var IS_FILTER = TYPE == 2;
+  var IS_SOME = TYPE == 3;
+  var IS_EVERY = TYPE == 4;
+  var IS_FIND_INDEX = TYPE == 6;
+  var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
+  var create = $create || asc;
+  return function ($this, callbackfn, that) {
+    var O = toObject($this);
+    var self = IObject(O);
+    var f = ctx(callbackfn, that, 3);
+    var length = toLength(self.length);
+    var index = 0;
+    var result = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined;
+    var val, res;
+    for (;length > index; index++) if (NO_HOLES || index in self) {
+      val = self[index];
+      res = f(val, index, O);
+      if (TYPE) {
+        if (IS_MAP) result[index] = res;   // map
+        else if (res) switch (TYPE) {
+          case 3: return true;             // some
+          case 5: return val;              // find
+          case 6: return index;            // findIndex
+          case 2: result.push(val);        // filter
+        } else if (IS_EVERY) return false; // every
+      }
+    }
+    return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
+  };
+};
+
+
+/***/ }),
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(Buffer) {
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.hash = hash;
-exports.merkleize = merkleize;
-exports.mixInLength = mixInLength;
+exports.isTreeBacked = isTreeBacked;
+exports.createTreeBacked = createTreeBacked;
+exports.getTreeValueClass = getTreeValueClass;
+exports.proxyWrapTreeValue = proxyWrapTreeValue;
+exports.ContainerTreeValue = exports.CompositeListTreeValue = exports.BasicListTreeValue = exports.CompositeArrayTreeValue = exports.BasicArrayTreeValue = exports.TreeValue = exports.TreeProxyHandler = void 0;
 
-var _hash2 = __webpack_require__(79);
+var _types = __webpack_require__(109);
 
-var _merkleize2 = __webpack_require__(171);
+var _byteArray = __webpack_require__(24);
 
-function hash(...inputs) {
-  return Uint8Array.from((0, _hash2.hash)(...inputs.map(Buffer.from)));
+var _tree = __webpack_require__(112);
+
+let _Symbol$iterator;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function isTreeBacked(value) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return value && value.type && value.tree && (0, _tree.isTree)(value.tree);
+}
+/**
+ * Return an ES6 Proxy-wrapped tree value (ergonomic getter/setter/iteration)
+ */
+
+
+function createTreeBacked(type, tree) {
+  const TreeValueClass = getTreeValueClass(type);
+  return proxyWrapTreeValue(new TreeValueClass(type, tree));
 }
 
-function merkleize(chunks, padTo) {
-  return (0, _merkleize2.merkleize)(Array.from(chunks).map(Buffer.from), padTo);
+function getTreeValueClass(type) {
+  if ((0, _types.isListType)(type)) {
+    if ((0, _types.isBasicType)(type.elementType)) {
+      return BasicListTreeValue;
+    } else {
+      return CompositeListTreeValue;
+    }
+  } else if ((0, _types.isVectorType)(type)) {
+    if ((0, _types.isBasicType)(type.elementType)) {
+      return BasicArrayTreeValue;
+    } else {
+      return CompositeArrayTreeValue;
+    }
+  } else if ((0, _types.isContainerType)(type)) {
+    return ContainerTreeValue;
+  }
+}
+/**
+ * Wrap a TreeValue in a Proxy that adds ergonomic getter/setter
+ */
+
+
+function proxyWrapTreeValue(value) {
+  return new Proxy(value, TreeProxyHandler);
+}
+/**
+ * Proxy handler that adds ergonomic get/set and exposes TreeValue methods
+ */
+
+
+const TreeProxyHandler = {
+  get(target, property) {
+    if (property in target) {
+      return target[property];
+    } else {
+      return target.getProperty(property);
+    }
+  },
+
+  set(target, property, value) {
+    return target.setProperty(property, value);
+  },
+
+  ownKeys(target) {
+    return target.getPropertyNames();
+  },
+
+  getOwnPropertyDescriptor(target, property) {
+    if (target.type.getPropertyType(property)) {
+      return {
+        configurable: true,
+        enumerable: true,
+        writable: true
+      };
+    } else {
+      return undefined;
+    }
+  }
+
+};
+/**
+ * Convenience wrapper around a type and tree
+ */
+
+exports.TreeProxyHandler = TreeProxyHandler;
+_Symbol$iterator = Symbol.iterator;
+
+class TreeValue {
+  constructor(type, tree) {
+    _defineProperty(this, "type", void 0);
+
+    _defineProperty(this, "tree", void 0);
+
+    this.type = type;
+    this.tree = tree;
+  }
+
+  clone() {
+    const TreeValueClass = Object.getPrototypeOf(this).constructor;
+    return proxyWrapTreeValue(new TreeValueClass(this.type, this.tree.clone()));
+  }
+
+  valueOf() {
+    return this.type.tree_convertToStruct(this.tree);
+  }
+
+  equals(other) {
+    if (isTreeBacked(other)) {
+      return (0, _byteArray.byteArrayEquals)(this.hashTreeRoot(), other.hashTreeRoot());
+    } else {
+      return this.type.struct_equals(this, other);
+    }
+  }
+
+  size() {
+    return this.type.tree_getSerializedLength(this.tree);
+  }
+
+  toStruct() {
+    return this.type.tree_convertToStruct(this.tree);
+  }
+
+  toBytes(output, offset) {
+    return this.type.tree_serializeToBytes(this.tree, output, offset);
+  }
+
+  serialize() {
+    const output = new Uint8Array(this.type.tree_getSerializedLength(this.tree));
+    this.toBytes(output, 0);
+    return output;
+  }
+
+  hashTreeRoot() {
+    return this.tree.root;
+  }
+
+  createProof(paths) {
+    return this.type.tree_createProof(this.tree, paths);
+  }
+
+  getPropertyNames() {
+    return this.type.tree_getPropertyNames(this.tree);
+  }
+
+  [_Symbol$iterator]() {
+    return this.values();
+  }
+
 }
 
-function mixInLength(root, length) {
-  return (0, _merkleize2.mixInLength)(Buffer.from(root), length);
+exports.TreeValue = TreeValue;
+
+class BasicArrayTreeValue extends TreeValue {
+  constructor(type, tree) {
+    super(type, tree);
+
+    _defineProperty(this, "type", void 0);
+
+    this.type = type;
+  }
+
+  getProperty(property) {
+    return this.type.tree_getProperty(this.tree, property);
+  }
+
+  setProperty(property, value) {
+    return this.type.tree_setProperty(this.tree, property, value);
+  }
+
+  *keys() {
+    const propNames = this.getPropertyNames(); // pop off "length"
+
+    propNames.pop();
+    yield* propNames.map(String);
+  }
+
+  values() {
+    return this.type.tree_iterateValues(this.tree);
+  }
+
+  *entries() {
+    const keys = this.getPropertyNames();
+    let i = 0;
+
+    for (const value of this.values()) {
+      yield [String(keys[i]), value];
+      i++;
+    }
+  }
+
+  readonlyValues() {
+    return this.type.tree_readonlyIterateValues(this.tree);
+  }
+
+  *readonlyEntries() {
+    const keys = this.getPropertyNames();
+    let i = 0;
+
+    for (const value of this.readonlyValues()) {
+      yield [String(keys[i]), value];
+      i++;
+    }
+  }
+
 }
-//# sourceMappingURL=compat.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(22).Buffer))
+
+exports.BasicArrayTreeValue = BasicArrayTreeValue;
+
+class CompositeArrayTreeValue extends TreeValue {
+  constructor(type, tree) {
+    super(type, tree);
+
+    _defineProperty(this, "type", void 0);
+
+    this.type = type;
+  }
+
+  getProperty(property) {
+    if (property === "length") {
+      return this.type.tree_getProperty(this.tree, property);
+    }
+
+    return createTreeBacked(this.type.elementType, this.type.tree_getProperty(this.tree, property));
+  }
+
+  setProperty(property, value) {
+    return this.type.tree_setProperty(this.tree, property, isTreeBacked(value) ? value.tree : this.type.elementType.struct_convertToTree(value));
+  }
+
+  *keys() {
+    const propNames = this.getPropertyNames(); // pop off "length"
+
+    propNames.pop();
+    yield* propNames.map(String);
+  }
+
+  *values() {
+    for (const tree of this.type.tree_iterateValues(this.tree)) {
+      yield createTreeBacked(this.type.elementType, tree);
+    }
+  }
+
+  *entries() {
+    const keys = this.getPropertyNames();
+    let i = 0;
+
+    for (const value of this.values()) {
+      yield [String(keys[i]), value];
+      i++;
+    }
+  }
+
+  *readonlyValues() {
+    for (const tree of this.type.tree_readonlyIterateValues(this.tree)) {
+      yield createTreeBacked(this.type.elementType, tree);
+    }
+  }
+
+  *readonlyEntries() {
+    const keys = this.getPropertyNames();
+    let i = 0;
+
+    for (const value of this.readonlyValues()) {
+      yield [String(keys[i]), value];
+      i++;
+    }
+  }
+
+}
+
+exports.CompositeArrayTreeValue = CompositeArrayTreeValue;
+
+class BasicListTreeValue extends BasicArrayTreeValue {
+  constructor(type, tree) {
+    super(type, tree);
+
+    _defineProperty(this, "type", void 0);
+
+    this.type = type;
+  }
+
+  push(...values) {
+    return this.type.tree_push(this.tree, ...values);
+  }
+
+  pop() {
+    return this.type.tree_pop(this.tree);
+  }
+
+}
+
+exports.BasicListTreeValue = BasicListTreeValue;
+
+class CompositeListTreeValue extends CompositeArrayTreeValue {
+  constructor(type, tree) {
+    super(type, tree);
+
+    _defineProperty(this, "type", void 0);
+
+    this.type = type;
+  }
+
+  push(...values) {
+    const convertedValues = values.map(value => isTreeBacked(value) ? value.tree : this.type.elementType.struct_convertToTree(value));
+    return this.type.tree_push(this.tree, ...convertedValues);
+  }
+
+  pop() {
+    return this.type.tree_pop(this.tree);
+  }
+
+}
+
+exports.CompositeListTreeValue = CompositeListTreeValue;
+
+class ContainerTreeValue extends TreeValue {
+  constructor(type, tree) {
+    super(type, tree);
+
+    _defineProperty(this, "type", void 0);
+
+    this.type = type;
+  }
+
+  getProperty(property) {
+    if (!this.type.fields[property]) {
+      return undefined;
+    }
+
+    const propType = this.type.getPropertyType(property);
+    const propValue = this.type.tree_getProperty(this.tree, property);
+
+    if ((0, _types.isCompositeType)(propType)) {
+      return createTreeBacked(propType, propValue);
+    } else {
+      return propValue;
+    }
+  }
+
+  setProperty(property, value) {
+    const propType = this.type.getPropertyType(property);
+
+    if ((0, _types.isCompositeType)(propType)) {
+      if (isTreeBacked(value)) {
+        return this.type.tree_setProperty(this.tree, property, value.tree);
+      } else {
+        return this.type.tree_setProperty(this.tree, property, propType.struct_convertToTree(value));
+      }
+    } else {
+      return this.type.tree_setProperty(this.tree, property, value);
+    }
+  }
+
+  *keys() {
+    yield* this.getPropertyNames();
+  }
+
+  *values() {
+    for (const [_key, value] of this.entries()) {
+      yield value;
+    }
+  }
+
+  *entries() {
+    const keys = this.getPropertyNames();
+    let i = 0;
+
+    for (const value of this.type.tree_iterateValues(this.tree)) {
+      const propName = keys[i];
+      const propType = this.type.getPropertyType(propName);
+
+      if ((0, _types.isCompositeType)(propType)) {
+        yield [propName, createTreeBacked(propType, value)];
+      } else {
+        yield [propName, value];
+      }
+
+      i++;
+    }
+  }
+
+  *readonlyValues() {
+    for (const [_key, value] of this.readonlyEntries()) {
+      yield value;
+    }
+  }
+
+  *readonlyEntries() {
+    const keys = this.getPropertyNames();
+    let i = 0;
+
+    for (const value of this.type.tree_readonlyIterateValues(this.tree)) {
+      const propName = keys[i];
+      const propType = this.type.getPropertyType(propName);
+
+      if ((0, _types.isCompositeType)(propType)) {
+        yield [propName, createTreeBacked(propType, value)];
+      } else {
+        yield [propName, value];
+      }
+
+      i++;
+    }
+  }
+
+}
+
+exports.ContainerTreeValue = ContainerTreeValue;
+//# sourceMappingURL=treeValue.js.map
 
 /***/ }),
-/* 60 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const hash_1 = __webpack_require__(115);
-const ERR_INVALID_TREE = "Invalid tree";
-const ERR_NOT_IMPLEMENTED = "Not implemented";
-class Node {
-    get root() {
-        throw new Error(ERR_NOT_IMPLEMENTED);
+exports.gindexChild = exports.gindexParent = exports.gindexSibling = exports.concatGindices = exports.gindexIterator = exports.iterateAtDepth = exports.countToDepth = exports.toGindexBitstring = exports.toGindex = exports.bitIndexBigInt = void 0;
+function bitIndexBigInt(v) {
+    return v.toString(2).length - 1;
+}
+exports.bitIndexBigInt = bitIndexBigInt;
+function toGindex(depth, index) {
+    const anchor = BigInt(1) << BigInt(depth);
+    if (index >= anchor) {
+        throw new Error("index too large for depth");
     }
-    isLeaf() {
-        throw new Error(ERR_NOT_IMPLEMENTED);
+    return anchor | index;
+}
+exports.toGindex = toGindex;
+function toGindexBitstring(depth, index) {
+    const str = index ? index.toString(2) : "";
+    if (str.length > depth) {
+        throw new Error("index too large for depth");
     }
-    get left() {
-        throw new Error(ERR_NOT_IMPLEMENTED);
-    }
-    get right() {
-        throw new Error(ERR_NOT_IMPLEMENTED);
-    }
-    rebindLeft(left) {
-        throw new Error(ERR_NOT_IMPLEMENTED);
-    }
-    rebindRight(right) {
-        throw new Error(ERR_NOT_IMPLEMENTED);
+    else {
+        return "1" + str.padStart(depth, "0");
     }
 }
-exports.Node = Node;
-class BranchNode extends Node {
-    constructor(_left, _right) {
-        super();
-        this._left = _left;
-        this._right = _right;
-        this._root = null;
-        if (!_left || !_right)
-            throw new Error(ERR_INVALID_TREE);
+exports.toGindexBitstring = toGindexBitstring;
+// Get the depth (root starting at 0) necessary to cover a subtree of `count` elements.
+// (in out): (0 0), (1 0), (2 1), (3 2), (4 2), (5 3), (6 3), (7 3), (8 3), (9 4)
+function countToDepth(count) {
+    if (count <= 1) {
+        return 0;
     }
-    get root() {
-        if (!this._root) {
-            this._root = hash_1.hash(this.left.root, this.right.root);
-        }
-        return this._root;
-    }
-    isLeaf() {
-        return false;
-    }
-    get left() {
-        return this._left;
-    }
-    set left(n) {
-        this._left = n;
-    }
-    get right() {
-        return this._right;
-    }
-    set right(n) {
-        this._right = n;
-    }
-    rebindLeft(left) {
-        return new BranchNode(left, this.right);
-    }
-    rebindRight(right) {
-        return new BranchNode(this.left, right);
-    }
+    return (count - BigInt(1)).toString(2).length;
 }
-exports.BranchNode = BranchNode;
-class LeafNode extends Node {
-    constructor(_root) {
-        super();
-        this._root = _root;
-        if (_root.length !== 32)
-            throw new Error(ERR_INVALID_TREE);
+exports.countToDepth = countToDepth;
+/**
+ * Iterate through Gindexes at a certain depth
+ */
+function iterateAtDepth(depth, startIndex, count) {
+    const anchor = BigInt(1) << BigInt(depth);
+    if (startIndex + count > anchor) {
+        throw new Error("Too large for depth");
     }
-    get root() {
-        return this._root;
-    }
-    isLeaf() {
-        return true;
-    }
-}
-exports.LeafNode = LeafNode;
-function identity(n) {
-    return n;
-}
-exports.identity = identity;
-function compose(inner, outer) {
-    return function (n) {
-        return outer(inner(n));
+    let i = toGindex(depth, startIndex);
+    const last = i + count;
+    return {
+        [Symbol.iterator]() {
+            return {
+                next() {
+                    if (i < last) {
+                        const value = i;
+                        i++;
+                        return { done: false, value };
+                    }
+                    else {
+                        return { done: true, value: undefined };
+                    }
+                },
+            };
+        },
     };
 }
-exports.compose = compose;
+exports.iterateAtDepth = iterateAtDepth;
+const ERR_INVALID_GINDEX = "Invalid gindex";
+function gindexIterator(gindex) {
+    let bitstring;
+    if (typeof gindex === "string") {
+        if (!gindex.length) {
+            throw new Error(ERR_INVALID_GINDEX);
+        }
+        bitstring = gindex;
+    }
+    else {
+        if (gindex < 1) {
+            throw new Error(ERR_INVALID_GINDEX);
+        }
+        bitstring = gindex.toString(2);
+    }
+    let i = 1;
+    const next = () => {
+        if (i === bitstring.length) {
+            return { done: true, value: undefined };
+        }
+        const bit = Number(bitstring[i]);
+        i++;
+        return { done: false, value: bit };
+    };
+    return {
+        [Symbol.iterator]() {
+            return { next };
+        },
+        remainingBitLength() {
+            return bitstring.length - i;
+        },
+    };
+}
+exports.gindexIterator = gindexIterator;
+/**
+ * Concatenate Generalized Indices
+ * Given generalized indices i1 for A -> B, i2 for B -> C .... i_n for Y -> Z, returns
+ * the generalized index for A -> Z.
+ */
+function concatGindices(gindices) {
+    return BigInt(gindices.reduce((acc, gindex) => acc + gindex.toString(2).slice(1), "0b1"));
+}
+exports.concatGindices = concatGindices;
+function gindexSibling(gindex) {
+    return gindex ^ BigInt(1);
+}
+exports.gindexSibling = gindexSibling;
+function gindexParent(gindex) {
+    return gindex / BigInt(2);
+}
+exports.gindexParent = gindexParent;
+function gindexChild(gindex, rightChild) {
+    return gindex * BigInt(2) + BigInt(rightChild);
+}
+exports.gindexChild = gindexChild;
 
 
 /***/ }),
-/* 61 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4119,30 +4899,63 @@ exports.compose = compose;
 
 
 
-var Schema = __webpack_require__(34);
+var Schema = __webpack_require__(37);
 
 
 module.exports = Schema.DEFAULT = new Schema({
   include: [
-    __webpack_require__(43)
+    __webpack_require__(47)
   ],
   explicit: [
-    __webpack_require__(212),
-    __webpack_require__(213),
-    __webpack_require__(214)
+    __webpack_require__(209),
+    __webpack_require__(210),
+    __webpack_require__(211)
   ]
 });
 
 
 /***/ }),
-/* 62 */
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=types.js.map
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ssz = exports.ts = void 0;
+
+var _ts = _interopRequireWildcard(__webpack_require__(238));
+
+exports.ts = _ts;
+
+var _ssz = _interopRequireWildcard(__webpack_require__(242));
+
+exports.ssz = _ssz;
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-				var addMethods = __webpack_require__(248)
+				var addMethods = __webpack_require__(272)
 				var methods = ["createRandomValueWorker","serialize"]
 				module.exports = function() {
-					var w = new Worker(__webpack_require__.p + "df55b9eea463906acd92.worker.js", { name: "[hash].worker.js" })
+					var w = new Worker(__webpack_require__.p + "333a416b4906f3977e1a.worker.js", { name: "[hash].worker.js" })
 					addMethods(w, methods)
 					
 					return w
@@ -4150,7 +4963,7 @@ module.exports = Schema.DEFAULT = new Schema({
 			
 
 /***/ }),
-/* 63 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4291,13 +5104,13 @@ function () {
 
 
 /***/ }),
-/* 64 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/@emotion/sheet/dist/sheet.browser.esm.js
-var sheet_browser_esm = __webpack_require__(63);
+var sheet_browser_esm = __webpack_require__(70);
 
 // CONCATENATED MODULE: ./node_modules/@emotion/stylis/dist/stylis.browser.esm.js
 function stylis_min (W) {
@@ -5090,11 +5903,11 @@ var cache_browser_esm_createCache = function createCache(options) {
 
 
 /***/ }),
-/* 65 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = __webpack_require__(66);
+var cof = __webpack_require__(73);
 // eslint-disable-next-line no-prototype-builtins
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
   return cof(it) == 'String' ? it.split('') : Object(it);
@@ -5102,7 +5915,7 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 
 
 /***/ }),
-/* 66 */
+/* 73 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -5113,18 +5926,47 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 67 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var shared = __webpack_require__(45)('keys');
-var uid = __webpack_require__(23);
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = __webpack_require__(22);
+var toLength = __webpack_require__(20);
+var toAbsoluteIndex = __webpack_require__(53);
+module.exports = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIObject($this);
+    var length = toLength(O.length);
+    var index = toAbsoluteIndex(fromIndex, length);
+    var value;
+    // Array#includes uses SameValueZero equality algorithm
+    // eslint-disable-next-line no-self-compare
+    if (IS_INCLUDES && el != el) while (length > index) {
+      value = O[index++];
+      // eslint-disable-next-line no-self-compare
+      if (value != value) return true;
+    // Array#indexOf ignores holes, Array#includes - not
+    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+      if (O[index] === el) return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var shared = __webpack_require__(50)('keys');
+var uid = __webpack_require__(21);
 module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
 };
 
 
 /***/ }),
-/* 68 */
+/* 76 */
 /***/ (function(module, exports) {
 
 // IE 8- don't enum bug keys
@@ -5134,36 +5976,7 @@ module.exports = (
 
 
 /***/ }),
-/* 69 */
-/***/ (function(module, exports) {
-
-exports.f = Object.getOwnPropertySymbols;
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var pIE = __webpack_require__(49);
-var createDesc = __webpack_require__(36);
-var toIObject = __webpack_require__(28);
-var toPrimitive = __webpack_require__(44);
-var has = __webpack_require__(18);
-var IE8_DOM_DEFINE = __webpack_require__(95);
-var gOPD = Object.getOwnPropertyDescriptor;
-
-exports.f = __webpack_require__(6) ? gOPD : function getOwnPropertyDescriptor(O, P) {
-  O = toIObject(O);
-  P = toPrimitive(P, true);
-  if (IE8_DOM_DEFINE) try {
-    return gOPD(O, P);
-  } catch (e) { /* empty */ }
-  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
-};
-
-
-/***/ }),
-/* 71 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5183,26 +5996,26 @@ module.exports = function () {
 
 
 /***/ }),
-/* 72 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.2.3.2 / 15.3.4.5 Function.prototype.bind(thisArg, args...)
-var $export = __webpack_require__(7);
+var $export = __webpack_require__(2);
 
-$export($export.P, 'Function', { bind: __webpack_require__(103) });
+$export($export.P, 'Function', { bind: __webpack_require__(105) });
 
 
 /***/ }),
-/* 73 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $iterators = __webpack_require__(39);
-var getKeys = __webpack_require__(27);
-var redefine = __webpack_require__(16);
+var $iterators = __webpack_require__(43);
+var getKeys = __webpack_require__(28);
+var redefine = __webpack_require__(17);
 var global = __webpack_require__(5);
-var hide = __webpack_require__(10);
+var hide = __webpack_require__(11);
 var Iterators = __webpack_require__(32);
-var wks = __webpack_require__(3);
+var wks = __webpack_require__(4);
 var ITERATOR = wks('iterator');
 var TO_STRING_TAG = wks('toStringTag');
 var ArrayValues = Iterators.Array;
@@ -5257,14 +6070,14 @@ for (var collections = getKeys(DOMIterables), i = 0; i < collections.length; i++
 
 
 /***/ }),
-/* 74 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 Object.keys(O)
-var toObject = __webpack_require__(17);
-var $keys = __webpack_require__(27);
+var toObject = __webpack_require__(18);
+var $keys = __webpack_require__(28);
 
-__webpack_require__(158)('keys', function () {
+__webpack_require__(166)('keys', function () {
   return function keys(it) {
     return $keys(toObject(it));
   };
@@ -5272,15 +6085,15 @@ __webpack_require__(158)('keys', function () {
 
 
 /***/ }),
-/* 75 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var $export = __webpack_require__(7);
-var $map = __webpack_require__(106)(1);
+var $export = __webpack_require__(2);
+var $map = __webpack_require__(63)(1);
 
-$export($export.P + $export.F * !__webpack_require__(107)([].map, true), 'Array', {
+$export($export.P + $export.F * !__webpack_require__(44)([].map, true), 'Array', {
   // 22.1.3.15 / 15.4.4.19 Array.prototype.map(callbackfn [, thisArg])
   map: function map(callbackfn /* , thisArg */) {
     return $map(this, callbackfn, arguments[1]);
@@ -5289,7 +6102,7 @@ $export($export.P + $export.F * !__webpack_require__(107)([].map, true), 'Array'
 
 
 /***/ }),
-/* 76 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5298,20 +6111,21 @@ $export($export.P + $export.F * !__webpack_require__(107)([].map, true), 'Array'
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isTypeOf = isTypeOf;
-exports.BasicType = void 0;
+exports.isBasicType = isBasicType;
+exports.BasicType = exports.BASIC_TYPE = void 0;
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _type = __webpack_require__(10);
+
+/* eslint-disable @typescript-eslint/camelcase */
+
+/* eslint-disable @typescript-eslint/member-ordering */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
+const BASIC_TYPE = Symbol.for("ssz/BasicType");
+exports.BASIC_TYPE = BASIC_TYPE;
 
-/**
- * Check if `type` is an instance of `typeSymbol` type
- *
- * Used by various isFooType functions
- */
-function isTypeOf(type, typeSymbol) {
-  return type && type._typeSymbols && type._typeSymbols.has && type._typeSymbols.has(typeSymbol);
+function isBasicType(type) {
+  return (0, _type.isTypeOf)(type, BASIC_TYPE);
 }
 /**
  * A BasicType is a terminal type, which has no flexibility in its representation.
@@ -5320,56 +6134,22 @@ function isTypeOf(type, typeSymbol) {
  */
 
 
-class BasicType {
-  /**
-   * Symbols used to track the identity of a type
-   *
-   * Used by various isFooType functions
-   */
+class BasicType extends _type.Type {
   constructor() {
-    _defineProperty(this, "_typeSymbols", void 0);
+    super();
 
-    this._typeSymbols = new Set();
+    this._typeSymbols.add(BASIC_TYPE);
   }
 
-  isBasic() {
-    return true;
-  }
-  /**
-   * Valid value assertion
-   */
-
-
-  assertValidValue(value) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Default constructor
-   */
-
-
-  defaultValue() {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Clone / copy
-   */
-
-
-  clone(value) {
+  struct_clone(value) {
     return value;
   }
-  /**
-   * Equality
-   */
 
-
-  equals(value1, value2) {
+  struct_equals(value1, value2) {
     this.assertValidValue(value1);
     this.assertValidValue(value2);
     return value1 === value2;
-  } // Serialization / Deserialization
-
+  }
   /**
    * Check if type has a variable number of elements (or subelements)
    *
@@ -5377,94 +6157,39 @@ class BasicType {
    */
 
 
-  isVariableSize() {
+  hasVariableSerializedLength() {
     return false;
   }
-  /**
-   * Serialized byte length
-   */
 
-
-  size() {
-    throw new Error("Not implemented");
+  getMaxSerializedLength() {
+    return this.struct_getSerializedLength();
   }
-  /**
-   * Maximal serialized byte length
-   */
 
-
-  maxSize() {
-    return this.size();
+  getMinSerializedLength() {
+    return this.struct_getSerializedLength();
   }
-  /**
-   * Minimal serialized byte length
-   */
 
+  bytes_validate(data, offset) {
+    if (!data) {
+      throw new Error("Data is null or undefined");
+    }
 
-  minSize() {
-    return this.size();
+    if (data.length === 0) {
+      throw new Error("Data is empty");
+    }
+
+    const length = data.length - offset;
+
+    if (length < this.struct_getSerializedLength()) {
+      throw new Error("Data length of ".concat(length, " is too small, expect ").concat(this.struct_getSerializedLength()));
+    } // accept data length > this.size()
+
   }
-  /**
-   * Low-level deserialization
-   */
 
-
-  fromBytes(data, offset) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Deserialization
-   */
-
-
-  deserialize(data) {
-    return this.fromBytes(data, 0);
-  }
-  /**
-   * Low-level serialization
-   *
-   * Serializes to a pre-allocated Uint8Array
-   */
-
-
-  toBytes(value, output, offset) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Serialization
-   */
-
-
-  serialize(value) {
-    const output = new Uint8Array(this.size());
-    this.toBytes(value, output, 0);
-    return output;
-  }
-  /**
-   * Merkleization
-   */
-
-
-  hashTreeRoot(value) {
+  struct_hashTreeRoot(value) {
     const output = new Uint8Array(32);
-    this.toBytes(value, output, 0);
+    this.struct_serializeToBytes(value, output, 0);
     return output;
-  }
-  /**
-   * Convert from JSON-serializable object
-   */
-
-
-  fromJson(data) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Convert to JSON-serializable object
-   */
-
-
-  toJson(value) {
-    throw new Error("Not implemented");
   }
 
 }
@@ -5473,7 +6198,7 @@ exports.BasicType = BasicType;
 //# sourceMappingURL=abstract.js.map
 
 /***/ }),
-/* 77 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5482,44 +6207,251 @@ exports.BasicType = BasicType;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CompositeType = void 0;
+exports.isCompositeType = isCompositeType;
+exports.CompositeType = exports.COMPOSITE_TYPE = void 0;
 
-var _backings = __webpack_require__(21);
+var _backings = __webpack_require__(84);
+
+var _type = __webpack_require__(10);
+
+var _persistentMerkleTree = __webpack_require__(45);
+
+var _compat = __webpack_require__(87);
+
+var _byteArray = __webpack_require__(24);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+const COMPOSITE_TYPE = Symbol.for("ssz/CompositeType");
+exports.COMPOSITE_TYPE = COMPOSITE_TYPE;
+
+function isCompositeType(type) {
+  return (0, _type.isTypeOf)(type, COMPOSITE_TYPE);
+}
 /**
  * A CompositeType is a type containing other types, and is flexible in its representation.
  *
  */
-class CompositeType {
-  /**
-   * Symbols used to track the identity of a type
-   *
-   * Used by various isFooType functions
-   */
+
+
+class CompositeType extends _type.Type {
   constructor() {
-    _defineProperty(this, "structural", void 0);
+    super();
 
-    _defineProperty(this, "tree", void 0);
+    _defineProperty(this, "_chunkDepth", void 0);
 
-    _defineProperty(this, "byteArray", void 0);
+    _defineProperty(this, "_defaultNode", void 0);
 
-    _defineProperty(this, "_typeSymbols", void 0);
-
-    this._typeSymbols = new Set();
+    this._typeSymbols.add(COMPOSITE_TYPE);
   }
 
-  isBasic() {
-    return false;
+  tree_equals(tree1, tree2) {
+    return (0, _byteArray.byteArrayEquals)(tree1.root, tree2.root);
   }
+
+  bytes_equals(bytes1, bytes2) {
+    return (0, _byteArray.byteArrayEquals)(bytes1, bytes2);
+  }
+
+  tree_defaultValue() {
+    return new _persistentMerkleTree.Tree(this.tree_defaultNode());
+  }
+
+  tree_clone(value) {
+    return value.clone();
+  }
+
+  bytes_clone(value, start = 0, end = value.length) {
+    const bytes = new Uint8Array(end - start);
+    value.subarray(start, end).set(bytes);
+    return bytes;
+  }
+
+  struct_serialize(struct, data) {
+    const output = new Uint8Array(this.struct_getSerializedLength(struct));
+    return this.struct_serializeToBytes(struct, output, 0);
+  }
+
+  tree_serialize(tree, data) {
+    const output = new Uint8Array(this.tree_getSerializedLength(tree));
+    return this.tree_serializeToBytes(tree, output, 0);
+  }
+
+  bytes_validate(data, start, end) {
+    if (!data) {
+      throw new Error("Data is null or undefined");
+    }
+
+    if (data.length === 0) {
+      throw new Error("Data is empty");
+    }
+
+    if (start < 0) {
+      throw new Error("Start param is negative: ".concat(start));
+    }
+
+    if (start > data.length) {
+      throw new Error("Start param: ".concat(start, " is greater than length: ").concat(data.length));
+    }
+
+    if (end < 0) {
+      throw new Error("End param is negative: ".concat(end));
+    }
+
+    if (end > data.length) {
+      throw new Error("End param: ".concat(end, " is greater than length: ").concat(data.length));
+    }
+
+    const length = end - start;
+
+    if (!this.hasVariableSerializedLength() && length !== this.struct_getSerializedLength(null)) {
+      throw new Error("Incorrect data length ".concat(length, ", expect ").concat(this.struct_getSerializedLength(null)));
+    }
+
+    if (end - start < this.getMinSerializedLength()) {
+      throw new Error("Data length ".concat(length, " is too small, expect at least ").concat(this.getMinSerializedLength()));
+    }
+  }
+
+  struct_deserialize(data) {
+    return this.struct_deserializeFromBytes(data, 0, data.length);
+  }
+
+  tree_deserialize(data) {
+    return this.tree_deserializeFromBytes(data, 0, data.length);
+  }
+
+  struct_getChunkCount(struct) {
+    return this.getMaxChunkCount();
+  }
+
+  tree_getChunkCount(target) {
+    return this.getMaxChunkCount();
+  }
+
+  *struct_yieldChunkRoots(struct) {
+    const chunkCount = this.struct_getChunkCount(struct);
+
+    for (let i = 0; i < chunkCount; i++) {
+      yield this.struct_getRootAtChunkIndex(struct, i);
+    }
+  }
+
+  getChunkDepth() {
+    if (!this._chunkDepth) {
+      this._chunkDepth = (0, _persistentMerkleTree.countToDepth)(BigInt(this.getMaxChunkCount()));
+    }
+
+    return this._chunkDepth;
+  }
+
+  getGindexAtChunkIndex(index) {
+    return (0, _persistentMerkleTree.toGindex)(this.getChunkDepth(), BigInt(index));
+  }
+
+  tree_getSubtreeAtChunkIndex(target, index) {
+    return target.getSubtree(this.getGindexAtChunkIndex(index));
+  }
+
+  tree_setSubtreeAtChunkIndex(target, index, value, expand = false) {
+    target.setSubtree(this.getGindexAtChunkIndex(index), value, expand);
+  }
+
+  tree_getRootAtChunkIndex(target, index) {
+    return target.getRoot(this.getGindexAtChunkIndex(index));
+  }
+
+  tree_setRootAtChunkIndex(target, index, value, expand = false) {
+    target.setRoot(this.getGindexAtChunkIndex(index), value, expand);
+  }
+
+  /**
+   * Navigate to a subtype & gindex using a path
+   */
+  getPathInfo(path) {
+    const gindices = [];
+    let type = this;
+
+    for (const prop of path) {
+      if (!isCompositeType(type)) {
+        throw new Error("Invalid path: cannot navigate beyond a basic type");
+      }
+
+      gindices.push(type.getPropertyGindex(prop));
+      type = type.getPropertyType(prop);
+    }
+
+    return {
+      type,
+      gindex: (0, _persistentMerkleTree.concatGindices)(gindices)
+    };
+  }
+
+  getPathGindex(path) {
+    return this.getPathInfo(path).gindex;
+  }
+  /**
+   * Get leaf gindices
+   *
+   * Note: This is a recursively called method.
+   * Subtypes recursively call this method until basic types / leaf data is hit.
+   *
+   * @param target Used for variable-length types.
+   * @param root Used to anchor the returned gindices to a non-root gindex.
+   * This is used to augment leaf gindices in recursively-called subtypes relative to the type.
+   * @returns The gindices corresponding to leaf data.
+   */
+
+
+  tree_createProof(target, paths) {
+    const gindices = paths.map(path => {
+      const {
+        type,
+        gindex
+      } = this.getPathInfo(path);
+
+      if (!isCompositeType(type)) {
+        return gindex;
+      } else {
+        // if the path subtype is composite, include the gindices of all the leaves
+        return type.tree_getLeafGindices(type.hasVariableSerializedLength() ? target.getSubtree(gindex) : undefined, gindex);
+      }
+    }).flat(1);
+    return target.getProof({
+      type: _persistentMerkleTree.ProofType.treeOffset,
+      gindices
+    });
+  }
+
+  tree_createFromProof(root, proof) {
+    const tree = _persistentMerkleTree.Tree.createFromProof(proof);
+
+    if (!(0, _byteArray.byteArrayEquals)(tree.root, root)) {
+      throw new Error("Proof does not match trusted root");
+    }
+
+    return tree;
+  }
+
+  tree_createFromProofUnsafe(proof) {
+    return _persistentMerkleTree.Tree.createFromProof(proof);
+  }
+
+  struct_hashTreeRoot(struct) {
+    return (0, _compat.merkleize)(this.struct_yieldChunkRoots(struct), this.getMaxChunkCount());
+  }
+
+  tree_hashTreeRoot(tree) {
+    return tree.root;
+  } // convenience
+
   /**
    * Valid value assertion
    */
 
 
   assertValidValue(value) {
-    this.structural.assertValidValue(value);
+    this.struct_assertValidValue(value);
   }
   /**
    * Equality
@@ -5530,7 +6462,7 @@ class CompositeType {
     if ((0, _backings.isBackedValue)(value1) && (0, _backings.isBackedValue)(value2)) {
       return value1.equals(value2);
     } else {
-      return this.structural.equals(value1, value2);
+      return this.struct_equals(value1, value2);
     }
   }
   /**
@@ -5539,7 +6471,7 @@ class CompositeType {
 
 
   defaultValue() {
-    return this.structural.defaultValue();
+    return this.struct_defaultValue();
   }
   /**
    * Clone / copy
@@ -5550,18 +6482,10 @@ class CompositeType {
     if ((0, _backings.isBackedValue)(value)) {
       return value.clone();
     } else {
-      return this.structural.clone(value);
+      return this.struct_clone(value);
     }
   } // Serialization / Deserialization
 
-  /**
-   * Check if type has a variable number of elements (or subelements)
-   */
-
-
-  isVariableSize() {
-    throw new Error("Not implemented");
-  }
   /**
    * Serialized byte length
    */
@@ -5571,7 +6495,7 @@ class CompositeType {
     if ((0, _backings.isBackedValue)(value)) {
       return value.size();
     } else {
-      return this.structural.size(value);
+      return this.struct_getSerializedLength(value);
     }
   }
   /**
@@ -5580,7 +6504,7 @@ class CompositeType {
 
 
   maxSize() {
-    return this.structural.maxSize();
+    return this.getMaxSerializedLength();
   }
   /**
    * Minimal serialized byte length
@@ -5588,7 +6512,7 @@ class CompositeType {
 
 
   minSize() {
-    return this.structural.minSize();
+    return this.getMinSerializedLength();
   }
   /**
    * Low-level deserialization
@@ -5596,7 +6520,7 @@ class CompositeType {
 
 
   fromBytes(data, start, end) {
-    throw new Error("Not implemented");
+    return this.struct_deserializeFromBytes(data, start, end);
   }
   /**
    * Deserialization
@@ -5604,7 +6528,7 @@ class CompositeType {
 
 
   deserialize(data) {
-    return this.structural.deserialize(data);
+    return this.fromBytes(data, 0, data.length);
   }
   /**
    * Low-level serialization
@@ -5617,7 +6541,7 @@ class CompositeType {
     if ((0, _backings.isBackedValue)(value)) {
       return value.toBytes(output, offset);
     } else {
-      return this.structural.toBytes(value, output, offset);
+      return this.struct_serializeToBytes(value, output, offset);
     }
   }
   /**
@@ -5629,18 +6553,12 @@ class CompositeType {
     if ((0, _backings.isBackedValue)(value)) {
       return value.serialize();
     } else {
-      return this.structural.serialize(value);
+      const output = new Uint8Array(this.size(value));
+      this.toBytes(value, output, 0);
+      return output;
     }
   } // Merkleization
 
-  /**
-   * Return the number of leaf chunks to be merkleized
-   */
-
-
-  chunkCount() {
-    throw new Error("Not implemented");
-  }
   /**
    * Merkleization
    */
@@ -5650,7 +6568,7 @@ class CompositeType {
     if ((0, _backings.isBackedValue)(value)) {
       return value.hashTreeRoot();
     } else {
-      return this.structural.hashTreeRoot(value);
+      return this.struct_hashTreeRoot(value);
     }
   }
   /**
@@ -5659,7 +6577,7 @@ class CompositeType {
 
 
   fromJson(data, options) {
-    return this.structural.fromJson(data, options);
+    return this.struct_convertFromJson(data, options);
   }
   /**
    * Convert to a JSON-serializable object
@@ -5667,7 +6585,35 @@ class CompositeType {
 
 
   toJson(value, options) {
-    return this.structural.toJson(value, options);
+    return this.struct_convertToJson(value, options);
+  }
+
+  createTreeBacked(tree) {
+    return (0, _backings.createTreeBacked)(this, tree);
+  }
+
+  createTreeBackedFromStruct(value) {
+    return this.createTreeBacked(this.struct_convertToTree(value));
+  }
+
+  createTreeBackedFromBytes(data) {
+    return this.createTreeBacked(this.tree_deserialize(data));
+  }
+
+  createTreeBackedFromJson(data, options) {
+    return this.createTreeBackedFromStruct(this.struct_convertFromJson(data, options));
+  }
+
+  createTreeBackedFromProof(root, proof) {
+    return this.createTreeBacked(this.tree_createFromProof(root, proof));
+  }
+
+  createTreeBackedFromProofUnsafe(proof) {
+    return this.createTreeBacked(this.tree_createFromProofUnsafe(proof));
+  }
+
+  defaultTreeBacked() {
+    return (0, _backings.createTreeBacked)(this, this.tree_defaultValue());
   }
 
 }
@@ -5676,7 +6622,7 @@ exports.CompositeType = CompositeType;
 //# sourceMappingURL=abstract.js.map
 
 /***/ }),
-/* 78 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5685,117 +6631,137 @@ exports.CompositeType = CompositeType;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.StructuralHandler = void 0;
 
-var _compat = __webpack_require__(59);
+var _tree = __webpack_require__(85);
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-/**
- * StructuralHandler differs slightly from the TreeHandler in that it is NOT a ProxyHandler.
- * It is only meant to be called via the CompositeType.structural object, rather than through a Proxied call.
- * It also acts on targets of type T rather than TreeBacked<T>.
- */
-class StructuralHandler {
-  constructor() {
-    _defineProperty(this, "_type", void 0);
-  }
-
-  type() {
-    return this._type;
-  }
-
-  defaultValue() {
-    throw new Error("Not implemented");
-  }
-
-  clone(target) {
-    throw new Error("Not implemented");
-  }
-
-  size(target) {
-    throw new Error("Not implemented");
-  }
-
-  maxSize() {
-    throw new Error("Not implemented.");
-  }
-
-  minSize() {
-    throw new Error("Not implemented.");
-  }
-
-  assertValidValue(target) {
-    throw new Error("Not implemented");
-  }
-
-  equals(target, other) {
-    throw new Error("Not implemented");
-  }
-
-  fromBytes(data, start, end) {
-    throw new Error("Not implemented");
-  }
-
-  deserialize(data) {
-    if (!this._type.isVariableSize() && this.size(null) !== data.length) {
-      throw new Error("Incorrect data length");
+Object.keys(_tree).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _tree[key];
     }
+  });
+});
 
-    return this.fromBytes(data, 0, data.length);
-  }
+var _backedValue = __webpack_require__(173);
 
-  serialize(target) {
-    const output = new Uint8Array(this._type.size(target));
-    this.toBytes(target, output, 0);
-    return output;
-  }
+Object.keys(_backedValue).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _backedValue[key];
+    }
+  });
+});
 
-  toBytes(target, output, offset) {
-    throw new Error("Not implemented");
-  }
+var _readonlyIterate = __webpack_require__(174);
 
-  nonzeroChunkCount(value) {
-    return this._type.chunkCount();
-  }
-
-  chunk(value, index) {
-    throw new Error("Not implemented");
-  }
-
-  chunks(value) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const t = this;
-    const chunkCount = this.nonzeroChunkCount(value);
-
-    const iterator = function* iterator() {
-      for (let i = 0; i < chunkCount; i++) {
-        yield t.chunk(value, i);
-      }
-    };
-
-    return iterator();
-  }
-
-  hashTreeRoot(target) {
-    return (0, _compat.merkleize)(this.chunks(target), this._type.chunkCount());
-  }
-
-  fromJson(data, options) {
-    throw new Error("Not implemented");
-  }
-
-  toJson(value, options) {
-    throw new Error("Not implemented");
-  }
-
-}
-
-exports.StructuralHandler = StructuralHandler;
-//# sourceMappingURL=abstract.js.map
+Object.keys(_readonlyIterate).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _readonlyIterate[key];
+    }
+  });
+});
+//# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 79 */
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _interface = __webpack_require__(172);
+
+Object.keys(_interface).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _interface[key];
+    }
+  });
+});
+
+var _treeValue = __webpack_require__(64);
+
+Object.keys(_treeValue).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _treeValue[key];
+    }
+  });
+});
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.zeroNode = void 0;
+const node_1 = __webpack_require__(35);
+const zeroes = [new node_1.LeafNode(new Uint8Array(32))];
+function zeroNode(depth) {
+    if (depth >= zeroes.length) {
+        for (let i = zeroes.length; i <= depth; i++) {
+            zeroes[i] = new node_1.BranchNode(zeroes[i - 1], zeroes[i - 1]);
+        }
+    }
+    return zeroes[depth];
+}
+exports.zeroNode = zeroNode;
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.hash = hash;
+exports.merkleize = merkleize;
+exports.mixInLength = mixInLength;
+
+var _hash2 = __webpack_require__(88);
+
+var _merkleize2 = __webpack_require__(184);
+
+function hash(...inputs) {
+  return Uint8Array.from((0, _hash2.hash)(...inputs.map(Buffer.from)));
+}
+
+function merkleize(chunks, padTo) {
+  return (0, _merkleize2.merkleize)(Array.from(chunks).map(Buffer.from), padTo);
+}
+
+function mixInLength(root, length) {
+  const lengthBuf = Buffer.alloc(32);
+  lengthBuf.writeUIntLE(length, 0, 6);
+  return hash(root, lengthBuf);
+}
+//# sourceMappingURL=compat.js.map
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(34).Buffer))
+
+/***/ }),
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5806,7 +6772,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.hash = hash;
 
-var _asSha = _interopRequireDefault(__webpack_require__(112));
+var _asSha = _interopRequireDefault(__webpack_require__(114));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5819,10 +6785,10 @@ function hash(...inputs) {
   return _asSha.default.digest(Buffer.concat(inputs));
 }
 //# sourceMappingURL=hash.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(22).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(34).Buffer))
 
 /***/ }),
-/* 80 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5831,56 +6797,81 @@ function hash(...inputs) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CompositeArrayStructuralHandler = exports.BasicArrayStructuralHandler = void 0;
+exports.BYTES_PER_LENGTH_PREFIX = exports.BYTES_PER_CHUNK = void 0;
 
-var _abstract = __webpack_require__(78);
+/** @module ssz */
+// Number of bytes per chunk.
+
+/** @ignore */
+const BYTES_PER_CHUNK = 32; // Number of bytes per serialized length prefix.
+
+/** @ignore */
+
+exports.BYTES_PER_CHUNK = BYTES_PER_CHUNK;
+const BYTES_PER_LENGTH_PREFIX = 4;
+exports.BYTES_PER_LENGTH_PREFIX = BYTES_PER_LENGTH_PREFIX;
+//# sourceMappingURL=constants.js.map
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CompositeArrayType = exports.BasicArrayType = void 0;
+
+var _abstract = __webpack_require__(83);
+
+var _errorPath = __webpack_require__(117);
+
+var _persistentMerkleTree = __webpack_require__(45);
+
+var _treeValue = __webpack_require__(64);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-class BasicArrayStructuralHandler extends _abstract.StructuralHandler {
-  constructor(...args) {
-    super(...args);
+class BasicArrayType extends _abstract.CompositeType {
+  constructor(options) {
+    super();
 
-    _defineProperty(this, "_type", void 0);
+    _defineProperty(this, "elementType", void 0);
+
+    this.elementType = options.elementType;
   }
 
-  getLength(value) {
-    throw new Error("Not implemented");
+  struct_getSerializedLength(value) {
+    return this.elementType.struct_getSerializedLength() * this.struct_getLength(value);
   }
 
-  getMaxLength() {
-    throw new Error("Not implemented");
+  getMaxSerializedLength() {
+    return this.getMaxLength() * this.elementType.getMaxSerializedLength();
   }
 
-  getMinLength() {
-    throw new Error("Not implemented");
+  getMinSerializedLength() {
+    return this.getMinLength() * this.elementType.getMinSerializedLength();
   }
 
-  size(value) {
-    return this._type.elementType.size() * this.getLength(value);
-  }
-
-  maxSize() {
-    return this.getMaxLength() * this._type.elementType.maxSize();
-  }
-
-  minSize() {
-    return this.getMinLength() * this._type.elementType.minSize();
-  }
-
-  assertValidValue(value) {
-    for (let i = 0; i < this.getLength(value); i++) {
+  struct_assertValidValue(value) {
+    for (let i = 0; i < this.struct_getLength(value); i++) {
       try {
-        this._type.elementType.assertValidValue(value[i]);
+        this.elementType.struct_assertValidValue(value[i]);
       } catch (e) {
         throw new Error("Invalid element ".concat(i, ": ").concat(e.message));
       }
     }
   }
 
-  equals(value1, value2) {
-    for (let i = 0; i < this.getLength(value1); i++) {
-      if (!this._type.elementType.equals(value1[i], value2[i])) {
+  struct_equals(value1, value2) {
+    if (this.struct_getLength(value1) !== this.struct_getLength(value2)) {
+      return false;
+    }
+
+    for (let i = 0; i < this.struct_getLength(value1); i++) {
+      if (!this.elementType.struct_equals(value1[i], value2[i])) {
         return false;
       }
     }
@@ -5888,131 +6879,311 @@ class BasicArrayStructuralHandler extends _abstract.StructuralHandler {
     return true;
   }
 
-  clone(value) {
-    const newValue = this._type.structural.defaultValue();
+  struct_clone(value) {
+    const newValue = this.struct_defaultValue();
 
-    for (let i = 0; i < this.getLength(value); i++) {
-      newValue[i] = this._type.elementType.clone(value[i]);
+    for (let i = 0; i < this.struct_getLength(value); i++) {
+      newValue[i] = this.elementType.struct_clone(value[i]);
     }
 
     return newValue;
   }
 
-  fromBytes(data, start, end) {
-    const elementSize = this._type.elementType.size();
-
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
+    const elementSize = this.elementType.struct_getSerializedLength();
     return Array.from({
       length: (end - start) / elementSize
-    }, (_, i) => this._type.elementType.fromBytes(data, start + i * elementSize));
+    }, (_, i) => this.elementType.struct_deserializeFromBytes(data, start + i * elementSize));
   }
 
-  toBytes(value, output, offset) {
-    const length = this.getLength(value);
+  struct_serializeToBytes(value, output, offset) {
+    const length = this.struct_getLength(value);
     let index = offset;
 
     for (let i = 0; i < length; i++) {
-      index = this._type.elementType.toBytes(value[i], output, index);
+      index = this.elementType.struct_serializeToBytes(value[i], output, index);
     }
 
     return index;
   }
 
-  chunk(value, index) {
+  struct_getRootAtChunkIndex(value, index) {
     const output = new Uint8Array(32);
-
-    const itemSize = this._type.elementType.size();
-
+    const itemSize = this.elementType.struct_getSerializedLength();
     const itemsInChunk = Math.floor(32 / itemSize);
     const firstIndex = index * itemsInChunk; // not inclusive
 
-    const lastIndex = Math.min(this.getLength(value), firstIndex + itemsInChunk); // i = array index, grows by 1
+    const lastIndex = Math.min(this.struct_getLength(value), firstIndex + itemsInChunk); // i = array index, grows by 1
     // j = data offset, grows by itemSize
 
     for (let i = firstIndex, j = 0; i < lastIndex; i++, j += itemSize) {
-      this._type.elementType.toBytes(value[i], output, j);
+      this.elementType.struct_serializeToBytes(value[i], output, j);
     }
 
     return output;
   }
 
-  fromJson(data) {
+  struct_getPropertyNames(value) {
+    const length = this.struct_getLength(value);
     return Array.from({
-      length: data.length
-    }, (_, i) => this._type.elementType.fromJson(data[i]));
+      length
+    }, (_, i) => i).concat(["length"]);
   }
 
-  toJson(value) {
+  struct_convertFromJson(data) {
     return Array.from({
-      length: this.getLength(value)
-    }, (_, i) => this._type.elementType.toJson(value[i]));
+      length: data.length
+    }, (_, i) => this.elementType.fromJson(data[i]));
+  }
+
+  struct_convertToJson(value) {
+    return Array.from({
+      length: this.struct_getLength(value)
+    }, (_, i) => this.elementType.struct_convertToJson(value[i]));
+  }
+
+  struct_convertToTree(value) {
+    if ((0, _treeValue.isTreeBacked)(value)) return value.tree.clone();
+    const contents = [];
+
+    for (const chunk of this.struct_yieldChunkRoots(value)) {
+      contents.push(new _persistentMerkleTree.LeafNode(chunk));
+    }
+
+    return new _persistentMerkleTree.Tree((0, _persistentMerkleTree.subtreeFillToContents)(contents, this.getChunkDepth()));
+  }
+
+  tree_convertToStruct(target) {
+    const value = this.struct_defaultValue();
+    const length = this.tree_getLength(target);
+
+    for (let i = 0; i < length; i++) {
+      value[i] = this.tree_getValueAtIndex(target, i);
+    }
+
+    return value;
+  }
+
+  tree_getSerializedLength(target) {
+    return this.elementType.struct_getSerializedLength() * this.tree_getLength(target);
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    const target = this.tree_defaultValue();
+    const byteLength = end - start;
+    const chunkCount = Math.ceil(byteLength / 32);
+
+    for (let i = 0; i < chunkCount; i++) {
+      // view of the chunk, shared buffer from `data`
+      const dataChunk = new Uint8Array(data.buffer, data.byteOffset + start + i * 32, Math.min(32, byteLength - i * 32)); // copy chunk into new memory
+
+      const chunk = new Uint8Array(32);
+      chunk.set(dataChunk);
+      this.tree_setRootAtChunkIndex(target, i, chunk, true // expand tree as needed
+      );
+    }
+
+    return target;
+  }
+
+  tree_serializeToBytes(target, output, offset) {
+    const size = this.tree_getSerializedLength(target);
+    const fullChunkCount = Math.floor(size / 32);
+    const remainder = size % 32;
+    let i = 0;
+
+    if (fullChunkCount > 0) {
+      for (const node of target.iterateNodesAtDepth(this.getChunkDepth(), 0, fullChunkCount)) {
+        output.set(node.root, offset + i * 32);
+        i++;
+      }
+    }
+
+    if (remainder) {
+      output.set(this.tree_getRootAtChunkIndex(target, fullChunkCount).slice(0, remainder), offset + i * 32);
+    }
+
+    return offset + size;
+  }
+
+  getPropertyGindex(prop) {
+    return this.getGindexAtChunkIndex(this.getChunkIndex(prop));
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  getPropertyType(prop) {
+    return this.elementType;
+  }
+
+  *tree_iterateValues(target) {
+    const length = this.tree_getLength(target);
+
+    if (length === 0) {
+      return;
+    }
+
+    const elementSize = this.elementType.struct_getSerializedLength();
+
+    if (32 % elementSize !== 0) {
+      throw new Error("cannot handle a non-chunk-alignable elementType");
+    }
+
+    let left = length;
+
+    for (const node of target.iterateNodesAtDepth(this.getChunkDepth(), 0, this.tree_getChunkCount(target))) {
+      const chunk = node.root;
+
+      for (let offset = 0; offset < 32; offset += elementSize) {
+        yield this.elementType.struct_deserializeFromBytes(chunk, offset);
+        left--;
+
+        if (left === 0) {
+          return;
+        }
+      }
+    }
+  }
+
+  *tree_readonlyIterateValues(target) {
+    yield* this.tree_iterateValues(target);
+  }
+
+  getChunkOffset(index) {
+    const elementSize = this.elementType.struct_getSerializedLength();
+    return index % Math.ceil(32 / elementSize) * elementSize;
+  }
+
+  getChunkIndex(index) {
+    return Math.floor(index / Math.ceil(32 / this.elementType.struct_getSerializedLength()));
+  }
+
+  tree_getValueAtIndex(target, index) {
+    const chunk = this.tree_getRootAtChunkIndex(target, this.getChunkIndex(index));
+    return this.elementType.struct_deserializeFromBytes(chunk, this.getChunkOffset(index));
+  }
+
+  tree_setValueAtIndex(target, index, value, expand = false) {
+    const chunkGindex = this.getGindexAtChunkIndex(this.getChunkIndex(index)); // copy data from old chunk, use new memory to set a new chunk
+
+    const chunk = new Uint8Array(32);
+    chunk.set(target.getRoot(chunkGindex));
+    this.elementType.struct_serializeToBytes(value, chunk, this.getChunkOffset(index));
+    target.setRoot(chunkGindex, chunk, expand);
+    return true;
+  }
+
+  tree_getProperty(target, property) {
+    const length = this.tree_getLength(target);
+
+    if (property === "length") {
+      return length;
+    }
+
+    const index = Number(property);
+
+    if (Number.isNaN(index)) {
+      return undefined;
+    }
+
+    if (index >= length) {
+      return undefined;
+    }
+
+    return this.tree_getValueAtIndex(target, index);
+  }
+
+  tree_setProperty(target, property, value, expand = false) {
+    return this.tree_setValueAtIndex(target, property, value, expand);
+  }
+
+  tree_deleteProperty(target, property) {
+    return this.tree_setProperty(target, property, this.elementType.struct_defaultValue());
+  }
+
+  tree_getPropertyNames(target) {
+    return Array.from({
+      length: this.tree_getLength(target)
+    }, (_, i) => String(i)).concat("length");
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  bytes_getVariableOffsets(target) {
+    return [];
+  }
+
+  tree_getLeafGindices(target, root = BigInt(1)) {
+    const chunkCount = this.tree_getChunkCount(target);
+    const startIndex = (0, _persistentMerkleTree.concatGindices)([root, (0, _persistentMerkleTree.toGindex)(this.getChunkDepth(), BigInt(0))]);
+    const gindices = [];
+
+    for (let i = 0, gindex = startIndex; i < chunkCount; i++, gindex++) {
+      gindices.push(gindex);
+    }
+
+    return gindices;
   }
 
 }
 
-exports.BasicArrayStructuralHandler = BasicArrayStructuralHandler;
+exports.BasicArrayType = BasicArrayType;
 
-class CompositeArrayStructuralHandler extends _abstract.StructuralHandler {
-  constructor(...args) {
-    super(...args);
+class CompositeArrayType extends _abstract.CompositeType {
+  constructor(options) {
+    super();
 
-    _defineProperty(this, "_type", void 0);
+    _defineProperty(this, "elementType", void 0);
+
+    this.elementType = options.elementType;
   }
 
-  getLength(value) {
-    throw new Error("Not implemented");
-  }
-
-  getMaxLength() {
-    throw new Error("Not implemented");
-  }
-
-  getMinLength() {
-    throw new Error("Not implemented");
-  }
-
-  size(value) {
-    if (this._type.elementType.isVariableSize()) {
+  struct_getSerializedLength(value) {
+    if (this.elementType.hasVariableSerializedLength()) {
       let s = 0;
 
-      for (let i = 0; i < this.getLength(value); i++) {
-        s += this._type.elementType.structural.size(value[i]) + 4;
+      for (let i = 0; i < this.struct_getLength(value); i++) {
+        s += this.elementType.struct_getSerializedLength(value[i]) + 4;
       }
 
       return s;
     } else {
-      return this._type.elementType.structural.size(null) * this.getLength(value);
+      return this.elementType.struct_getSerializedLength(null) * this.struct_getLength(value);
     }
   }
 
-  maxSize() {
-    if (this._type.elementType.isVariableSize()) {
-      return this.getMaxLength() * 4 + this.getMaxLength() * this._type.elementType.maxSize();
+  getMaxSerializedLength() {
+    if (this.elementType.hasVariableSerializedLength()) {
+      return this.getMaxLength() * 4 + this.getMaxLength() * this.elementType.getMaxSerializedLength();
     } else {
-      return this.getMaxLength() * this._type.elementType.maxSize();
+      return this.getMaxLength() * this.elementType.getMaxSerializedLength();
     }
   }
 
-  minSize() {
-    if (this._type.elementType.isVariableSize()) {
-      return this.getMinLength() * 4 + this.getMinLength() * this._type.elementType.minSize();
+  getMinSerializedLength() {
+    if (this.elementType.hasVariableSerializedLength()) {
+      return this.getMinLength() * 4 + this.getMinLength() * this.elementType.getMinSerializedLength();
     } else {
-      return this.getMinLength() * this._type.elementType.minSize();
+      return this.getMinLength() * this.elementType.getMinSerializedLength();
     }
   }
 
-  assertValidValue(value) {
-    for (let i = 0; i < this.getLength(value); i++) {
+  struct_assertValidValue(value) {
+    for (let i = 0; i < this.struct_getLength(value); i++) {
       try {
-        this._type.elementType.structural.assertValidValue(value[i]);
+        this.elementType.struct_assertValidValue(value[i]);
       } catch (e) {
         throw new Error("Invalid element ".concat(i, ": ").concat(e.message));
       }
     }
   }
 
-  equals(value1, value2) {
-    for (let i = 0; i < this.getLength(value1); i++) {
-      if (!this._type.elementType.structural.equals(value1[i], value2[i])) {
+  struct_equals(value1, value2) {
+    if (this.struct_getLength(value1) !== this.struct_getLength(value2)) {
+      return false;
+    }
+
+    for (let i = 0; i < this.struct_getLength(value1); i++) {
+      if (!this.elementType.struct_equals(value1[i], value2[i])) {
         return false;
       }
     }
@@ -6020,32 +7191,34 @@ class CompositeArrayStructuralHandler extends _abstract.StructuralHandler {
     return true;
   }
 
-  clone(value) {
-    const newValue = this.defaultValue();
+  struct_clone(value) {
+    const newValue = this.struct_defaultValue();
 
-    for (let i = 0; i < this.getLength(value); i++) {
-      newValue[i] = this._type.elementType.structural.clone(value[i]);
+    for (let i = 0; i < this.struct_getLength(value); i++) {
+      newValue[i] = this.elementType.struct_clone(value[i]);
     }
 
     return newValue;
   }
 
-  fromBytes(data, start, end) {
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
+
     if (start === end) {
       return [];
     }
 
-    if (this._type.elementType.isVariableSize()) {
+    if (this.elementType.hasVariableSerializedLength()) {
       const value = []; // all elements variable-sized
       // indices contain offsets
 
       let currentIndex = start;
-      let nextIndex = currentIndex; // data exists between offsets
+      let nextIndex; // data exists between offsets
 
       const fixedSection = new DataView(data.buffer, data.byteOffset);
       const firstOffset = start + fixedSection.getUint32(start, true);
       let currentOffset = firstOffset;
-      let nextOffset = currentOffset;
+      let nextOffset;
 
       while (currentIndex < firstOffset) {
         if (currentOffset > end) {
@@ -6059,7 +7232,12 @@ class CompositeArrayStructuralHandler extends _abstract.StructuralHandler {
           throw new Error("Offsets must be increasing");
         }
 
-        value.push(this._type.elementType.structural.fromBytes(data, currentOffset, nextOffset));
+        try {
+          value.push(this.elementType.struct_deserializeFromBytes(data, currentOffset, nextOffset));
+        } catch (e) {
+          throw new _errorPath.SszErrorPath(e, value.length);
+        }
+
         currentIndex = nextIndex;
         currentOffset = nextOffset;
       }
@@ -6070,18 +7248,17 @@ class CompositeArrayStructuralHandler extends _abstract.StructuralHandler {
 
       return value;
     } else {
-      const elementSize = this._type.elementType.structural.size(null);
-
+      const elementSize = this.elementType.struct_getSerializedLength(null);
       return Array.from({
         length: (end - start) / elementSize
-      }, (_, i) => this._type.elementType.structural.fromBytes(data, start + i * elementSize, start + (i + 1) * elementSize));
+      }, (_, i) => this.elementType.struct_deserializeFromBytes(data, start + i * elementSize, start + (i + 1) * elementSize));
     }
   }
 
-  toBytes(value, output, offset) {
-    const length = this.getLength(value);
+  struct_serializeToBytes(value, output, offset) {
+    const length = this.struct_getLength(value);
 
-    if (this._type.elementType.isVariableSize()) {
+    if (this.elementType.hasVariableSerializedLength()) {
       let variableIndex = offset + length * 4;
       const fixedSection = new DataView(output.buffer, output.byteOffset + offset);
 
@@ -6089,7 +7266,7 @@ class CompositeArrayStructuralHandler extends _abstract.StructuralHandler {
         // write offset
         fixedSection.setUint32(i * 4, variableIndex - offset, true); // write serialized element to variable section
 
-        variableIndex = this._type.elementType.structural.toBytes(value[i], output, variableIndex);
+        variableIndex = this.elementType.struct_serializeToBytes(value[i], output, variableIndex);
       }
 
       return variableIndex;
@@ -6097,542 +7274,160 @@ class CompositeArrayStructuralHandler extends _abstract.StructuralHandler {
       let index = offset;
 
       for (let i = 0; i < length; i++) {
-        index = this._type.elementType.structural.toBytes(value[i], output, index);
+        index = this.elementType.struct_serializeToBytes(value[i], output, index);
       }
 
       return index;
     }
   }
 
-  chunk(value, index) {
-    return this._type.elementType.hashTreeRoot(value[index]);
+  struct_getRootAtChunkIndex(value, index) {
+    return this.elementType.hashTreeRoot(value[index]);
   }
 
-  fromJson(data, options) {
+  struct_getPropertyNames(value) {
+    const length = this.struct_getLength(value);
+    return Array.from({
+      length
+    }, (_, i) => i).concat(["length"]);
+  }
+
+  struct_convertFromJson(data, options) {
     return Array.from({
       length: data.length
-    }, (_, i) => this._type.elementType.structural.fromJson(data[i], options));
+    }, (_, i) => this.elementType.struct_convertFromJson(data[i], options));
   }
 
-  toJson(value, options) {
+  struct_convertToJson(value, options) {
     return Array.from({
-      length: this.getLength(value)
-    }, (_, i) => this._type.elementType.structural.toJson(value[i], options));
+      length: this.struct_getLength(value)
+    }, (_, i) => this.elementType.struct_convertToJson(value[i], options));
   }
 
-}
+  struct_convertToTree(value) {
+    if ((0, _treeValue.isTreeBacked)(value)) return value.tree.clone();
+    const contents = [];
 
-exports.CompositeArrayStructuralHandler = CompositeArrayStructuralHandler;
-//# sourceMappingURL=array.js.map
-
-/***/ }),
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeVectorStructuralHandler = exports.BasicVectorStructuralHandler = void 0;
-
-var _array = __webpack_require__(80);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BasicVectorStructuralHandler extends _array.BasicArrayStructuralHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultValue() {
-    return Array.from({
-      length: this._type.length
-    }, () => {
-      return this._type.elementType.defaultValue();
-    });
-  }
-
-  getLength(value) {
-    return this._type.length;
-  }
-
-  getMaxLength() {
-    return this._type.length;
-  }
-
-  getMinLength() {
-    return this._type.length;
-  }
-
-  fromBytes(data, start, end) {
-    if ((end - start) / this._type.elementType.size() !== this._type.length) {
-      throw new Error("Incorrect deserialized vector length");
+    for (const element of value) {
+      contents.push(this.elementType.struct_convertToTree(element).rootNode);
     }
 
-    return super.fromBytes(data, start, end);
+    return new _persistentMerkleTree.Tree((0, _persistentMerkleTree.subtreeFillToContents)(contents, this.getChunkDepth()));
   }
 
-  assertValidValue(value) {
-    const actualLength = value.length;
-    const expectedLength = this.getLength(value);
+  tree_convertToStruct(target) {
+    const value = this.struct_defaultValue();
+    const length = this.tree_getLength(target);
 
-    if (actualLength !== expectedLength) {
-      throw new Error("Invalid vector length: expected ".concat(expectedLength, ", actual ").concat(actualLength));
-    } // @ts-ignore
-
-
-    super.assertValidValue(value);
-  }
-
-  fromJson(data) {
-    if (!Array.isArray(data)) {
-      throw new Error("Invalid JSON vector: expected an Array");
-    }
-
-    const expectedLength = this._type.length;
-
-    if (data.length !== expectedLength) {
-      throw new Error("Invalid JSON vector length: expected ".concat(expectedLength, ", actual ").concat(data.length));
-    }
-
-    return super.fromJson(data);
-  }
-
-}
-
-exports.BasicVectorStructuralHandler = BasicVectorStructuralHandler;
-
-class CompositeVectorStructuralHandler extends _array.CompositeArrayStructuralHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultValue() {
-    return Array.from({
-      length: this._type.length
-    }, () => {
-      return this._type.elementType.structural.defaultValue();
-    });
-  }
-
-  getLength(value) {
-    return this._type.length;
-  }
-
-  getMaxLength() {
-    return this._type.length;
-  }
-
-  getMinLength() {
-    return this._type.length;
-  }
-
-  fromBytes(data, start, end) {
-    const value = super.fromBytes(data, start, end);
-
-    if (value.length !== this._type.length) {
-      throw new Error("Incorrect deserialized vector length");
+    for (let i = 0; i < length; i++) {
+      value[i] = this.elementType.tree_convertToStruct(this.tree_getSubtreeAtChunkIndex(target, i));
     }
 
     return value;
   }
 
-  assertValidValue(value) {
-    const actualLength = value.length;
-    const expectedLength = this.getLength(value);
-
-    if (actualLength !== expectedLength) {
-      throw new Error("Invalid vector length: expected ".concat(expectedLength, ", actual ").concat(actualLength));
-    } // @ts-ignore
-
-
-    super.assertValidValue(value);
-  }
-
-  fromJson(data) {
-    if (!Array.isArray(data)) {
-      throw new Error("Invalid JSON vector: expected an Array");
-    }
-
-    const expectedLength = this._type.length;
-
-    if (data.length !== expectedLength) {
-      throw new Error("Invalid JSON vector length: expected ".concat(expectedLength, ", actual ").concat(data.length));
-    }
-
-    return super.fromJson(data);
-  }
-
-}
-
-exports.CompositeVectorStructuralHandler = CompositeVectorStructuralHandler;
-//# sourceMappingURL=vector.js.map
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.toHexString = toHexString;
-exports.fromHexString = fromHexString;
-exports.byteArrayEquals = byteArrayEquals;
-exports.isByteArrayBacked = isByteArrayBacked;
-exports.ByteArrayHandler = void 0;
-
-var _backedValue = __webpack_require__(83);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function toHexString(target) {
-  return "0x" + [...target].map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-function fromHexString(data) {
-  if (typeof data !== "string") {
-    throw new Error("Expected hex string to be a string");
-  }
-
-  if (data.length % 2 !== 0) {
-    throw new Error("Expected an even number of characters");
-  }
-
-  data = data.replace("0x", "");
-  return new Uint8Array(data.match(/.{1,2}/g).map(b => parseInt(b, 16)));
-}
-
-function byteArrayEquals(a, b) {
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  return a.every((v, i) => v === b[i]);
-}
-
-function isByteArrayBacked(value) {
-  return value.backingType && value.backingType() === _backedValue.BackingType.byteArray;
-}
-/**
- * The IByteArrayBacked interface represents the public API that attach to byte-array-backed Proxy objects
- *
- * This is an alternative way of calling methods of the attached ByteArrayHandler
- */
-
-
-/**
- * A ByteArrayHandler instance handles byte-array-backed-specific logic.
- * It is a property of its associated CompositeType, and vice-versa.
- * It is also attached to each ByteArrayBacked as its ES6 Proxy handler
- *
- * These methods can be used in both contexts (when part of IByteArrayBacked):
- * eg:
- *   Type.byteArray.serialize(byteArrayBacking)
- *   and
- *   byteArrayBackedValue.serialize()
- */
-class ByteArrayHandler {
-  constructor() {
-    _defineProperty(this, "_type", void 0);
-  }
-
-  type() {
-    return this._type;
-  }
-  /**
-   * The byte array backing
-   */
-
-
-  byteArray(target) {
-    return target;
-  }
-  /**
-   * The attached ByteArrayHandler
-   */
-
-
-  backingHandler() {
-    return this;
-  }
-  /**
-   * The BackingType associated with the byte array backing
-   */
-
-
-  backingType() {
-    return _backedValue.BackingType.byteArray;
-  }
-  /**
-   * Default byte array
-   */
-
-
-  defaultBacking() {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Default constructor
-   */
-
-
-  defaultValue() {
-    return this.asByteArrayBacked(this.defaultBacking());
-  }
-
-  createValue(value) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Return an ES6 Proxy-wrapped byte array backing
-   */
-
-
-  asByteArrayBacked(target) {
-    return new Proxy(target, this);
-  }
-  /**
-   * Clone / copy
-   */
-
-
-  clone(target) {
-    const newTarget = new Uint8Array(target.length);
-    newTarget.set(target);
-    return this.asByteArrayBacked(newTarget);
-  }
-  /**
-   * Equality
-   *
-   * If both values are byte-array-backed, use equality byte-by-byte, else use structural equality
-   */
-
-
-  equals(target, other) {
-    if (isByteArrayBacked(other)) {
-      const otherTarget = other.byteArray();
-      return byteArrayEquals(target, otherTarget);
-    }
-
-    return this._type.structural.equals(this.asByteArrayBacked(target), other);
-  } // Serialization
-
-
-  getVariableOffsets(target) {
-    throw new Error("Not implemented");
-  }
-
-  getByteBits(target, offset) {
-    const byte = target[offset];
-
-    if (!byte) {
-      return [false, false, false, false, false, false, false, false];
-    }
-
-    const bits = Array.prototype.map.call(byte.toString(2).padStart(8, "0"), c => c === "1" ? true : false).reverse();
-    return bits;
-  }
-  /**
-   * Serialized byte length
-   */
-
-
-  size(target) {
-    return target.length;
-  }
-  /**
-   * Low-level deserialization
-   */
-
-
-  fromBytes(data, start, end) {
-    const target = new Uint8Array(end - start);
-    target.set(new Uint8Array(data.buffer, data.byteOffset + start, end - start));
-    return this.asByteArrayBacked(target);
-  }
-  /**
-   * Deserialization
-   */
-
-
-  deserialize(data) {
-    return this.fromBytes(data, 0, data.length);
-  }
-  /**
-   * Low-level serialization
-   *
-   * Serializes to a pre-allocated Uint8Array
-   */
-
-
-  toBytes(target, output, offset) {
-    output.set(target, offset);
-    return offset + target.length;
-  }
-  /**
-   * Serialization
-   */
-
-
-  serialize(target) {
-    const output = new Uint8Array(this.size(target));
-    this.toBytes(target, output, 0);
-    return output;
-  }
-  /**
-   * Merkleization
-   */
-
-
-  hashTreeRoot(target) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Return a property of T, either a subarray ByteArrayBacked or a primitive, of a basic type
-   */
-
-
-  getProperty(target, property) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * ES6 Proxy trap to get a IByteArrayBacked method or property of T
-   */
-
-
-  get(target, // eslint-disable-line @typescript-eslint/no-explicit-any
-  property) {
-    if (property in this) {
-      return this.getMethod(target, property);
+  tree_getSerializedLength(target) {
+    if (this.elementType.hasVariableSerializedLength()) {
+      let s = 0;
+
+      for (let i = 0; i < this.tree_getLength(target); i++) {
+        s += this.elementType.tree_getSerializedLength(this.tree_getSubtreeAtChunkIndex(target, i)) + 4;
+      }
+
+      return s;
     } else {
-      return this.getProperty(target, property);
+      return this.elementType.tree_getSerializedLength(null) * this.tree_getLength(target);
     }
   }
-  /**
-   * ES6 Proxy trap to set a property of T
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+  tree_serializeToBytes(target, output, offset) {
+    const length = this.tree_getLength(target);
 
-  set(target, property, value) {
-    throw new Error("Not implemented");
+    if (this.elementType.hasVariableSerializedLength()) {
+      let variableIndex = offset + length * 4;
+      const fixedSection = new DataView(output.buffer, output.byteOffset + offset, length * 4);
+      let i = 0;
+
+      for (const node of target.iterateNodesAtDepth(this.getChunkDepth(), i, length)) {
+        // write offset
+        fixedSection.setUint32(i * 4, variableIndex - offset, true); // write serialized element to variable section
+
+        variableIndex = this.elementType.tree_serializeToBytes(new _persistentMerkleTree.Tree(node), output, variableIndex);
+        i++;
+      }
+
+      return variableIndex;
+    } else {
+      let index = offset;
+      let i = 0;
+
+      for (const node of target.iterateNodesAtDepth(this.getChunkDepth(), i, length)) {
+        index = this.elementType.tree_serializeToBytes(new _persistentMerkleTree.Tree(node), output, index);
+        i++;
+      }
+
+      return index;
+    }
   }
-  /**
-   * Return a IByteArrayBacked method, to be called using the IByteArrayBacked interface
-   */
+
+  getPropertyGindex(prop) {
+    return this.getGindexAtChunkIndex(prop);
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 
-  getMethod(target, methodName) {
-    return this[methodName].bind(this, target);
+  getPropertyType(prop) {
+    return this.elementType;
   }
 
-}
+  tree_getProperty(target, property) {
+    const length = this.tree_getLength(target);
 
-exports.ByteArrayHandler = ByteArrayHandler;
-//# sourceMappingURL=abstract.js.map
+    if (property === "length") {
+      return length;
+    }
 
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
+    const index = Number(property);
 
-"use strict";
+    if (Number.isNaN(index)) {
+      return undefined;
+    }
 
+    if (index >= length) {
+      return undefined;
+    }
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isBackedValue = isBackedValue;
-exports.BackingType = void 0;
-let BackingType;
-/**
- * A BackedValue is a value that is backed by a non-structural type
- *
- * It is implemented as an ES6 Proxy object that provides
- * - convenient access to the structural properties corresponding to its type
- * - additional methods for backing-specific implementations of ssz operations
- */
+    return this.tree_getSubtreeAtChunkIndex(target, index);
+  }
 
-exports.BackingType = BackingType;
-
-(function (BackingType) {
-  BackingType["tree"] = "tree";
-  BackingType["byteArray"] = "byteArray";
-})(BackingType || (exports.BackingType = BackingType = {}));
-
-function isBackedValue(value) {
-  if (value && value.backingType) {
+  tree_setProperty(target, property, value, expand = false) {
+    this.tree_setSubtreeAtChunkIndex(target, property, value, expand);
     return true;
-  } else {
-    return false;
-  }
-}
-//# sourceMappingURL=backedValue.js.map
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeArrayByteArrayHandler = exports.BasicArrayByteArrayHandler = void 0;
-
-var _abstract = __webpack_require__(82);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BasicArrayByteArrayHandler extends _abstract.ByteArrayHandler {
-  constructor(...args) {
-    super(...args);
-
-    _defineProperty(this, "_type", void 0);
   }
 
-  getLength(target) {
-    throw new Error("Not implemented");
+  tree_deleteProperty(target, property) {
+    return this.tree_setProperty(target, property, this.elementType.tree_defaultValue());
   }
 
-  chunk(target, index) {
-    throw new Error("Not implemented");
+  tree_getPropertyNames(target) {
+    return Array.from({
+      length: this.tree_getLength(target)
+    }, (_, i) => i).concat(["length"]);
   }
 
-}
-
-exports.BasicArrayByteArrayHandler = BasicArrayByteArrayHandler;
-
-class CompositeArrayByteArrayHandler extends _abstract.ByteArrayHandler {
-  constructor(...args) {
-    super(...args);
-
-    _defineProperty(this, "_type", void 0);
+  *tree_iterateValues(target) {
+    for (const gindex of (0, _persistentMerkleTree.iterateAtDepth)(this.getChunkDepth(), BigInt(0), BigInt(this.tree_getLength(target)))) {
+      yield target.getSubtree(gindex);
+    }
   }
 
-  getLength(target) {
-    throw new Error("Not implemented");
+  *tree_readonlyIterateValues(target) {
+    for (const node of target.iterateNodesAtDepth(this.getChunkDepth(), 0, this.tree_getLength(target))) {
+      yield new _persistentMerkleTree.Tree(node);
+    }
   }
 
-  chunk(target, index) {
-    throw new Error("Not implemented");
-  }
-
-  getVariableOffsets(target) {
-    if (this._type.elementType.isVariableSize()) {
+  bytes_getVariableOffsets(target) {
+    if (this.elementType.hasVariableSerializedLength()) {
       if (target.length === 0) {
         return [];
       }
@@ -6643,7 +7438,7 @@ class CompositeArrayByteArrayHandler extends _abstract.ByteArrayHandler {
       const fixedSection = new DataView(target.buffer, target.byteOffset);
       const firstOffset = fixedSection.getUint32(0, true);
       let currentOffset = firstOffset;
-      let nextOffset = currentOffset;
+      let nextOffset;
       let currentIndex = 0;
       let nextIndex = 0;
 
@@ -6674,844 +7469,30 @@ class CompositeArrayByteArrayHandler extends _abstract.ByteArrayHandler {
     }
   }
 
-}
-
-exports.CompositeArrayByteArrayHandler = CompositeArrayByteArrayHandler;
-//# sourceMappingURL=array.js.map
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isTreeBacked = isTreeBacked;
-exports.TreeHandler = void 0;
-
-var _persistentMerkleTree = __webpack_require__(41);
-
-var _backedValue = __webpack_require__(83);
-
-var _byteArray = __webpack_require__(40);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function isTreeBacked(value) {
-  return value.backingType && value.backingType() === _backedValue.BackingType.tree;
-}
-/**
- * The ITreeBacked interface represents the public API that attach to tree-backed Proxy objects
- *
- * This is an alternative way of calling methods of the attached TreeHandler
- */
-
-
-/**
- * A TreeHandler instance handles tree-backed-specific logic.
- * It is a property of its associated CompositeType, and vice-versa.
- * It is also attached to each TreeBacked as its ES6 Proxy handler
- *
- * These methods can be used in both contexts (when part of ITreeBacked):
- * eg:
- *   Type.tree.hashTreeRoot(tree)
- *   and
- *   treeBackedValue.hashTreeRoot()
- */
-class TreeHandler {
-  constructor() {
-    _defineProperty(this, "_type", void 0);
-
-    _defineProperty(this, "_depth", void 0);
-  }
-
-  type() {
-    return this._type;
-  }
-  /**
-   * The merkle tree backing
-   */
-
-
-  tree(target) {
-    return target;
-  }
-  /**
-   * The attached TreeHandler
-   */
-
-
-  backingHandler() {
-    return this;
-  }
-  /**
-   * The BackingType associated with the merkle tree backing
-   */
-
-
-  backingType() {
-    return _backedValue.BackingType.tree;
-  }
-
-  defaultNode() {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Default merkle tree backing
-   */
-
-
-  defaultBacking() {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Default constructor
-   */
-
-
-  defaultValue() {
-    return this.asTreeBacked(this.defaultBacking());
-  }
-  /**
-   * Return an ES6 Proxy-wrapped tree backing
-   */
-
-
-  asTreeBacked(target) {
-    return new Proxy(target, this);
-  }
-  /**
-   * Clone / copy
-   */
-
-
-  clone(target) {
-    return this.asTreeBacked(target.clone());
-  }
-  /**
-   * Equality
-   *
-   * If both values are tree-backed, use equality by merkle root, else use structural equality
-   */
-
-
-  equals(target, other) {
-    if (isTreeBacked(other)) {
-      return (0, _byteArray.byteArrayEquals)(this.hashTreeRoot(target), this.hashTreeRoot(other.tree()));
-    }
-
-    return this._type.structural.equals(this.asTreeBacked(target), other);
-  }
-
-  createValue(value) {
-    this._type.assertValidValue(value);
-
-    return this.asTreeBacked(this.fromStructural(value));
-  }
-
-  fromStructural(value) {
-    throw new Error("Not implemented");
-  }
-
-  toStructural(target) {
-    return this._type.structural.clone(this.asTreeBacked(target));
-  } // Serialization
-
-  /**
-   * Serialized byte length
-   */
-
-
-  size(target) {
-    return this._type.structural.size(this.asTreeBacked(target));
-  }
-  /**
-   * Low-level deserialization
-   */
-
-
-  fromBytes(data, start, end) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Deserialization
-   */
-
-
-  deserialize(data) {
-    return this.asTreeBacked(this.fromBytes(data, 0, data.length));
-  }
-  /**
-   * Low-level serialization
-   *
-   * Serializes to a pre-allocated Uint8Array
-   */
-
-
-  toBytes(target, output, offset) {
-    return this._type.structural.toBytes(this.asTreeBacked(target), output, offset);
-  }
-  /**
-   * Serialization
-   */
-
-
-  serialize(target) {
-    const output = new Uint8Array(this.size(target));
-    this.toBytes(target, output, 0);
-    return output;
-  } // Merkleization
-
-
-  gindexOfProperty(target, prop) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * The depth of the merkle tree
-   */
-
-
-  depth() {
-    if (!this._depth) {
-      this._depth = (0, _persistentMerkleTree.countToDepth)(BigInt(this._type.chunkCount()));
-    }
-
-    return this._depth;
-  }
-
-  gindexOfChunk(target, index) {
-    return (0, _persistentMerkleTree.toGindex)(BigInt(index), this.depth());
-  }
-
-  getSubtreeAtChunk(target, index) {
-    return target.getSubtree(this.gindexOfChunk(target, index));
-  }
-
-  setSubtreeAtChunk(target, index, value, expand = false) {
-    target.setSubtree(this.gindexOfChunk(target, index), value, expand);
-  }
-
-  getRootAtChunk(target, index) {
-    return target.getRoot(this.gindexOfChunk(target, index));
-  }
-
-  setRootAtChunk(target, index, value, expand = false) {
-    target.setRoot(this.gindexOfChunk(target, index), value, expand);
-  }
-  /**
-   * Merkleization
-   */
-
-
-  hashTreeRoot(target) {
-    return target.root;
-  }
-  /**
-   * Return a property of T, either a subtree TreeBacked or a primitive, of a basic type
-   */
-
-
-  getProperty(target, property) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * ES6 Proxy trap to get a ITreeBacked method or property of T
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-
-  get(target, property) {
-    if (property in this) {
-      return this.getMethod(target, property);
-    } else {
-      return this.getProperty(target, property);
-    }
-  }
-  /**
-   * ES6 Proxy trap to set a property of T
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-
-  set(target, property, value) {
-    throw new Error("Not implemented");
-  }
-  /**
-   * Return a ITreeBacked method, to be called using the ITreeBacked interface
-   */
-
-
-  getMethod(target, methodName) {
-    return this[methodName].bind(this, target);
-  }
-
-}
-
-exports.TreeHandler = TreeHandler;
-//# sourceMappingURL=abstract.js.map
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const node_1 = __webpack_require__(60);
-let zeroes = [new node_1.LeafNode(new Uint8Array(32))];
-function zeroNode(depth) {
-    if (depth >= zeroes.length) {
-        for (let i = zeroes.length; i <= depth; i++) {
-            zeroes[i] = new node_1.BranchNode(zeroes[i - 1], zeroes[i - 1]);
-        }
-    }
-    return zeroes[depth];
-}
-exports.zeroNode = zeroNode;
-
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeArrayTreeHandler = exports.BasicArrayTreeHandler = void 0;
-
-var _persistentMerkleTree = __webpack_require__(41);
-
-var _abstract = __webpack_require__(85);
-
-let _Symbol$iterator, _Symbol$iterator2;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-_Symbol$iterator = Symbol.iterator;
-
-class BasicArrayTreeHandler extends _abstract.TreeHandler {
-  constructor(...args) {
-    super(...args);
-
-    _defineProperty(this, "_type", void 0);
-  }
-
-  fromStructural(value) {
-    const v = this.defaultValue();
-
-    for (let i = 0; i < value.length; i++) {
-      v[i] = value[i];
-    }
-
-    return v.tree();
-  }
-
-  size(target) {
-    return this._type.elementType.size() * this.getLength(target);
-  }
-
-  fromBytes(data, start, end) {
-    const target = this.defaultBacking();
-    const byteLength = end - start;
-    const chunkCount = Math.ceil(byteLength / 32);
-
-    for (let i = 0; i < chunkCount; i++) {
-      // view of the chunk, shared buffer from `data`
-      const dataChunk = new Uint8Array(data.buffer, data.byteOffset + start + i * 32, Math.min(32, byteLength - i * 32)); // copy chunk into new memory
-
-      const chunk = new Uint8Array(32);
-      chunk.set(dataChunk);
-      this.setRootAtChunk(target, i, chunk, true // expand tree as needed
-      );
-    }
-
-    return target;
-  }
-
-  toBytes(target, output, offset) {
-    const size = this.size(target);
-    let i = 0;
-    let chunkIndex = 0;
-
-    for (; i < size - 31; i += 32, chunkIndex += 1) {
-      output.set(this.getRootAtChunk(target, chunkIndex), offset + i);
-    }
-
-    if (i !== size) {
-      output.set(this.getRootAtChunk(target, chunkIndex).slice(0, size - i), offset + i);
-    }
-
-    return offset + size;
-  }
-
-  gindexOfProperty(target, prop) {
-    return this.gindexOfChunk(target, this.getChunkIndex(prop));
-  }
-
-  getLength(target) {
-    throw new Error("Not implemented");
-  }
-
-  getChunkOffset(index) {
-    const elementSize = this._type.elementType.size();
-
-    return index % Math.ceil(32 / elementSize) * elementSize;
-  }
-
-  getChunkIndex(index) {
-    return Math.floor(index / Math.ceil(32 / this._type.elementType.size()));
-  }
-
-  getValueAtIndex(target, index) {
-    const chunk = this.getRootAtChunk(target, this.getChunkIndex(index));
-    return this._type.elementType.fromBytes(chunk, this.getChunkOffset(index));
-  }
-
-  getProperty(target, property) {
-    const length = this.getLength(target);
-
-    if (property === "length") {
-      return length;
-    }
-
-    const index = Number(property);
-
-    if (Number.isNaN(index)) {
-      return undefined;
-    }
-
-    if (index >= length) {
-      return undefined;
-    }
-
-    return this.getValueAtIndex(target, index);
-  }
-
-  setProperty(target, property, value, expand = false) {
-    const chunkGindex = this.gindexOfChunk(target, this.getChunkIndex(property)); // copy data from old chunk, use new memory to set a new chunk
-
-    const chunk = new Uint8Array(32);
-    chunk.set(target.getRoot(chunkGindex));
-
-    this._type.elementType.toBytes(value, chunk, this.getChunkOffset(property));
-
-    target.setRoot(chunkGindex, chunk, expand);
-    return true;
-  }
-
-  set(target, property, value, expand = false) {
-    return this.setProperty(target, property, value, expand);
-  }
-
-  deleteProperty(target, property) {
-    return this.setProperty(target, property, this._type.elementType.defaultValue());
-  }
-
-  ownKeys(target) {
-    return Array.from({
-      length: this.getLength(target)
-    }, (_, i) => String(i));
-  }
-
-  *[_Symbol$iterator](target) {
-    for (let i = 0; i < this.getLength(target); i++) {
-      yield this.getValueAtIndex(target, i);
-    }
-  }
-
-  find(target, fn) {
-    const value = this.asTreeBacked(target);
-
-    for (let i = 0; i < this.getLength(target); i++) {
-      const elementValue = this.getValueAtIndex(target, i);
-
-      if (fn(elementValue, i, value)) {
-        return elementValue;
-      }
-    }
-
-    return undefined;
-  }
-
-  findIndex(target, fn) {
-    const value = this.asTreeBacked(target);
-
-    for (let i = 0; i < this.getLength(target); i++) {
-      if (fn(this.getValueAtIndex(target, i), i, value)) {
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  forEach(target, fn) {
-    const value = this.asTreeBacked(target);
-
-    for (let i = 0; i < this.getLength(target); i++) {
-      fn(this.getValueAtIndex(target, i), i, value);
-    }
-  }
-
-}
-
-exports.BasicArrayTreeHandler = BasicArrayTreeHandler;
-_Symbol$iterator2 = Symbol.iterator;
-
-class CompositeArrayTreeHandler extends _abstract.TreeHandler {
-  constructor(...args) {
-    super(...args);
-
-    _defineProperty(this, "_type", void 0);
-  }
-
-  fromStructural(value) {
-    const v = this.defaultValue();
-
-    for (let i = 0; i < value.length; i++) {
-      v[i] = value[i];
-    }
-
-    return v.tree();
-  }
-
-  size(target) {
-    if (this._type.elementType.isVariableSize()) {
-      let s = 0;
-
-      for (let i = 0; i < this.getLength(target); i++) {
-        s += this._type.elementType.tree.size(this.getSubtreeAtChunk(target, i)) + 4;
-      }
-
-      return s;
-    } else {
-      return this._type.elementType.tree.size(null) * this.getLength(target);
-    }
-  }
-
-  toBytes(target, output, offset) {
-    const length = this.getLength(target);
-
-    if (this._type.elementType.isVariableSize()) {
-      let variableIndex = offset + length * 4;
-      const fixedSection = new DataView(output.buffer, output.byteOffset + offset, length * 4);
-
-      for (let i = 0; i < length; i++) {
-        // write offset
-        fixedSection.setUint32(i * 4, variableIndex - offset, true); // write serialized element to variable section
-
-        variableIndex = this._type.elementType.tree.toBytes(this.getSubtreeAtChunk(target, i), output, variableIndex);
-      }
-
-      return variableIndex;
-    } else {
-      let index = offset;
-
-      for (let i = 0; i < length; i++) {
-        index = this._type.elementType.tree.toBytes(this.getSubtreeAtChunk(target, i), output, index);
-      }
-
-      return index;
-    }
-  }
-
-  gindexOfProperty(target, prop) {
-    return this.gindexOfChunk(target, prop);
-  }
-
-  getLength(target) {
-    throw new Error("Not implemented");
-  }
-
-  getValueAtChunk(target, index) {
-    return this._type.elementType.tree.asTreeBacked(this.getSubtreeAtChunk(target, index));
-  }
-
-  getProperty(target, property) {
-    const length = this.getLength(target);
-
-    if (property === "length") {
-      return length;
-    }
-
-    const index = Number(property);
-
-    if (Number.isNaN(index)) {
-      return undefined;
-    }
-
-    if (index >= length) {
-      return undefined;
-    }
-
-    return this.getValueAtChunk(target, index);
-  }
-
-  setProperty(target, property, value, expand = false) {
-    const chunkGindex = this.gindexOfChunk(target, property);
-
-    if ((0, _abstract.isTreeBacked)(value)) {
-      target.setSubtree(chunkGindex, value.tree());
-    } else {
-      target.setSubtree(chunkGindex, this._type.elementType.tree.fromStructural(value), expand);
-    }
-
-    return true;
-  }
-
-  set(target, property, value, expand = false) {
-    return this.setProperty(target, property, value, expand);
-  }
-
-  deleteProperty(target, property) {
-    return this.setProperty(target, property, this._type.elementType.tree.defaultValue());
-  }
-
-  ownKeys(target) {
-    return Array.from({
-      length: this.getLength(target)
-    }, (_, i) => String(i));
-  }
-
-  *[_Symbol$iterator2](target) {
-    const elementTreeHandler = this._type.elementType.tree;
-
-    for (const gindex of (0, _persistentMerkleTree.iterateAtDepth)(BigInt(0), BigInt(this.getLength(target)), this.depth())) {
-      yield elementTreeHandler.asTreeBacked(target.getSubtree(gindex));
-    }
-  }
-
-  find(target, fn) {
-    const value = this.asTreeBacked(target);
-    const elementTreeHandler = this._type.elementType.tree;
-    let i = 0;
-
-    for (const gindex of (0, _persistentMerkleTree.iterateAtDepth)(BigInt(0), BigInt(this.getLength(target)), this.depth())) {
-      const elementValue = elementTreeHandler.asTreeBacked(target.getSubtree(gindex));
-
-      if (fn(elementValue, i, value)) {
-        return elementValue;
-      }
-
-      i++;
-    }
-
-    return undefined;
-  }
-
-  findIndex(target, fn) {
-    const value = this.asTreeBacked(target);
-    const elementTreeHandler = this._type.elementType.tree;
-    let i = 0;
-
-    for (const gindex of (0, _persistentMerkleTree.iterateAtDepth)(BigInt(0), BigInt(this.getLength(target)), this.depth())) {
-      const elementValue = elementTreeHandler.asTreeBacked(target.getSubtree(gindex));
-
-      if (fn(elementValue, i, value)) {
-        return i;
-      }
-
-      i++;
-    }
-
-    return -1;
-  }
-
-  forEach(target, fn) {
-    const value = this.asTreeBacked(target);
-    const elementTreeHandler = this._type.elementType.tree;
-    let i = 0;
-
-    for (const gindex of (0, _persistentMerkleTree.iterateAtDepth)(BigInt(0), BigInt(this.getLength(target)), this.depth())) {
-      const elementValue = elementTreeHandler.asTreeBacked(target.getSubtree(gindex));
-      fn(elementValue, i, value);
-      i++;
-    }
-  }
-
-}
-
-exports.CompositeArrayTreeHandler = CompositeArrayTreeHandler;
-//# sourceMappingURL=array.js.map
-
-/***/ }),
-/* 88 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeVectorTreeHandler = exports.BasicVectorTreeHandler = void 0;
-
-var _persistentMerkleTree = __webpack_require__(41);
-
-var _array = __webpack_require__(87);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BasicVectorTreeHandler extends _array.BasicArrayTreeHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    _defineProperty(this, "_defaultNode", void 0);
-
-    this._type = type;
-  }
-
-  defaultNode() {
-    if (!this._defaultNode) {
-      this._defaultNode = (0, _persistentMerkleTree.subtreeFillToLength)((0, _persistentMerkleTree.zeroNode)(0), this.depth(), this._type.chunkCount());
-    }
-
-    return this._defaultNode;
-  }
-
-  defaultBacking() {
-    return new _persistentMerkleTree.Tree(this.defaultNode());
-  }
-
-  getLength(target) {
-    return this._type.length;
-  }
-
-  fromBytes(data, start, end) {
-    if (end - start !== this._type.size(null)) {
-      throw new Error("Incorrect deserialized vector length");
-    }
-
-    return super.fromBytes(data, start, end);
-  }
-
-  setProperty(target, property, value) {
-    if (property >= this.getLength(target)) {
-      throw new Error("Invalid array index");
-    }
-
-    return super.setProperty(target, property, value, false);
-  }
-
-}
-
-exports.BasicVectorTreeHandler = BasicVectorTreeHandler;
-
-class CompositeVectorTreeHandler extends _array.CompositeArrayTreeHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    _defineProperty(this, "_defaultNode", void 0);
-
-    this._type = type;
-  }
-
-  defaultNode() {
-    if (!this._defaultNode) {
-      this._defaultNode = (0, _persistentMerkleTree.subtreeFillToLength)(this._type.elementType.tree.defaultNode(), this.depth(), this._type.length);
-    }
-
-    return this._defaultNode;
-  }
-
-  defaultBacking() {
-    return new _persistentMerkleTree.Tree(this.defaultNode());
-  }
-
-  getLength(target) {
-    return this._type.length;
-  }
-
-  fromBytes(data, start, end) {
-    const target = this.defaultBacking();
-
-    if (this._type.elementType.isVariableSize()) {
-      const offsets = this._type.byteArray.getVariableOffsets(new Uint8Array(data.buffer, data.byteOffset + start, end - start));
-
-      if (offsets.length !== this._type.length) {
-        throw new Error("Incorrect deserialized vector length");
-      }
-
-      for (let i = 0; i < offsets.length; i++) {
-        const [currentOffset, nextOffset] = offsets[i];
-        this.setSubtreeAtChunk(target, i, this._type.elementType.tree.fromBytes(data, start + currentOffset, start + nextOffset));
+  tree_getLeafGindices(target, root = BigInt(1)) {
+    // Underlying elements exist one per chunk
+    // Iterate through chunk gindices, recursively fetching leaf gindices from each chunk
+    const chunkCount = this.tree_getChunkCount(target);
+    const gindices = [];
+    const startIndex = (0, _persistentMerkleTree.toGindex)(this.getChunkDepth(), BigInt(0));
+    const extendedStartIndex = (0, _persistentMerkleTree.concatGindices)([root, startIndex]);
+
+    if (this.elementType.hasVariableSerializedLength()) {
+      if (!target) {
+        throw new Error("variable type requires tree argument to get leaves");
+      } // variable-length elements must pass the underlying subtrees to determine the length
+
+
+      for (let i = 0, gindex = startIndex, extendedGindex = extendedStartIndex; i < chunkCount; i++, gindex++, extendedGindex++) {
+        gindices.push(...this.elementType.tree_getLeafGindices(target.getSubtree(gindex), extendedGindex));
       }
     } else {
-      const elementSize = this._type.elementType.structural.size(null);
-
-      const length = (end - start) / elementSize;
-
-      if (length !== this._type.length) {
-        throw new Error("Incorrect deserialized vector length");
-      }
-
-      for (let i = 0; i < length; i++) {
-        this.setSubtreeAtChunk(target, i, this._type.elementType.tree.fromBytes(data, start + i * elementSize, start + (i + 1) * elementSize));
+      for (let i = 0, gindex = extendedStartIndex; i < chunkCount; i++, gindex++) {
+        gindices.push(...this.elementType.tree_getLeafGindices(undefined, gindex));
       }
     }
 
-    return target;
-  }
-
-  setProperty(target, property, value) {
-    if (property >= this.getLength(target)) {
-      throw new Error("Invalid array index");
-    }
-
-    return super.setProperty(target, property, value, false);
-  }
-
-}
-
-exports.CompositeVectorTreeHandler = CompositeVectorTreeHandler;
-//# sourceMappingURL=vector.js.map
-
-/***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeArrayType = exports.BasicArrayType = void 0;
-
-var _abstract = __webpack_require__(77);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BasicArrayType extends _abstract.CompositeType {
-  constructor(options) {
-    super();
-
-    _defineProperty(this, "elementType", void 0);
-
-    this.elementType = options.elementType;
-  }
-
-}
-
-exports.BasicArrayType = BasicArrayType;
-
-class CompositeArrayType extends _abstract.CompositeType {
-  constructor(options) {
-    super();
-
-    _defineProperty(this, "elementType", void 0);
-
-    this.elementType = options.elementType;
+    return gindices;
   }
 
 }
@@ -7520,7 +7501,7 @@ exports.CompositeArrayType = CompositeArrayType;
 //# sourceMappingURL=array.js.map
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7532,11 +7513,13 @@ Object.defineProperty(exports, "__esModule", {
 exports.isVectorType = isVectorType;
 exports.CompositeVectorType = exports.BasicVectorType = exports.VectorType = exports.VECTOR_TYPE = void 0;
 
-var _array = __webpack_require__(89);
+var _array = __webpack_require__(90);
 
-var _basic = __webpack_require__(20);
+var _basic = __webpack_require__(33);
 
-var _backings = __webpack_require__(21);
+var _type = __webpack_require__(10);
+
+var _persistentMerkleTree = __webpack_require__(45);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -7545,14 +7528,14 @@ const VECTOR_TYPE = Symbol.for("ssz/VectorType"); // eslint-disable-next-line @t
 exports.VECTOR_TYPE = VECTOR_TYPE;
 
 function isVectorType(type) {
-  return (0, _basic.isTypeOf)(type, VECTOR_TYPE);
+  return (0, _type.isTypeOf)(type, VECTOR_TYPE);
 } // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 
 // Trick typescript into treating VectorType as a constructor
 const VectorType = // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function VectorType(options) {
-  if (options.elementType.isBasic()) {
+  if ((0, _basic.isBasicType)(options.elementType)) {
     return new BasicVectorType(options);
   } else {
     return new CompositeVectorType(options);
@@ -7568,18 +7551,107 @@ class BasicVectorType extends _array.BasicArrayType {
     _defineProperty(this, "length", void 0);
 
     this.length = options.length;
-    this.structural = new _backings.BasicVectorStructuralHandler(this);
-    this.tree = new _backings.BasicVectorTreeHandler(this);
-    this.byteArray = new _backings.BasicVectorByteArrayHandler(this);
 
     this._typeSymbols.add(VECTOR_TYPE);
   }
 
-  isVariableSize() {
+  struct_defaultValue() {
+    return Array.from({
+      length: this.length
+    }, () => {
+      return this.elementType.struct_defaultValue();
+    });
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  struct_getLength(value) {
+    return this.length;
+  }
+
+  getMaxLength() {
+    return this.length;
+  }
+
+  getMinLength() {
+    return this.length;
+  }
+
+  bytes_validate(data, start, end) {
+    super.bytes_validate(data, start, end);
+
+    if (end - start !== this.size(null)) {
+      throw new Error("Incorrect deserialized vector length");
+    }
+  }
+
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
+    return super.struct_deserializeFromBytes(data, start, end);
+  }
+
+  struct_assertValidValue(value) {
+    const actualLength = value.length;
+    const expectedLength = this.struct_getLength(value);
+
+    if (actualLength !== expectedLength) {
+      throw new Error("Invalid vector length: expected ".concat(expectedLength, ", actual ").concat(actualLength));
+    }
+
+    super.struct_assertValidValue(value);
+  }
+
+  struct_convertFromJson(data) {
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid JSON vector: expected an Array");
+    }
+
+    const expectedLength = this.length;
+
+    if (data.length !== expectedLength) {
+      throw new Error("Invalid JSON vector length: expected ".concat(expectedLength, ", actual ").concat(data.length));
+    }
+
+    return super.struct_convertFromJson(data);
+  }
+
+  tree_defaultNode() {
+    if (!this._defaultNode) {
+      this._defaultNode = (0, _persistentMerkleTree.subtreeFillToLength)((0, _persistentMerkleTree.zeroNode)(0), this.getChunkDepth(), this.getMaxChunkCount());
+    }
+
+    return this._defaultNode;
+  }
+
+  tree_defaultValue() {
+    return new _persistentMerkleTree.Tree(this.tree_defaultNode());
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  tree_getLength(target) {
+    return this.length;
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    if (end - start !== this.struct_getSerializedLength(null)) {
+      throw new Error("Incorrect deserialized vector length");
+    }
+
+    return super.tree_deserializeFromBytes(data, start, end);
+  }
+
+  tree_setProperty(target, property, value) {
+    if (property >= this.tree_getLength(target)) {
+      throw new Error("Invalid array index");
+    }
+
+    return super.tree_setProperty(target, property, value, false);
+  }
+
+  hasVariableSerializedLength() {
     return false;
   }
 
-  chunkCount() {
+  getMaxChunkCount() {
     return Math.ceil(this.length * this.elementType.size() / 32);
   }
 
@@ -7594,18 +7666,127 @@ class CompositeVectorType extends _array.CompositeArrayType {
     _defineProperty(this, "length", void 0);
 
     this.length = options.length;
-    this.structural = new _backings.CompositeVectorStructuralHandler(this);
-    this.tree = new _backings.CompositeVectorTreeHandler(this);
-    this.byteArray = new _backings.CompositeVectorByteArrayHandler(this);
 
     this._typeSymbols.add(VECTOR_TYPE);
   }
 
-  isVariableSize() {
-    return this.elementType.isVariableSize();
+  struct_defaultValue() {
+    return Array.from({
+      length: this.length
+    }, () => {
+      return this.elementType.struct_defaultValue();
+    });
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  struct_getLength(value) {
+    return this.length;
   }
 
-  chunkCount() {
+  getMaxLength() {
+    return this.length;
+  }
+
+  getMinLength() {
+    return this.length;
+  }
+
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
+    const value = super.struct_deserializeFromBytes(data, start, end);
+
+    if (value.length !== this.length) {
+      throw new Error("Incorrect deserialized vector length");
+    }
+
+    return value;
+  }
+
+  struct_assertValidValue(value) {
+    const actualLength = value.length;
+    const expectedLength = this.struct_getLength(value);
+
+    if (actualLength !== expectedLength) {
+      throw new Error("Invalid vector length: expected ".concat(expectedLength, ", actual ").concat(actualLength));
+    }
+
+    super.struct_assertValidValue(value);
+  }
+
+  struct_convertFromJson(data) {
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid JSON vector: expected an Array");
+    }
+
+    const expectedLength = this.length;
+
+    if (data.length !== expectedLength) {
+      throw new Error("Invalid JSON vector length: expected ".concat(expectedLength, ", actual ").concat(data.length));
+    }
+
+    return super.struct_convertFromJson(data);
+  }
+
+  tree_defaultNode() {
+    if (!this._defaultNode) {
+      this._defaultNode = (0, _persistentMerkleTree.subtreeFillToLength)(this.elementType.tree_defaultNode(), this.getChunkDepth(), this.length);
+    }
+
+    return this._defaultNode;
+  }
+
+  tree_defaultValue() {
+    return new _persistentMerkleTree.Tree(this.tree_defaultNode());
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  tree_getLength(target) {
+    return this.length;
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    const target = this.tree_defaultValue();
+
+    if (this.elementType.hasVariableSerializedLength()) {
+      const offsets = this.bytes_getVariableOffsets(new Uint8Array(data.buffer, data.byteOffset + start, end - start));
+
+      if (offsets.length !== this.length) {
+        throw new Error("Incorrect deserialized vector length");
+      }
+
+      for (let i = 0; i < offsets.length; i++) {
+        const [currentOffset, nextOffset] = offsets[i];
+        this.tree_setSubtreeAtChunkIndex(target, i, this.elementType.tree_deserializeFromBytes(data, start + currentOffset, start + nextOffset));
+      }
+    } else {
+      const elementSize = this.elementType.struct_getSerializedLength(null);
+      const length = (end - start) / elementSize;
+
+      if (length !== this.length) {
+        throw new Error("Incorrect deserialized vector length");
+      }
+
+      for (let i = 0; i < length; i++) {
+        this.tree_setSubtreeAtChunkIndex(target, i, this.elementType.tree_deserializeFromBytes(data, start + i * elementSize, start + (i + 1) * elementSize));
+      }
+    }
+
+    return target;
+  }
+
+  setProperty(target, property, value) {
+    if (property >= this.tree_getLength(target)) {
+      throw new Error("Invalid array index");
+    }
+
+    return super.tree_setProperty(target, property, value, false);
+  }
+
+  hasVariableSerializedLength() {
+    return this.elementType.hasVariableSerializedLength();
+  }
+
+  getMaxChunkCount() {
     return this.length;
   }
 
@@ -7615,7 +7796,7 @@ exports.CompositeVectorType = CompositeVectorType;
 //# sourceMappingURL=vector.js.map
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7626,20 +7807,20 @@ exports.CompositeVectorType = CompositeVectorType;
 
 
 
-var Schema = __webpack_require__(34);
+var Schema = __webpack_require__(37);
 
 
 module.exports = new Schema({
   explicit: [
-    __webpack_require__(199),
-    __webpack_require__(200),
-    __webpack_require__(201)
+    __webpack_require__(196),
+    __webpack_require__(197),
+    __webpack_require__(198)
   ]
 });
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7648,18 +7829,23 @@ module.exports = new Schema({
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ATTESTATION_SUBNET_COUNT = exports.JUSTIFICATION_BITS_LENGTH = exports.DEPOSIT_CONTRACT_TREE_DEPTH = void 0;
-const DEPOSIT_CONTRACT_TREE_DEPTH = 2 ** 5; // 32
+exports.ssz = exports.ts = void 0;
 
-exports.DEPOSIT_CONTRACT_TREE_DEPTH = DEPOSIT_CONTRACT_TREE_DEPTH;
-const JUSTIFICATION_BITS_LENGTH = 4;
-exports.JUSTIFICATION_BITS_LENGTH = JUSTIFICATION_BITS_LENGTH;
-const ATTESTATION_SUBNET_COUNT = 64;
-exports.ATTESTATION_SUBNET_COUNT = ATTESTATION_SUBNET_COUNT;
-//# sourceMappingURL=constants.js.map
+var _ts = _interopRequireWildcard(__webpack_require__(260));
+
+exports.ts = _ts;
+
+var _ssz = _interopRequireWildcard(__webpack_require__(265));
+
+exports.ssz = _ssz;
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+//# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7679,13 +7865,13 @@ __webpack_require__.d(__webpack_exports__, "merge", function() { return /* bindi
 __webpack_require__.d(__webpack_exports__, "sheet", function() { return /* binding */ sheet; });
 
 // EXTERNAL MODULE: ./node_modules/@emotion/cache/dist/cache.browser.esm.js + 2 modules
-var cache_browser_esm = __webpack_require__(64);
+var cache_browser_esm = __webpack_require__(71);
 
 // EXTERNAL MODULE: ./node_modules/@emotion/serialize/dist/serialize.browser.esm.js + 3 modules
-var serialize_browser_esm = __webpack_require__(11);
+var serialize_browser_esm = __webpack_require__(13);
 
 // EXTERNAL MODULE: ./node_modules/@emotion/utils/dist/utils.browser.esm.js
-var utils_browser_esm = __webpack_require__(15);
+var utils_browser_esm = __webpack_require__(16);
 
 // CONCATENATED MODULE: ./node_modules/create-emotion/dist/create-emotion.browser.esm.js
 
@@ -7850,25 +8036,39 @@ var _createEmotion = create_emotion_browser_esm(),
 
 
 /***/ }),
-/* 94 */
-/***/ (function(module) {
-
-module.exports = JSON.parse("{\"private\":true,\"name\":\"simpleserialize.com\",\"version\":\"0.1.0\",\"repository\":\"https://github.com/chainsafe/simpleserialize.com\",\"author\":\"Chainsafe Systems\",\"license\":\"MIT\",\"scripts\":{\"check-types\":\"tsc\",\"dev\":\"cross-env NODE_ENV=development webpack-dev-server --color --progress\",\"build\":\"cross-env NODE_ENV=production webpack --color --progress\",\"start\":\"serve dist\",\"lint\":\"eslint --ext .tsx src/\",\"lint-fix\":\"eslint --ext .tsx src/ --fix\"},\"dependencies\":{\"@babel/runtime\":\"^7.5.5\",\"@chainsafe/lodestar-config\":\"^0.9.0\",\"@chainsafe/lodestar-types\":\"^0.9.0\",\"@chainsafe/ssz\":\"^0.6.7\",\"@types/bn.js\":\"^4.11.5\",\"@types/deep-equal\":\"^1.0.1\",\"@types/file-saver\":\"^2.0.1\",\"@typescript-eslint/eslint-plugin\":\"^2.32.0\",\"@typescript-eslint/parser\":\"^2.32.0\",\"bn.js\":\"^4.11.8\",\"bulma\":\"^0.7.5\",\"core-js\":\"2\",\"css-loader\":\"^2.1.1\",\"decamelize\":\"^3.2.0\",\"deep-equal\":\"^1.1.0\",\"eslint\":\"^7.0.0\",\"eslint-plugin-import\":\"^2.20.2\",\"extract-text-webpack-plugin\":\"^4.0.0-beta.0\",\"eyzy-tree\":\"^0.2.2\",\"file-saver\":\"^2.0.2\",\"js-yaml\":\"^3.13.1\",\"mini-css-extract-plugin\":\"^0.7.0\",\"node-sass\":\"^4.12.0\",\"react\":\"^16.8.6\",\"react-alert\":\"^7.0.1\",\"react-alert-template-basic\":\"^1.0.0\",\"react-dom\":\"^16.8.6\",\"react-loading-overlay\":\"^1.0.1\",\"react-spinners\":\"^0.8.3\",\"sass-loader\":\"^7.1.0\",\"style-loader\":\"^0.23.1\"},\"devDependencies\":{\"@babel/core\":\"^7.4.5\",\"@babel/preset-env\":\"^7.4.5\",\"@babel/preset-react\":\"^7.0.0\",\"@babel/preset-typescript\":\"^7.3.3\",\"@types/node\":\"^12.0.4\",\"@types/react\":\"^16.8.19\",\"@types/react-dom\":\"^16.8.4\",\"babel-loader\":\"^8.0.6\",\"cross-env\":\"^5.2.0\",\"eslint-plugin-react\":\"^7.20.0\",\"html-webpack-plugin\":\"^3.2.0\",\"serve\":\"^11.0.1\",\"typescript\":\"^3.5.1\",\"webpack\":\"^4.33.0\",\"webpack-cli\":\"^3.3.2\",\"webpack-dev-server\":\"^3.6.0\",\"workerize-loader\":\"^1.2.1\"}}");
-
-/***/ }),
 /* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(6) && !__webpack_require__(8)(function () {
-  return Object.defineProperty(__webpack_require__(96)('div'), 'a', { get: function () { return 7; } }).a != 7;
-});
+"use strict";
+
+
+
+var yaml = __webpack_require__(193);
+
+
+module.exports = yaml;
 
 
 /***/ }),
 /* 96 */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"private\":true,\"name\":\"simpleserialize.com\",\"version\":\"0.1.0\",\"repository\":\"https://github.com/chainsafe/simpleserialize.com\",\"author\":\"Chainsafe Systems\",\"license\":\"MIT\",\"scripts\":{\"check-types\":\"tsc\",\"dev\":\"cross-env NODE_ENV=development webpack-dev-server --color --progress\",\"build\":\"cross-env NODE_ENV=production webpack --color --progress\",\"start\":\"serve dist\",\"lint\":\"eslint --ext .tsx src/\",\"lint:fix\":\"eslint --ext .tsx src/ --fix\"},\"dependencies\":{\"@babel/runtime\":\"^7.5.5\",\"@chainsafe/lodestar-config\":\"^0.25.0\",\"@chainsafe/lodestar-types\":\"^0.25.0\",\"@chainsafe/ssz\":\"^0.8.11\",\"@types/bn.js\":\"^4.11.5\",\"@types/deep-equal\":\"^1.0.1\",\"@types/file-saver\":\"^2.0.1\",\"@typescript-eslint/eslint-plugin\":\"^2.32.0\",\"@typescript-eslint/parser\":\"^2.32.0\",\"bn.js\":\"^4.11.8\",\"bulma\":\"^0.7.5\",\"core-js\":\"2\",\"css-loader\":\"^2.1.1\",\"decamelize\":\"^3.2.0\",\"deep-equal\":\"^1.1.0\",\"eslint\":\"^7.0.0\",\"eslint-plugin-import\":\"^2.20.2\",\"extract-text-webpack-plugin\":\"^4.0.0-beta.0\",\"eyzy-tree\":\"^0.2.2\",\"file-saver\":\"^2.0.2\",\"js-yaml\":\"^3.13.1\",\"mini-css-extract-plugin\":\"^0.7.0\",\"node-sass\":\"^4.12.0\",\"react\":\"^16.8.6\",\"react-alert\":\"^7.0.1\",\"react-alert-template-basic\":\"^1.0.0\",\"react-dom\":\"^16.8.6\",\"react-loading-overlay\":\"^1.0.1\",\"react-spinners\":\"^0.8.3\",\"sass-loader\":\"^7.1.0\",\"style-loader\":\"^0.23.1\"},\"devDependencies\":{\"@babel/core\":\"^7.4.5\",\"@babel/preset-env\":\"^7.4.5\",\"@babel/preset-react\":\"^7.0.0\",\"@babel/preset-typescript\":\"^7.3.3\",\"@types/node\":\"^12.0.4\",\"@types/react\":\"^16.8.19\",\"@types/react-dom\":\"^16.8.4\",\"babel-loader\":\"^8.0.6\",\"cross-env\":\"^5.2.0\",\"eslint-plugin-react\":\"^7.20.0\",\"html-webpack-plugin\":\"^3.2.0\",\"serve\":\"^11.0.1\",\"typescript\":\"^3.5.1\",\"webpack\":\"^4.33.0\",\"webpack-cli\":\"^3.3.2\",\"webpack-dev-server\":\"^3.6.0\",\"workerize-loader\":\"^1.2.1\"}}");
+
+/***/ }),
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(13);
+module.exports = !__webpack_require__(6) && !__webpack_require__(9)(function () {
+  return Object.defineProperty(__webpack_require__(98)('div'), 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(14);
 var document = __webpack_require__(5).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
@@ -7878,13 +8078,13 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 97 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var has = __webpack_require__(18);
-var toIObject = __webpack_require__(28);
-var arrayIndexOf = __webpack_require__(98)(false);
-var IE_PROTO = __webpack_require__(67)('IE_PROTO');
+var has = __webpack_require__(19);
+var toIObject = __webpack_require__(22);
+var arrayIndexOf = __webpack_require__(74)(false);
+var IE_PROTO = __webpack_require__(75)('IE_PROTO');
 
 module.exports = function (object, names) {
   var O = toIObject(object);
@@ -7901,36 +8101,7 @@ module.exports = function (object, names) {
 
 
 /***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// false -> Array#indexOf
-// true  -> Array#includes
-var toIObject = __webpack_require__(28);
-var toLength = __webpack_require__(19);
-var toAbsoluteIndex = __webpack_require__(48);
-module.exports = function (IS_INCLUDES) {
-  return function ($this, el, fromIndex) {
-    var O = toIObject($this);
-    var length = toLength(O.length);
-    var index = toAbsoluteIndex(fromIndex, length);
-    var value;
-    // Array#includes uses SameValueZero equality algorithm
-    // eslint-disable-next-line no-self-compare
-    if (IS_INCLUDES && el != el) while (length > index) {
-      value = O[index++];
-      // eslint-disable-next-line no-self-compare
-      if (value != value) return true;
-    // Array#indexOf ignores holes, Array#includes - not
-    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
-      if (O[index] === el) return IS_INCLUDES || index || 0;
-    } return !IS_INCLUDES && -1;
-  };
-};
-
-
-/***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8027,14 +8198,14 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(5);
 var core = __webpack_require__(25);
-var LIBRARY = __webpack_require__(26);
-var wksExt = __webpack_require__(101);
-var defineProperty = __webpack_require__(9).f;
+var LIBRARY = __webpack_require__(27);
+var wksExt = __webpack_require__(102);
+var defineProperty = __webpack_require__(8).f;
 module.exports = function (name) {
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
   if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
@@ -8042,32 +8213,51 @@ module.exports = function (name) {
 
 
 /***/ }),
-/* 101 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports.f = __webpack_require__(3);
-
-
-/***/ }),
 /* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 7.2.2 IsArray(argument)
-var cof = __webpack_require__(66);
-module.exports = Array.isArray || function isArray(arg) {
-  return cof(arg) == 'Array';
-};
+exports.f = __webpack_require__(4);
 
 
 /***/ }),
 /* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// 7.2.2 IsArray(argument)
+var cof = __webpack_require__(73);
+module.exports = Array.isArray || function isArray(arg) {
+  return cof(arg) == 'Array';
+};
+
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(8);
+var anObject = __webpack_require__(12);
+var getKeys = __webpack_require__(28);
+
+module.exports = __webpack_require__(6) ? Object.defineProperties : function defineProperties(O, Properties) {
+  anObject(O);
+  var keys = getKeys(Properties);
+  var length = keys.length;
+  var i = 0;
+  var P;
+  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
-var aFunction = __webpack_require__(37);
-var isObject = __webpack_require__(13);
-var invoke = __webpack_require__(152);
+var aFunction = __webpack_require__(38);
+var isObject = __webpack_require__(14);
+var invoke = __webpack_require__(160);
 var arraySlice = [].slice;
 var factories = {};
 
@@ -8092,10 +8282,10 @@ module.exports = Function.bind || function bind(that /* , ...args */) {
 
 
 /***/ }),
-/* 104 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dP = __webpack_require__(9).f;
+var dP = __webpack_require__(8).f;
 var FProto = Function.prototype;
 var nameRE = /^\s*function ([^ (]*)/;
 var NAME = 'name';
@@ -8114,13 +8304,13 @@ NAME in FProto || __webpack_require__(6) && dP(FProto, NAME, {
 
 
 /***/ }),
-/* 105 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has = __webpack_require__(18);
-var toObject = __webpack_require__(17);
-var IE_PROTO = __webpack_require__(67)('IE_PROTO');
+var has = __webpack_require__(19);
+var toObject = __webpack_require__(18);
+var IE_PROTO = __webpack_require__(75)('IE_PROTO');
 var ObjectProto = Object.prototype;
 
 module.exports = Object.getPrototypeOf || function (O) {
@@ -8129,72 +8319,6 @@ module.exports = Object.getPrototypeOf || function (O) {
   if (typeof O.constructor == 'function' && O instanceof O.constructor) {
     return O.constructor.prototype;
   } return O instanceof Object ? ObjectProto : null;
-};
-
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 0 -> Array#forEach
-// 1 -> Array#map
-// 2 -> Array#filter
-// 3 -> Array#some
-// 4 -> Array#every
-// 5 -> Array#find
-// 6 -> Array#findIndex
-var ctx = __webpack_require__(46);
-var IObject = __webpack_require__(65);
-var toObject = __webpack_require__(17);
-var toLength = __webpack_require__(19);
-var asc = __webpack_require__(159);
-module.exports = function (TYPE, $create) {
-  var IS_MAP = TYPE == 1;
-  var IS_FILTER = TYPE == 2;
-  var IS_SOME = TYPE == 3;
-  var IS_EVERY = TYPE == 4;
-  var IS_FIND_INDEX = TYPE == 6;
-  var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
-  var create = $create || asc;
-  return function ($this, callbackfn, that) {
-    var O = toObject($this);
-    var self = IObject(O);
-    var f = ctx(callbackfn, that, 3);
-    var length = toLength(self.length);
-    var index = 0;
-    var result = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined;
-    var val, res;
-    for (;length > index; index++) if (NO_HOLES || index in self) {
-      val = self[index];
-      res = f(val, index, O);
-      if (TYPE) {
-        if (IS_MAP) result[index] = res;   // map
-        else if (res) switch (TYPE) {
-          case 3: return true;             // some
-          case 5: return val;              // find
-          case 6: return index;            // findIndex
-          case 2: result.push(val);        // filter
-        } else if (IS_EVERY) return false; // every
-      }
-    }
-    return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
-  };
-};
-
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var fails = __webpack_require__(8);
-
-module.exports = function (method, arg) {
-  return !!method && fails(function () {
-    // eslint-disable-next-line no-useless-call
-    arg ? method.call(null, function () { /* empty */ }, 1) : method.call(null);
-  });
 };
 
 
@@ -8235,7 +8359,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _basic = __webpack_require__(20);
+var _basic = __webpack_require__(33);
 
 Object.keys(_basic).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -8247,7 +8371,7 @@ Object.keys(_basic).forEach(function (key) {
   });
 });
 
-var _composite = __webpack_require__(163);
+var _composite = __webpack_require__(171);
 
 Object.keys(_composite).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -8259,7 +8383,7 @@ Object.keys(_composite).forEach(function (key) {
   });
 });
 
-var _type = __webpack_require__(195);
+var _type = __webpack_require__(10);
 
 Object.keys(_type).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -8285,13 +8409,16 @@ Object.defineProperty(exports, "__esModule", {
 exports.isBooleanType = isBooleanType;
 exports.BooleanType = exports.BOOLEAN_TYPE = void 0;
 
-var _abstract = __webpack_require__(76);
+var _type = __webpack_require__(10);
 
+var _abstract = __webpack_require__(82);
+
+/* eslint-disable @typescript-eslint/camelcase */
 const BOOLEAN_TYPE = Symbol.for("ssz/BooleanType");
 exports.BOOLEAN_TYPE = BOOLEAN_TYPE;
 
 function isBooleanType(type) {
-  return (0, _abstract.isTypeOf)(type, BOOLEAN_TYPE);
+  return (0, _type.isTypeOf)(type, BOOLEAN_TYPE);
 }
 
 class BooleanType extends _abstract.BasicType {
@@ -8301,30 +8428,28 @@ class BooleanType extends _abstract.BasicType {
     this._typeSymbols.add(BOOLEAN_TYPE);
   }
 
-  size() {
+  struct_getSerializedLength() {
     return 1;
   }
 
-  isBasic() {
-    return true;
-  }
-
-  assertValidValue(value) {
+  struct_assertValidValue(value) {
     if (value !== true && value !== false) {
       throw new Error("Boolean value must be true or false");
     }
   }
 
-  defaultValue() {
+  struct_defaultValue() {
     return false;
   }
 
-  toBytes(value, output, offset) {
+  struct_serializeToBytes(value, output, offset) {
     output[offset] = value ? 1 : 0;
     return offset + 1;
   }
 
-  fromBytes(data, offset) {
+  struct_deserializeFromBytes(data, offset) {
+    this.bytes_validate(data, offset);
+
     if (data[offset] === 1) {
       return true;
     } else if (data[offset] === 0) {
@@ -8334,12 +8459,12 @@ class BooleanType extends _abstract.BasicType {
     }
   }
 
-  fromJson(data) {
-    this.assertValidValue(data);
+  struct_convertFromJson(data) {
+    this.struct_assertValidValue(data);
     return data;
   }
 
-  toJson(value) {
+  struct_convertToJson(value) {
     return value;
   }
 
@@ -8363,7 +8488,9 @@ exports.isNumberUintType = isNumberUintType;
 exports.isBigIntUintType = isBigIntUintType;
 exports.BigIntUintType = exports.BIGINT_UINT_TYPE = exports.NumberUintType = exports.NUMBER_UINT_TYPE = exports.UintType = exports.UINT_TYPE = void 0;
 
-var _abstract = __webpack_require__(76);
+var _type = __webpack_require__(10);
+
+var _abstract = __webpack_require__(82);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -8371,7 +8498,7 @@ const UINT_TYPE = Symbol.for("ssz/UintType");
 exports.UINT_TYPE = UINT_TYPE;
 
 function isUintType(type) {
-  return (0, _abstract.isTypeOf)(type, UINT_TYPE);
+  return (0, _type.isTypeOf)(type, UINT_TYPE);
 } // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 
@@ -8386,7 +8513,7 @@ class UintType extends _abstract.BasicType {
     this._typeSymbols.add(UINT_TYPE);
   }
 
-  size() {
+  struct_getSerializedLength() {
     return this.byteLength;
   }
 
@@ -8395,19 +8522,22 @@ class UintType extends _abstract.BasicType {
 exports.UintType = UintType;
 const NUMBER_UINT_TYPE = Symbol.for("ssz/NumberUintType");
 exports.NUMBER_UINT_TYPE = NUMBER_UINT_TYPE;
+const BIGINT_4_BYTES = BigInt(32);
 
 function isNumberUintType(type) {
-  return (0, _abstract.isTypeOf)(type, NUMBER_UINT_TYPE);
+  return (0, _type.isTypeOf)(type, NUMBER_UINT_TYPE);
 }
 
 class NumberUintType extends UintType {
   constructor(options) {
     super(options);
 
+    _defineProperty(this, "_maxBigInt", void 0);
+
     this._typeSymbols.add(NUMBER_UINT_TYPE);
   }
 
-  assertValidValue(value) {
+  struct_assertValidValue(value) {
     if (value !== Infinity && (!Number.isSafeInteger(value) || value > BigInt(2) ** (BigInt(8) * BigInt(this.byteLength)))) {
       throw new Error("Uint value is not a number");
     }
@@ -8417,15 +8547,19 @@ class NumberUintType extends UintType {
     }
   }
 
-  defaultValue() {
+  struct_defaultValue() {
     return 0;
   }
 
-  maxBigInt() {
-    return BigInt(2) ** BigInt(this.byteLength * 8) - BigInt(1);
+  struct_getMaxBigInt() {
+    if (this._maxBigInt === undefined) {
+      this._maxBigInt = BigInt(2) ** BigInt(this.byteLength * 8) - BigInt(1);
+    }
+
+    return this._maxBigInt;
   }
 
-  toBytes(value, output, offset) {
+  struct_serializeToBytes(value, output, offset) {
     if (this.byteLength > 6 && value === Infinity) {
       for (let i = offset; i < offset + this.byteLength; i++) {
         output[i] = 0xff;
@@ -8443,12 +8577,13 @@ class NumberUintType extends UintType {
     return offset + this.byteLength;
   }
 
-  fromBytes(data, offset) {
+  struct_deserializeFromBytes(data, offset) {
+    this.bytes_validate(data, offset);
     let isInfinity = true;
-    let output = BigInt(0);
+    let output = 0;
 
     for (let i = 0; i < this.byteLength; i++) {
-      output += BigInt(data[offset + i]) << BigInt(8 * i);
+      output += data[offset + i] * 2 ** (8 * i);
 
       if (data[offset + i] !== 0xff) {
         isInfinity = false;
@@ -8462,11 +8597,11 @@ class NumberUintType extends UintType {
     return Number(output);
   }
 
-  fromJson(data) {
+  struct_convertFromJson(data) {
     let n;
     const bigN = BigInt(data);
 
-    if (bigN === this.maxBigInt()) {
+    if (bigN === this.struct_getMaxBigInt()) {
       n = Infinity;
     } else if (bigN < Number.MAX_SAFE_INTEGER) {
       n = Number(bigN);
@@ -8478,10 +8613,10 @@ class NumberUintType extends UintType {
     return n;
   }
 
-  toJson(value) {
+  struct_convertToJson(value) {
     if (this.byteLength > 4) {
       if (value === Infinity) {
-        return this.maxBigInt().toString();
+        return this.struct_getMaxBigInt().toString();
       }
 
       return String(value);
@@ -8497,7 +8632,7 @@ const BIGINT_UINT_TYPE = Symbol.for("ssz/BigIntUintType");
 exports.BIGINT_UINT_TYPE = BIGINT_UINT_TYPE;
 
 function isBigIntUintType(type) {
-  return (0, _abstract.isTypeOf)(type, BIGINT_UINT_TYPE);
+  return (0, _type.isTypeOf)(type, BIGINT_UINT_TYPE);
 }
 
 class BigIntUintType extends UintType {
@@ -8507,7 +8642,7 @@ class BigIntUintType extends UintType {
     this._typeSymbols.add(BIGINT_UINT_TYPE);
   }
 
-  assertValidValue(value) {
+  struct_assertValidValue(value) {
     if (typeof value !== "bigint") {
       throw new Error("Uint value is not a bigint");
     }
@@ -8517,39 +8652,88 @@ class BigIntUintType extends UintType {
     }
   }
 
-  defaultValue() {
+  struct_defaultValue() {
     return BigInt(0);
   }
 
-  toBytes(value, output, offset) {
+  struct_serializeToBytes(value, output, offset) {
+    // Motivation
+    // BigInt bit shifting and BigInt allocation is slower compared to number
+    // For every 4 bytes, we extract value to groupedBytes
+    // and do bit shifting on the number
     let v = value;
+    let groupedBytes = Number(BigInt.asUintN(32, v));
 
     for (let i = 0; i < this.byteLength; i++) {
-      output[offset + i] = Number(v & BigInt(0xff));
-      v >>= BigInt(8);
+      output[offset + i] = Number(groupedBytes & 0xff);
+
+      if ((i + 1) % 4 !== 0) {
+        groupedBytes >>= 8;
+      } else {
+        v >>= BIGINT_4_BYTES;
+        groupedBytes = Number(BigInt.asUintN(32, v));
+      }
     }
 
     return offset + this.byteLength;
   }
 
-  fromBytes(data, offset) {
+  struct_deserializeFromBytes(data, offset) {
+    this.bytes_validate(data, offset); // Motivation:
+    //   Creating BigInts and bitshifting is more expensive than
+    // number bitshifting.
+    // Implementation:
+    //   Iterate throuth the bytearray, bitshifting the data into a 'groupOutput' number, byte by byte
+    // After each 4 bytes, bitshift the groupOutput into the bigint output and clear the groupOutput out
+    // After iterating through the bytearray,
+    // There may be additional data in the groupOutput if the bytearray if the bytearray isn't divisible by 4
+
     let output = BigInt(0);
+    let groupIndex = 0,
+        groupOutput = 0;
 
     for (let i = 0; i < this.byteLength; i++) {
-      output += BigInt(data[offset + i]) << BigInt(8 * i);
+      groupOutput += data[offset + i] << 8 * (i % 4);
+
+      if ((i + 1) % 4 === 0) {
+        // Left shift returns a signed integer and the output may have become negative
+        // In that case, the output needs to be converted to unsigned integer
+        if (groupOutput < 0) {
+          groupOutput >>>= 0;
+        } // Optimization to set the output the first time, forgoing BigInt addition
+
+
+        if (groupIndex === 0) {
+          output = BigInt(groupOutput);
+        } else {
+          output += BigInt(groupOutput) << BigInt(32 * groupIndex);
+        }
+
+        groupIndex++;
+        groupOutput = 0;
+      }
+    } // if this.byteLength isn't a multiple of 4, there will be additional data
+
+
+    if (groupOutput) {
+      output += BigInt(groupOutput >>> 0) << BigInt(32 * groupIndex);
     }
 
     return output;
   }
 
-  fromJson(data) {
+  struct_convertFromJson(data) {
     const value = BigInt(data);
     this.assertValidValue(value);
     return value;
   }
 
-  toJson(value) {
-    return value.toString();
+  struct_convertToJson(value) {
+    if (this.byteLength > 4) {
+      return value.toString();
+    } else {
+      return Number(value);
+    }
   }
 
 }
@@ -8567,9 +8751,47 @@ exports.BigIntUintType = BigIntUintType;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.isTree = isTree;
+
+function isTree(value) {
+  return Boolean(value.rootNode && value.rootNode.isLeaf);
+}
+//# sourceMappingURL=tree.js.map
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.hash = void 0;
+const as_sha256_1 = __webpack_require__(114);
+const input = new Uint8Array(64);
+/**
+ * Hash two 32 byte arrays
+ */
+function hash(a, b) {
+    input.set(a, 0);
+    input.set(b, 32);
+    return as_sha256_1.default.digest64(input);
+}
+exports.hash = hash;
+
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.default = void 0;
 
-var _wasm = __webpack_require__(169);
+var _wasm = __webpack_require__(175);
 
 class SHA256 {
   constructor() {
@@ -8607,272 +8829,130 @@ class SHA256 {
   }
 
   static digest(data) {
-    if (data.length <= SHA256.ctx.INPUT_LENGTH) {
-      const input = new Uint8Array(SHA256.ctx.memory.buffer, SHA256.ctx.input.value, SHA256.ctx.INPUT_LENGTH);
+    if (data.length <= staticInstance.ctx.INPUT_LENGTH) {
+      const input = new Uint8Array(staticInstance.ctx.memory.buffer, staticInstance.ctx.input.value, staticInstance.ctx.INPUT_LENGTH);
       input.set(data);
-      SHA256.ctx.digest(data.length);
+      staticInstance.ctx.digest(data.length);
       const output = new Uint8Array(32);
-      output.set(new Uint8Array(SHA256.ctx.memory.buffer, SHA256.ctx.output.value, 32));
+      output.set(new Uint8Array(staticInstance.ctx.memory.buffer, staticInstance.ctx.output.value, 32));
       return output;
     }
 
-    return SHA256.ctx.init().update(data).final();
+    return staticInstance.init().update(data).final();
+  }
+
+  static digest64(data) {
+    if (data.length == 64) {
+      const input = new Uint8Array(staticInstance.ctx.memory.buffer, staticInstance.ctx.input.value, staticInstance.ctx.INPUT_LENGTH);
+      input.set(data);
+      staticInstance.ctx.digest64(staticInstance.ctx.input.value, staticInstance.ctx.output.value);
+      const output = new Uint8Array(32);
+      output.set(new Uint8Array(staticInstance.ctx.memory.buffer, staticInstance.ctx.output.value, 32));
+      return output;
+    }
+
+    throw new Error("InvalidLengthForDigest64");
   }
 
 }
 
 exports.default = SHA256;
-SHA256.ctx = new SHA256();
-
-/***/ }),
-/* 113 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeListStructuralHandler = exports.BasicListStructuralHandler = void 0;
-
-var _compat = __webpack_require__(59);
-
-var _array = __webpack_require__(80);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BasicListStructuralHandler extends _array.BasicArrayStructuralHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultValue() {
-    return [];
-  }
-
-  getLength(value) {
-    return value.length;
-  }
-
-  getMaxLength() {
-    return this._type.limit;
-  }
-
-  getMinLength() {
-    return 0;
-  }
-
-  fromBytes(data, start, end) {
-    if ((end - start) / this._type.elementType.size() > this._type.limit) {
-      throw new Error("Deserialized list length greater than limit");
-    }
-
-    return super.fromBytes(data, start, end);
-  }
-
-  nonzeroChunkCount(value) {
-    return Math.ceil(value.length * this._type.elementType.size() / 32);
-  }
-
-  hashTreeRoot(value) {
-    return (0, _compat.mixInLength)(super.hashTreeRoot(value), value.length);
-  }
-
-  fromJson(data) {
-    if (!Array.isArray(data)) {
-      throw new Error("Invalid JSON list: expected an Array");
-    }
-
-    const maxLength = this._type.limit;
-
-    if (data.length > maxLength) {
-      throw new Error("Invalid JSON list: length ".concat(data.length, " greater than limit ").concat(maxLength));
-    }
-
-    return super.fromJson(data);
-  }
-
-}
-
-exports.BasicListStructuralHandler = BasicListStructuralHandler;
-
-class CompositeListStructuralHandler extends _array.CompositeArrayStructuralHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultValue() {
-    return [];
-  }
-
-  getLength(value) {
-    return value.length;
-  }
-
-  getMaxLength() {
-    return this._type.limit;
-  }
-
-  getMinLength() {
-    return 0;
-  }
-
-  fromBytes(data, start, end) {
-    const value = super.fromBytes(data, start, end);
-
-    if (value.length > this._type.limit) {
-      throw new Error("Deserialized list length greater than limit");
-    }
-
-    return value;
-  }
-
-  nonzeroChunkCount(value) {
-    return value.length;
-  }
-
-  hashTreeRoot(value) {
-    return (0, _compat.mixInLength)(super.hashTreeRoot(value), value.length);
-  }
-
-  fromJson(data, options) {
-    if (!Array.isArray(data)) {
-      throw new Error("Invalid JSON list: expected an Array");
-    }
-
-    const maxLength = this._type.limit;
-
-    if (data.length > maxLength) {
-      throw new Error("Invalid JSON list: length ".concat(data.length, " greater than limit ").concat(maxLength));
-    }
-
-    return super.fromJson(data, options);
-  }
-
-}
-
-exports.CompositeListStructuralHandler = CompositeListStructuralHandler;
-//# sourceMappingURL=list.js.map
-
-/***/ }),
-/* 114 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function bitIndexBigInt(v) {
-    return v.toString(2).length - 1;
-}
-exports.bitIndexBigInt = bitIndexBigInt;
-function toGindex(index, depth) {
-    const anchor = BigInt(1) << BigInt(depth);
-    if (index >= anchor) {
-        throw new Error("index too large for depth");
-    }
-    return anchor | index;
-}
-exports.toGindex = toGindex;
-function toGindexBitstring(index, depth) {
-    const str = index ? index.toString(2) : '';
-    if (str.length > depth) {
-        throw new Error("index too large for depth");
-    }
-    else {
-        return "1" + str.padStart(depth, "0");
-    }
-}
-exports.toGindexBitstring = toGindexBitstring;
-// Get the depth (root starting at 0) necessary to cover a subtree of `count` elements.
-// (in out): (0 0), (1 0), (2 1), (3 2), (4 2), (5 3), (6 3), (7 3), (8 3), (9 4)
-function countToDepth(count) {
-    if (count <= 1) {
-        return 0;
-    }
-    return (count - BigInt(1)).toString(2).length;
-}
-exports.countToDepth = countToDepth;
-/**
- * Iterate through Gindexes at a certain depth
- */
-function iterateAtDepth(startIndex, count, depth) {
-    const anchor = BigInt(1) << BigInt(depth);
-    if (startIndex + count >= anchor) {
-        throw new Error("Too large for depth");
-    }
-    let i = toGindex(startIndex, depth);
-    const last = i + count;
-    return {
-        [Symbol.iterator]() {
-            return {
-                next() {
-                    if (i < last) {
-                        const value = i;
-                        i++;
-                        return { done: false, value };
-                    }
-                    else {
-                        return { done: true, value: undefined };
-                    }
-                }
-            };
-        }
-    };
-}
-exports.iterateAtDepth = iterateAtDepth;
-const ERR_INVALID_GINDEX = "Invalid gindex";
-function gindexIterator(gindex) {
-    if (gindex < 1) {
-        throw new Error(ERR_INVALID_GINDEX);
-    }
-    const bitstring = gindex.toString(2);
-    let i = 1;
-    const next = () => {
-        if (i === bitstring.length) {
-            return { done: true, value: undefined };
-        }
-        const bit = Number(bitstring[i]);
-        i++;
-        return { done: false, value: bit };
-    };
-    return {
-        [Symbol.iterator]() {
-            return { next };
-        },
-        totalBitLength() {
-            return bitstring.length;
-        },
-        remainingBitLength() {
-            return bitstring.length - i;
-        },
-    };
-}
-exports.gindexIterator = gindexIterator;
-
+const staticInstance = new SHA256();
 
 /***/ }),
 /* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(Buffer) {
-Object.defineProperty(exports, "__esModule", { value: true });
-const as_sha256_1 = __webpack_require__(112);
-function hash(a, b) {
-    return as_sha256_1.default.digest(Buffer.concat([a, b]));
-}
-exports.hash = hash;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(22).Buffer))
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deserializeProof = exports.serializeProof = exports.createNodeFromProof = exports.createProof = exports.ProofTypeSerialized = exports.ProofType = void 0;
+const single_1 = __webpack_require__(116);
+const treeOffset_1 = __webpack_require__(182);
+var ProofType;
+(function (ProofType) {
+    ProofType["single"] = "single";
+    ProofType["treeOffset"] = "treeOffset";
+})(ProofType = exports.ProofType || (exports.ProofType = {}));
+/**
+ * Serialized proofs are prepended with a single byte, denoting their type
+ */
+exports.ProofTypeSerialized = [
+    ProofType.single,
+    ProofType.treeOffset, // 1
+];
+function createProof(rootNode, input) {
+    switch (input.type) {
+        case ProofType.single: {
+            const [leaf, witnesses] = single_1.createSingleProof(rootNode, input.gindex);
+            return {
+                type: ProofType.single,
+                gindex: input.gindex,
+                leaf,
+                witnesses,
+            };
+        }
+        case ProofType.treeOffset: {
+            const [offsets, leaves] = treeOffset_1.createTreeOffsetProof(rootNode, input.gindices);
+            return {
+                type: ProofType.treeOffset,
+                offsets,
+                leaves,
+            };
+        }
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+exports.createProof = createProof;
+function createNodeFromProof(proof) {
+    switch (proof.type) {
+        case ProofType.single:
+            return single_1.createNodeFromSingleProof(proof.gindex, proof.leaf, proof.witnesses);
+        case ProofType.treeOffset:
+            return treeOffset_1.createNodeFromTreeOffsetProof(proof.offsets, proof.leaves);
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+exports.createNodeFromProof = createNodeFromProof;
+function serializeProof(proof) {
+    switch (proof.type) {
+        case ProofType.single:
+            throw new Error("Not implemented");
+        case ProofType.treeOffset: {
+            const output = new Uint8Array(1 + treeOffset_1.computeTreeOffsetProofSerializedLength(proof.offsets, proof.leaves));
+            output[0] = exports.ProofTypeSerialized.indexOf(ProofType.treeOffset);
+            treeOffset_1.serializeTreeOffsetProof(output, 1, proof.offsets, proof.leaves);
+            return output;
+        }
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+exports.serializeProof = serializeProof;
+function deserializeProof(data) {
+    const proofType = exports.ProofTypeSerialized[data[0]];
+    if (!proofType) {
+        throw new Error("Invalid proof type");
+    }
+    switch (proofType) {
+        case ProofType.single:
+            throw new Error("Not implemented");
+        case ProofType.treeOffset: {
+            const [offsets, leaves] = treeOffset_1.deserializeTreeOffsetProof(data, 1);
+            return {
+                type: ProofType.treeOffset,
+                offsets,
+                leaves,
+            };
+        }
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+exports.deserializeProof = deserializeProof;
+
 
 /***/ }),
 /* 116 */
@@ -8880,257 +8960,48 @@ exports.hash = hash;
 
 "use strict";
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeListTreeHandler = exports.BasicListTreeHandler = void 0;
-
-var _persistentMerkleTree = __webpack_require__(41);
-
-var _types = __webpack_require__(109);
-
-var _array = __webpack_require__(87);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BasicListTreeHandler extends _array.BasicArrayTreeHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    _defineProperty(this, "_defaultNode", void 0);
-
-    this._type = type;
-  }
-
-  defaultNode() {
-    if (!this._defaultNode) {
-      this._defaultNode = new _persistentMerkleTree.BranchNode((0, _persistentMerkleTree.zeroNode)(super.depth()), (0, _persistentMerkleTree.zeroNode)(0));
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createNodeFromSingleProof = exports.createSingleProof = exports.ERR_INVALID_NAV = void 0;
+const node_1 = __webpack_require__(35);
+const gindex_1 = __webpack_require__(65);
+exports.ERR_INVALID_NAV = "Invalid tree navigation";
+function createSingleProof(rootNode, index) {
+    const witnesses = [];
+    let node = rootNode;
+    for (const i of gindex_1.gindexIterator(index)) {
+        if (i) {
+            if (node.isLeaf())
+                throw new Error(exports.ERR_INVALID_NAV);
+            witnesses.push(node.left.root);
+            node = node.right;
+        }
+        else {
+            if (node.isLeaf())
+                throw new Error(exports.ERR_INVALID_NAV);
+            witnesses.push(node.right.root);
+            node = node.left;
+        }
     }
-
-    return this._defaultNode;
-  }
-
-  defaultBacking() {
-    return new _persistentMerkleTree.Tree(this.defaultNode());
-  }
-
-  getLength(target) {
-    return _types.number32Type.fromBytes(target.getRoot(BigInt(3)), 0);
-  }
-
-  setLength(target, length) {
-    const chunk = new Uint8Array(32);
-
-    _types.number32Type.toBytes(length, chunk, 0);
-
-    target.setRoot(BigInt(3), chunk);
-  }
-
-  fromBytes(data, start, end) {
-    const length = (end - start) / this._type.elementType.size();
-
-    if (!Number.isSafeInteger(length)) {
-      throw new Error("Deserialized list byte length must be divisible by element size");
-    }
-
-    if (length > this._type.limit) {
-      throw new Error("Deserialized list length greater than limit");
-    }
-
-    const value = super.fromBytes(data, start, end);
-    this.setLength(value, length);
-    return value;
-  }
-
-  depth() {
-    return super.depth() + 1;
-  }
-
-  set(target, property, value) {
-    const length = this.getLength(target);
-
-    if (property > length) {
-      throw new Error("Invalid length index");
-    } else if (property == length) {
-      this.pushSingle(target, value);
-      return true;
-    } else {
-      return this.setProperty(target, property, value);
-    }
-  }
-
-  deleteProperty(target, property) {
-    const length = this.getLength(target);
-
-    if (property > length) {
-      throw new Error("Invalid length index");
-    } else if (property == length) {
-      this.pop(target);
-      return true;
-    } else {
-      return super.deleteProperty(target, property);
-    }
-  }
-
-  pushSingle(target, value) {
-    const length = this.getLength(target);
-    const expand = this.getChunkIndex(length) != this.getChunkIndex(length + 1);
-    this.setProperty(target, length, value, expand);
-    this.setLength(target, length + 1);
-    return length + 1;
-  }
-
-  push(target, ...values) {
-    let newLength;
-    values.forEach(value => newLength = this.pushSingle(target, value));
-    return newLength;
-  }
-
-  pop(target) {
-    const length = this.getLength(target);
-    const value = this.get(target, length - 1);
-    super.deleteProperty(target, length - 1);
-    this.setLength(target, length - 1);
-    return value;
-  }
-
+    return [node.root, witnesses.reverse()];
 }
-
-exports.BasicListTreeHandler = BasicListTreeHandler;
-
-class CompositeListTreeHandler extends _array.CompositeArrayTreeHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    _defineProperty(this, "_defaultNode", void 0);
-
-    this._type = type;
-  }
-
-  defaultNode() {
-    if (!this._defaultNode) {
-      this._defaultNode = new _persistentMerkleTree.BranchNode((0, _persistentMerkleTree.zeroNode)(super.depth()), (0, _persistentMerkleTree.zeroNode)(0));
+exports.createSingleProof = createSingleProof;
+function createNodeFromSingleProof(gindex, leaf, witnesses) {
+    let node = new node_1.LeafNode(leaf);
+    const w = witnesses.reverse();
+    while (gindex > 1) {
+        const sibling = new node_1.LeafNode(w.pop());
+        if (gindex % BigInt(2) === BigInt(0)) {
+            node = new node_1.BranchNode(node, sibling);
+        }
+        else {
+            node = new node_1.BranchNode(sibling, node);
+        }
+        gindex = gindex / BigInt(2);
     }
-
-    return this._defaultNode;
-  }
-
-  defaultBacking() {
-    return new _persistentMerkleTree.Tree(this.defaultNode());
-  }
-
-  getLength(target) {
-    return _types.number32Type.fromBytes(target.getRoot(BigInt(3)), 0);
-  }
-
-  setLength(target, length) {
-    const chunk = new Uint8Array(32);
-
-    _types.number32Type.toBytes(length, chunk, 0);
-
-    target.setRoot(BigInt(3), chunk);
-  }
-
-  fromBytes(data, start, end) {
-    const target = this.defaultBacking();
-
-    if (this._type.elementType.isVariableSize()) {
-      const offsets = this._type.byteArray.getVariableOffsets(new Uint8Array(data.buffer, data.byteOffset + start, end - start));
-
-      if (offsets.length > this._type.limit) {
-        throw new Error("Deserialized list length greater than limit");
-      }
-
-      for (let i = 0; i < offsets.length; i++) {
-        const [currentOffset, nextOffset] = offsets[i];
-        this.setSubtreeAtChunk(target, i, this._type.elementType.tree.fromBytes(data, start + currentOffset, start + nextOffset));
-      }
-
-      this.setLength(target, offsets.length);
-    } else {
-      const elementSize = this._type.elementType.structural.size(null);
-
-      const length = (end - start) / elementSize;
-
-      if (!Number.isSafeInteger(length)) {
-        throw new Error("Deserialized list byte length must be divisible by element size");
-      }
-
-      if (length > this._type.limit) {
-        throw new Error("Deserialized list length greater than limit");
-      }
-
-      for (let i = 0; i < length; i++) {
-        this.setSubtreeAtChunk(target, i, this._type.elementType.tree.fromBytes(data, start + i * elementSize, start + (i + 1) * elementSize), true // expand tree as needed
-        );
-      }
-
-      this.setLength(target, length);
-    }
-
-    return target;
-  }
-
-  depth() {
-    return super.depth() + 1;
-  }
-
-  set(target, property, value) {
-    const length = this.getLength(target);
-
-    if (property > length) {
-      throw new Error("Invalid length index");
-    } else if (property == length) {
-      this.pushSingle(target, value);
-      return true;
-    } else {
-      return this.setProperty(target, property, value);
-    }
-  }
-
-  deleteProperty(target, property) {
-    const length = this.getLength(target);
-
-    if (property > length) {
-      throw new Error("Invalid length index");
-    } else if (property == length) {
-      this.pop(target);
-      return true;
-    } else {
-      return super.deleteProperty(target, property);
-    }
-  }
-
-  pushSingle(target, value) {
-    const length = this.getLength(target);
-    this.setProperty(target, length, value, true);
-    this.setLength(target, length + 1);
-    return length + 1;
-  }
-
-  push(target, ...values) {
-    let newLength;
-    values.forEach(value => newLength = this.pushSingle(target, value));
-    return newLength;
-  }
-
-  pop(target) {
-    const length = this.getLength(target);
-    const value = this.get(target, length - 1);
-    this.setProperty(target, length - 1, new _persistentMerkleTree.Tree((0, _persistentMerkleTree.zeroNode)(0)));
-    this.setLength(target, length - 1);
-    return value;
-  }
-
+    return node;
 }
+exports.createNodeFromSingleProof = createNodeFromSingleProof;
 
-exports.CompositeListTreeHandler = CompositeListTreeHandler;
-//# sourceMappingURL=list.js.map
 
 /***/ }),
 /* 117 */
@@ -9142,29 +9013,109 @@ exports.CompositeListTreeHandler = CompositeListTreeHandler;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isListType = isListType;
-exports.CompositeListType = exports.BasicListType = exports.ListType = exports.LIST_TYPE = void 0;
-
-var _array = __webpack_require__(89);
-
-var _basic = __webpack_require__(20);
-
-var _backings = __webpack_require__(21);
+exports.renderJsonPath = renderJsonPath;
+exports.SszErrorPath = void 0;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+/**
+ * Tracks the JSON path location of nested errors
+ */
+class SszErrorPath extends Error {
+  constructor(e, keyOrIndex) {
+    const prevJsonPath = e instanceof SszErrorPath ? e.jsonPath : [];
+    const jsonPath = [keyOrIndex, ...prevJsonPath];
+    const rawMessage = e instanceof SszErrorPath ? e.rawMessage : e.message;
+    super("".concat(renderJsonPath(jsonPath), ": ").concat(rawMessage));
+
+    _defineProperty(this, "jsonPath", void 0);
+
+    _defineProperty(this, "rawMessage", void 0);
+
+    this.jsonPath = jsonPath;
+    this.rawMessage = rawMessage;
+  }
+
+}
+/**
+ * Render an array of JSON path items
+ * @param jsonPath ["a", 2, "n", "m"]
+ * @returns "a[2].n.m"
+ */
+
+
+exports.SszErrorPath = SszErrorPath;
+
+function renderJsonPath(jsonPath) {
+  let path = "";
+
+  for (const item of jsonPath) {
+    switch (typeof item) {
+      case "number":
+        path += "[".concat(item, "]");
+        break;
+
+      case "string":
+      default:
+        path += path.length > 0 ? ".".concat(item) : item;
+        break;
+    }
+  }
+
+  return path;
+}
+//# sourceMappingURL=errorPath.js.map
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isListType = isListType;
+exports.CompositeListType = exports.BasicListType = exports.ListType = exports.LIST_TYPE = exports.LENGTH_GINDEX = void 0;
+
+var _array = __webpack_require__(90);
+
+var _basic = __webpack_require__(33);
+
+var _type = __webpack_require__(10);
+
+var _compat = __webpack_require__(87);
+
+var _persistentMerkleTree = __webpack_require__(45);
+
+var _treeValue = __webpack_require__(64);
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/**
+ * SSZ Lists (variable-length arrays) include the length of the list in the tree
+ * This length is always in the same index in the tree
+ * ```
+ *   1
+ *  / \
+ * 2   3 // <-here
+ * ```
+ */
+const LENGTH_GINDEX = BigInt(3);
+exports.LENGTH_GINDEX = LENGTH_GINDEX;
 const LIST_TYPE = Symbol.for("ssz/ListType"); // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 exports.LIST_TYPE = LIST_TYPE;
 
 function isListType(type) {
-  return (0, _basic.isTypeOf)(type, LIST_TYPE);
+  return (0, _type.isTypeOf)(type, LIST_TYPE);
 } // Trick typescript into treating ListType as a constructor
 
 
 const ListType = // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ListType(options) {
-  if (options.elementType.isBasic()) {
+  if ((0, _basic.isBasicType)(options.elementType)) {
     return new BasicListType(options);
   } else {
     return new CompositeListType(options);
@@ -9180,19 +9131,184 @@ class BasicListType extends _array.BasicArrayType {
     _defineProperty(this, "limit", void 0);
 
     this.limit = options.limit;
-    this.structural = new _backings.BasicListStructuralHandler(this);
-    this.tree = new _backings.BasicListTreeHandler(this);
-    this.byteArray = new _backings.BasicListByteArrayHandler(this);
 
     this._typeSymbols.add(LIST_TYPE);
   }
 
-  isVariableSize() {
+  struct_defaultValue() {
+    return [];
+  }
+
+  struct_getLength(value) {
+    return value.length;
+  }
+
+  getMaxLength() {
+    return this.limit;
+  }
+
+  getMinLength() {
+    return 0;
+  }
+
+  bytes_validate(data, start, end) {
+    super.bytes_validate(data, start, end);
+
+    if (end - start > this.getMaxSerializedLength()) {
+      throw new Error("Deserialized list length greater than limit");
+    }
+  }
+
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
+    return super.struct_deserializeFromBytes(data, start, end);
+  }
+
+  struct_getChunkCount(value) {
+    return Math.ceil(value.length * this.elementType.struct_getSerializedLength() / 32);
+  }
+
+  struct_hashTreeRoot(value) {
+    return (0, _compat.mixInLength)(super.struct_hashTreeRoot(value), value.length);
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  struct_convertFromJson(data, options) {
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid JSON list: expected an Array");
+    }
+
+    const maxLength = this.limit;
+
+    if (data.length > maxLength) {
+      throw new Error("Invalid JSON list: length ".concat(data.length, " greater than limit ").concat(maxLength));
+    }
+
+    return super.struct_convertFromJson(data);
+  }
+
+  struct_convertToTree(value) {
+    if ((0, _treeValue.isTreeBacked)(value)) return value.tree.clone();
+    const tree = super.struct_convertToTree(value);
+    this.tree_setLength(tree, value.length);
+    return tree;
+  }
+
+  tree_defaultNode() {
+    if (!this._defaultNode) {
+      this._defaultNode = new _persistentMerkleTree.BranchNode((0, _persistentMerkleTree.zeroNode)(super.getChunkDepth()), (0, _persistentMerkleTree.zeroNode)(0));
+    }
+
+    return this._defaultNode;
+  }
+
+  tree_defaultValue() {
+    return new _persistentMerkleTree.Tree(this.tree_defaultNode());
+  }
+
+  tree_getLength(target) {
+    return _basic.number32Type.struct_deserializeFromBytes(target.getRoot(LENGTH_GINDEX), 0);
+  }
+
+  tree_setLength(target, length) {
+    const chunk = new Uint8Array(32);
+
+    _basic.number32Type.toBytes(length, chunk, 0);
+
+    target.setRoot(LENGTH_GINDEX, chunk);
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    const length = (end - start) / this.elementType.struct_getSerializedLength();
+
+    if (!Number.isSafeInteger(length)) {
+      throw new Error("Deserialized list byte length must be divisible by element size");
+    }
+
+    if (length > this.limit) {
+      throw new Error("Deserialized list length greater than limit");
+    }
+
+    const value = super.tree_deserializeFromBytes(data, start, end);
+    this.tree_setLength(value, length);
+    return value;
+  }
+
+  tree_getChunkCount(target) {
+    return Math.ceil(this.tree_getLength(target) * this.elementType.struct_getSerializedLength() / 32);
+  }
+
+  getChunkDepth() {
+    return super.getChunkDepth() + 1;
+  }
+
+  tree_setProperty(target, property, value) {
+    const length = this.tree_getLength(target);
+
+    if (property > length) {
+      throw new Error("Invalid length index");
+    } else if (property == length) {
+      this.tree_pushSingle(target, value);
+      return true;
+    } else {
+      return this.tree_setValueAtIndex(target, property, value);
+    }
+  }
+
+  tree_deleteProperty(target, property) {
+    const length = this.tree_getLength(target);
+
+    if (property > length) {
+      throw new Error("Invalid length index");
+    } else if (property == length) {
+      this.tree_pop(target);
+      return true;
+    } else {
+      return super.tree_deleteProperty(target, property);
+    }
+  }
+
+  tree_pushSingle(target, value) {
+    const length = this.tree_getLength(target);
+    const expand = this.getChunkIndex(length) != this.getChunkIndex(length + 1);
+    this.tree_setValueAtIndex(target, length, value, expand);
+    this.tree_setLength(target, length + 1);
+    return length + 1;
+  }
+
+  tree_push(target, ...values) {
+    let newLength;
+
+    for (const value of values) newLength = this.tree_pushSingle(target, value);
+
+    return newLength;
+  }
+
+  tree_pop(target) {
+    const length = this.tree_getLength(target);
+    const value = this.tree_getProperty(target, length - 1);
+    super.tree_deleteProperty(target, length - 1);
+    this.tree_setLength(target, length - 1);
+    return value;
+  }
+
+  hasVariableSerializedLength() {
     return true;
   }
 
-  chunkCount() {
+  getMaxChunkCount() {
     return Math.ceil(this.limit * this.elementType.size() / 32);
+  }
+
+  tree_getLeafGindices(target, root = BigInt(1)) {
+    if (!target) {
+      throw new Error("variable type requires tree argument to get leaves");
+    }
+
+    const gindices = super.tree_getLeafGindices(target, root); // include the length chunk
+
+    gindices.push((0, _persistentMerkleTree.concatGindices)([root, LENGTH_GINDEX]));
+    return gindices;
   }
 
 }
@@ -9206,19 +9322,204 @@ class CompositeListType extends _array.CompositeArrayType {
     _defineProperty(this, "limit", void 0);
 
     this.limit = options.limit;
-    this.structural = new _backings.CompositeListStructuralHandler(this);
-    this.tree = new _backings.CompositeListTreeHandler(this);
-    this.byteArray = new _backings.CompositeListByteArrayHandler(this);
 
     this._typeSymbols.add(LIST_TYPE);
   }
 
-  isVariableSize() {
+  hasVariableSerializedLength() {
     return true;
   }
 
-  chunkCount() {
+  getMaxChunkCount() {
     return this.limit;
+  }
+
+  struct_defaultValue() {
+    return [];
+  }
+
+  struct_getLength(value) {
+    return value.length;
+  }
+
+  getMaxLength() {
+    return this.limit;
+  }
+
+  getMinLength() {
+    return 0;
+  }
+
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
+    const value = super.struct_deserializeFromBytes(data, start, end);
+
+    if (value.length > this.limit) {
+      throw new Error("Deserialized list length greater than limit: ".concat(value.length, " ").concat(this.limit));
+    }
+
+    return value;
+  }
+
+  struct_getChunkCount(value) {
+    return value.length;
+  }
+
+  struct_hashTreeRoot(value) {
+    return (0, _compat.mixInLength)(super.struct_hashTreeRoot(value), value.length);
+  }
+
+  struct_convertFromJson(data, options) {
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid JSON list: expected an Array");
+    }
+
+    const maxLength = this.limit;
+
+    if (data.length > maxLength) {
+      throw new Error("Invalid JSON list: length ".concat(data.length, " greater than limit ").concat(maxLength));
+    }
+
+    return super.struct_convertFromJson(data, options);
+  }
+
+  tree_defaultNode() {
+    if (!this._defaultNode) {
+      this._defaultNode = new _persistentMerkleTree.BranchNode((0, _persistentMerkleTree.zeroNode)(super.getChunkDepth()), (0, _persistentMerkleTree.zeroNode)(0));
+    }
+
+    return this._defaultNode;
+  }
+
+  tree_defaultValue() {
+    return new _persistentMerkleTree.Tree(this.tree_defaultNode());
+  }
+
+  struct_convertToTree(value) {
+    if ((0, _treeValue.isTreeBacked)(value)) return value.tree.clone();
+    const tree = super.struct_convertToTree(value);
+    this.tree_setLength(tree, value.length);
+    return tree;
+  }
+
+  tree_getLength(target) {
+    return _basic.number32Type.struct_deserializeFromBytes(target.getRoot(LENGTH_GINDEX), 0);
+  }
+
+  tree_setLength(target, length) {
+    const chunk = new Uint8Array(32);
+
+    _basic.number32Type.struct_serializeToBytes(length, chunk, 0);
+
+    target.setRoot(LENGTH_GINDEX, chunk);
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    const target = this.tree_defaultValue();
+
+    if (this.elementType.hasVariableSerializedLength()) {
+      const offsets = this.bytes_getVariableOffsets(new Uint8Array(data.buffer, data.byteOffset + start, end - start));
+
+      if (offsets.length > this.limit) {
+        throw new Error("Deserialized list length greater than limit");
+      }
+
+      for (let i = 0; i < offsets.length; i++) {
+        const [currentOffset, nextOffset] = offsets[i];
+        this.tree_setSubtreeAtChunkIndex(target, i, this.elementType.tree_deserializeFromBytes(data, start + currentOffset, start + nextOffset));
+      }
+
+      this.tree_setLength(target, offsets.length);
+    } else {
+      const elementSize = this.elementType.struct_getSerializedLength(null);
+      const length = (end - start) / elementSize;
+
+      if (!Number.isSafeInteger(length)) {
+        throw new Error("Deserialized list byte length must be divisible by element size");
+      }
+
+      if (length > this.limit) {
+        throw new Error("Deserialized list length greater than limit");
+      }
+
+      for (let i = 0; i < length; i++) {
+        this.tree_setSubtreeAtChunkIndex(target, i, this.elementType.tree_deserializeFromBytes(data, start + i * elementSize, start + (i + 1) * elementSize), true // expand tree as needed
+        );
+      }
+
+      this.tree_setLength(target, length);
+    }
+
+    return target;
+  }
+
+  tree_getChunkCount(target) {
+    return this.tree_getLength(target);
+  }
+
+  getChunkDepth() {
+    return super.getChunkDepth() + 1;
+  }
+
+  tree_setProperty(target, property, value) {
+    const length = this.tree_getLength(target);
+
+    if (property > length) {
+      throw new Error("Invalid length index");
+    } else if (property == length) {
+      this.tree_pushSingle(target, value);
+    } else {
+      this.tree_setSubtreeAtChunkIndex(target, property, value);
+    }
+
+    return true;
+  }
+
+  tree_deleteProperty(target, property) {
+    const length = this.tree_getLength(target);
+
+    if (property > length) {
+      throw new Error("Invalid length index");
+    } else if (property == length) {
+      this.tree_pop(target);
+      return true;
+    } else {
+      return super.tree_deleteProperty(target, property);
+    }
+  }
+
+  tree_pushSingle(target, value) {
+    const length = this.tree_getLength(target);
+    this.tree_setSubtreeAtChunkIndex(target, length, value, true);
+    this.tree_setLength(target, length + 1);
+    return length + 1;
+  }
+
+  tree_push(target, ...values) {
+    let newLength;
+
+    for (const value of values) newLength = this.tree_pushSingle(target, value);
+
+    return newLength;
+  }
+
+  tree_pop(target) {
+    const length = this.tree_getLength(target);
+    const value = this.tree_getProperty(target, length - 1);
+    this.tree_setSubtreeAtChunkIndex(target, length - 1, new _persistentMerkleTree.Tree((0, _persistentMerkleTree.zeroNode)(0)));
+    this.tree_setLength(target, length - 1);
+    return value;
+  }
+
+  tree_getLeafGindices(target, root = BigInt(1)) {
+    if (!target) {
+      throw new Error("variable type requires tree argument to get leaves");
+    }
+
+    const gindices = super.tree_getLeafGindices(target, root); // include the length chunk
+
+    gindices.push((0, _persistentMerkleTree.concatGindices)([root, LENGTH_GINDEX]));
+    return gindices;
   }
 
 }
@@ -9227,7 +9528,7 @@ exports.CompositeListType = CompositeListType;
 //# sourceMappingURL=list.js.map
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9239,11 +9540,13 @@ Object.defineProperty(exports, "__esModule", {
 exports.isByteVectorType = isByteVectorType;
 exports.ByteVectorType = exports.BYTEVECTOR_TYPE = void 0;
 
-var _vector = __webpack_require__(90);
+var _vector = __webpack_require__(91);
 
-var _basic = __webpack_require__(20);
+var _basic = __webpack_require__(33);
 
-var _backings = __webpack_require__(21);
+var _type = __webpack_require__(10);
+
+var _byteArray = __webpack_require__(24);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -9255,7 +9558,7 @@ const BYTEVECTOR_TYPE = Symbol.for("ssz/ByteVectorType");
 exports.BYTEVECTOR_TYPE = BYTEVECTOR_TYPE;
 
 function isByteVectorType(type) {
-  return (0, _basic.isTypeOf)(type, BYTEVECTOR_TYPE);
+  return (0, _type.isTypeOf)(type, BYTEVECTOR_TYPE);
 }
 
 class ByteVectorType extends _vector.BasicVectorType {
@@ -9263,10 +9566,65 @@ class ByteVectorType extends _vector.BasicVectorType {
     super(_objectSpread({
       elementType: _basic.byteType
     }, options));
-    this.structural = new _backings.ByteVectorStructuralHandler(this);
-    this.tree = new _backings.ByteVectorTreeHandler(this);
 
     this._typeSymbols.add(BYTEVECTOR_TYPE);
+  }
+
+  struct_defaultValue() {
+    return new Uint8Array(this.length);
+  }
+
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
+    const length = end - start;
+
+    if (length !== this.length) {
+      throw new Error("Invalid deserialized vector length: expected ".concat(this.length, ", actual: ").concat(length));
+    }
+
+    const value = new Uint8Array(length);
+    value.set(data.slice(start, end));
+    return value;
+  }
+
+  struct_serializeToBytes(value, output, offset) {
+    output.set(value, offset);
+    return offset + this.length;
+  }
+
+  struct_convertFromJson(data) {
+    const value = (0, _byteArray.fromHexString)(data);
+
+    if (value.length !== this.length) {
+      throw new Error("Invalid JSON vector length: expected ".concat(this.length, ", actual: ").concat(value.length));
+    }
+
+    return value;
+  }
+
+  struct_convertToJson(value) {
+    return (0, _byteArray.toHexString)(value);
+  }
+
+  tree_convertToStruct(target) {
+    const value = new Uint8Array(this.length);
+    const chunkIterator = target.iterateNodesAtDepth(this.getChunkDepth(), 0, this.getMaxChunkCount());
+
+    if (this.length % 32 === 0) {
+      for (let i = 0; i < this.length; i += 32) {
+        value.set(chunkIterator.next().value.root, i);
+      }
+    } else {
+      let i;
+
+      for (i = 0; i < this.length - 32; i += 32) {
+        value.set(chunkIterator.next().value.root, i);
+      }
+
+      value.set(chunkIterator.next().value.root.subarray(0, this.length - i), i);
+    }
+
+    return value;
   }
 
 }
@@ -9275,7 +9633,7 @@ exports.ByteVectorType = ByteVectorType;
 //# sourceMappingURL=byteVector.js.map
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9289,18 +9647,18 @@ exports.ByteVectorType = ByteVectorType;
 
 
 
-var Schema = __webpack_require__(34);
+var Schema = __webpack_require__(37);
 
 
 module.exports = new Schema({
   include: [
-    __webpack_require__(120)
+    __webpack_require__(121)
   ]
 });
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9315,29 +9673,29 @@ module.exports = new Schema({
 
 
 
-var Schema = __webpack_require__(34);
+var Schema = __webpack_require__(37);
 
 
 module.exports = new Schema({
   include: [
-    __webpack_require__(91)
+    __webpack_require__(92)
   ],
   implicit: [
-    __webpack_require__(202),
-    __webpack_require__(203),
-    __webpack_require__(204),
-    __webpack_require__(205)
+    __webpack_require__(199),
+    __webpack_require__(200),
+    __webpack_require__(201),
+    __webpack_require__(202)
   ]
 });
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(5);
-var hide = __webpack_require__(10);
-var uid = __webpack_require__(23);
+var hide = __webpack_require__(11);
+var uid = __webpack_require__(21);
 var TYPED = uid('typed_array');
 var VIEW = uid('view');
 var ABV = !!(global.ArrayBuffer && global.DataView);
@@ -9366,10 +9724,10 @@ module.exports = {
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var redefine = __webpack_require__(16);
+var redefine = __webpack_require__(17);
 module.exports = function (target, src, safe) {
   for (var key in src) redefine(target, key, src[key], safe);
   return target;
@@ -9377,7 +9735,7 @@ module.exports = function (target, src, safe) {
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports) {
 
 module.exports = function (it, Constructor, name, forbiddenField) {
@@ -9388,12 +9746,12 @@ module.exports = function (it, Constructor, name, forbiddenField) {
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://tc39.github.io/ecma262/#sec-toindex
 var toInteger = __webpack_require__(29);
-var toLength = __webpack_require__(19);
+var toLength = __webpack_require__(20);
 module.exports = function (it) {
   if (it === undefined) return 0;
   var number = toInteger(it);
@@ -9404,15 +9762,15 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 // 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
 
-var toObject = __webpack_require__(17);
-var toAbsoluteIndex = __webpack_require__(48);
-var toLength = __webpack_require__(19);
+var toObject = __webpack_require__(18);
+var toAbsoluteIndex = __webpack_require__(53);
+var toLength = __webpack_require__(20);
 module.exports = function fill(value /* , start = 0, end = @length */) {
   var O = toObject(this);
   var length = toLength(O.length);
@@ -9426,13 +9784,13 @@ module.exports = function fill(value /* , start = 0, end = @length */) {
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var regexpFlags = __webpack_require__(71);
+var regexpFlags = __webpack_require__(77);
 
 var nativeExec = RegExp.prototype.exec;
 // This always refers to the native implementation, because the
@@ -9491,149 +9849,439 @@ module.exports = patchedExec;
 
 
 /***/ }),
-/* 127 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createIBeaconParams = createIBeaconParams;
-exports.convertTypes = convertTypes;
-exports.schema = void 0;
-
-var _jsYaml = __webpack_require__(35);
-
-var _types = __webpack_require__(234);
-
-var constants = _interopRequireWildcard(__webpack_require__(235));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function createIBeaconParams(params) {
-  return convertTypes(params, _types.typeMap);
-}
-
-function convertTypes(params, typeMap) {
-  for (const k in params) {
-    if (params.hasOwnProperty(k)) {
-      if (typeMap[k]) {
-        params[k] = typeMap[k](params[k]);
-      } else {
-        params[k] = Number(params[k]);
-      }
-    }
-  }
-
-  return _objectSpread({}, params, {}, constants);
-}
-
-const schema = new _jsYaml.Schema({
-  include: [_jsYaml.FAILSAFE_SCHEMA],
-  implicit: [new _jsYaml.Type("tag:yaml.org,2002:str", {
-    kind: "scalar",
-    construct: function construct(data) {
-      return data !== null ? data : "";
-    }
-  })]
-});
-exports.schema = schema;
-//# sourceMappingURL=utils.js.map
-
-/***/ }),
 /* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+//# sourceMappingURL=misc.js.map
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=operations.js.map
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=validator.js.map
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=api.js.map
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createIBeaconSSZTypes = createIBeaconSSZTypes;
 
-var primitive = _interopRequireWildcard(__webpack_require__(236));
+var _constants = __webpack_require__(243);
 
-var misc = _interopRequireWildcard(__webpack_require__(237));
-
-var operations = _interopRequireWildcard(__webpack_require__(238));
-
-var block = _interopRequireWildcard(__webpack_require__(239));
-
-var state = _interopRequireWildcard(__webpack_require__(240));
-
-var validator = _interopRequireWildcard(__webpack_require__(241));
-
-var wire = _interopRequireWildcard(__webpack_require__(242));
-
-var api = _interopRequireWildcard(__webpack_require__(243));
-
-var _interface = __webpack_require__(244);
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-const allGenerators = _objectSpread({}, misc, {}, operations, {}, block, {}, state, {}, validator, {}, wire, {}, api);
-
-function createIBeaconSSZTypes(params) {
-  const types = {}; // primitive types (don't need generators)
-
-  for (const type in primitive) {
-    // @ts-ignore
-    // eslint-disable-next-line import/namespace
-    types[type] = primitive[type];
-  } // relies on list of typenames in dependency order
-
-
-  _interface.typeNames.forEach(type => {
-    // @ts-ignore
-    types[type] = allGenerators[type](types, params);
+Object.keys(_constants).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _constants[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _constants[key];
+    }
   });
-  /* or if we can separate out types w/ dependencies into files
-  for (const type in misc) {
-    types[type] = misc[type](types, params);
-  }
-  for (const type in operations) {
-    types[type] = operations[type](types, params);
-  }
-  for (const type in block) {
-    types[type] = block[type](types, params);
-  }
-  for (const type in state) {
-    types[type] = state[type](types, params);
-  }
-  for (const type in validator) {
-    types[type] = validator[type](types, params);
-  }
-  for (const type in wire) {
-    types[type] = wire[type](types, params);
-  }
-   */
+});
 
+var _preset = __webpack_require__(133);
 
-  return types;
-}
+Object.keys(_preset).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _preset[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _preset[key];
+    }
+  });
+});
+
+var _activePreset = __webpack_require__(251);
+
+Object.keys(_activePreset).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _activePreset[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _activePreset[key];
+    }
+  });
+});
+
+var _forkName = __webpack_require__(259);
+
+Object.keys(_forkName).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _forkName[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _forkName[key];
+    }
+  });
+});
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 129 */
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _presetName = __webpack_require__(244);
+
+Object.keys(_presetName).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _presetName[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _presetName[key];
+    }
+  });
+});
+
+var _interface = __webpack_require__(245);
+
+Object.keys(_interface).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _interface[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _interface[key];
+    }
+  });
+});
+
+var _ssz = __webpack_require__(246);
+
+Object.keys(_ssz).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _ssz[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _ssz[key];
+    }
+  });
+});
+
+var _phase = __webpack_require__(134);
+
+Object.keys(_phase).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _phase[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _phase[key];
+    }
+  });
+});
+
+var _altair = __webpack_require__(135);
+
+Object.keys(_altair).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _altair[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _altair[key];
+    }
+  });
+});
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _interface = __webpack_require__(247);
+
+Object.keys(_interface).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _interface[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _interface[key];
+    }
+  });
+});
+
+var _ssz = __webpack_require__(248);
+
+Object.keys(_ssz).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _ssz[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _ssz[key];
+    }
+  });
+});
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _interface = __webpack_require__(249);
+
+Object.keys(_interface).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _interface[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _interface[key];
+    }
+  });
+});
+
+var _ssz = __webpack_require__(250);
+
+Object.keys(_ssz).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _ssz[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _ssz[key];
+    }
+  });
+});
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ssz = exports.ts = void 0;
+
+var _ts = _interopRequireWildcard(__webpack_require__(67));
+
+exports.ts = _ts;
+
+var _ssz = _interopRequireWildcard(__webpack_require__(137));
+
+exports.ssz = _ssz;
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ParticipationFlags = exports.Domain = exports.BLSSignature = exports.BLSPubkey = exports.ForkDigest = exports.DomainType = exports.Version = exports.Root = exports.Gwei = exports.ValidatorIndex = exports.SubCommitteeIndex = exports.CommitteeIndex = exports.Epoch = exports.Slot = exports.Uint256 = exports.Uint128 = exports.Uint64 = exports.Number64 = exports.Uint32 = exports.Uint16 = exports.Uint8 = exports.Bytes96 = exports.Bytes48 = exports.Bytes32 = exports.Bytes8 = exports.Bytes4 = exports.Boolean = void 0;
+
+var _ssz = __webpack_require__(7);
+
+const Boolean = _ssz.booleanType;
+exports.Boolean = Boolean;
+const Bytes4 = new _ssz.ByteVectorType({
+  length: 4
+});
+exports.Bytes4 = Bytes4;
+const Bytes8 = new _ssz.ByteVectorType({
+  length: 8
+});
+exports.Bytes8 = Bytes8;
+const Bytes32 = new _ssz.ByteVectorType({
+  length: 32
+});
+exports.Bytes32 = Bytes32;
+const Bytes48 = new _ssz.ByteVectorType({
+  length: 48
+});
+exports.Bytes48 = Bytes48;
+const Bytes96 = new _ssz.ByteVectorType({
+  length: 96
+});
+exports.Bytes96 = Bytes96;
+const Uint8 = _ssz.byteType;
+exports.Uint8 = Uint8;
+const Uint16 = new _ssz.NumberUintType({
+  byteLength: 2
+});
+exports.Uint16 = Uint16;
+const Uint32 = _ssz.number32Type;
+exports.Uint32 = Uint32;
+const Number64 = new _ssz.NumberUintType({
+  byteLength: 8
+});
+exports.Number64 = Number64;
+const Uint64 = new _ssz.BigIntUintType({
+  byteLength: 8
+});
+exports.Uint64 = Uint64;
+const Uint128 = new _ssz.BigIntUintType({
+  byteLength: 16
+});
+exports.Uint128 = Uint128;
+const Uint256 = new _ssz.BigIntUintType({
+  byteLength: 32
+}); // Custom types, defined for type hinting and readability
+
+exports.Uint256 = Uint256;
+const Slot = Number64;
+exports.Slot = Slot;
+const Epoch = Number64;
+exports.Epoch = Epoch;
+const CommitteeIndex = Number64;
+exports.CommitteeIndex = CommitteeIndex;
+const SubCommitteeIndex = Number64;
+exports.SubCommitteeIndex = SubCommitteeIndex;
+const ValidatorIndex = Number64;
+exports.ValidatorIndex = ValidatorIndex;
+const Gwei = Uint64;
+exports.Gwei = Gwei;
+const Root = new _ssz.RootType({
+  expandedType: () => {
+    throw new Error("Generic Root type has no expanded type");
+  }
+});
+exports.Root = Root;
+const Version = Bytes4;
+exports.Version = Version;
+const DomainType = Bytes4;
+exports.DomainType = DomainType;
+const ForkDigest = Bytes4;
+exports.ForkDigest = ForkDigest;
+const BLSPubkey = Bytes48;
+exports.BLSPubkey = BLSPubkey;
+const BLSSignature = Bytes96;
+exports.BLSSignature = BLSSignature;
+const Domain = Bytes32;
+exports.Domain = Domain;
+const ParticipationFlags = Uint8;
+exports.ParticipationFlags = ParticipationFlags;
+//# sourceMappingURL=sszTypes.js.map
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LazyVariable = void 0;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+class LazyVariable {
+  constructor() {
+    _defineProperty(this, "var", {
+      set: false
+    });
+  }
+
+  get() {
+    if (!this.var.set) throw Error("variable not set");
+    return this.var.value;
+  }
+
+  set(value) {
+    this.var = {
+      set: true,
+      value
+    };
+  }
+
+}
+
+exports.LazyVariable = LazyVariable;
+//# sourceMappingURL=lazyVar.js.map
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ssz = exports.ts = void 0;
+
+var _ts = _interopRequireWildcard(__webpack_require__(266));
+
+exports.ts = _ts;
+
+var _ssz = _interopRequireWildcard(__webpack_require__(267));
+
+exports.ssz = _ssz;
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9646,11 +10294,11 @@ var PropTypes = _interopRequireWildcard(__webpack_require__(1));
 
 var _react = _interopRequireDefault(__webpack_require__(0));
 
-var _reactDom = _interopRequireDefault(__webpack_require__(14));
+var _reactDom = _interopRequireDefault(__webpack_require__(15));
 
-var _reactLifecyclesCompat = __webpack_require__(130);
+var _reactLifecyclesCompat = __webpack_require__(141);
 
-var _PropTypes = __webpack_require__(131);
+var _PropTypes = __webpack_require__(142);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10097,7 +10745,7 @@ var _default = (0, _reactLifecyclesCompat.polyfill)(Transition);
 exports.default = _default;
 
 /***/ }),
-/* 130 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10264,7 +10912,7 @@ function polyfill(Component) {
 
 
 /***/ }),
-/* 131 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10283,7 +10931,7 @@ var classNamesShape =  false ? undefined : null;
 exports.classNamesShape = classNamesShape;
 
 /***/ }),
-/* 132 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10296,9 +10944,9 @@ var _propTypes = _interopRequireDefault(__webpack_require__(1));
 
 var _react = _interopRequireDefault(__webpack_require__(0));
 
-var _reactLifecyclesCompat = __webpack_require__(130);
+var _reactLifecyclesCompat = __webpack_require__(141);
 
-var _ChildMapping = __webpack_require__(256);
+var _ChildMapping = __webpack_require__(280);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10440,7 +11088,7 @@ exports.default = _default;
 module.exports = exports["default"];
 
 /***/ }),
-/* 133 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(a,b){if(true)!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (b),
@@ -10452,53 +11100,7 @@ module.exports = exports["default"];
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(108)))
 
 /***/ }),
-/* 134 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.types = void 0;
-
-var _mainnet = __webpack_require__(233);
-
-var _generators = __webpack_require__(128);
-
-/**
- * @module sszTypes/presets/mainnet
- */
-const types = (0, _generators.createIBeaconSSZTypes)(_mainnet.params);
-exports.types = types;
-//# sourceMappingURL=mainnet.js.map
-
-/***/ }),
-/* 135 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.types = void 0;
-
-var _minimal = __webpack_require__(245);
-
-var _generators = __webpack_require__(128);
-
-/**
- * @module sszTypes/presets/minimal
- */
-const types = (0, _generators.createIBeaconSSZTypes)(_minimal.params);
-exports.types = types;
-//# sourceMappingURL=minimal.js.map
-
-/***/ }),
-/* 136 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10513,13 +11115,13 @@ var _react = _interopRequireWildcard(__webpack_require__(0));
 
 var _propTypes = _interopRequireDefault(__webpack_require__(1));
 
-var _reactTransitionGroup = __webpack_require__(249);
+var _reactTransitionGroup = __webpack_require__(273);
 
-var _emotion = __webpack_require__(93);
+var _emotion = __webpack_require__(94);
 
-var _Spinner = _interopRequireDefault(__webpack_require__(257));
+var _Spinner = _interopRequireDefault(__webpack_require__(281));
 
-var _styles = _interopRequireDefault(__webpack_require__(258));
+var _styles = _interopRequireDefault(__webpack_require__(282));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10681,7 +11283,7 @@ var _default = LoadingOverlayWrapper;
 exports.default = _default;
 
 /***/ }),
-/* 137 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10713,8 +11315,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx jsx */
 var React = __importStar(__webpack_require__(0));
-var core_1 = __webpack_require__(265);
-var helpers_1 = __webpack_require__(259);
+var core_1 = __webpack_require__(289);
+var helpers_1 = __webpack_require__(283);
 var bounce = core_1.keyframes(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  0%, 100% {transform: scale(0)}\n  50% {transform: scale(1.0)}\n"], ["\n  0%, 100% {transform: scale(0)}\n  50% {transform: scale(1.0)}\n"])));
 var Loader = /** @class */ (function (_super) {
     __extends(Loader, _super);
@@ -10744,7 +11346,7 @@ var templateObject_1, templateObject_2, templateObject_3;
 
 
 /***/ }),
-/* 138 */
+/* 147 */
 /***/ (function(module, exports) {
 
 function _inheritsLoose(subClass, superClass) {
@@ -10756,39 +11358,39 @@ function _inheritsLoose(subClass, superClass) {
 module.exports = _inheritsLoose;
 
 /***/ }),
-/* 139 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(7);
+var $export = __webpack_require__(2);
 
-$export($export.S + $export.F, 'Object', { assign: __webpack_require__(141) });
+$export($export.S + $export.F, 'Object', { assign: __webpack_require__(150) });
 
 
 /***/ }),
-/* 140 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(45)('native-function-to-string', Function.toString);
+module.exports = __webpack_require__(50)('native-function-to-string', Function.toString);
 
 
 /***/ }),
-/* 141 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // 19.1.2.1 Object.assign(target, source, ...)
 var DESCRIPTORS = __webpack_require__(6);
-var getKeys = __webpack_require__(27);
-var gOPS = __webpack_require__(69);
-var pIE = __webpack_require__(49);
-var toObject = __webpack_require__(17);
-var IObject = __webpack_require__(65);
+var getKeys = __webpack_require__(28);
+var gOPS = __webpack_require__(54);
+var pIE = __webpack_require__(55);
+var toObject = __webpack_require__(18);
+var IObject = __webpack_require__(72);
 var $assign = Object.assign;
 
 // should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || __webpack_require__(8)(function () {
+module.exports = !$assign || __webpack_require__(9)(function () {
   var A = {};
   var B = {};
   // eslint-disable-next-line no-undef
@@ -10818,7 +11420,7 @@ module.exports = !$assign || __webpack_require__(8)(function () {
 
 
 /***/ }),
-/* 142 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10831,7 +11433,7 @@ module.exports = !$assign || __webpack_require__(8)(function () {
  * LICENSE file in the root directory of this source tree.
  */
 
-var l=__webpack_require__(99),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
+var l=__webpack_require__(100),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
 60116,B="function"===typeof Symbol&&Symbol.iterator;function C(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
 var D={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},E={};function F(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}F.prototype.isReactComponent={};F.prototype.setState=function(a,b){if("object"!==typeof a&&"function"!==typeof a&&null!=a)throw Error(C(85));this.updater.enqueueSetState(this,a,b,"setState")};F.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function G(){}G.prototype=F.prototype;function H(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}var I=H.prototype=new G;I.constructor=H;l(I,F.prototype);I.isPureReactComponent=!0;var J={current:null},K=Object.prototype.hasOwnProperty,L={key:!0,ref:!0,__self:!0,__source:!0};
@@ -10850,7 +11452,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 
 
 /***/ }),
-/* 143 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10866,7 +11468,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0),n=__webpack_require__(99),r=__webpack_require__(144);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
+var aa=__webpack_require__(0),n=__webpack_require__(100),r=__webpack_require__(153);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
 function ba(a,b,c,d,e,f,g,h,k){var l=Array.prototype.slice.call(arguments,3);try{b.apply(c,l)}catch(m){this.onError(m)}}var da=!1,ea=null,fa=!1,ha=null,ia={onError:function(a){da=!0;ea=a}};function ja(a,b,c,d,e,f,g,h,k){da=!1;ea=null;ba.apply(ia,arguments)}function ka(a,b,c,d,e,f,g,h,k){ja.apply(this,arguments);if(da){if(da){var l=ea;da=!1;ea=null}else throw Error(u(198));fa||(fa=!0,ha=l)}}var la=null,ma=null,na=null;
 function oa(a,b,c){var d=a.type||"unknown-event";a.currentTarget=na(c);ka(d,b,void 0,a);a.currentTarget=null}var pa=null,qa={};
 function ra(){if(pa)for(var a in qa){var b=qa[a],c=pa.indexOf(a);if(!(-1<c))throw Error(u(96,a));if(!sa[c]){if(!b.extractEvents)throw Error(u(97,a));sa[c]=b;c=b.eventTypes;for(var d in c){var e=void 0;var f=c[d],g=b,h=d;if(ta.hasOwnProperty(h))throw Error(u(99,h));ta[h]=f;var k=f.phasedRegistrationNames;if(k){for(e in k)k.hasOwnProperty(e)&&ua(k[e],g,h);e=!0}else f.registrationName?(ua(f.registrationName,g,h),e=!0):e=!1;if(!e)throw Error(u(98,d,a));}}}}
@@ -11149,19 +11751,19 @@ exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!gk(c))throw Er
 
 
 /***/ }),
-/* 144 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 if (true) {
-  module.exports = __webpack_require__(145);
+  module.exports = __webpack_require__(154);
 } else {}
 
 
 /***/ }),
-/* 145 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11189,18 +11791,18 @@ exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=
 
 
 /***/ }),
-/* 146 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var META = __webpack_require__(23)('meta');
-var isObject = __webpack_require__(13);
-var has = __webpack_require__(18);
-var setDesc = __webpack_require__(9).f;
+var META = __webpack_require__(21)('meta');
+var isObject = __webpack_require__(14);
+var has = __webpack_require__(19);
+var setDesc = __webpack_require__(8).f;
 var id = 0;
 var isExtensible = Object.isExtensible || function () {
   return true;
 };
-var FREEZE = !__webpack_require__(8)(function () {
+var FREEZE = !__webpack_require__(9)(function () {
   return isExtensible(Object.preventExtensions({}));
 });
 var setMeta = function (it) {
@@ -11248,13 +11850,13 @@ var meta = module.exports = {
 
 
 /***/ }),
-/* 147 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
-var getKeys = __webpack_require__(27);
-var gOPS = __webpack_require__(69);
-var pIE = __webpack_require__(49);
+var getKeys = __webpack_require__(28);
+var gOPS = __webpack_require__(54);
+var pIE = __webpack_require__(55);
 module.exports = function (it) {
   var result = getKeys(it);
   var getSymbols = gOPS.f;
@@ -11269,26 +11871,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 148 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP = __webpack_require__(9);
-var anObject = __webpack_require__(12);
-var getKeys = __webpack_require__(27);
-
-module.exports = __webpack_require__(6) ? Object.defineProperties : function defineProperties(O, Properties) {
-  anObject(O);
-  var keys = getKeys(Properties);
-  var length = keys.length;
-  var i = 0;
-  var P;
-  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
-  return O;
-};
-
-
-/***/ }),
-/* 149 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var document = __webpack_require__(5).document;
@@ -11296,12 +11879,12 @@ module.exports = document && document.documentElement;
 
 
 /***/ }),
-/* 150 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__(28);
-var gOPN = __webpack_require__(53).f;
+var toIObject = __webpack_require__(22);
+var gOPN = __webpack_require__(41).f;
 var toString = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -11321,18 +11904,18 @@ module.exports.f = function getOwnPropertyNames(it) {
 
 
 /***/ }),
-/* 151 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 21.2.5.3 get RegExp.prototype.flags()
-if (__webpack_require__(6) && /./g.flags != 'g') __webpack_require__(9).f(RegExp.prototype, 'flags', {
+if (__webpack_require__(6) && /./g.flags != 'g') __webpack_require__(8).f(RegExp.prototype, 'flags', {
   configurable: true,
-  get: __webpack_require__(71)
+  get: __webpack_require__(77)
 });
 
 
 /***/ }),
-/* 152 */
+/* 160 */
 /***/ (function(module, exports) {
 
 // fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -11354,12 +11937,12 @@ module.exports = function (fn, args, that) {
 
 
 /***/ }),
-/* 153 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
-var isObject = __webpack_require__(13);
+var isObject = __webpack_require__(14);
 var anObject = __webpack_require__(12);
 var check = function (O, proto) {
   anObject(O);
@@ -11369,7 +11952,7 @@ module.exports = {
   set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
     function (test, buggy, set) {
       try {
-        set = __webpack_require__(46)(Function.call, __webpack_require__(70).f(Object.prototype, '__proto__').set, 2);
+        set = __webpack_require__(51)(Function.call, __webpack_require__(58).f(Object.prototype, '__proto__').set, 2);
         set(test, []);
         buggy = !(test instanceof Array);
       } catch (e) { buggy = true; }
@@ -11385,20 +11968,20 @@ module.exports = {
 
 
 /***/ }),
-/* 154 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.31 Array.prototype[@@unscopables]
-var UNSCOPABLES = __webpack_require__(3)('unscopables');
+var UNSCOPABLES = __webpack_require__(4)('unscopables');
 var ArrayProto = Array.prototype;
-if (ArrayProto[UNSCOPABLES] == undefined) __webpack_require__(10)(ArrayProto, UNSCOPABLES, {});
+if (ArrayProto[UNSCOPABLES] == undefined) __webpack_require__(11)(ArrayProto, UNSCOPABLES, {});
 module.exports = function (key) {
   ArrayProto[UNSCOPABLES][key] = true;
 };
 
 
 /***/ }),
-/* 155 */
+/* 163 */
 /***/ (function(module, exports) {
 
 module.exports = function (done, value) {
@@ -11407,20 +11990,20 @@ module.exports = function (done, value) {
 
 
 /***/ }),
-/* 156 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var LIBRARY = __webpack_require__(26);
-var $export = __webpack_require__(7);
-var redefine = __webpack_require__(16);
-var hide = __webpack_require__(10);
+var LIBRARY = __webpack_require__(27);
+var $export = __webpack_require__(2);
+var redefine = __webpack_require__(17);
+var hide = __webpack_require__(11);
 var Iterators = __webpack_require__(32);
-var $iterCreate = __webpack_require__(157);
-var setToStringTag = __webpack_require__(52);
-var getPrototypeOf = __webpack_require__(105);
-var ITERATOR = __webpack_require__(3)('iterator');
+var $iterCreate = __webpack_require__(165);
+var setToStringTag = __webpack_require__(57);
+var getPrototypeOf = __webpack_require__(107);
+var ITERATOR = __webpack_require__(4)('iterator');
 var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
 var FF_ITERATOR = '@@iterator';
 var KEYS = 'keys';
@@ -11483,18 +12066,18 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
 
 
 /***/ }),
-/* 157 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var create = __webpack_require__(38);
-var descriptor = __webpack_require__(36);
-var setToStringTag = __webpack_require__(52);
+var create = __webpack_require__(40);
+var descriptor = __webpack_require__(26);
+var setToStringTag = __webpack_require__(57);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(10)(IteratorPrototype, __webpack_require__(3)('iterator'), function () { return this; });
+__webpack_require__(11)(IteratorPrototype, __webpack_require__(4)('iterator'), function () { return this; });
 
 module.exports = function (Constructor, NAME, next) {
   Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -11503,13 +12086,13 @@ module.exports = function (Constructor, NAME, next) {
 
 
 /***/ }),
-/* 158 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // most Object methods by ES6 should accept primitives
-var $export = __webpack_require__(7);
+var $export = __webpack_require__(2);
 var core = __webpack_require__(25);
-var fails = __webpack_require__(8);
+var fails = __webpack_require__(9);
 module.exports = function (KEY, exec) {
   var fn = (core.Object || {})[KEY] || Object[KEY];
   var exp = {};
@@ -11519,11 +12102,11 @@ module.exports = function (KEY, exec) {
 
 
 /***/ }),
-/* 159 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 9.4.2.3 ArraySpeciesCreate(originalArray, length)
-var speciesConstructor = __webpack_require__(160);
+var speciesConstructor = __webpack_require__(168);
 
 module.exports = function (original, length) {
   return new (speciesConstructor(original))(length);
@@ -11531,12 +12114,12 @@ module.exports = function (original, length) {
 
 
 /***/ }),
-/* 160 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(13);
-var isArray = __webpack_require__(102);
-var SPECIES = __webpack_require__(3)('species');
+var isObject = __webpack_require__(14);
+var isArray = __webpack_require__(103);
+var SPECIES = __webpack_require__(4)('species');
 
 module.exports = function (original) {
   var C;
@@ -11553,7 +12136,7 @@ module.exports = function (original) {
 
 
 /***/ }),
-/* 161 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11561,7 +12144,7 @@ module.exports = function (original) {
 //# sourceMappingURL=interface.js.map
 
 /***/ }),
-/* 162 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11589,7 +12172,7 @@ exports.booleanType = booleanType;
 //# sourceMappingURL=wellKnown.js.map
 
 /***/ }),
-/* 163 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11599,7 +12182,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _abstract = __webpack_require__(77);
+var _abstract = __webpack_require__(83);
 
 Object.keys(_abstract).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11611,7 +12194,7 @@ Object.keys(_abstract).forEach(function (key) {
   });
 });
 
-var _array = __webpack_require__(89);
+var _array = __webpack_require__(90);
 
 Object.keys(_array).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11623,7 +12206,7 @@ Object.keys(_array).forEach(function (key) {
   });
 });
 
-var _vector = __webpack_require__(90);
+var _vector = __webpack_require__(91);
 
 Object.keys(_vector).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11635,7 +12218,7 @@ Object.keys(_vector).forEach(function (key) {
   });
 });
 
-var _list = __webpack_require__(117);
+var _list = __webpack_require__(118);
 
 Object.keys(_list).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11647,7 +12230,7 @@ Object.keys(_list).forEach(function (key) {
   });
 });
 
-var _bitVector = __webpack_require__(191);
+var _bitVector = __webpack_require__(187);
 
 Object.keys(_bitVector).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11659,7 +12242,7 @@ Object.keys(_bitVector).forEach(function (key) {
   });
 });
 
-var _bitList = __webpack_require__(192);
+var _bitList = __webpack_require__(188);
 
 Object.keys(_bitList).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11671,7 +12254,7 @@ Object.keys(_bitList).forEach(function (key) {
   });
 });
 
-var _byteVector = __webpack_require__(118);
+var _byteVector = __webpack_require__(119);
 
 Object.keys(_byteVector).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11683,7 +12266,7 @@ Object.keys(_byteVector).forEach(function (key) {
   });
 });
 
-var _root = __webpack_require__(193);
+var _root = __webpack_require__(189);
 
 Object.keys(_root).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11695,7 +12278,7 @@ Object.keys(_root).forEach(function (key) {
   });
 });
 
-var _container = __webpack_require__(194);
+var _container = __webpack_require__(190);
 
 Object.keys(_container).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -11709,15 +12292,15 @@ Object.keys(_container).forEach(function (key) {
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 164 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-//# sourceMappingURL=object.js.map
+//# sourceMappingURL=interface.js.map
 
 /***/ }),
-/* 165 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11726,366 +12309,49 @@ Object.keys(_container).forEach(function (key) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.isBackedValue = isBackedValue;
 
-var _abstract = __webpack_require__(78);
+var _tree = __webpack_require__(85);
 
-Object.keys(_abstract).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _abstract[key];
-    }
-  });
-});
-
-var _array = __webpack_require__(80);
-
-Object.keys(_array).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _array[key];
-    }
-  });
-});
-
-var _list = __webpack_require__(113);
-
-Object.keys(_list).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _list[key];
-    }
-  });
-});
-
-var _vector = __webpack_require__(81);
-
-Object.keys(_vector).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _vector[key];
-    }
-  });
-});
-
-var _byteVector = __webpack_require__(175);
-
-Object.keys(_byteVector).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _byteVector[key];
-    }
-  });
-});
-
-var _bitList = __webpack_require__(179);
-
-Object.keys(_bitList).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _bitList[key];
-    }
-  });
-});
-
-var _bitVector = __webpack_require__(180);
-
-Object.keys(_bitVector).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _bitVector[key];
-    }
-  });
-});
-
-var _container = __webpack_require__(181);
-
-Object.keys(_container).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _container[key];
-    }
-  });
-});
-//# sourceMappingURL=index.js.map
+function isBackedValue(value) {
+  return (0, _tree.isTreeBacked)(value);
+}
+//# sourceMappingURL=backedValue.js.map
 
 /***/ }),
-/* 166 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.byteLength = byteLength
-exports.toByteArray = toByteArray
-exports.fromByteArray = fromByteArray
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.readonlyValues = readonlyValues;
+exports.readonlyEntries = readonlyEntries;
 
-var lookup = []
-var revLookup = []
-var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
+var _tree = __webpack_require__(85);
 
-var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-for (var i = 0, len = code.length; i < len; ++i) {
-  lookup[i] = code[i]
-  revLookup[code.charCodeAt(i)] = i
-}
-
-// Support decoding URL-safe base64 strings, as Node.js does.
-// See: https://en.wikipedia.org/wiki/Base64#URL_applications
-revLookup['-'.charCodeAt(0)] = 62
-revLookup['_'.charCodeAt(0)] = 63
-
-function getLens (b64) {
-  var len = b64.length
-
-  if (len % 4 > 0) {
-    throw new Error('Invalid string. Length must be a multiple of 4')
-  }
-
-  // Trim off extra bytes after placeholder bytes are found
-  // See: https://github.com/beatgammit/base64-js/issues/42
-  var validLen = b64.indexOf('=')
-  if (validLen === -1) validLen = len
-
-  var placeHoldersLen = validLen === len
-    ? 0
-    : 4 - (validLen % 4)
-
-  return [validLen, placeHoldersLen]
-}
-
-// base64 is 4/3 + up to two characters of the original data
-function byteLength (b64) {
-  var lens = getLens(b64)
-  var validLen = lens[0]
-  var placeHoldersLen = lens[1]
-  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
-}
-
-function _byteLength (b64, validLen, placeHoldersLen) {
-  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
-}
-
-function toByteArray (b64) {
-  var tmp
-  var lens = getLens(b64)
-  var validLen = lens[0]
-  var placeHoldersLen = lens[1]
-
-  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen))
-
-  var curByte = 0
-
-  // if there are placeholders, only get up to the last complete 4 chars
-  var len = placeHoldersLen > 0
-    ? validLen - 4
-    : validLen
-
-  var i
-  for (i = 0; i < len; i += 4) {
-    tmp =
-      (revLookup[b64.charCodeAt(i)] << 18) |
-      (revLookup[b64.charCodeAt(i + 1)] << 12) |
-      (revLookup[b64.charCodeAt(i + 2)] << 6) |
-      revLookup[b64.charCodeAt(i + 3)]
-    arr[curByte++] = (tmp >> 16) & 0xFF
-    arr[curByte++] = (tmp >> 8) & 0xFF
-    arr[curByte++] = tmp & 0xFF
-  }
-
-  if (placeHoldersLen === 2) {
-    tmp =
-      (revLookup[b64.charCodeAt(i)] << 2) |
-      (revLookup[b64.charCodeAt(i + 1)] >> 4)
-    arr[curByte++] = tmp & 0xFF
-  }
-
-  if (placeHoldersLen === 1) {
-    tmp =
-      (revLookup[b64.charCodeAt(i)] << 10) |
-      (revLookup[b64.charCodeAt(i + 1)] << 4) |
-      (revLookup[b64.charCodeAt(i + 2)] >> 2)
-    arr[curByte++] = (tmp >> 8) & 0xFF
-    arr[curByte++] = tmp & 0xFF
-  }
-
-  return arr
-}
-
-function tripletToBase64 (num) {
-  return lookup[num >> 18 & 0x3F] +
-    lookup[num >> 12 & 0x3F] +
-    lookup[num >> 6 & 0x3F] +
-    lookup[num & 0x3F]
-}
-
-function encodeChunk (uint8, start, end) {
-  var tmp
-  var output = []
-  for (var i = start; i < end; i += 3) {
-    tmp =
-      ((uint8[i] << 16) & 0xFF0000) +
-      ((uint8[i + 1] << 8) & 0xFF00) +
-      (uint8[i + 2] & 0xFF)
-    output.push(tripletToBase64(tmp))
-  }
-  return output.join('')
-}
-
-function fromByteArray (uint8) {
-  var tmp
-  var len = uint8.length
-  var extraBytes = len % 3 // if we have 1 byte left, pad 2 bytes
-  var parts = []
-  var maxChunkLength = 16383 // must be multiple of 3
-
-  // go through the array every three bytes, we'll deal with trailing stuff later
-  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
-  }
-
-  // pad the end with zeros, but make sure to not forget the extra bytes
-  if (extraBytes === 1) {
-    tmp = uint8[len - 1]
-    parts.push(
-      lookup[tmp >> 2] +
-      lookup[(tmp << 4) & 0x3F] +
-      '=='
-    )
-  } else if (extraBytes === 2) {
-    tmp = (uint8[len - 2] << 8) + uint8[len - 1]
-    parts.push(
-      lookup[tmp >> 10] +
-      lookup[(tmp >> 4) & 0x3F] +
-      lookup[(tmp << 2) & 0x3F] +
-      '='
-    )
-  }
-
-  return parts.join('')
-}
-
-
-/***/ }),
-/* 167 */
-/***/ (function(module, exports) {
-
-exports.read = function (buffer, offset, isLE, mLen, nBytes) {
-  var e, m
-  var eLen = (nBytes * 8) - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var nBits = -7
-  var i = isLE ? (nBytes - 1) : 0
-  var d = isLE ? -1 : 1
-  var s = buffer[offset + i]
-
-  i += d
-
-  e = s & ((1 << (-nBits)) - 1)
-  s >>= (-nBits)
-  nBits += eLen
-  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-  m = e & ((1 << (-nBits)) - 1)
-  e >>= (-nBits)
-  nBits += mLen
-  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-  if (e === 0) {
-    e = 1 - eBias
-  } else if (e === eMax) {
-    return m ? NaN : ((s ? -1 : 1) * Infinity)
+function readonlyValues(obj) {
+  if ((0, _tree.isTreeBacked)(obj) && obj.readonlyValues) {
+    return obj.readonlyValues();
   } else {
-    m = m + Math.pow(2, mLen)
-    e = e - eBias
+    return Object.values(obj);
   }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
 }
 
-exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c
-  var eLen = (nBytes * 8) - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
-  var i = isLE ? 0 : (nBytes - 1)
-  var d = isLE ? 1 : -1
-  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
-
-  value = Math.abs(value)
-
-  if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0
-    e = eMax
+function readonlyEntries(obj) {
+  if ((0, _tree.isTreeBacked)(obj) && obj.readonlyEntries) {
+    return obj.readonlyEntries();
   } else {
-    e = Math.floor(Math.log(value) / Math.LN2)
-    if (value * (c = Math.pow(2, -e)) < 1) {
-      e--
-      c *= 2
-    }
-    if (e + eBias >= 1) {
-      value += rt / c
-    } else {
-      value += rt * Math.pow(2, 1 - eBias)
-    }
-    if (value * c >= 2) {
-      e++
-      c /= 2
-    }
-
-    if (e + eBias >= eMax) {
-      m = 0
-      e = eMax
-    } else if (e + eBias >= 1) {
-      m = ((value * c) - 1) * Math.pow(2, mLen)
-      e = e + eBias
-    } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
-      e = 0
-    }
+    return Object.entries(obj);
   }
-
-  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
-
-  e = (e << mLen) | m
-  eLen += mLen
-  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
-
-  buffer[offset + i - d] |= s * 128
 }
-
-
-/***/ }),
-/* 168 */
-/***/ (function(module, exports) {
-
-var toString = {}.toString;
-
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
-};
-
+//# sourceMappingURL=readonlyIterate.js.map
 
 /***/ }),
-/* 169 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12096,14 +12362,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.newInstance = newInstance;
 
-var _loader = _interopRequireDefault(__webpack_require__(170));
+var _loader = _interopRequireDefault(__webpack_require__(176));
 
-var _buffer = __webpack_require__(22);
+var _buffer = __webpack_require__(34);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* babel-plugin-inline-binary-import '../build/optimized.wasm' */
-const wasmCode = "\0asm\x01\0\0\0\x01\x1F\x06`\0\0`\x01\x7F\0`\x02\x7F\x7F\0`\x01\x7F\x01\x7F`\x03\x7F\x7F\x7F\0`\x04\x7F\x7F\x7F\x7F\0\x02\r\x01\x03env\x05abort\0\x05\x03\x0E\r\x01\x03\x02\x03\0\0\x04\x02\x02\x03\x01\x01\0\x05\x03\x01\0\x01\x06\xA7\x01!\x7F\0A\x80\x04\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x07K\b\x06memory\x02\0\fINPUT_LENGTH\x03\0\x05input\x03\x1B\x06output\x03\x1D\x04init\0\x06\x06update\0\t\x05final\0\x0B\x06digest\0\f\b\x01\r\n\xD7\x0B\rF\x01\x02\x7F \0?\0\"\x02A\x10t\"\x01K\x04@ \x02 \0 \x01kA\xFF\xFF\x03jA\x80\x80|qA\x10v\"\x01 \x02 \x01J\x1B@\0A\0H\x04@ \x01@\0A\0H\x04@\0\x0B\x0B\x0B \0$\x16\x0BR\x01\x03\x7F \0A\xF0\xFF\xFF\xFF\x03K\x04@\0\x0B#\x16A\x10j\"\x02 \0A\x0FjApq\"\x01A\x10 \x01A\x10K\x1B\"\x03j\x10\x01 \x02A\x10k\"\x01 \x036\x02\0 \x01A\x016\x02\x04 \x01A\x006\x02\b \x01 \x006\x02\f \x02\x0B%\x01\x01\x7F\x03@ \x01\x04@ \0\"\x02A\x01j!\0 \x02A\0:\0\0 \x01A\x01k!\x01\f\x01\x0B\x0B\x0B)\x01\x01\x7F \0A\xF0\xFF\xFF\xFF\x03K\x04@A\xD0\x02A\x80\x03A6A*\x10\0\0\x0B \0\x10\x02\"\x01 \0\x10\x03 \x01\x0B?\0A\xB4\x02(\x02\0$\x01A\xB0\x03$\x15A\xB0\x03$\x16A\xC0\0\x10\x04$\x17#\x17$\x18A\x80\x02\x10\x04$\x19#\x19$\x1AA\x80\x04\x10\x04$\x1B#\x1B$\x1CA \x10\x04$\x1D#\x1D$\x1E\x0BJ\0A\xE7\xCC\xA7\xD0\x06$\x02A\x85\xDD\x9E\xDB{$\x03A\xF2\xE6\xBB\xE3\x03$\x04A\xBA\xEA\xBF\xAAz$\x05A\xFF\xA4\xB9\x88\x05$\x06A\x8C\xD1\x95\xD8y$\x07A\xAB\xB3\x8F\xFC\x01$\bA\x99\x9A\x83\xDF\x05$\tA\0$\x1FA\0$ \x0Bg\x01\x02\x7F\x02@ \x02!\x03 \0 \x01F\r\0 \0 \x01I\x04@\x03@ \x03\x04@ \0\"\x02A\x01j!\0 \x01\"\x04A\x01j!\x01 \x02 \x04-\0\0:\0\0 \x03A\x01k!\x03\f\x01\x0B\x0B\x05\x03@ \x03\x04@ \x03A\x01k\"\x03 \0j \x01 \x03j-\0\0:\0\0\f\x01\x0B\x0B\x0B\x0B\x0B\xE7\x03\x01\x01\x7F#\x02$\n#\x03$\x0B#\x04$\f#\x05$\r#\x06$\x0E#\x07$\x0F#\b$\x10#\t$\x11A\0$\x12\x03@#\x12A\x10I\x04@ \0#\x12A\x02tj \x01#\x12A\x02t\"\x02j-\0\0A\x18t \x01 \x02A\x01jj-\0\0A\x10tr \x01 \x02A\x02jj-\0\0A\btr \x01 \x02A\x03jj-\0\0r6\x02\0#\x12A\x01j$\x12\f\x01\x0B\x0BA\x10$\x12\x03@#\x12A\xC0\0I\x04@ \0#\x12A\x02tj \0#\x12A\x10kA\x02tj(\x02\0 \0#\x12A\x07kA\x02tj(\x02\0 \0#\x12A\x02kA\x02tj(\x02\0\"\x01A\x11x \x01A\x13xs \x01A\nvsj \0#\x12A\x0FkA\x02tj(\x02\0\"\x01A\x07x \x01A\x12xs \x01A\x03vsjj6\x02\0#\x12A\x01j$\x12\f\x01\x0B\x0BA\0$\x12\x03@#\x12A\xC0\0I\x04@ \0#\x12A\x02tj(\x02\0#\x01#\x12A\x02tj(\x02\0#\x11#\x0E\"\x01A\x06x \x01A\x0Bxs \x01A\x19xsj#\x0E\"\x01#\x0Fq#\x10 \x01A\x7Fsqsjjj$\x13#\n\"\x01A\x02x \x01A\rxs \x01A\x16xs#\n\"\x01#\x0B\"\x02q \x01#\f\"\x01qs \x01 \x02qsj$\x14#\x10$\x11#\x0F$\x10#\x0E$\x0F#\r#\x13j$\x0E#\f$\r#\x0B$\f#\n$\x0B#\x13#\x14j$\n#\x12A\x01j$\x12\f\x01\x0B\x0B#\x02#\nj$\x02#\x03#\x0Bj$\x03#\x04#\fj$\x04#\x05#\rj$\x05#\x06#\x0Ej$\x06#\x07#\x0Fj$\x07#\b#\x10j$\b#\t#\x11j$\t\x0B\xB1\x01\x01\x02\x7F \x01# j$ #\x1F\x04@A\xC0\0#\x1Fk \x01L\x04@#\x18#\x1Fj \0A\xC0\0#\x1Fk\x10\x07#\x1FA\xC0\0#\x1Fkj$\x1FA\xC0\0#\x1Fk!\x02 \x01A\xC0\0#\x1Fkk!\x01#\x1A#\x18\x10\bA\0$\x1F\x05#\x18#\x1Fj \0 \x01\x10\x07 \x01#\x1Fj$\x1F\x0F\x0B\x0B\x03@ \x03 \x01A\xC0\0mH\x04@#\x1A \0 \x02j\x10\b \x03A\x01j!\x03 \x02A@k!\x02\f\x01\x0B\x0B \x01A?q\x04@#\x18#\x1Fj \0 \x02j \x01A?q\"\0\x10\x07 \0#\x1Fj$\x1F\x0B\x0B\x19\0 \0A\x80\xFE\x83xqA\bw \0A\xFF\x81\xFC\x07qA\bxr\x0B\xAD\x02\x01\x02\x7F# A?qA?H\x04@#\x18#\x1FjA\x80\x01:\0\0#\x1FA\x01j$\x1F\x0B# A?qA8N\x04@#\x18#\x1Fj\"\x01A\xC0\0#\x1Fkj!\x02\x03@ \x01 \x02I\x04@ \x01A\0:\0\0 \x01A\x01j!\x01\f\x01\x0B\x0B#\x1A#\x18\x10\bA\0$\x1F\x0B# A?qA?N\x04@#\x18#\x1FjA\x80\x01:\0\0#\x1FA\x01j$\x1F\x0B#\x18#\x1Fj\"\x01A8#\x1Fkj!\x02\x03@ \x01 \x02I\x04@ \x01A\0:\0\0 \x01A\x01j!\x01\f\x01\x0B\x0B#\x18A8j# A\x80\x80\x80\x80\x02m\x10\n6\x02\0#\x18A<j# A\x03t\x10\n6\x02\0#\x1A#\x18\x10\b \0#\x02\x10\n6\x02\0 \0A\x04j#\x03\x10\n6\x02\0 \0A\bj#\x04\x10\n6\x02\0 \0A\fj#\x05\x10\n6\x02\0 \0A\x10j#\x06\x10\n6\x02\0 \0A\x14j#\x07\x10\n6\x02\0 \0A\x18j#\b\x10\n6\x02\0 \0A\x1Cj#\t\x10\n6\x02\0\x0B\x0E\0\x10\x06#\x1C \0\x10\t#\x1E\x10\x0B\x0B\x04\0\x10\x05\x0B\x0B\xA5\x03\x04\0A\x11\x0B\x8F\x02\x01\0\0\x01\0\0\0\0\0\0\0\0\x01\0\0\x98/\x8AB\x91D7q\xCF\xFB\xC0\xB5\xA5\xDB\xB5\xE9[\xC2V9\xF1\x11\xF1Y\xA4\x82?\x92\xD5^\x1C\xAB\x98\xAA\x07\xD8\x01[\x83\x12\xBE\x851$\xC3}\fUt]\xBEr\xFE\xB1\xDE\x80\xA7\x06\xDC\x9Bt\xF1\x9B\xC1\xC1i\x9B\xE4\x86G\xBE\xEF\xC6\x9D\xC1\x0F\xCC\xA1\f$o,\xE9-\xAA\x84tJ\xDC\xA9\xB0\\\xDA\x88\xF9vRQ>\x98m\xC61\xA8\xC8'\x03\xB0\xC7\x7FY\xBF\xF3\x0B\xE0\xC6G\x91\xA7\xD5Qc\xCA\x06g))\x14\x85\n\xB7'8!\x1B.\xFCm,M\x13\r8STs\ne\xBB\njv.\xC9\xC2\x81\x85,r\x92\xA1\xE8\xBF\xA2Kf\x1A\xA8p\x8BK\xC2\xA3Ql\xC7\x19\xE8\x92\xD1$\x06\x99\xD6\x855\x0E\xF4p\xA0j\x10\x16\xC1\xA4\x19\bl7\x1ELwH'\xB5\xBC\xB04\xB3\f\x1C9J\xAA\xD8NO\xCA\x9C[\xF3o.h\xEE\x82\x8Ftoc\xA5x\x14x\xC8\x84\b\x02\xC7\x8C\xFA\xFF\xBE\x90\xEBlP\xA4\xF7\xA3\xF9\xBE\xF2xq\xC6\0A\xA0\x02\x0B\x1D\x10\0\0\0\x01\0\0\0\x03\0\0\0\x10\0\0\0 \0\0\0 \0\0\0\0\x01\0\0@\0A\xC0\x02\x0B+\x1C\0\0\0\x01\0\0\0\x01\0\0\0\x1C\0\0\0I\0n\0v\0a\0l\0i\0d\0 \0l\0e\0n\0g\0t\0h\0A\xF0\x02\x0B5&\0\0\0\x01\0\0\0\x01\0\0\0&\0\0\0~\0l\0i\0b\0/\0a\0r\0r\0a\0y\0b\0u\0f\0f\0e\0r\0.\0t\0s";
+const wasmCode = "\0asm\x01\0\0\0\x01\x1F\x06`\x02\x7F\x7F\0`\0\0`\x01\x7F\0`\x01\x7F\x01\x7F`\x03\x7F\x7F\x7F\0`\x04\x7F\x7F\x7F\x7F\0\x02\r\x01\x03env\x05abort\0\x05\x03\x0F\x0E\x02\x03\0\x03\x01\x01\x04\0\0\x03\x02\x02\0\x01\x05\x03\x01\0\x01\x06\xAC\x01\"\x7F\0A\x80\x04\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x7F\x01A\0\x0B\x07V\t\x06memory\x02\0\fINPUT_LENGTH\x03\0\x05input\x03\x1C\x06output\x03\x1E\x04init\0\x06\x06update\0\t\x05final\0\x0B\x06digest\0\f\bdigest64\0\r\b\x01\x0E\n\xD2\f\x0EF\x01\x02\x7F \0?\0\"\x02A\x10t\"\x01K\x04@ \x02 \0 \x01kA\xFF\xFF\x03jA\x80\x80|qA\x10v\"\x01 \x02 \x01J\x1B@\0A\0H\x04@ \x01@\0A\0H\x04@\0\x0B\x0B\x0B \0$\x17\x0BR\x01\x03\x7F \0A\xF0\xFF\xFF\xFF\x03K\x04@\0\x0B#\x17A\x10j\"\x02 \0A\x0FjApq\"\x01A\x10 \x01A\x10K\x1B\"\x03j\x10\x01 \x02A\x10k\"\x01 \x036\x02\0 \x01A\x016\x02\x04 \x01A\x006\x02\b \x01 \x006\x02\f \x02\x0B%\x01\x01\x7F\x03@ \x01\x04@ \0\"\x02A\x01j!\0 \x02A\0:\0\0 \x01A\x01k!\x01\f\x01\x0B\x0B\x0B)\x01\x01\x7F \0A\xF0\xFF\xFF\xFF\x03K\x04@A\x80\x05A\xB0\x05A6A*\x10\0\0\x0B \0\x10\x02\"\x01 \0\x10\x03 \x01\x0BG\0A\xB4\x02(\x02\0$\x01A\xE4\x04(\x02\0$\x02A\xE0\x05$\x16A\xE0\x05$\x17A\xC0\0\x10\x04$\x18#\x18$\x19A\x80\x02\x10\x04$\x1A#\x1A$\x1BA\x80\x04\x10\x04$\x1C#\x1C$\x1DA \x10\x04$\x1E#\x1E$\x1F\x0BJ\0A\xE7\xCC\xA7\xD0\x06$\x03A\x85\xDD\x9E\xDB{$\x04A\xF2\xE6\xBB\xE3\x03$\x05A\xBA\xEA\xBF\xAAz$\x06A\xFF\xA4\xB9\x88\x05$\x07A\x8C\xD1\x95\xD8y$\bA\xAB\xB3\x8F\xFC\x01$\tA\x99\x9A\x83\xDF\x05$\nA\0$ A\0$!\x0Bg\x01\x02\x7F\x02@ \x02!\x03 \0 \x01F\r\0 \0 \x01I\x04@\x03@ \x03\x04@ \0\"\x02A\x01j!\0 \x01\"\x04A\x01j!\x01 \x02 \x04-\0\0:\0\0 \x03A\x01k!\x03\f\x01\x0B\x0B\x05\x03@ \x03\x04@ \x03A\x01k\"\x03 \0j \x01 \x03j-\0\0:\0\0\f\x01\x0B\x0B\x0B\x0B\x0B\xEC\x03\x01\x01\x7F#\x03$\x0B#\x04$\f#\x05$\r#\x06$\x0E#\x07$\x0F#\b$\x10#\t$\x11#\n$\x12 \x01\x04@A\0$\x13\x03@#\x13A\x10I\x04@ \0#\x13A\x02tj \x01#\x13A\x02t\"\x02j-\0\0A\x18t \x01 \x02A\x01jj-\0\0A\x10tr \x01 \x02A\x02jj-\0\0A\btr \x01 \x02A\x03jj-\0\0r6\x02\0#\x13A\x01j$\x13\f\x01\x0B\x0BA\x10$\x13\x03@#\x13A\xC0\0I\x04@ \0#\x13A\x02tj \0#\x13A\x10kA\x02tj(\x02\0 \0#\x13A\x07kA\x02tj(\x02\0 \0#\x13A\x02kA\x02tj(\x02\0\"\x01A\x11x \x01A\x13xs \x01A\nvsj \0#\x13A\x0FkA\x02tj(\x02\0\"\x01A\x07x \x01A\x12xs \x01A\x03vsjj6\x02\0#\x13A\x01j$\x13\f\x01\x0B\x0B\x0BA\0$\x13\x03@#\x13A\xC0\0I\x04@ \0#\x13A\x02tj(\x02\0#\x01#\x13A\x02tj(\x02\0#\x12#\x0F\"\x01A\x06x \x01A\x0Bxs \x01A\x19xsj#\x0F\"\x01#\x10q#\x11 \x01A\x7Fsqsjjj$\x14#\x0B\"\x01A\x02x \x01A\rxs \x01A\x16xs#\x0B\"\x01#\f\"\x02q \x01#\r\"\x01qs \x01 \x02qsj$\x15#\x11$\x12#\x10$\x11#\x0F$\x10#\x0E#\x14j$\x0F#\r$\x0E#\f$\r#\x0B$\f#\x14#\x15j$\x0B#\x13A\x01j$\x13\f\x01\x0B\x0B#\x03#\x0Bj$\x03#\x04#\fj$\x04#\x05#\rj$\x05#\x06#\x0Ej$\x06#\x07#\x0Fj$\x07#\b#\x10j$\b#\t#\x11j$\t#\n#\x12j$\n\x0B\xB1\x01\x01\x02\x7F \x01#!j$!# \x04@A\xC0\0# k \x01L\x04@#\x19# j \0A\xC0\0# k\x10\x07# A\xC0\0# kj$ A\xC0\0# k!\x02 \x01A\xC0\0# kk!\x01#\x1B#\x19\x10\bA\0$ \x05#\x19# j \0 \x01\x10\x07 \x01# j$ \x0F\x0B\x0B\x03@ \x03 \x01A\xC0\0mH\x04@#\x1B \0 \x02j\x10\b \x03A\x01j!\x03 \x02A@k!\x02\f\x01\x0B\x0B \x01A?q\x04@#\x19# j \0 \x02j \x01A?q\"\0\x10\x07 \0# j$ \x0B\x0B\x19\0 \0A\x80\xFE\x83xqA\bw \0A\xFF\x81\xFC\x07qA\bxr\x0B\xAD\x02\x01\x02\x7F#!A?qA?H\x04@#\x19# jA\x80\x01:\0\0# A\x01j$ \x0B#!A?qA8N\x04@#\x19# j\"\x01A\xC0\0# kj!\x02\x03@ \x01 \x02I\x04@ \x01A\0:\0\0 \x01A\x01j!\x01\f\x01\x0B\x0B#\x1B#\x19\x10\bA\0$ \x0B#!A?qA?N\x04@#\x19# jA\x80\x01:\0\0# A\x01j$ \x0B#\x19# j\"\x01A8# kj!\x02\x03@ \x01 \x02I\x04@ \x01A\0:\0\0 \x01A\x01j!\x01\f\x01\x0B\x0B#\x19A8j#!A\x80\x80\x80\x80\x02m\x10\n6\x02\0#\x19A<j#!A\x03t\x10\n6\x02\0#\x1B#\x19\x10\b \0#\x03\x10\n6\x02\0 \0A\x04j#\x04\x10\n6\x02\0 \0A\bj#\x05\x10\n6\x02\0 \0A\fj#\x06\x10\n6\x02\0 \0A\x10j#\x07\x10\n6\x02\0 \0A\x14j#\b\x10\n6\x02\0 \0A\x18j#\t\x10\n6\x02\0 \0A\x1Cj#\n\x10\n6\x02\0\x0B\x0E\0\x10\x06#\x1D \0\x10\t#\x1F\x10\x0B\x0Bm\0\x10\x06#\x1B \0\x10\b#\x02A\0\x10\b \x01#\x03\x10\n6\x02\0 \x01A\x04j#\x04\x10\n6\x02\0 \x01A\bj#\x05\x10\n6\x02\0 \x01A\fj#\x06\x10\n6\x02\0 \x01A\x10j#\x07\x10\n6\x02\0 \x01A\x14j#\b\x10\n6\x02\0 \x01A\x18j#\t\x10\n6\x02\0 \x01A\x1Cj#\n\x10\n6\x02\0\x0B\x04\0\x10\x05\x0B\x0B\xAB\x05\x07\0A\x11\x0B\x8F\x02\x01\0\0\x01\0\0\0\0\0\0\0\0\x01\0\0\x98/\x8AB\x91D7q\xCF\xFB\xC0\xB5\xA5\xDB\xB5\xE9[\xC2V9\xF1\x11\xF1Y\xA4\x82?\x92\xD5^\x1C\xAB\x98\xAA\x07\xD8\x01[\x83\x12\xBE\x851$\xC3}\fUt]\xBEr\xFE\xB1\xDE\x80\xA7\x06\xDC\x9Bt\xF1\x9B\xC1\xC1i\x9B\xE4\x86G\xBE\xEF\xC6\x9D\xC1\x0F\xCC\xA1\f$o,\xE9-\xAA\x84tJ\xDC\xA9\xB0\\\xDA\x88\xF9vRQ>\x98m\xC61\xA8\xC8'\x03\xB0\xC7\x7FY\xBF\xF3\x0B\xE0\xC6G\x91\xA7\xD5Qc\xCA\x06g))\x14\x85\n\xB7'8!\x1B.\xFCm,M\x13\r8STs\ne\xBB\njv.\xC9\xC2\x81\x85,r\x92\xA1\xE8\xBF\xA2Kf\x1A\xA8p\x8BK\xC2\xA3Ql\xC7\x19\xE8\x92\xD1$\x06\x99\xD6\x855\x0E\xF4p\xA0j\x10\x16\xC1\xA4\x19\bl7\x1ELwH'\xB5\xBC\xB04\xB3\f\x1C9J\xAA\xD8NO\xCA\x9C[\xF3o.h\xEE\x82\x8Ftoc\xA5x\x14x\xC8\x84\b\x02\xC7\x8C\xFA\xFF\xBE\x90\xEBlP\xA4\xF7\xA3\xF9\xBE\xF2xq\xC6\0A\xA0\x02\x0B\x1D\x10\0\0\0\x01\0\0\0\x03\0\0\0\x10\0\0\0 \0\0\0 \0\0\0\0\x01\0\0@\0A\xC1\x02\x0B\x13\x01\0\0\x01\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\x80\0A\x8D\x03\x0B\xC3\x01\x02\0\0\0\0\0\x80\0\0@\x01\0P \0\x88P\0\0\0\b\0\"\x14\0U\"B\x97\b\x05 \0\0\xA0\0\0\x88Z\0\x94\\\0\x9D\xD4\x16\0\0\x1F\x80\xFA\xD0%2\xD3YYg\x11\xDA\xBF\xE6\xF6I\x15\f\xB3P\xB0\xB2\b'L|\x9D\x93\xA3\xE2\f\xEA\xE1\xE6\x885C+\xA5Io\xA1go\x012\xD7\x91.\xEBN\xE5U\xBF]5#\xEE\x8E\xC2^\xBC\xE2\x94C?\xA8\xF7x\xADE\xCD\xD0\xF36\xE8\x05\x9C\xD9\xC7\x1DQ\xB0\xC4z\xBCi[7\x11\xBD\xE5q\xBA\xE3\xF2\x9F ;\x17\xEE\xFE\x18\xE7\xD9Z\xE2FP7\x13\x9D\b\x15\x05\x04\x0F\rONH'&\xD2(\x0114\xB4h\xC6\xCCA\bB\xB8\x11\xD3bq\xA7\x9B\xE5\x84\xA4\xA7\x85\0A\xD0\x04\x0B\x1D\x10\0\0\0\x01\0\0\0\x03\0\0\0\x10\0\0\0P\x01\0\0P\x01\0\0\0\x01\0\0@\0A\xF0\x04\x0B+\x1C\0\0\0\x01\0\0\0\x01\0\0\0\x1C\0\0\0I\0n\0v\0a\0l\0i\0d\0 \0l\0e\0n\0g\0t\0h\0A\xA0\x05\x0B5&\0\0\0\x01\0\0\0\x01\0\0\0&\0\0\0~\0l\0i\0b\0/\0a\0r\0r\0a\0y\0b\0u\0f\0f\0e\0r\0.\0t\0s";
 
 const _module = new WebAssembly.Module(_buffer.Buffer.from(wasmCode, 'binary'));
 
@@ -12112,7 +12378,7 @@ function newInstance() {
 }
 
 /***/ }),
-/* 170 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12536,7 +12802,783 @@ exports.demangle = demangle;
 
 
 /***/ }),
-/* 171 */
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.byteLength = byteLength
+exports.toByteArray = toByteArray
+exports.fromByteArray = fromByteArray
+
+var lookup = []
+var revLookup = []
+var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
+
+var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+for (var i = 0, len = code.length; i < len; ++i) {
+  lookup[i] = code[i]
+  revLookup[code.charCodeAt(i)] = i
+}
+
+// Support decoding URL-safe base64 strings, as Node.js does.
+// See: https://en.wikipedia.org/wiki/Base64#URL_applications
+revLookup['-'.charCodeAt(0)] = 62
+revLookup['_'.charCodeAt(0)] = 63
+
+function getLens (b64) {
+  var len = b64.length
+
+  if (len % 4 > 0) {
+    throw new Error('Invalid string. Length must be a multiple of 4')
+  }
+
+  // Trim off extra bytes after placeholder bytes are found
+  // See: https://github.com/beatgammit/base64-js/issues/42
+  var validLen = b64.indexOf('=')
+  if (validLen === -1) validLen = len
+
+  var placeHoldersLen = validLen === len
+    ? 0
+    : 4 - (validLen % 4)
+
+  return [validLen, placeHoldersLen]
+}
+
+// base64 is 4/3 + up to two characters of the original data
+function byteLength (b64) {
+  var lens = getLens(b64)
+  var validLen = lens[0]
+  var placeHoldersLen = lens[1]
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+}
+
+function _byteLength (b64, validLen, placeHoldersLen) {
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+}
+
+function toByteArray (b64) {
+  var tmp
+  var lens = getLens(b64)
+  var validLen = lens[0]
+  var placeHoldersLen = lens[1]
+
+  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen))
+
+  var curByte = 0
+
+  // if there are placeholders, only get up to the last complete 4 chars
+  var len = placeHoldersLen > 0
+    ? validLen - 4
+    : validLen
+
+  var i
+  for (i = 0; i < len; i += 4) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 18) |
+      (revLookup[b64.charCodeAt(i + 1)] << 12) |
+      (revLookup[b64.charCodeAt(i + 2)] << 6) |
+      revLookup[b64.charCodeAt(i + 3)]
+    arr[curByte++] = (tmp >> 16) & 0xFF
+    arr[curByte++] = (tmp >> 8) & 0xFF
+    arr[curByte++] = tmp & 0xFF
+  }
+
+  if (placeHoldersLen === 2) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 2) |
+      (revLookup[b64.charCodeAt(i + 1)] >> 4)
+    arr[curByte++] = tmp & 0xFF
+  }
+
+  if (placeHoldersLen === 1) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 10) |
+      (revLookup[b64.charCodeAt(i + 1)] << 4) |
+      (revLookup[b64.charCodeAt(i + 2)] >> 2)
+    arr[curByte++] = (tmp >> 8) & 0xFF
+    arr[curByte++] = tmp & 0xFF
+  }
+
+  return arr
+}
+
+function tripletToBase64 (num) {
+  return lookup[num >> 18 & 0x3F] +
+    lookup[num >> 12 & 0x3F] +
+    lookup[num >> 6 & 0x3F] +
+    lookup[num & 0x3F]
+}
+
+function encodeChunk (uint8, start, end) {
+  var tmp
+  var output = []
+  for (var i = start; i < end; i += 3) {
+    tmp =
+      ((uint8[i] << 16) & 0xFF0000) +
+      ((uint8[i + 1] << 8) & 0xFF00) +
+      (uint8[i + 2] & 0xFF)
+    output.push(tripletToBase64(tmp))
+  }
+  return output.join('')
+}
+
+function fromByteArray (uint8) {
+  var tmp
+  var len = uint8.length
+  var extraBytes = len % 3 // if we have 1 byte left, pad 2 bytes
+  var parts = []
+  var maxChunkLength = 16383 // must be multiple of 3
+
+  // go through the array every three bytes, we'll deal with trailing stuff later
+  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+    parts.push(encodeChunk(
+      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
+    ))
+  }
+
+  // pad the end with zeros, but make sure to not forget the extra bytes
+  if (extraBytes === 1) {
+    tmp = uint8[len - 1]
+    parts.push(
+      lookup[tmp >> 2] +
+      lookup[(tmp << 4) & 0x3F] +
+      '=='
+    )
+  } else if (extraBytes === 2) {
+    tmp = (uint8[len - 2] << 8) + uint8[len - 1]
+    parts.push(
+      lookup[tmp >> 10] +
+      lookup[(tmp >> 4) & 0x3F] +
+      lookup[(tmp << 2) & 0x3F] +
+      '='
+    )
+  }
+
+  return parts.join('')
+}
+
+
+/***/ }),
+/* 178 */
+/***/ (function(module, exports) {
+
+exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m
+  var eLen = (nBytes * 8) - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var nBits = -7
+  var i = isLE ? (nBytes - 1) : 0
+  var d = isLE ? -1 : 1
+  var s = buffer[offset + i]
+
+  i += d
+
+  e = s & ((1 << (-nBits)) - 1)
+  s >>= (-nBits)
+  nBits += eLen
+  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1)
+  e >>= (-nBits)
+  nBits += mLen
+  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen)
+    e = e - eBias
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+}
+
+exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c
+  var eLen = (nBytes * 8) - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
+  var i = isLE ? 0 : (nBytes - 1)
+  var d = isLE ? 1 : -1
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+
+  value = Math.abs(value)
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0
+    e = eMax
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2)
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--
+      c *= 2
+    }
+    if (e + eBias >= 1) {
+      value += rt / c
+    } else {
+      value += rt * Math.pow(2, 1 - eBias)
+    }
+    if (value * c >= 2) {
+      e++
+      c /= 2
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0
+      e = eMax
+    } else if (e + eBias >= 1) {
+      m = ((value * c) - 1) * Math.pow(2, mLen)
+      e = e + eBias
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+      e = 0
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m
+  eLen += mLen
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128
+}
+
+
+/***/ }),
+/* 179 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
+
+
+/***/ }),
+/* 180 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.subtreeFillToContents = exports.subtreeFillToLength = exports.subtreeFillToDepth = void 0;
+const node_1 = __webpack_require__(35);
+const zeroNode_1 = __webpack_require__(86);
+const ERR_NAVIGATION = "Navigation error";
+const ERR_TOO_MANY_NODES = "Too many nodes";
+// subtree filling
+function subtreeFillToDepth(bottom, depth) {
+    let node = bottom;
+    while (depth > 0) {
+        node = new node_1.BranchNode(node, node);
+        depth--;
+    }
+    return node;
+}
+exports.subtreeFillToDepth = subtreeFillToDepth;
+function subtreeFillToLength(bottom, depth, length) {
+    const maxLength = 1 << depth;
+    if (length > maxLength)
+        throw new Error(ERR_TOO_MANY_NODES);
+    if (length === maxLength)
+        return subtreeFillToDepth(bottom, depth);
+    if (depth === 0) {
+        if (length === 1)
+            return bottom;
+        else
+            throw new Error(ERR_NAVIGATION);
+    }
+    if (depth === 1) {
+        return new node_1.BranchNode(bottom, length > 1 ? bottom : zeroNode_1.zeroNode(0));
+    }
+    const pivot = maxLength >> 1;
+    if (length <= pivot) {
+        return new node_1.BranchNode(subtreeFillToLength(bottom, depth - 1, length), zeroNode_1.zeroNode(depth - 1));
+    }
+    else {
+        return new node_1.BranchNode(subtreeFillToDepth(bottom, depth - 1), subtreeFillToLength(bottom, depth - 1, length - pivot));
+    }
+}
+exports.subtreeFillToLength = subtreeFillToLength;
+function subtreeFillToContents(nodes, depth) {
+    const maxLength = 2 ** depth;
+    if (nodes.length > maxLength)
+        throw new Error(ERR_TOO_MANY_NODES);
+    if (depth === 0) {
+        if (!nodes.length)
+            return zeroNode_1.zeroNode(0);
+        return nodes[0];
+    }
+    if (depth === 1) {
+        if (!nodes.length)
+            return zeroNode_1.zeroNode(1);
+        return new node_1.BranchNode(nodes[0], nodes[1] || zeroNode_1.zeroNode(0));
+    }
+    const pivot = Math.floor(maxLength / 2);
+    if (nodes.length <= pivot) {
+        return new node_1.BranchNode(subtreeFillToContents(nodes, depth - 1), zeroNode_1.zeroNode(depth - 1));
+    }
+    else {
+        return new node_1.BranchNode(subtreeFillToContents(nodes.slice(0, Number(pivot)), depth - 1), subtreeFillToContents(nodes.slice(Number(pivot)), depth - 1));
+    }
+}
+exports.subtreeFillToContents = subtreeFillToContents;
+
+
+/***/ }),
+/* 181 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Tree = void 0;
+const gindex_1 = __webpack_require__(65);
+const node_1 = __webpack_require__(35);
+const proof_1 = __webpack_require__(115);
+const single_1 = __webpack_require__(116);
+const zeroNode_1 = __webpack_require__(86);
+const ERR_INVALID_TREE = "Invalid tree operation";
+const ERR_PARAM_LT_ZERO = "Param must be >= 0";
+const ERR_COUNT_GT_DEPTH = "Count extends beyond depth limit";
+class Tree {
+    constructor(node, hook) {
+        this._node = node;
+        if (hook) {
+            if (typeof WeakRef === "undefined") {
+                this.hook = hook;
+            }
+            else {
+                this.hook = new WeakRef(hook);
+            }
+        }
+    }
+    static createFromProof(proof) {
+        return new Tree(proof_1.createNodeFromProof(proof));
+    }
+    get rootNode() {
+        return this._node;
+    }
+    set rootNode(n) {
+        this._node = n;
+        if (this.hook) {
+            // WeakRef should not change status during a program's execution
+            // So, use WeakRef feature detection to assume the type of this.hook
+            // to minimize the memory footprint of Tree
+            if (typeof WeakRef === "undefined") {
+                this.hook(this);
+            }
+            else {
+                const hookVar = this.hook.deref();
+                if (hookVar) {
+                    hookVar(this);
+                }
+                else {
+                    // Hook has been garbage collected, no need to keep the hookRef
+                    this.hook = undefined;
+                }
+            }
+        }
+    }
+    get root() {
+        return this.rootNode.root;
+    }
+    getNode(index) {
+        let node = this.rootNode;
+        for (const i of gindex_1.gindexIterator(index)) {
+            if (i) {
+                if (node.isLeaf())
+                    throw new Error(ERR_INVALID_TREE);
+                node = node.right;
+            }
+            else {
+                if (node.isLeaf())
+                    throw new Error(ERR_INVALID_TREE);
+                node = node.left;
+            }
+        }
+        return node;
+    }
+    setter(index, expand = false) {
+        let link = node_1.identity;
+        let node = this.rootNode;
+        const iterator = gindex_1.gindexIterator(index);
+        for (const i of iterator) {
+            if (i) {
+                if (node.isLeaf()) {
+                    if (!expand)
+                        throw new Error(ERR_INVALID_TREE);
+                    else {
+                        const child = zeroNode_1.zeroNode(iterator.remainingBitLength() - 1);
+                        node = new node_1.BranchNode(child, child);
+                    }
+                }
+                link = node_1.compose(node.rebindRight.bind(node), link);
+                node = node.right;
+            }
+            else {
+                if (node.isLeaf()) {
+                    if (!expand)
+                        throw new Error(ERR_INVALID_TREE);
+                    else {
+                        const child = zeroNode_1.zeroNode(iterator.remainingBitLength() - 1);
+                        node = new node_1.BranchNode(child, child);
+                    }
+                }
+                link = node_1.compose(node.rebindLeft.bind(node), link);
+                node = node.left;
+            }
+        }
+        return node_1.compose(node_1.identity, link);
+    }
+    setNode(index, n, expand = false) {
+        this.rootNode = this.setter(index, expand)(n);
+    }
+    getRoot(index) {
+        return this.getNode(index).root;
+    }
+    setRoot(index, root, expand = false) {
+        this.setNode(index, new node_1.LeafNode(root), expand);
+    }
+    getSubtree(index) {
+        return new Tree(this.getNode(index), (v) => this.setNode(index, v.rootNode));
+    }
+    setSubtree(index, v, expand = false) {
+        this.setNode(index, v.rootNode, expand);
+    }
+    clone() {
+        return new Tree(this.rootNode);
+    }
+    getSingleProof(index) {
+        return single_1.createSingleProof(this.rootNode, index)[1];
+    }
+    /**
+     * Fast read-only iteration
+     * In-order traversal of nodes at `depth`
+     * starting from the `startIndex`-indexed node
+     * iterating through `count` nodes
+     */
+    *iterateNodesAtDepth(depth, startIndex, count) {
+        // Strategy:
+        // First nagivate to the starting Gindex node,
+        // At each level record the tuple (current node, the navigation direction) in a list (Left=0, Right=1)
+        // Once we reach the starting Gindex node, the list will be length == depth
+        // Begin emitting nodes: Outer loop:
+        //   Yield the current node
+        //   Inner loop
+        //     pop off the end of the list
+        //     If its (N, Left) (we've nav'd the left subtree, but not the right subtree)
+        //       push (N, Right) and set set node as the n.right
+        //       push (N, Left) and set node as n.left until list length == depth
+        //   Inner loop until the list length == depth
+        // Outer loop until the list is empty or the yield count == count
+        if (startIndex < 0 || count < 0 || depth < 0) {
+            throw new Error(ERR_PARAM_LT_ZERO);
+        }
+        if (BigInt(1) << BigInt(depth) < startIndex + count) {
+            throw new Error(ERR_COUNT_GT_DEPTH);
+        }
+        if (count === 0) {
+            return;
+        }
+        if (depth === 0) {
+            yield this.rootNode;
+            return;
+        }
+        let node = this.rootNode;
+        let currCount = 0;
+        const startGindex = gindex_1.toGindexBitstring(depth, BigInt(startIndex));
+        const nav = [];
+        for (const i of gindex_1.gindexIterator(startGindex)) {
+            nav.push([node, i]);
+            if (i) {
+                if (node.isLeaf())
+                    throw new Error(ERR_INVALID_TREE);
+                node = node.right;
+            }
+            else {
+                if (node.isLeaf())
+                    throw new Error(ERR_INVALID_TREE);
+                node = node.left;
+            }
+        }
+        while (nav.length && currCount < count) {
+            yield node;
+            currCount++;
+            if (currCount === count) {
+                return;
+            }
+            do {
+                const [parentNode, direction] = nav.pop();
+                // if direction was left
+                if (!direction) {
+                    // now navigate right
+                    nav.push([parentNode, 1]);
+                    if (parentNode.isLeaf())
+                        throw new Error(ERR_INVALID_TREE);
+                    node = parentNode.right;
+                    // and then left as far as possible
+                    while (nav.length !== depth) {
+                        nav.push([node, 0]);
+                        if (node.isLeaf())
+                            throw new Error(ERR_INVALID_TREE);
+                        node = node.left;
+                    }
+                }
+            } while (nav.length && nav.length !== depth);
+        }
+    }
+    getProof(input) {
+        return proof_1.createProof(this.rootNode, input);
+    }
+}
+exports.Tree = Tree;
+
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deserializeTreeOffsetProof = exports.serializeTreeOffsetProof = exports.computeTreeOffsetProofSerializedLength = exports.createNodeFromTreeOffsetProof = exports.createTreeOffsetProof = exports.treeOffsetProofToNode = exports.nodeToTreeOffsetProof = void 0;
+const node_1 = __webpack_require__(35);
+const util_1 = __webpack_require__(183);
+/**
+ * Compute offsets and leaves of a tree-offset proof
+ *
+ * Recursive function
+ *
+ * See https://github.com/protolambda/eth-merkle-trees/blob/master/tree_offsets.md
+ * @param node current node in the tree
+ * @param gindex current generalized index in the tree
+ * @param proofGindices generalized indices to left include in the proof - must be sorted in-order according to the tree
+ */
+function nodeToTreeOffsetProof(node, gindex, proofGindices) {
+    if (!proofGindices.length || !proofGindices[0].startsWith(gindex)) {
+        // there are no proof indices left OR the current subtree contains no remaining proof indices
+        return [[], []];
+    }
+    else if (gindex === proofGindices[0]) {
+        // the current node is at the next proof index
+        proofGindices.shift();
+        return [[], [node.root]];
+    }
+    else {
+        // recursively compute offsets, leaves for the left and right subtree
+        const [leftOffsets, leftLeaves] = nodeToTreeOffsetProof(node.left, gindex + "0", proofGindices);
+        const [rightOffsets, rightLeaves] = nodeToTreeOffsetProof(node.right, gindex + "1", proofGindices);
+        // the offset prepended to the list is # of leaves in the left subtree
+        const pivot = leftLeaves.length;
+        return [[pivot].concat(leftOffsets, rightOffsets), leftLeaves.concat(rightLeaves)];
+    }
+}
+exports.nodeToTreeOffsetProof = nodeToTreeOffsetProof;
+/**
+ * Recreate a `Node` given offsets and leaves of a tree-offset proof
+ *
+ * Recursive definition
+ *
+ * See https://github.com/protolambda/eth-merkle-trees/blob/master/tree_offsets.md
+ */
+function treeOffsetProofToNode(offsets, leaves) {
+    if (!leaves.length) {
+        throw new Error("Proof must contain gt 0 leaves");
+    }
+    else if (leaves.length === 1) {
+        return new node_1.LeafNode(leaves[0]);
+    }
+    else {
+        // the offset popped from the list is the # of leaves in the left subtree
+        const pivot = offsets[0];
+        return new node_1.BranchNode(treeOffsetProofToNode(offsets.slice(1, pivot), leaves.slice(0, pivot)), treeOffsetProofToNode(offsets.slice(pivot), leaves.slice(pivot)));
+    }
+}
+exports.treeOffsetProofToNode = treeOffsetProofToNode;
+/**
+ * Create a tree-offset proof
+ *
+ * @param rootNode the root node of the tree
+ * @param gindices generalized indices to include in the proof
+ */
+function createTreeOffsetProof(rootNode, gindices) {
+    return nodeToTreeOffsetProof(rootNode, "1", util_1.computeMultiProofBitstrings(gindices.map((g) => g.toString(2))));
+}
+exports.createTreeOffsetProof = createTreeOffsetProof;
+/**
+ * Recreate a `Node` given a tree-offset proof
+ *
+ * @param offsets offsets of a tree-offset proof
+ * @param leaves leaves of a tree-offset proof
+ */
+function createNodeFromTreeOffsetProof(offsets, leaves) {
+    // TODO validation
+    return treeOffsetProofToNode(offsets, leaves);
+}
+exports.createNodeFromTreeOffsetProof = createNodeFromTreeOffsetProof;
+function computeTreeOffsetProofSerializedLength(offsets, leaves) {
+    // add 1 for # of leaves
+    return (offsets.length + 1) * 2 + leaves.length * 32;
+}
+exports.computeTreeOffsetProofSerializedLength = computeTreeOffsetProofSerializedLength;
+// Serialized tree offset proof structure:
+// # of leaves - 2 bytes
+// offsets - 2 bytes each
+// leaves - 32 bytes each
+function serializeTreeOffsetProof(output, byteOffset, offsets, leaves) {
+    const writer = new DataView(output.buffer, output.byteOffset, output.byteLength);
+    // set # of leaves
+    writer.setUint16(byteOffset, leaves.length, true);
+    // set offsets
+    const offsetsStartIndex = byteOffset + 2;
+    for (let i = 0; i < offsets.length; i++) {
+        writer.setUint16(i * 2 + offsetsStartIndex, offsets[i], true);
+    }
+    // set leaves
+    const leavesStartIndex = offsetsStartIndex + offsets.length * 2;
+    for (let i = 0; i < leaves.length; i++) {
+        output.set(leaves[i], i * 32 + leavesStartIndex);
+    }
+}
+exports.serializeTreeOffsetProof = serializeTreeOffsetProof;
+function deserializeTreeOffsetProof(data, byteOffset) {
+    const reader = new DataView(data.buffer, data.byteOffset, data.byteLength);
+    // get # of leaves
+    const leafCount = reader.getUint16(byteOffset, true);
+    if (data.length < (leafCount - 1) * 2 + leafCount * 32) {
+        throw new Error("Unable to deserialize tree offset proof: not enough bytes");
+    }
+    // get offsets
+    const offsetsStartIndex = byteOffset + 2;
+    const offsets = Array.from({ length: leafCount - 1 }, (_, i) => reader.getUint16(i * 2 + offsetsStartIndex, true));
+    // get leaves
+    const leavesStartIndex = offsetsStartIndex + offsets.length * 2;
+    const leaves = Array.from({ length: leafCount }, (_, i) => data.subarray(i * 32 + leavesStartIndex, (i + 1) * 32 + leavesStartIndex));
+    return [offsets, leaves];
+}
+exports.deserializeTreeOffsetProof = deserializeTreeOffsetProof;
+
+
+/***/ }),
+/* 183 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.computeMultiProofBitstrings = exports.filterParentBitstrings = exports.sortInOrderBitstrings = exports.computeProofBitstrings = exports.computeProofGindices = void 0;
+const gindex_1 = __webpack_require__(65);
+// Not currently in use, but simpler implementation useful for testing
+/**
+ * Compute both the path and branch indices
+ *
+ * Path indices are parent indices upwards toward the root
+ * Branch indices are witnesses required for a merkle proof
+ */
+function computeProofGindices(gindex) {
+    const path = new Set();
+    const branch = new Set();
+    let g = gindex;
+    while (g > 1) {
+        path.add(g);
+        branch.add(gindex_1.gindexSibling(g));
+        g = gindex_1.gindexParent(g);
+    }
+    return { path, branch };
+}
+exports.computeProofGindices = computeProofGindices;
+/**
+ * Compute both the path and branch indices
+ *
+ * Path indices are parent indices upwards toward the root
+ * Branch indices are witnesses required for a merkle proof
+ */
+function computeProofBitstrings(gindex) {
+    const path = new Set();
+    const branch = new Set();
+    let g = gindex;
+    while (g.length > 1) {
+        path.add(g);
+        const lastBit = g[g.length - 1];
+        const parent = g.substring(0, g.length - 1);
+        branch.add(parent + (Number(lastBit) ^ 1));
+        g = parent;
+    }
+    return { path, branch };
+}
+exports.computeProofBitstrings = computeProofBitstrings;
+/**
+ * Sort generalized indices in-order
+ * @param bitLength maximum bit length of generalized indices to sort
+ */
+function sortInOrderBitstrings(gindices, bitLength) {
+    if (!gindices.length) {
+        return [];
+    }
+    return gindices
+        .map((g) => g.padEnd(bitLength))
+        .sort()
+        .map((g) => g.trim());
+}
+exports.sortInOrderBitstrings = sortInOrderBitstrings;
+/**
+ * Filter out parent generalized indices
+ */
+function filterParentBitstrings(gindices) {
+    const sortedBitstrings = gindices.sort((a, b) => a.length - b.length);
+    const filtered = [];
+    outer: for (let i = 0; i < sortedBitstrings.length; i++) {
+        const bsA = sortedBitstrings[i];
+        for (let j = i + 1; j < sortedBitstrings.length; j++) {
+            const bsB = sortedBitstrings[j];
+            if (bsB.startsWith(bsA)) {
+                continue outer;
+            }
+        }
+        filtered.push(bsA);
+    }
+    return filtered;
+}
+exports.filterParentBitstrings = filterParentBitstrings;
+/**
+ * Return the set of generalized indices required for a multiproof
+ * This includes all leaves and any necessary witnesses
+ * @param gindices leaves to include in proof
+ * @returns all generalized indices required for a multiproof (leaves and witnesses), deduplicated and sorted in-order according to the tree
+ */
+function computeMultiProofBitstrings(gindices) {
+    // Initialize the proof indices with the leaves
+    const proof = new Set(filterParentBitstrings(gindices));
+    const paths = new Set();
+    const branches = new Set();
+    // Collect all path indices and all branch indices
+    let maxBitLength = 1;
+    for (const gindex of proof) {
+        if (gindex.length > maxBitLength)
+            maxBitLength = gindex.length;
+        const { path, branch } = computeProofBitstrings(gindex);
+        path.forEach((g) => paths.add(g));
+        branch.forEach((g) => branches.add(g));
+    }
+    // Remove all branches that are included in the paths
+    paths.forEach((g) => branches.delete(g));
+    // Add all remaining branches to the leaves
+    branches.forEach((g) => proof.add(g));
+    return sortInOrderBitstrings(Array.from(proof), maxBitLength);
+}
+exports.computeMultiProofBitstrings = computeMultiProofBitstrings;
+
+
+/***/ }),
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12548,11 +13590,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.merkleize = merkleize;
 exports.mixInLength = mixInLength;
 
-var _hash = __webpack_require__(79);
+var _hash = __webpack_require__(88);
 
-var _math = __webpack_require__(172);
+var _math = __webpack_require__(185);
 
-var _zeros = __webpack_require__(173);
+var _zeros = __webpack_require__(186);
 
 /** @module ssz */
 
@@ -12596,10 +13638,10 @@ function mixInLength(root, length) {
   return Buffer.from(h.buffer, h.byteOffset, h.byteLength);
 }
 //# sourceMappingURL=merkleize.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(22).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(34).Buffer))
 
 /***/ }),
-/* 172 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12637,7 +13679,7 @@ function previousPowerOf2(n) {
 //# sourceMappingURL=math.js.map
 
 /***/ }),
-/* 173 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12648,9 +13690,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.zeroHashes = void 0;
 
-var _constants = __webpack_require__(174);
+var _constants = __webpack_require__(89);
 
-var _hash = __webpack_require__(79);
+var _hash = __webpack_require__(88);
 
 /** @module ssz */
 // create array of "zero hashes", successively hashed zero chunks
@@ -12662,10 +13704,10 @@ for (let i = 0; i < 52; i++) {
   zeroHashes.push(Buffer.from(h.buffer, h.byteOffset, h.byteLength));
 }
 //# sourceMappingURL=zeros.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(22).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(34).Buffer))
 
 /***/ }),
-/* 174 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12674,315 +13716,69 @@ for (let i = 0; i < 52; i++) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BYTES_PER_LENGTH_PREFIX = exports.BYTES_PER_CHUNK = void 0;
+exports.isBitVectorType = isBitVectorType;
+exports.BitVectorType = exports.BITVECTOR_TYPE = void 0;
 
-/** @module ssz */
-// Number of bytes per chunk.
+var _vector = __webpack_require__(91);
 
-/** @ignore */
-const BYTES_PER_CHUNK = 32; // Number of bytes per serialized length prefix.
+var _basic = __webpack_require__(33);
 
-/** @ignore */
+var _type = __webpack_require__(10);
 
-exports.BYTES_PER_CHUNK = BYTES_PER_CHUNK;
-const BYTES_PER_LENGTH_PREFIX = 4;
-exports.BYTES_PER_LENGTH_PREFIX = BYTES_PER_LENGTH_PREFIX;
-//# sourceMappingURL=constants.js.map
+var _byteArray = __webpack_require__(24);
 
-/***/ }),
-/* 175 */
-/***/ (function(module, exports, __webpack_require__) {
+var _constants = __webpack_require__(89);
 
-"use strict";
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ByteVectorStructuralHandler = void 0;
-
-var _byteArray = __webpack_require__(40);
-
-var _vector = __webpack_require__(81);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-class ByteVectorStructuralHandler extends _vector.BasicVectorStructuralHandler {
-  constructor(type) {
-    super(type);
+const BITVECTOR_TYPE = Symbol.for("ssz/BitVectorType");
+exports.BITVECTOR_TYPE = BITVECTOR_TYPE;
 
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultValue() {
-    return new Uint8Array(this._type.length);
-  }
-
-  fromBytes(data, start, end) {
-    const length = end - start;
-
-    if (length !== this._type.length) {
-      throw new Error("Invalid deserialized vector length: expected ".concat(this._type.length, ", actual: ").concat(length));
-    }
-
-    const value = new Uint8Array(length);
-    value.set(data.slice(start, end));
-    return value;
-  }
-
-  toBytes(value, output, offset) {
-    output.set(value, offset);
-    return offset + this._type.length;
-  }
-
-  fromJson(data) {
-    const value = (0, _byteArray.fromHexString)(data);
-
-    if (value.length !== this._type.length) {
-      throw new Error("Invalid JSON vector length: expected ".concat(this._type.length, ", actual: ").concat(value.length));
-    }
-
-    return value;
-  }
-
-  toJson(value) {
-    return (0, _byteArray.toHexString)(value);
-  }
-
+function isBitVectorType(type) {
+  return (0, _type.isTypeOf)(type, BITVECTOR_TYPE);
 }
 
-exports.ByteVectorStructuralHandler = ByteVectorStructuralHandler;
-//# sourceMappingURL=byteVector.js.map
+class BitVectorType extends _vector.BasicVectorType {
+  constructor(options) {
+    super(_objectSpread({
+      elementType: _basic.booleanType
+    }, options));
 
-/***/ }),
-/* 176 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+    this._typeSymbols.add(BITVECTOR_TYPE);
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeVectorByteArrayHandler = exports.BasicVectorByteArrayHandler = void 0;
+  struct_getLength(value) {
+    return this.length;
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-var _array = __webpack_require__(84);
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+  struct_getByteLength(value) {
+    return Math.ceil(this.length / 8);
+  } // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-class BasicVectorByteArrayHandler extends _array.BasicArrayByteArrayHandler {
-  constructor(type) {
-    super();
 
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
+  struct_getSerializedLength(value) {
+    return Math.ceil(this.length / 8);
   }
 
-  defaultBacking() {
-    return new Uint8Array(this._type.elementType.size() * this._type.length);
+  getMaxSerializedLength() {
+    return this.struct_getSerializedLength(null);
   }
 
-}
-
-exports.BasicVectorByteArrayHandler = BasicVectorByteArrayHandler;
-
-class CompositeVectorByteArrayHandler extends _array.CompositeArrayByteArrayHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
+  getMinSerializedLength() {
+    return this.struct_getSerializedLength(null);
   }
 
-  defaultBacking() {
-    const defaultElementBacking = this._type.elementType.byteArray.defaultBacking();
-
-    const totalSize = defaultElementBacking.length * this._type.length;
-    const target = new Uint8Array(totalSize);
-
-    for (let i = 0; i < totalSize; i += defaultElementBacking.length) {
-      target.set(defaultElementBacking, i);
-    }
-
-    return target;
+  struct_getChunkCount(value) {
+    return Math.ceil(this.struct_getLength(value) / 256);
   }
 
-}
-
-exports.CompositeVectorByteArrayHandler = CompositeVectorByteArrayHandler;
-//# sourceMappingURL=vector.js.map
-
-/***/ }),
-/* 177 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CompositeListByteArrayHandler = exports.BasicListByteArrayHandler = void 0;
-
-var _compat = __webpack_require__(59);
-
-var _array = __webpack_require__(84);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BasicListByteArrayHandler extends _array.BasicArrayByteArrayHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultBacking() {
-    return new Uint8Array(0);
-  }
-
-  hashTreeRoot(target) {
-    return (0, _compat.mixInLength)(super.hashTreeRoot(target), this.getLength(target));
-  }
-
-}
-
-exports.BasicListByteArrayHandler = BasicListByteArrayHandler;
-
-class CompositeListByteArrayHandler extends _array.CompositeArrayByteArrayHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultBacking() {
-    return new Uint8Array(0);
-  }
-
-  hashTreeRoot(target) {
-    return (0, _compat.mixInLength)(super.hashTreeRoot(target), this.getLength(target));
-  }
-
-}
-
-exports.CompositeListByteArrayHandler = CompositeListByteArrayHandler;
-//# sourceMappingURL=list.js.map
-
-/***/ }),
-/* 178 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ContainerByteArrayHandler = void 0;
-
-var _abstract = __webpack_require__(82);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class ContainerByteArrayHandler extends _abstract.ByteArrayHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  defaultBacking() {
-    throw new Error("Not implelented");
-  }
-
-  getVariableOffsets(target) {
-    const offsets = []; // variable-sized values can be interspersed with fixed-sized values
-    // variable-sized value indices are serialized as offsets, indices deeper in the byte array
-
-    let currentIndex = 0;
-    let nextIndex = 0;
-    const fixedSection = new DataView(target.buffer, target.byteOffset);
-    const fixedOffsets = [];
-    const variableOffsets = [];
-    let variableIndex = 0;
-    Object.values(this._type.fields).forEach((fieldType, i) => {
-      if (fieldType.isVariableSize()) {
-        const offset = fixedSection.getUint32(currentIndex, true);
-
-        if (offset > target.length) {
-          throw new Error("Offset out of bounds");
-        }
-
-        variableOffsets.push(offset);
-        currentIndex = nextIndex = currentIndex + 4;
-        variableIndex++;
-      } else {
-        nextIndex = currentIndex + fieldType.size(null);
-        fixedOffsets[i] = [currentIndex, nextIndex];
-        currentIndex = nextIndex;
-      }
-    });
-    variableOffsets.push(target.length);
-    variableIndex = 0;
-    Object.values(this._type.fields).forEach((fieldType, i) => {
-      if (fieldType.isVariableSize()) {
-        if (variableOffsets[variableIndex] > variableOffsets[variableIndex + 1]) {
-          throw new Error("Offsets must be increasing");
-        }
-
-        offsets.push([variableOffsets[variableIndex], variableOffsets[variableIndex + 1]]);
-        variableIndex++;
-      } else {
-        offsets.push(fixedOffsets[i]);
-      }
-    });
-    return offsets;
-  }
-
-}
-
-exports.ContainerByteArrayHandler = ContainerByteArrayHandler;
-//# sourceMappingURL=container.js.map
-
-/***/ }),
-/* 179 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.BitListStructuralHandler = void 0;
-
-var _byteArray = __webpack_require__(40);
-
-var _list = __webpack_require__(113);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BitListStructuralHandler extends _list.BasicListStructuralHandler {
-  constructor(type) {
-    super(type);
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  getByte(value, index) {
+  struct_getByte(value, index) {
     const firstBitIndex = index * 8;
     const lastBitIndex = Math.min(firstBitIndex + 7, value.length - 1);
     let bitstring = "0b";
@@ -12994,31 +13790,244 @@ class BitListStructuralHandler extends _list.BasicListStructuralHandler {
     return Number(bitstring);
   }
 
-  getLength(value) {
-    return value.length;
-  }
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
 
-  getByteLength(value) {
-    return Math.ceil(value.length / 8);
-  }
+    if (end - start !== this.size(null)) {
+      throw new Error("Invalid bitvector: length not equal to vector length");
+    }
 
-  size(value) {
-    if (value.length % 8 === 0) {
-      return this.getByteLength(value) + 1;
+    const value = [];
+
+    for (let i = start; i < end - 1; i++) {
+      value.push(...(0, _byteArray.getByteBits)(data, i));
+    }
+
+    const lastBitLength = this.length % 8;
+
+    if (!lastBitLength) {
+      // vector takes up the whole byte, no need for checks
+      value.push(...(0, _byteArray.getByteBits)(data, end - 1));
     } else {
-      return this.getByteLength(value);
+      const lastBits = (0, _byteArray.getByteBits)(data, end - 1);
+
+      if (lastBits.slice(lastBitLength).some(b => b)) {
+        throw new Error("Invalid bitvector: nonzero bits past length");
+      }
+
+      value.push(...lastBits.slice(0, lastBitLength));
+    }
+
+    return value;
+  }
+
+  struct_serializeToBytes(value, output, offset) {
+    const byteLength = this.struct_getByteLength(value);
+
+    for (let i = 0; i < byteLength; i++) {
+      output[offset + i] = this.struct_getByte(value, i);
+    }
+
+    return offset + byteLength;
+  }
+
+  struct_getRootAtChunkIndex(value, chunkIndex) {
+    const output = new Uint8Array(_constants.BYTES_PER_CHUNK);
+    const byteLength = Math.min(_constants.BYTES_PER_CHUNK, this.struct_getByteLength(value) - chunkIndex);
+    const byteOffset = chunkIndex * _constants.BYTES_PER_CHUNK;
+
+    for (let i = 0; i < byteLength; i++) {
+      output[i] = this.struct_getByte(value, i + byteOffset);
+    }
+
+    return output;
+  }
+
+  struct_convertFromJson(data) {
+    const bytes = (0, _byteArray.fromHexString)(data);
+    return this.fromBytes(bytes, 0, bytes.length);
+  }
+
+  struct_convertToJson(value) {
+    return (0, _byteArray.toHexString)(this.serialize(value));
+  }
+
+  tree_getByteLength(target) {
+    return Math.ceil(this.tree_getLength(target) / 8);
+  }
+
+  tree_getSerializedLength(target) {
+    return this.tree_getByteLength(target);
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    // mask last byte to ensure it doesn't go over length
+    const lastByte = data[end - 1]; // If the data len fits full bytes this check must be skipped.
+    // Otherwise we must ensure that the extra bits are set to zero.
+
+    const lastByteBitLen = this.length % 8;
+
+    if (lastByteBitLen > 0) {
+      const mask = 0xff << lastByteBitLen & 0xff;
+
+      if ((lastByte & mask) > 0) {
+        throw new Error("Invalid deserialized bitvector length");
+      }
+    }
+
+    return super.tree_deserializeFromBytes(data, start, end);
+  }
+
+  getBitOffset(index) {
+    return index % 8;
+  }
+
+  getChunkOffset(index) {
+    return Math.floor(index % 256 / 8);
+  }
+
+  getChunkIndex(index) {
+    return Math.floor(index / 256);
+  }
+
+  tree_getChunkCount(target) {
+    return Math.ceil(this.tree_getLength(target) / 256);
+  }
+
+  *tree_iterateValues(target) {
+    const length = this.tree_getLength(target);
+    const chunkCount = this.tree_getChunkCount(target);
+    const nodeIterator = target.iterateNodesAtDepth(this.getChunkDepth(), 0, chunkCount);
+    let i = 0;
+
+    for (const node of nodeIterator) {
+      const chunk = node.root;
+
+      for (let j = 0; j < 256 && i < length; i++, j++) {
+        const byte = chunk[this.getChunkOffset(i)];
+        yield !!(byte & 1 << this.getBitOffset(i));
+      }
     }
   }
 
-  maxSize() {
-    return Math.ceil(this._type.limit / 8) + 1;
+  tree_getValueAtIndex(target, index) {
+    const chunk = this.tree_getRootAtChunkIndex(target, this.getChunkIndex(index));
+    const byte = chunk[this.getChunkOffset(index)];
+    return !!(byte & 1 << this.getBitOffset(index));
   }
 
-  minSize() {
+  tree_setProperty(target, property, value) {
+    const chunkGindex = this.getGindexAtChunkIndex(this.getChunkIndex(property));
+    const chunk = new Uint8Array(32);
+    chunk.set(target.getRoot(chunkGindex));
+    const byteOffset = this.getChunkOffset(property);
+
+    if (value) {
+      chunk[byteOffset] |= 1 << this.getBitOffset(property);
+    } else {
+      chunk[byteOffset] &= 0xff ^ 1 << this.getBitOffset(property);
+    }
+
+    target.setRoot(chunkGindex, chunk);
+    return true;
+  }
+
+  getMaxChunkCount() {
+    return Math.ceil(this.length / 256);
+  }
+
+}
+
+exports.BitVectorType = BitVectorType;
+//# sourceMappingURL=bitVector.js.map
+
+/***/ }),
+/* 188 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isBitListType = isBitListType;
+exports.BitListType = exports.BITLIST_TYPE = void 0;
+
+var _list = __webpack_require__(118);
+
+var _basic = __webpack_require__(33);
+
+var _type = __webpack_require__(10);
+
+var _byteArray = __webpack_require__(24);
+
+var _constants = __webpack_require__(89);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+const BITLIST_TYPE = Symbol.for("ssz/BitListType");
+exports.BITLIST_TYPE = BITLIST_TYPE;
+
+function isBitListType(type) {
+  return (0, _type.isTypeOf)(type, BITLIST_TYPE);
+}
+
+class BitListType extends _list.BasicListType {
+  constructor(options) {
+    super(_objectSpread({
+      elementType: _basic.booleanType
+    }, options));
+
+    this._typeSymbols.add(BITLIST_TYPE);
+  }
+
+  struct_getByte(value, index) {
+    const firstBitIndex = index * 8;
+    const lastBitIndex = Math.min(firstBitIndex + 7, value.length - 1);
+    let bitstring = "0b";
+
+    for (let i = lastBitIndex; i >= firstBitIndex; i--) {
+      bitstring += value[i] ? "1" : "0";
+    }
+
+    return Number(bitstring);
+  }
+
+  struct_getLength(value) {
+    return value.length;
+  }
+
+  struct_getByteLength(value) {
+    return Math.ceil(value.length / 8);
+  }
+
+  struct_getSerializedLength(value) {
+    if (value.length % 8 === 0) {
+      return this.struct_getByteLength(value) + 1;
+    } else {
+      return this.struct_getByteLength(value);
+    }
+  }
+
+  getMaxSerializedLength() {
+    return Math.ceil(this.limit / 8) + 1;
+  }
+
+  getMinSerializedLength() {
     return 1;
   }
 
-  fromBytes(data, start, end) {
+  struct_getChunkCount(value) {
+    return Math.ceil(this.struct_getLength(value) / 256);
+  }
+
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
     const value = [];
 
     const toBool = c => c === "1" ? true : false;
@@ -13043,18 +14052,18 @@ class BitListStructuralHandler extends _list.BasicListStructuralHandler {
     const last1 = lastBits.lastIndexOf(true);
     value.push(...lastBits.slice(0, last1));
 
-    if (value.length > this._type.limit) {
+    if (value.length > this.limit) {
       throw new Error("Invalid deserialized bitlist, length greater than limit");
     }
 
     return value;
   }
 
-  toBytes(value, output, offset) {
-    const byteLength = this.getByteLength(value);
+  struct_serializeToBytes(value, output, offset) {
+    const byteLength = this.struct_getByteLength(value);
 
     for (let i = 0; i < byteLength; i++) {
-      output[offset + i] = this.getByte(value, i);
+      output[offset + i] = this.struct_getByte(value, i);
     }
 
     const newOffset = offset + byteLength;
@@ -13068,33 +14077,162 @@ class BitListStructuralHandler extends _list.BasicListStructuralHandler {
     }
   }
 
-  chunk(value, index) {
-    const output = new Uint8Array(32);
-    const byteLength = Math.min(32, this.getByteLength(value) - index);
+  struct_getRootAtChunkIndex(value, chunkIndex) {
+    const output = new Uint8Array(_constants.BYTES_PER_CHUNK);
+    const byteLength = Math.min(_constants.BYTES_PER_CHUNK, this.struct_getByteLength(value) - chunkIndex);
+    const byteOffset = chunkIndex * _constants.BYTES_PER_CHUNK;
 
     for (let i = 0; i < byteLength; i++) {
-      output[i] = this.getByte(value, i + index);
+      output[i] = this.struct_getByte(value, i + byteOffset);
     }
 
     return output;
   }
 
-  fromJson(data) {
+  struct_convertFromJson(data) {
     const bytes = (0, _byteArray.fromHexString)(data);
-    return this.fromBytes(bytes, 0, bytes.length);
+    return this.struct_deserializeFromBytes(bytes, 0, bytes.length);
   }
 
-  toJson(value) {
+  struct_convertToJson(value) {
     return (0, _byteArray.toHexString)(this.serialize(value));
+  }
+
+  tree_getByteLength(target) {
+    return Math.ceil(this.tree_getLength(target) / 8);
+  }
+
+  tree_getSerializedLength(target) {
+    const bitLength = this.tree_getLength(target);
+
+    if (bitLength % 8 === 0) {
+      return this.tree_getByteLength(target) + 1;
+    } else {
+      return this.tree_getByteLength(target);
+    }
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    const lastByte = data[end - 1];
+
+    if (lastByte === 0) {
+      throw new Error("Invalid deserialized bitlist, padding bit required");
+    }
+
+    if (lastByte === 1) {
+      const target = super.tree_deserializeFromBytes(data, start, end - 1);
+      const length = (end - start - 1) * 8;
+      this.tree_setLength(target, length);
+      return target;
+    } // the last byte is > 1, so a padding bit will exist in the last byte and need to be removed
+
+
+    const target = super.tree_deserializeFromBytes(data, start, end);
+    const lastGindex = this.getGindexAtChunkIndex(Math.ceil((end - start) / 32) - 1); // copy chunk into new memory
+
+    const lastChunk = new Uint8Array(32);
+    lastChunk.set(target.getRoot(lastGindex));
+    const lastChunkByte = (end - start) % 32 - 1; // mask lastChunkByte
+
+    const lastByteBitLength = lastByte.toString(2).length - 1;
+    const length = (end - start - 1) * 8 + lastByteBitLength;
+    const mask = 0xff >> 8 - lastByteBitLength;
+    lastChunk[lastChunkByte] &= mask;
+    target.setRoot(lastGindex, lastChunk);
+    this.tree_setLength(target, length);
+    return target;
+  }
+
+  tree_serializeToBytes(target, output, offset) {
+    const sizeNoPadding = this.tree_getByteLength(target);
+    const fullChunkCount = Math.floor(sizeNoPadding / 32);
+    const remainder = sizeNoPadding % 32;
+    let i = 0;
+
+    if (fullChunkCount > 0) {
+      for (const node of target.iterateNodesAtDepth(this.getChunkDepth(), 0, fullChunkCount)) {
+        output.set(node.root, offset + i * 32);
+        i++;
+      }
+    }
+
+    if (remainder) {
+      output.set(this.tree_getRootAtChunkIndex(target, fullChunkCount).slice(0, remainder), offset + i * 32);
+    }
+
+    const bitLength = this.tree_getLength(target);
+    const size = this.tree_getSerializedLength(target);
+    const newOffset = offset + size; // set padding bit
+
+    output[newOffset - 1] |= 1 << bitLength % 8;
+    return newOffset;
+  }
+
+  getBitOffset(index) {
+    return index % 8;
+  }
+
+  getChunkOffset(index) {
+    return Math.floor(index % 256 / 8);
+  }
+
+  getChunkIndex(index) {
+    return Math.floor(index / 256);
+  }
+
+  tree_getChunkCount(target) {
+    return Math.ceil(this.tree_getLength(target) / 256);
+  }
+
+  *tree_iterateValues(target) {
+    const length = this.tree_getLength(target);
+    const chunkCount = this.tree_getChunkCount(target);
+    const nodeIterator = target.iterateNodesAtDepth(this.getChunkDepth(), 0, chunkCount);
+    let i = 0;
+
+    for (const node of nodeIterator) {
+      const chunk = node.root;
+
+      for (let j = 0; j < 256 && i < length; i++, j++) {
+        const byte = chunk[this.getChunkOffset(i)];
+        yield !!(byte & 1 << this.getBitOffset(i));
+      }
+    }
+  }
+
+  tree_getValueAtIndex(target, index) {
+    const chunk = this.tree_getRootAtChunkIndex(target, this.getChunkIndex(index));
+    const byte = chunk[this.getChunkOffset(index)];
+    return !!(byte & 1 << this.getBitOffset(index));
+  }
+
+  tree_setValueAtIndex(target, property, value, expand = false) {
+    const chunkGindex = this.getGindexAtChunkIndex(this.getChunkIndex(property));
+    const chunk = new Uint8Array(32);
+    chunk.set(target.getRoot(chunkGindex));
+    const byteOffset = this.getChunkOffset(property);
+
+    if (value) {
+      chunk[byteOffset] |= 1 << this.getBitOffset(property);
+    } else {
+      chunk[byteOffset] &= 0xff ^ 1 << this.getBitOffset(property);
+    }
+
+    target.setRoot(chunkGindex, chunk, expand);
+    return true;
+  }
+
+  getMaxChunkCount() {
+    return Math.ceil(this.limit / 256);
   }
 
 }
 
-exports.BitListStructuralHandler = BitListStructuralHandler;
+exports.BitListType = BitListType;
 //# sourceMappingURL=bitList.js.map
 
 /***/ }),
-/* 180 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13103,122 +14241,74 @@ exports.BitListStructuralHandler = BitListStructuralHandler;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BitVectorStructuralHandler = void 0;
+exports.isRootType = isRootType;
+exports.RootType = exports.ROOT_TYPE = void 0;
 
-var _byteArray = __webpack_require__(40);
+var _byteVector = __webpack_require__(119);
 
-var _vector = __webpack_require__(81);
+var _type = __webpack_require__(10);
+
+var _backings = __webpack_require__(84);
+
+var _byteArray = __webpack_require__(24);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-class BitVectorStructuralHandler extends _vector.BasicVectorStructuralHandler {
-  constructor(type) {
-    super(type);
+const ROOT_TYPE = Symbol.for("ssz/RootType");
+exports.ROOT_TYPE = ROOT_TYPE;
 
-    _defineProperty(this, "_type", void 0);
+function isRootType(type) {
+  return (0, _type.isTypeOf)(type, ROOT_TYPE);
+}
 
-    this._type = type;
-  }
-
-  getLength(value) {
-    return this._type.length;
-  }
-
-  getByteLength(value) {
-    return Math.ceil(this._type.length / 8);
-  }
-
-  size(value) {
-    return Math.ceil(this._type.length / 8);
-  }
-
-  maxSize() {
-    return this.size(null);
-  }
-
-  minSize() {
-    return this.size(null);
-  }
-
-  getByte(value, index) {
-    const firstBitIndex = index * 8;
-    const lastBitIndex = Math.min(firstBitIndex + 7, value.length - 1);
-    let bitstring = "0b";
-
-    for (let i = lastBitIndex; i >= firstBitIndex; i--) {
-      bitstring += value[i] ? "1" : "0";
-    }
-
-    return Number(bitstring);
-  }
-
-  fromBytes(data, start, end) {
-    if (end - start !== this.size(null)) {
-      throw new Error("Invalid bitvector: length not equal to vector length");
-    }
-
-    const value = [];
-    const getByteBits = this._type.byteArray.getByteBits;
-
-    for (let i = start; i < end - 1; i++) {
-      value.push(...getByteBits(data, i));
-    }
-
-    const lastBitLength = this._type.length % 8;
-
-    if (!lastBitLength) {
-      // vector takes up the whole byte, no need for checks
-      value.push(...getByteBits(data, end - 1));
-    } else {
-      const lastBits = this._type.byteArray.getByteBits(data, end - 1);
-
-      if (lastBits.slice(lastBitLength).some(b => b)) {
-        throw new Error("Invalid bitvector: nonzero bits past length");
-      }
-
-      value.push(...lastBits.slice(0, lastBitLength));
-    }
-
+function convertRootToUint8Array(value) {
+  if (value instanceof Uint8Array) {
     return value;
+  } else if ((0, _backings.isTreeBacked)(value)) {
+    return value.tree.root;
+  } else if (Array.isArray(value)) {
+    return new Uint8Array(value);
+  } else {
+    throw new Error("Unable to convert root to Uint8Array: not Uint8Array, tree-backed, or Array");
+  }
+}
+
+class RootType extends _byteVector.ByteVectorType {
+  constructor(options) {
+    super({
+      length: 32
+    });
+
+    _defineProperty(this, "_expandedType", void 0);
+
+    this._expandedType = options.expandedType;
+
+    this._typeSymbols.add(ROOT_TYPE);
   }
 
-  toBytes(value, output, offset) {
-    const byteLength = this.getByteLength(value);
-
-    for (let i = 0; i < byteLength; i++) {
-      output[offset + i] = this.getByte(value, i);
+  get expandedType() {
+    if (typeof this._expandedType === "function") {
+      this._expandedType = this._expandedType();
     }
 
-    return offset + byteLength;
+    return this._expandedType;
   }
 
-  chunk(value, index) {
-    const output = new Uint8Array(32);
-    const byteLength = Math.min(32, this.getByteLength(value) - index);
-
-    for (let i = 0; i < byteLength; i++) {
-      output[i] = this.getByte(value, i + index);
-    }
-
-    return output;
+  struct_equals(value1, value2) {
+    return (0, _byteArray.byteArrayEquals)(convertRootToUint8Array(value1), convertRootToUint8Array(value2));
   }
 
-  fromJson(data) {
-    const bytes = (0, _byteArray.fromHexString)(data);
-    return this.fromBytes(bytes, 0, bytes.length);
-  }
-
-  toJson(value) {
-    return (0, _byteArray.toHexString)(this.serialize(value));
+  equals(value1, value2) {
+    return this.struct_equals(value1, value2);
   }
 
 }
 
-exports.BitVectorStructuralHandler = BitVectorStructuralHandler;
-//# sourceMappingURL=bitVector.js.map
+exports.RootType = RootType;
+//# sourceMappingURL=root.js.map
 
 /***/ }),
-/* 181 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13227,106 +14317,121 @@ exports.BitVectorStructuralHandler = BitVectorStructuralHandler;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ContainerStructuralHandler = void 0;
+exports.isContainerType = isContainerType;
+exports.ContainerType = exports.CONTAINER_TYPE = void 0;
 
-var _abstract = __webpack_require__(78);
+var _abstract = __webpack_require__(83);
 
-var _utils = __webpack_require__(182);
+var _type = __webpack_require__(10);
+
+var _persistentMerkleTree = __webpack_require__(45);
+
+var _errorPath = __webpack_require__(117);
+
+var _json = __webpack_require__(191);
+
+var _treeValue = __webpack_require__(64);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-class ContainerStructuralHandler extends _abstract.StructuralHandler {
-  constructor(type) {
+const CONTAINER_TYPE = Symbol.for("ssz/ContainerType");
+exports.CONTAINER_TYPE = CONTAINER_TYPE;
+
+function isContainerType(type) {
+  return (0, _type.isTypeOf)(type, CONTAINER_TYPE);
+}
+
+class ContainerType extends _abstract.CompositeType {
+  // ES6 ensures key order is chronological
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(options) {
     super();
 
-    _defineProperty(this, "_type", void 0);
+    _defineProperty(this, "fields", void 0);
 
-    this._type = type;
+    this.fields = _objectSpread({}, options.fields);
+
+    this._typeSymbols.add(CONTAINER_TYPE);
   }
 
-  defaultValue() {
+  struct_defaultValue() {
     const obj = {};
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType]) => {
-      if (fieldType.isBasic()) {
-        obj[fieldName] = fieldType.defaultValue();
-      } else {
-        obj[fieldName] = fieldType.structural.defaultValue();
-      }
-    });
+
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
+      obj[fieldName] = fieldType.struct_defaultValue();
+    }
+
     return obj;
   }
 
-  size(value) {
+  struct_getSerializedLength(value) {
     let s = 0;
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType]) => {
-      if (fieldType.isVariableSize()) {
-        s += fieldType.size(value[fieldName]) + 4;
+
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
+      if (fieldType.hasVariableSerializedLength()) {
+        s += fieldType.struct_getSerializedLength(value[fieldName]) + 4;
       } else {
-        s += fieldType.size(null);
+        s += fieldType.struct_getSerializedLength(null);
       }
-    });
+    }
+
     return s;
   }
 
-  maxSize() {
-    const fixedSize = Object.values(this._type.fields).reduce((total, fieldType) => total + (fieldType.isVariableSize() ? 4 : fieldType.maxSize()), 0);
-    const maxDynamicSize = Object.values(this._type.fields).reduce((total, fieldType) => total += fieldType.isVariableSize() ? fieldType.maxSize() : 0, 0);
+  getMaxSerializedLength() {
+    const fixedSize = Object.values(this.fields).reduce((total, fieldType) => total + (fieldType.hasVariableSerializedLength() ? 4 : fieldType.getMaxSerializedLength()), 0);
+    const maxDynamicSize = Object.values(this.fields).reduce((total, fieldType) => total += fieldType.hasVariableSerializedLength() ? fieldType.getMaxSerializedLength() : 0, 0);
     return fixedSize + maxDynamicSize;
   }
 
-  minSize() {
-    const fixedSize = Object.values(this._type.fields).reduce((total, fieldType) => total + (fieldType.isVariableSize() ? 4 : fieldType.minSize()), 0);
-    const minDynamicSize = Object.values(this._type.fields).reduce((total, fieldType) => total += fieldType.isVariableSize() ? fieldType.minSize() : 0, 0);
+  getMinSerializedLength() {
+    const fixedSize = Object.values(this.fields).reduce((total, fieldType) => total + (fieldType.hasVariableSerializedLength() ? 4 : fieldType.getMinSerializedLength()), 0);
+    const minDynamicSize = Object.values(this.fields).reduce((total, fieldType) => total += fieldType.hasVariableSerializedLength() ? fieldType.getMinSerializedLength() : 0, 0);
     return fixedSize + minDynamicSize;
   }
 
-  assertValidValue(value) {
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType]) => {
+  struct_assertValidValue(value) {
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
       try {
-        if (fieldType.isBasic()) {
-          fieldType.assertValidValue(value[fieldName]);
-        } else {
-          // @ts-ignore
-          fieldType.structural.assertValidValue(value[fieldName]);
-        }
+        // @ts-ignore
+        fieldType.struct_assertValidValue(value[fieldName]);
       } catch (e) {
         throw new Error("Invalid field ".concat(fieldName, ": ").concat(e.message));
       }
+    }
+  }
+
+  struct_equals(value1, value2) {
+    this.struct_assertValidValue(value1);
+    this.struct_assertValidValue(value2);
+    return Object.entries(this.fields).every(([fieldName, fieldType]) => {
+      return fieldType.struct_equals(value1[fieldName], value2[fieldName]);
     });
   }
 
-  equals(value1, value2) {
-    this.assertValidValue(value1);
-    this.assertValidValue(value2);
-    return Object.entries(this._type.fields).every(([fieldName, fieldType]) => {
-      if (fieldType.isBasic()) {
-        return fieldType.equals(value1[fieldName], value2[fieldName]);
-      } else {
-        return fieldType.structural.equals(value1[fieldName], value2[fieldName]);
-      }
-    });
-  }
-
-  clone(value) {
+  struct_clone(value) {
     const newValue = {};
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType]) => {
-      if (fieldType.isBasic()) {
-        newValue[fieldName] = fieldType.clone(value[fieldName]);
-      } else {
-        newValue[fieldName] = fieldType.structural.clone(value[fieldName]);
-      }
-    });
+
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
+      newValue[fieldName] = fieldType.struct_clone(value[fieldName]);
+    }
+
     return newValue;
   }
 
-  fromBytes(data, start, end) {
+  struct_deserializeFromBytes(data, start, end) {
+    this.bytes_validate(data, start, end);
     let currentIndex = start;
     let nextIndex = currentIndex;
     const value = {}; // Since variable-sized values can be interspersed with fixed-sized values, we precalculate
     // the offset indices so we can more easily deserialize the fields in once pass
     // first we get the fixed sizes
 
-    const fixedSizes = Object.values(this._type.fields).map(fieldType => !fieldType.isVariableSize() && fieldType.size(null)); // with the fixed sizes, we can read the offsets, and store for our single pass
+    const fixedSizes = Object.values(this.fields).map(fieldType => !fieldType.hasVariableSerializedLength() && fieldType.struct_getSerializedLength(null)); // with the fixed sizes, we can read the offsets, and store for our single pass
 
     const offsets = [];
     const fixedSection = new DataView(data.buffer, data.byteOffset);
@@ -13345,35 +14450,34 @@ class ContainerStructuralHandler extends _abstract.StructuralHandler {
     }
 
     let offsetIndex = 0;
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType], i) => {
-      const fieldSize = fixedSizes[i];
 
-      if (fieldSize === false) {
-        // variable-sized field
-        if (offsets[offsetIndex] > end) {
-          throw new Error("Offset out of bounds");
-        }
+    for (const [i, [fieldName, fieldType]] of Object.entries(this.fields).entries()) {
+      try {
+        const fieldSize = fixedSizes[i];
 
-        if (offsets[offsetIndex] > offsets[offsetIndex + 1]) {
-          throw new Error("Offsets must be increasing");
-        }
+        if (fieldSize === false) {
+          // variable-sized field
+          if (offsets[offsetIndex] > end) {
+            throw new Error("Offset out of bounds");
+          }
 
-        value[fieldName] = fieldType.structural.fromBytes(data, offsets[offsetIndex], offsets[offsetIndex + 1]);
-        offsetIndex++;
-        currentIndex += 4;
-      } else {
-        // fixed-sized field
-        nextIndex = currentIndex + fieldSize;
+          if (offsets[offsetIndex] > offsets[offsetIndex + 1]) {
+            throw new Error("Offsets must be increasing");
+          }
 
-        if (fieldType.isBasic()) {
-          value[fieldName] = fieldType.fromBytes(data, currentIndex);
+          value[fieldName] = fieldType.struct_deserializeFromBytes(data, offsets[offsetIndex], offsets[offsetIndex + 1]);
+          offsetIndex++;
+          currentIndex += 4;
         } else {
-          value[fieldName] = fieldType.structural.fromBytes(data, currentIndex, nextIndex);
+          // fixed-sized field
+          nextIndex = currentIndex + fieldSize;
+          value[fieldName] = fieldType.struct_deserializeFromBytes(data, currentIndex, nextIndex);
+          currentIndex = nextIndex;
         }
-
-        currentIndex = nextIndex;
+      } catch (e) {
+        throw new _errorPath.SszErrorPath(e, fieldName);
       }
-    });
+    }
 
     if (offsets.length > 1) {
       if (offsetIndex !== offsets.length - 1) {
@@ -13392,12 +14496,13 @@ class ContainerStructuralHandler extends _abstract.StructuralHandler {
     return value;
   }
 
-  toBytes(value, output, offset) {
-    let variableIndex = offset + Object.values(this._type.fields).reduce((total, fieldType) => total + (fieldType.isVariableSize() ? 4 : fieldType.size(null)), 0);
+  struct_serializeToBytes(value, output, offset) {
+    let variableIndex = offset + Object.values(this.fields).reduce((total, fieldType) => total + (fieldType.hasVariableSerializedLength() ? 4 : fieldType.struct_getSerializedLength(null)), 0);
     const fixedSection = new DataView(output.buffer, output.byteOffset + offset);
     let fixedIndex = offset;
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType]) => {
-      if (fieldType.isVariableSize()) {
+
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
+      if (fieldType.hasVariableSerializedLength()) {
         // write offset
         fixedSection.setUint32(fixedIndex - offset, variableIndex - offset, true);
         fixedIndex += 4; // write serialized element to variable section
@@ -13406,51 +14511,371 @@ class ContainerStructuralHandler extends _abstract.StructuralHandler {
       } else {
         fixedIndex = fieldType.toBytes(value[fieldName], output, fixedIndex);
       }
-    });
+    }
+
     return variableIndex;
   }
 
-  chunk(value, index) {
-    const fieldName = Object.keys(this._type.fields)[index];
-    const fieldType = this._type.fields[fieldName];
-    return fieldType.hashTreeRoot(value[fieldName]);
+  struct_getRootAtChunkIndex(value, index) {
+    const fieldName = Object.keys(this.fields)[index];
+    const fieldType = this.fields[fieldName];
+    return fieldType.struct_hashTreeRoot(value[fieldName]);
   }
 
-  fromJson(data, options) {
+  struct_convertFromJson(data, options) {
     if (typeof data !== "object") {
       throw new Error("Invalid JSON container: expected Object");
     }
 
     const value = {};
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType]) => {
+
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
       const expectedCase = options ? options.case : null;
-      const expectedFieldName = (0, _utils.toExpectedCase)(fieldName, expectedCase);
+      const expectedFieldName = (0, _json.toExpectedCase)(fieldName, expectedCase);
 
       if (data[expectedFieldName] === undefined) {
         throw new Error("Invalid JSON container field: expected field ".concat(expectedFieldName, " is undefined"));
       }
 
       value[fieldName] = fieldType.fromJson(data[expectedFieldName], options);
-    });
+    }
+
     return value;
   }
 
-  toJson(value, options) {
+  struct_convertToJson(value, options) {
     const data = {};
     const expectedCase = options ? options.case : null;
-    Object.entries(this._type.fields).forEach(([fieldName, fieldType]) => {
-      data[(0, _utils.toExpectedCase)(fieldName, expectedCase)] = fieldType.toJson(value[fieldName], options);
-    });
+
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
+      data[(0, _json.toExpectedCase)(fieldName, expectedCase)] = fieldType.toJson(value[fieldName], options);
+    }
+
     return data;
+  }
+
+  struct_convertToTree(value) {
+    if ((0, _treeValue.isTreeBacked)(value)) return value.tree.clone();
+    return new _persistentMerkleTree.Tree((0, _persistentMerkleTree.subtreeFillToContents)(Object.entries(this.fields).map(([fieldName, fieldType]) => {
+      if (!(0, _abstract.isCompositeType)(fieldType)) {
+        const chunk = new Uint8Array(32);
+        fieldType.toBytes(value[fieldName], chunk, 0);
+        return new _persistentMerkleTree.LeafNode(chunk);
+      } else {
+        return fieldType.struct_convertToTree(value[fieldName]).rootNode;
+      }
+    }), this.getChunkDepth()));
+  }
+
+  struct_getPropertyNames() {
+    return Object.keys(this.fields);
+  }
+
+  bytes_getVariableOffsets(target) {
+    const types = Object.values(this.fields);
+    const offsets = []; // variable-sized values can be interspersed with fixed-sized values
+    // variable-sized value indices are serialized as offsets, indices deeper in the byte array
+
+    let currentIndex = 0;
+    let nextIndex = 0;
+    const fixedSection = new DataView(target.buffer, target.byteOffset);
+    const fixedOffsets = [];
+    const variableOffsets = [];
+    let variableIndex = 0;
+
+    for (const [i, fieldType] of types.entries()) {
+      if (fieldType.hasVariableSerializedLength()) {
+        const offset = fixedSection.getUint32(currentIndex, true);
+
+        if (offset > target.length) {
+          throw new Error("Offset out of bounds");
+        }
+
+        variableOffsets.push(offset);
+        currentIndex = nextIndex = currentIndex + 4;
+        variableIndex++;
+      } else {
+        nextIndex = currentIndex + fieldType.struct_getSerializedLength(null);
+        fixedOffsets[i] = [currentIndex, nextIndex];
+        currentIndex = nextIndex;
+      }
+    }
+
+    variableOffsets.push(target.length);
+    variableIndex = 0;
+
+    for (const [i, fieldType] of types.entries()) {
+      if (fieldType.hasVariableSerializedLength()) {
+        if (variableOffsets[variableIndex] > variableOffsets[variableIndex + 1]) {
+          throw new Error("Offsets must be increasing");
+        }
+
+        offsets.push([variableOffsets[variableIndex], variableOffsets[variableIndex + 1]]);
+        variableIndex++;
+      } else {
+        offsets.push(fixedOffsets[i]);
+      }
+    }
+
+    return offsets;
+  }
+
+  tree_defaultNode() {
+    if (!this._defaultNode) {
+      this._defaultNode = (0, _persistentMerkleTree.subtreeFillToContents)(Object.values(this.fields).map(fieldType => {
+        if (!(0, _abstract.isCompositeType)(fieldType)) {
+          return (0, _persistentMerkleTree.zeroNode)(0);
+        } else {
+          return fieldType.tree_defaultNode();
+        }
+      }), this.getChunkDepth());
+    }
+
+    return this._defaultNode;
+  }
+
+  tree_convertToStruct(target) {
+    const value = {};
+
+    for (const [i, [fieldName, fieldType]] of Object.entries(this.fields).entries()) {
+      if (!(0, _abstract.isCompositeType)(fieldType)) {
+        const chunk = this.tree_getRootAtChunkIndex(target, i);
+        value[fieldName] = fieldType.struct_deserializeFromBytes(chunk, 0);
+      } else {
+        const subtree = this.tree_getSubtreeAtChunkIndex(target, i);
+        value[fieldName] = fieldType.tree_convertToStruct(subtree);
+      }
+    }
+
+    return value;
+  }
+
+  tree_getSerializedLength(target) {
+    let s = 0;
+
+    for (const [i, fieldType] of Object.values(this.fields).entries()) {
+      if (fieldType.hasVariableSerializedLength()) {
+        s += fieldType.tree_getSerializedLength(this.tree_getSubtreeAtChunkIndex(target, i)) + 4;
+      } else {
+        s += fieldType.struct_getSerializedLength(null);
+      }
+    }
+
+    return s;
+  }
+
+  tree_deserializeFromBytes(data, start, end) {
+    const target = this.tree_defaultValue();
+    const offsets = this.bytes_getVariableOffsets(new Uint8Array(data.buffer, data.byteOffset + start, end - start));
+
+    for (const [i, fieldType] of Object.values(this.fields).entries()) {
+      const [currentOffset, nextOffset] = offsets[i];
+
+      if (!(0, _abstract.isCompositeType)(fieldType)) {
+        // view of the chunk, shared buffer from `data`
+        const dataChunk = new Uint8Array(data.buffer, data.byteOffset + start + currentOffset, nextOffset - currentOffset);
+        const chunk = new Uint8Array(32); // copy chunk into new memory
+
+        chunk.set(dataChunk);
+        this.tree_setRootAtChunkIndex(target, i, chunk);
+      } else {
+        this.tree_setSubtreeAtChunkIndex(target, i, fieldType.tree_deserializeFromBytes(data, start + currentOffset, start + nextOffset));
+      }
+    }
+
+    return target;
+  }
+
+  tree_serializeToBytes(target, output, offset) {
+    let variableIndex = offset + Object.values(this.fields).reduce((total, fieldType) => total + (fieldType.hasVariableSerializedLength() ? 4 : fieldType.struct_getSerializedLength(null)), 0);
+    const fixedSection = new DataView(output.buffer, output.byteOffset + offset);
+    let fixedIndex = offset;
+    let i = 0;
+    const fieldTypes = Object.values(this.fields);
+
+    for (const node of target.iterateNodesAtDepth(this.getChunkDepth(), i, fieldTypes.length)) {
+      const fieldType = fieldTypes[i];
+
+      if (!(0, _abstract.isCompositeType)(fieldType)) {
+        const s = fieldType.struct_getSerializedLength();
+        output.set(node.root.slice(0, s), fixedIndex);
+        fixedIndex += s;
+      } else if (fieldType.hasVariableSerializedLength()) {
+        // write offset
+        fixedSection.setUint32(fixedIndex - offset, variableIndex - offset, true);
+        fixedIndex += 4; // write serialized element to variable section
+
+        variableIndex = fieldType.tree_serializeToBytes(new _persistentMerkleTree.Tree(node), output, variableIndex);
+      } else {
+        fixedIndex = fieldType.tree_serializeToBytes(new _persistentMerkleTree.Tree(node), output, fixedIndex);
+      }
+
+      i++;
+    }
+
+    return variableIndex;
+  }
+
+  getPropertyGindex(prop) {
+    const chunkIndex = Object.keys(this.fields).findIndex(fieldName => fieldName === prop);
+
+    if (chunkIndex === -1) {
+      throw new Error("Invalid container field name: ".concat(String(prop)));
+    }
+
+    return this.getGindexAtChunkIndex(chunkIndex);
+  }
+
+  getPropertyType(prop) {
+    const type = this.fields[prop];
+
+    if (!type) {
+      throw new Error("Invalid container field name: ".concat(String(prop)));
+    }
+
+    return type;
+  }
+
+  tree_getPropertyNames() {
+    return Object.keys(this.fields);
+  }
+
+  tree_getProperty(target, prop) {
+    const chunkIndex = Object.keys(this.fields).findIndex(fieldName => fieldName === prop);
+
+    if (chunkIndex === -1) {
+      return undefined;
+    }
+
+    const fieldType = this.fields[prop];
+
+    if (!(0, _abstract.isCompositeType)(fieldType)) {
+      const chunk = this.tree_getRootAtChunkIndex(target, chunkIndex);
+      return fieldType.struct_deserializeFromBytes(chunk, 0);
+    } else {
+      return this.tree_getSubtreeAtChunkIndex(target, chunkIndex);
+    }
+  }
+
+  tree_setProperty(target, property, value) {
+    const chunkIndex = Object.keys(this.fields).findIndex(fieldName => fieldName === property);
+
+    if (chunkIndex === -1) {
+      throw new Error("Invalid container field name");
+    }
+
+    const chunkGindex = this.getGindexAtChunkIndex(chunkIndex);
+    const fieldType = this.fields[property];
+
+    if (!(0, _abstract.isCompositeType)(fieldType)) {
+      const chunk = new Uint8Array(32);
+      fieldType.struct_serializeToBytes(value, chunk, 0);
+      target.setRoot(chunkGindex, chunk);
+      return true;
+    } else {
+      target.setSubtree(chunkGindex, value);
+      return true;
+    }
+  }
+
+  tree_deleteProperty(target, prop) {
+    const chunkIndex = Object.keys(this.fields).findIndex(fieldName => fieldName === prop);
+
+    if (chunkIndex === -1) {
+      throw new Error("Invalid container field name");
+    }
+
+    const fieldType = this.fields[prop];
+
+    if (!(0, _abstract.isCompositeType)(fieldType)) {
+      return this.tree_setProperty(target, prop, fieldType.struct_defaultValue());
+    } else {
+      return this.tree_setProperty(target, prop, fieldType.tree_defaultValue());
+    }
+  }
+
+  *tree_iterateValues(target) {
+    const gindexIterator = (0, _persistentMerkleTree.iterateAtDepth)(this.getChunkDepth(), BigInt(0), BigInt(this.getMaxChunkCount()))[Symbol.iterator]();
+
+    for (const propType of Object.values(this.fields)) {
+      const {
+        value,
+        done
+      } = gindexIterator.next();
+
+      if (done) {
+        return;
+      } else {
+        if (!(0, _abstract.isCompositeType)(propType)) {
+          yield propType.struct_deserializeFromBytes(value.root, 0);
+        } else {
+          yield target.getSubtree(value);
+        }
+      }
+    }
+  }
+
+  *tree_readonlyIterateValues(target) {
+    const chunkIterator = target.iterateNodesAtDepth(this.getChunkDepth(), 0, this.getMaxChunkCount());
+
+    for (const propType of Object.values(this.fields)) {
+      const {
+        value,
+        done
+      } = chunkIterator.next();
+
+      if (done) {
+        return;
+      } else {
+        if (!(0, _abstract.isCompositeType)(propType)) {
+          yield propType.struct_deserializeFromBytes(value.root, 0);
+        } else {
+          yield new _persistentMerkleTree.Tree(value);
+        }
+      }
+    }
+  }
+
+  hasVariableSerializedLength() {
+    return Object.values(this.fields).some(fieldType => fieldType.hasVariableSerializedLength());
+  }
+
+  getMaxChunkCount() {
+    return Object.keys(this.fields).length;
+  }
+
+  tree_getLeafGindices(target, root = BigInt(1)) {
+    const gindices = [];
+
+    for (const [fieldName, fieldType] of Object.entries(this.fields)) {
+      const fieldGindex = this.getPropertyGindex(fieldName);
+      const extendedFieldGindex = (0, _persistentMerkleTree.concatGindices)([root, fieldGindex]);
+
+      if (!(0, _abstract.isCompositeType)(fieldType)) {
+        gindices.push(extendedFieldGindex);
+      } else {
+        if (fieldType.hasVariableSerializedLength()) {
+          if (!target) {
+            throw new Error("variable type requires tree argument to get leaves");
+          }
+
+          gindices.push(...fieldType.tree_getLeafGindices(target.getSubtree(fieldGindex), extendedFieldGindex));
+        } else {
+          gindices.push(...fieldType.tree_getLeafGindices(undefined, extendedFieldGindex));
+        }
+      }
+    }
+
+    return gindices;
   }
 
 }
 
-exports.ContainerStructuralHandler = ContainerStructuralHandler;
+exports.ContainerType = ContainerType;
 //# sourceMappingURL=container.js.map
 
 /***/ }),
-/* 182 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13461,7 +14886,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.toExpectedCase = toExpectedCase;
 
-var _case = _interopRequireDefault(__webpack_require__(183));
+var _case = _interopRequireDefault(__webpack_require__(192));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13477,10 +14902,10 @@ function toExpectedCase(value, expectedCase = "camel") {
       return value;
   }
 }
-//# sourceMappingURL=utils.js.map
+//# sourceMappingURL=json.js.map
 
 /***/ }),
-/* 183 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*! Case - v1.6.2 - 2020-03-24
@@ -13657,976 +15082,15 @@ function toExpectedCase(value, expectedCase = "camel") {
 
 
 /***/ }),
-/* 184 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _abstract = __webpack_require__(85);
-
-Object.keys(_abstract).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _abstract[key];
-    }
-  });
-});
-
-var _array = __webpack_require__(87);
-
-Object.keys(_array).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _array[key];
-    }
-  });
-});
-
-var _vector = __webpack_require__(88);
-
-Object.keys(_vector).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _vector[key];
-    }
-  });
-});
-
-var _list = __webpack_require__(116);
-
-Object.keys(_list).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _list[key];
-    }
-  });
-});
-
-var _bitList = __webpack_require__(187);
-
-Object.keys(_bitList).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _bitList[key];
-    }
-  });
-});
-
-var _bitVector = __webpack_require__(188);
-
-Object.keys(_bitVector).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _bitVector[key];
-    }
-  });
-});
-
-var _byteVector = __webpack_require__(189);
-
-Object.keys(_byteVector).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _byteVector[key];
-    }
-  });
-});
-
-var _container = __webpack_require__(190);
-
-Object.keys(_container).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _container[key];
-    }
-  });
-});
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 185 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const node_1 = __webpack_require__(60);
-const zeroNode_1 = __webpack_require__(86);
-const ERR_NAVIGATION = "Navigation error";
-const ERR_TOO_MANY_NODES = "Too many nodes";
-// subtree filling
-function subtreeFillToDepth(bottom, depth) {
-    let node = bottom;
-    while (depth > 0) {
-        node = new node_1.BranchNode(node, node);
-        depth--;
-    }
-    return node;
-}
-exports.subtreeFillToDepth = subtreeFillToDepth;
-function subtreeFillToLength(bottom, depth, length) {
-    const maxLength = 1 << depth;
-    if (length > maxLength)
-        throw new Error(ERR_TOO_MANY_NODES);
-    else if (length === maxLength)
-        return subtreeFillToDepth(bottom, depth);
-    else if (depth === 0) {
-        if (length === 1)
-            return bottom;
-        else
-            throw new Error(ERR_NAVIGATION);
-    }
-    else if (depth === 1) {
-        return new node_1.BranchNode(bottom, (length > 1) ? bottom : zeroNode_1.zeroNode(0));
-    }
-    else {
-        const pivot = maxLength >> 1;
-        if (length <= pivot) {
-            return new node_1.BranchNode(subtreeFillToLength(bottom, depth - 1, length), zeroNode_1.zeroNode(depth - 1));
-        }
-        else {
-            return new node_1.BranchNode(subtreeFillToDepth(bottom, depth - 1), subtreeFillToLength(bottom, depth - 1, length - pivot));
-        }
-    }
-}
-exports.subtreeFillToLength = subtreeFillToLength;
-function subtreeFillToContents(nodes, depth) {
-    const maxLength = 1 << depth;
-    if (nodes.length > maxLength)
-        throw new Error(ERR_TOO_MANY_NODES);
-    else if (depth === 0) {
-        if (nodes.length === 1)
-            return nodes[0];
-        else
-            throw new Error(ERR_NAVIGATION);
-    }
-    else if (depth === 1) {
-        return new node_1.BranchNode(nodes[0], (nodes.length > 1) ? nodes[1] : zeroNode_1.zeroNode(0));
-    }
-    else {
-        const pivot = maxLength >> 1;
-        if (nodes.length <= pivot) {
-            return new node_1.BranchNode(subtreeFillToContents(nodes, depth - 1), zeroNode_1.zeroNode(depth - 1));
-        }
-        else {
-            return new node_1.BranchNode(subtreeFillToContents(nodes.slice(0, Number(pivot)), depth - 1), subtreeFillToContents(nodes.slice(Number(pivot)), depth - 1));
-        }
-    }
-}
-exports.subtreeFillToContents = subtreeFillToContents;
-
-
-/***/ }),
-/* 186 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const gindex_1 = __webpack_require__(114);
-const node_1 = __webpack_require__(60);
-const zeroNode_1 = __webpack_require__(86);
-const ERR_INVALID_TREE = "Invalid tree";
-class Tree {
-    constructor(node, hook) {
-        this._node = node;
-        this.hook = hook;
-    }
-    get rootNode() {
-        return this._node;
-    }
-    set rootNode(n) {
-        this._node = n;
-        if (this.hook) {
-            this.hook(this);
-        }
-    }
-    get root() {
-        return this.rootNode.root;
-    }
-    getNode(index) {
-        let node = this.rootNode;
-        for (const i of gindex_1.gindexIterator(index)) {
-            if (i) {
-                if (node.isLeaf())
-                    throw new Error(ERR_INVALID_TREE);
-                node = node.right;
-            }
-            else {
-                if (node.isLeaf())
-                    throw new Error(ERR_INVALID_TREE);
-                node = node.left;
-            }
-        }
-        return node;
-    }
-    setter(index, expand = false) {
-        let link = node_1.identity;
-        let node = this.rootNode;
-        const iterator = gindex_1.gindexIterator(index);
-        for (const i of iterator) {
-            if (i) {
-                if (node.isLeaf()) {
-                    if (!expand)
-                        throw new Error(ERR_INVALID_TREE);
-                    else {
-                        const child = zeroNode_1.zeroNode(iterator.remainingBitLength() - 1);
-                        node = new node_1.BranchNode(child, child);
-                    }
-                }
-                link = node_1.compose(node.rebindRight.bind(node), link);
-                node = node.right;
-            }
-            else {
-                if (node.isLeaf()) {
-                    if (!expand)
-                        throw new Error(ERR_INVALID_TREE);
-                    else {
-                        const child = zeroNode_1.zeroNode(iterator.remainingBitLength() - 1);
-                        node = new node_1.BranchNode(child, child);
-                    }
-                }
-                link = node_1.compose(node.rebindLeft.bind(node), link);
-                node = node.left;
-            }
-        }
-        return node_1.compose(node_1.identity, link);
-    }
-    setNode(index, n, expand = false) {
-        this.rootNode = this.setter(index, expand)(n);
-    }
-    getRoot(index) {
-        return this.getNode(index).root;
-    }
-    setRoot(index, root, expand = false) {
-        this.setNode(index, new node_1.LeafNode(root), expand);
-    }
-    getSubtree(index) {
-        return new Tree(this.getNode(index), (v) => this.setNode(index, v.rootNode));
-    }
-    setSubtree(index, v, expand = false) {
-        this.setNode(index, v.rootNode, expand);
-    }
-    clone() {
-        return new Tree(this.rootNode);
-    }
-    getSingleProof(index) {
-        const proof = [];
-        let node = this.rootNode;
-        for (const i of gindex_1.gindexIterator(index)) {
-            if (i) {
-                if (node.isLeaf())
-                    throw new Error(ERR_INVALID_TREE);
-                proof.push(node.left.root);
-                node = node.right;
-            }
-            else {
-                if (node.isLeaf())
-                    throw new Error(ERR_INVALID_TREE);
-                proof.push(node.right.root);
-                node = node.left;
-            }
-        }
-        return proof.reverse();
-    }
-}
-exports.Tree = Tree;
-
-
-/***/ }),
-/* 187 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.BitListTreeHandler = void 0;
-
-var _list = __webpack_require__(116);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BitListTreeHandler extends _list.BasicListTreeHandler {
-  constructor(type) {
-    super(type);
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  getByteLength(target) {
-    return Math.ceil(this.getLength(target) / 8);
-  }
-
-  size(target) {
-    const bitLength = this.getLength(target);
-
-    if (bitLength % 8 === 0) {
-      return this.getByteLength(target) + 1;
-    } else {
-      return this.getByteLength(target);
-    }
-  }
-
-  fromBytes(data, start, end) {
-    const lastByte = data[end - 1];
-
-    if (lastByte === 0) {
-      throw new Error("Invalid deserialized bitlist, padding bit required");
-    }
-
-    const target = super.fromBytes(data, start, end);
-    const lastGindex = this.gindexOfChunk(target, Math.ceil((end - start) / 32) - 1); // copy chunk into new memory
-
-    const lastChunk = new Uint8Array(32);
-    lastChunk.set(target.getRoot(lastGindex));
-    const lastChunkByte = (end - start) % 32 - 1;
-    let length;
-
-    if (lastByte === 1) {
-      // zero lastChunkByte
-      length = (end - start - 1) * 8;
-      lastChunk[lastChunkByte] = 0;
-    } else {
-      // mask lastChunkByte
-      const lastByteBitLength = lastByte.toString(2).length - 1;
-      length = (end - start - 1) * 8 + lastByteBitLength;
-      const mask = 0xff >> 8 - lastByteBitLength;
-      lastChunk[lastChunkByte] &= mask;
-    }
-
-    target.setRoot(lastGindex, lastChunk);
-    this.setLength(target, length);
-    return target;
-  }
-
-  toBytes(target, output, offset) {
-    const newOffset = super.toBytes(target, output, offset);
-    const bitLength = this.getLength(target);
-    const size = this.size(target); // set padding bit
-
-    output[offset + size - 1] |= 1 << bitLength % 8;
-    return newOffset;
-  }
-
-  getBitOffset(index) {
-    return index % 8;
-  }
-
-  getChunkOffset(index) {
-    return Math.floor(index % 256 / 8);
-  }
-
-  getChunkIndex(index) {
-    return Math.floor(index / 256);
-  }
-
-  getValueAtIndex(target, index) {
-    const chunk = this.getRootAtChunk(target, this.getChunkIndex(index));
-    const byte = chunk[this.getChunkOffset(index)];
-    return !!(byte & 1 << this.getBitOffset(index));
-  }
-
-  setProperty(target, property, value, expand = false) {
-    const chunkGindex = this.gindexOfChunk(target, this.getChunkIndex(property));
-    const chunk = new Uint8Array(32);
-    chunk.set(target.getRoot(chunkGindex));
-    const byteOffset = this.getChunkOffset(property);
-
-    if (value) {
-      chunk[byteOffset] |= 1 << this.getBitOffset(property);
-    } else {
-      chunk[byteOffset] &= 0xff ^ 1 << this.getBitOffset(property);
-    }
-
-    target.setRoot(chunkGindex, chunk, expand);
-    return true;
-  }
-
-}
-
-exports.BitListTreeHandler = BitListTreeHandler;
-//# sourceMappingURL=bitList.js.map
-
-/***/ }),
-/* 188 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.BitVectorTreeHandler = void 0;
-
-var _vector = __webpack_require__(88);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class BitVectorTreeHandler extends _vector.BasicVectorTreeHandler {
-  constructor(type) {
-    super(type);
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  getByteLength(target) {
-    return Math.ceil(this.getLength(target) / 8);
-  }
-
-  size(target) {
-    return this.getByteLength(target);
-  }
-
-  fromBytes(data, start, end) {
-    // mask last byte to ensure it doesn't go over length
-    const lastByte = data[end - 1];
-    const mask = 0xff << this._type.length % 8 & 0xff;
-
-    if (lastByte & mask) {
-      throw new Error("Invalid deserialized bitvector length");
-    }
-
-    return super.fromBytes(data, start, end);
-  }
-
-  getBitOffset(index) {
-    return index % 8;
-  }
-
-  getChunkOffset(index) {
-    return Math.floor(index % 256 / 8);
-  }
-
-  getChunkIndex(index) {
-    return Math.floor(index / 256);
-  }
-
-  getValueAtIndex(target, index) {
-    const chunk = this.getRootAtChunk(target, this.getChunkIndex(index));
-    const byte = chunk[this.getChunkOffset(index)];
-    return !!(byte & 1 << this.getBitOffset(index));
-  }
-
-  setProperty(target, property, value) {
-    const chunkGindex = this.gindexOfChunk(target, this.getChunkIndex(property));
-    const chunk = new Uint8Array(32);
-    chunk.set(target.getRoot(chunkGindex));
-    const byteOffset = this.getChunkOffset(property);
-
-    if (value) {
-      chunk[byteOffset] |= 1 << this.getBitOffset(property);
-    } else {
-      chunk[byteOffset] &= 0xff ^ 1 << this.getBitOffset(property);
-    }
-
-    target.setRoot(chunkGindex, chunk);
-    return true;
-  }
-
-}
-
-exports.BitVectorTreeHandler = BitVectorTreeHandler;
-//# sourceMappingURL=bitVector.js.map
-
-/***/ }),
-/* 189 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ByteVectorTreeHandler = void 0;
-
-var _vector = __webpack_require__(88);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class ByteVectorTreeHandler extends _vector.BasicVectorTreeHandler {
-  constructor(type) {
-    super(type);
-
-    _defineProperty(this, "_type", void 0);
-
-    this._type = type;
-  }
-
-  valueOf(target) {
-    return this.serialize(target);
-  }
-
-}
-
-exports.ByteVectorTreeHandler = ByteVectorTreeHandler;
-//# sourceMappingURL=byteVector.js.map
-
-/***/ }),
-/* 190 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ContainerTreeHandler = void 0;
-
-var _persistentMerkleTree = __webpack_require__(41);
-
-var _abstract = __webpack_require__(85);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-class ContainerTreeHandler extends _abstract.TreeHandler {
-  constructor(type) {
-    super();
-
-    _defineProperty(this, "_type", void 0);
-
-    _defineProperty(this, "_defaultNode", void 0);
-
-    this._type = type;
-  }
-
-  defaultNode() {
-    if (!this._defaultNode) {
-      this._defaultNode = (0, _persistentMerkleTree.subtreeFillToContents)(Object.values(this._type.fields).map(fieldType => {
-        if (fieldType.isBasic()) {
-          return (0, _persistentMerkleTree.zeroNode)(0);
-        } else {
-          return fieldType.tree.defaultNode();
-        }
-      }), this.depth());
-    }
-
-    return this._defaultNode;
-  }
-
-  defaultBacking() {
-    return new _persistentMerkleTree.Tree(this.defaultNode());
-  }
-
-  fromStructural(value) {
-    const v = this.defaultValue();
-    Object.keys(this._type.fields).forEach(fieldName => {
-      v[fieldName] = value[fieldName];
-    });
-    return v.tree();
-  }
-
-  size(target) {
-    let s = 0;
-    Object.values(this._type.fields).forEach((fieldType, i) => {
-      if (fieldType.isVariableSize()) {
-        s += fieldType.tree.size(this.getSubtreeAtChunk(target, i)) + 4;
-      } else {
-        s += fieldType.size(null);
-      }
-    });
-    return s;
-  }
-
-  fromBytes(data, start, end) {
-    const target = this.defaultBacking();
-
-    const offsets = this._type.byteArray.getVariableOffsets(new Uint8Array(data.buffer, data.byteOffset + start, end - start));
-
-    Object.values(this._type.fields).forEach((fieldType, i) => {
-      const [currentOffset, nextOffset] = offsets[i];
-
-      if (fieldType.isBasic()) {
-        // view of the chunk, shared buffer from `data`
-        const dataChunk = new Uint8Array(data.buffer, data.byteOffset + start + currentOffset, nextOffset - currentOffset);
-        const chunk = new Uint8Array(32); // copy chunk into new memory
-
-        chunk.set(dataChunk);
-        this.setRootAtChunk(target, i, chunk);
-      } else {
-        this.setSubtreeAtChunk(target, i, fieldType.tree.fromBytes(data, start + currentOffset, start + nextOffset));
-      }
-    });
-    return target;
-  }
-
-  toBytes(target, output, offset) {
-    let variableIndex = offset + Object.values(this._type.fields).reduce((total, fieldType) => total + (fieldType.isVariableSize() ? 4 : fieldType.size(null)), 0);
-    const fixedSection = new DataView(output.buffer, output.byteOffset + offset);
-    let fixedIndex = offset;
-    Object.values(this._type.fields).forEach((fieldType, i) => {
-      if (fieldType.isBasic()) {
-        const s = fieldType.size();
-        output.set(this.getRootAtChunk(target, i).slice(0, s), fixedIndex);
-        fixedIndex += s;
-      } else if (fieldType.isVariableSize()) {
-        // write offset
-        fixedSection.setUint32(fixedIndex - offset, variableIndex - offset, true);
-        fixedIndex += 4; // write serialized element to variable section
-
-        variableIndex = fieldType.tree.toBytes(this.getSubtreeAtChunk(target, i), output, variableIndex);
-      } else {
-        fixedIndex = fieldType.tree.toBytes(this.getSubtreeAtChunk(target, i), output, fixedIndex);
-      }
-    });
-    return variableIndex;
-  }
-
-  gindexOfProperty(target, prop) {
-    const chunkIndex = Object.keys(this._type.fields).findIndex(fieldName => fieldName === prop);
-
-    if (chunkIndex === -1) {
-      throw new Error("Invalid container field name");
-    }
-
-    return this.gindexOfChunk(target, chunkIndex);
-  }
-
-  getProperty(target, property) {
-    const chunkIndex = Object.keys(this._type.fields).findIndex(fieldName => fieldName === property);
-
-    if (chunkIndex === -1) {
-      return undefined;
-    }
-
-    const fieldType = this._type.fields[property];
-
-    if (fieldType.isBasic()) {
-      const chunk = this.getRootAtChunk(target, chunkIndex);
-      return fieldType.fromBytes(chunk, 0);
-    } else {
-      return fieldType.tree.asTreeBacked(this.getSubtreeAtChunk(target, chunkIndex));
-    }
-  }
-
-  set(target, property, value) {
-    const chunkIndex = Object.keys(this._type.fields).findIndex(fieldName => fieldName === property);
-
-    if (chunkIndex === -1) {
-      throw new Error("Invalid container field name");
-    }
-
-    const chunkGindex = this.gindexOfChunk(target, chunkIndex);
-    const fieldType = this._type.fields[property];
-
-    if (fieldType.isBasic()) {
-      const chunk = new Uint8Array(32);
-      fieldType.toBytes(value, chunk, 0);
-      target.setRoot(chunkGindex, chunk);
-      return true;
-    } else {
-      if ((0, _abstract.isTreeBacked)(value)) {
-        target.setSubtree(chunkGindex, value.tree());
-      } else {
-        target.setSubtree(chunkGindex, fieldType.tree.fromStructural(value));
-      }
-
-      return true;
-    }
-  }
-
-  deleteProperty(target, property) {
-    const chunkIndex = Object.keys(this._type.fields).findIndex(fieldName => fieldName === property);
-
-    if (chunkIndex === -1) {
-      throw new Error("Invalid container field name");
-    }
-
-    const fieldType = this._type.fields[property];
-
-    if (fieldType.isBasic()) {
-      return this.set(target, property, fieldType.defaultValue());
-    } else {
-      return this.set(target, property, fieldType.tree.defaultValue());
-    }
-  }
-
-  ownKeys(target) {
-    return Object.keys(this._type.fields);
-  }
-
-  getOwnPropertyDescriptor(target, property) {
-    if (this._type.fields[property]) {
-      return {
-        configurable: true,
-        enumerable: true,
-        writable: true
-      };
-    } else {
-      return undefined;
-    }
-  }
-
-}
-
-exports.ContainerTreeHandler = ContainerTreeHandler;
-//# sourceMappingURL=container.js.map
-
-/***/ }),
-/* 191 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isBitVectorType = isBitVectorType;
-exports.BitVectorType = exports.BITVECTOR_TYPE = void 0;
-
-var _vector = __webpack_require__(90);
-
-var _basic = __webpack_require__(20);
-
-var _backings = __webpack_require__(21);
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-const BITVECTOR_TYPE = Symbol.for("ssz/BitVectorType");
-exports.BITVECTOR_TYPE = BITVECTOR_TYPE;
-
-function isBitVectorType(type) {
-  return (0, _basic.isTypeOf)(type, BITVECTOR_TYPE);
-}
-
-class BitVectorType extends _vector.BasicVectorType {
-  constructor(options) {
-    super(_objectSpread({
-      elementType: _basic.booleanType
-    }, options));
-    this.structural = new _backings.BitVectorStructuralHandler(this);
-    this.tree = new _backings.BitVectorTreeHandler(this);
-
-    this._typeSymbols.add(BITVECTOR_TYPE);
-  }
-
-  chunkCount() {
-    return Math.ceil(this.length / 256);
-  }
-
-}
-
-exports.BitVectorType = BitVectorType;
-//# sourceMappingURL=bitVector.js.map
-
-/***/ }),
-/* 192 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isBitListType = isBitListType;
-exports.BitListType = exports.BITLIST_TYPE = void 0;
-
-var _list = __webpack_require__(117);
-
-var _basic = __webpack_require__(20);
-
-var _backings = __webpack_require__(21);
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-const BITLIST_TYPE = Symbol.for("ssz/BitListType");
-exports.BITLIST_TYPE = BITLIST_TYPE;
-
-function isBitListType(type) {
-  return (0, _basic.isTypeOf)(type, BITLIST_TYPE);
-}
-
-class BitListType extends _list.BasicListType {
-  constructor(options) {
-    super(_objectSpread({
-      elementType: _basic.booleanType
-    }, options));
-    this.structural = new _backings.BitListStructuralHandler(this);
-    this.tree = new _backings.BitListTreeHandler(this);
-
-    this._typeSymbols.add(BITLIST_TYPE);
-  }
-
-  chunkCount() {
-    return Math.ceil(this.limit / 256);
-  }
-
-}
-
-exports.BitListType = BitListType;
-//# sourceMappingURL=bitList.js.map
-
-/***/ }),
 /* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isRootType = isRootType;
-exports.RootType = exports.ROOT_TYPE = void 0;
 
-var _basic = __webpack_require__(20);
-
-var _byteVector = __webpack_require__(118);
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-const ROOT_TYPE = Symbol.for("ssz/RootType");
-exports.ROOT_TYPE = ROOT_TYPE;
-
-function isRootType(type) {
-  return (0, _basic.isTypeOf)(type, ROOT_TYPE);
-}
-
-class RootType extends _byteVector.ByteVectorType {
-  constructor(options) {
-    super({
-      length: 32
-    });
-
-    _defineProperty(this, "_expandedType", void 0);
-
-    this._expandedType = options.expandedType;
-
-    this._typeSymbols.add(ROOT_TYPE);
-  }
-
-  get expandedType() {
-    if (typeof this._expandedType === "function") {
-      this._expandedType = this._expandedType();
-    }
-
-    return this._expandedType;
-  }
-
-}
-
-exports.RootType = RootType;
-//# sourceMappingURL=root.js.map
-
-/***/ }),
-/* 194 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isContainerType = isContainerType;
-exports.ContainerType = exports.CONTAINER_TYPE = void 0;
-
-var _abstract = __webpack_require__(77);
-
-var _basic = __webpack_require__(20);
-
-var _backings = __webpack_require__(21);
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-const CONTAINER_TYPE = Symbol.for("ssz/ContainerType");
-exports.CONTAINER_TYPE = CONTAINER_TYPE;
-
-function isContainerType(type) {
-  return (0, _basic.isTypeOf)(type, CONTAINER_TYPE);
-}
-
-class ContainerType extends _abstract.CompositeType {
-  // ES6 ensures key order is chronological
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(options) {
-    super();
-
-    _defineProperty(this, "fields", void 0);
-
-    this.fields = _objectSpread({}, options.fields);
-    this.structural = new _backings.ContainerStructuralHandler(this);
-    this.tree = new _backings.ContainerTreeHandler(this);
-    this.byteArray = new _backings.ContainerByteArrayHandler(this);
-
-    this._typeSymbols.add(CONTAINER_TYPE);
-  }
-
-  isVariableSize() {
-    return Object.values(this.fields).some(fieldType => fieldType.isVariableSize());
-  }
-
-  chunkCount() {
-    return Object.keys(this.fields).length;
-  }
-
-}
-
-exports.ContainerType = ContainerType;
-//# sourceMappingURL=container.js.map
-
-/***/ }),
-/* 195 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-//# sourceMappingURL=type.js.map
-
-/***/ }),
-/* 196 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-
-var loader = __webpack_require__(197);
-var dumper = __webpack_require__(216);
+var loader = __webpack_require__(194);
+var dumper = __webpack_require__(213);
 
 
 function deprecated(name) {
@@ -14636,25 +15100,25 @@ function deprecated(name) {
 }
 
 
-module.exports.Type                = __webpack_require__(2);
-module.exports.Schema              = __webpack_require__(34);
-module.exports.FAILSAFE_SCHEMA     = __webpack_require__(91);
-module.exports.JSON_SCHEMA         = __webpack_require__(120);
-module.exports.CORE_SCHEMA         = __webpack_require__(119);
-module.exports.DEFAULT_SAFE_SCHEMA = __webpack_require__(43);
-module.exports.DEFAULT_FULL_SCHEMA = __webpack_require__(61);
+module.exports.Type                = __webpack_require__(3);
+module.exports.Schema              = __webpack_require__(37);
+module.exports.FAILSAFE_SCHEMA     = __webpack_require__(92);
+module.exports.JSON_SCHEMA         = __webpack_require__(121);
+module.exports.CORE_SCHEMA         = __webpack_require__(120);
+module.exports.DEFAULT_SAFE_SCHEMA = __webpack_require__(47);
+module.exports.DEFAULT_FULL_SCHEMA = __webpack_require__(66);
 module.exports.load                = loader.load;
 module.exports.loadAll             = loader.loadAll;
 module.exports.safeLoad            = loader.safeLoad;
 module.exports.safeLoadAll         = loader.safeLoadAll;
 module.exports.dump                = dumper.dump;
 module.exports.safeDump            = dumper.safeDump;
-module.exports.YAMLException       = __webpack_require__(42);
+module.exports.YAMLException       = __webpack_require__(46);
 
 // Deprecated schema names from JS-YAML 2.0.x
-module.exports.MINIMAL_SCHEMA = __webpack_require__(91);
-module.exports.SAFE_SCHEMA    = __webpack_require__(43);
-module.exports.DEFAULT_SCHEMA = __webpack_require__(61);
+module.exports.MINIMAL_SCHEMA = __webpack_require__(92);
+module.exports.SAFE_SCHEMA    = __webpack_require__(47);
+module.exports.DEFAULT_SCHEMA = __webpack_require__(66);
 
 // Deprecated functions from JS-YAML 1.x.x
 module.exports.scan           = deprecated('scan');
@@ -14664,7 +15128,7 @@ module.exports.addConstructor = deprecated('addConstructor');
 
 
 /***/ }),
-/* 197 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14672,11 +15136,11 @@ module.exports.addConstructor = deprecated('addConstructor');
 
 /*eslint-disable max-len,no-use-before-define*/
 
-var common              = __webpack_require__(33);
-var YAMLException       = __webpack_require__(42);
-var Mark                = __webpack_require__(198);
-var DEFAULT_SAFE_SCHEMA = __webpack_require__(43);
-var DEFAULT_FULL_SCHEMA = __webpack_require__(61);
+var common              = __webpack_require__(36);
+var YAMLException       = __webpack_require__(46);
+var Mark                = __webpack_require__(195);
+var DEFAULT_SAFE_SCHEMA = __webpack_require__(47);
+var DEFAULT_FULL_SCHEMA = __webpack_require__(66);
 
 
 var _hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -16315,14 +16779,14 @@ module.exports.safeLoad    = safeLoad;
 
 
 /***/ }),
-/* 198 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 
-var common = __webpack_require__(33);
+var common = __webpack_require__(36);
 
 
 function Mark(name, buffer, position, line, column) {
@@ -16398,13 +16862,13 @@ module.exports = Mark;
 
 
 /***/ }),
-/* 199 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 module.exports = new Type('tag:yaml.org,2002:str', {
   kind: 'scalar',
@@ -16413,13 +16877,13 @@ module.exports = new Type('tag:yaml.org,2002:str', {
 
 
 /***/ }),
-/* 200 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 module.exports = new Type('tag:yaml.org,2002:seq', {
   kind: 'sequence',
@@ -16428,13 +16892,13 @@ module.exports = new Type('tag:yaml.org,2002:seq', {
 
 
 /***/ }),
-/* 201 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 module.exports = new Type('tag:yaml.org,2002:map', {
   kind: 'mapping',
@@ -16443,13 +16907,13 @@ module.exports = new Type('tag:yaml.org,2002:map', {
 
 
 /***/ }),
-/* 202 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 function resolveYamlNull(data) {
   if (data === null) return true;
@@ -16484,13 +16948,13 @@ module.exports = new Type('tag:yaml.org,2002:null', {
 
 
 /***/ }),
-/* 203 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 function resolveYamlBoolean(data) {
   if (data === null) return false;
@@ -16526,14 +16990,14 @@ module.exports = new Type('tag:yaml.org,2002:bool', {
 
 
 /***/ }),
-/* 204 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var common = __webpack_require__(33);
-var Type   = __webpack_require__(2);
+var common = __webpack_require__(36);
+var Type   = __webpack_require__(3);
 
 function isHexCode(c) {
   return ((0x30/* 0 */ <= c) && (c <= 0x39/* 9 */)) ||
@@ -16706,14 +17170,14 @@ module.exports = new Type('tag:yaml.org,2002:int', {
 
 
 /***/ }),
-/* 205 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var common = __webpack_require__(33);
-var Type   = __webpack_require__(2);
+var common = __webpack_require__(36);
+var Type   = __webpack_require__(3);
 
 var YAML_FLOAT_PATTERN = new RegExp(
   // 2.5e4, 2.5 and integers
@@ -16829,13 +17293,13 @@ module.exports = new Type('tag:yaml.org,2002:float', {
 
 
 /***/ }),
-/* 206 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 var YAML_DATE_REGEXP = new RegExp(
   '^([0-9][0-9][0-9][0-9])'          + // [1] year
@@ -16924,13 +17388,13 @@ module.exports = new Type('tag:yaml.org,2002:timestamp', {
 
 
 /***/ }),
-/* 207 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 function resolveYamlMerge(data) {
   return data === '<<' || data === null;
@@ -16943,7 +17407,7 @@ module.exports = new Type('tag:yaml.org,2002:merge', {
 
 
 /***/ }),
-/* 208 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16956,10 +17420,10 @@ var NodeBuffer;
 try {
   // A trick for browserified version, to not include `Buffer` shim
   var _require = require;
-  NodeBuffer = __webpack_require__(22).Buffer;
+  NodeBuffer = __webpack_require__(34).Buffer;
 } catch (__) {}
 
-var Type       = __webpack_require__(2);
+var Type       = __webpack_require__(3);
 
 
 // [ 64, 65, 66 ] -> [ padding, CR, LF ]
@@ -17088,13 +17552,13 @@ module.exports = new Type('tag:yaml.org,2002:binary', {
 
 
 /***/ }),
-/* 209 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 var _hasOwnProperty = Object.prototype.hasOwnProperty;
 var _toString       = Object.prototype.toString;
@@ -17139,13 +17603,13 @@ module.exports = new Type('tag:yaml.org,2002:omap', {
 
 
 /***/ }),
-/* 210 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 var _toString = Object.prototype.toString;
 
@@ -17199,13 +17663,13 @@ module.exports = new Type('tag:yaml.org,2002:pairs', {
 
 
 /***/ }),
-/* 211 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 var _hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -17235,13 +17699,13 @@ module.exports = new Type('tag:yaml.org,2002:set', {
 
 
 /***/ }),
-/* 212 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 function resolveJavascriptUndefined() {
   return true;
@@ -17270,13 +17734,13 @@ module.exports = new Type('tag:yaml.org,2002:js/undefined', {
 
 
 /***/ }),
-/* 213 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 function resolveJavascriptRegExp(data) {
   if (data === null) return false;
@@ -17337,7 +17801,7 @@ module.exports = new Type('tag:yaml.org,2002:js/regexp', {
 
 
 /***/ }),
-/* 214 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17355,14 +17819,14 @@ var esprima;
 try {
   // workaround to exclude package from browserify list.
   var _require = require;
-  esprima = __webpack_require__(215);
+  esprima = __webpack_require__(212);
 } catch (_) {
   /* eslint-disable no-redeclare */
   /* global window */
   if (typeof window !== 'undefined') esprima = window.esprima;
 }
 
-var Type = __webpack_require__(2);
+var Type = __webpack_require__(3);
 
 function resolveJavascriptFunction(data) {
   if (data === null) return false;
@@ -17437,7 +17901,7 @@ module.exports = new Type('tag:yaml.org,2002:js/function', {
 
 
 /***/ }),
-/* 215 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -24145,7 +24609,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 216 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24153,10 +24617,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /*eslint-disable no-use-before-define*/
 
-var common              = __webpack_require__(33);
-var YAMLException       = __webpack_require__(42);
-var DEFAULT_FULL_SCHEMA = __webpack_require__(61);
-var DEFAULT_SAFE_SCHEMA = __webpack_require__(43);
+var common              = __webpack_require__(36);
+var YAMLException       = __webpack_require__(46);
+var DEFAULT_FULL_SCHEMA = __webpack_require__(66);
+var DEFAULT_SAFE_SCHEMA = __webpack_require__(47);
 
 var _toString       = Object.prototype.toString;
 var _hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -25002,10 +25466,10 @@ module.exports.safeDump = safeDump;
 
 
 /***/ }),
-/* 217 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(218)('Uint8', 1, function (init) {
+__webpack_require__(215)('Uint8', 1, function (init) {
   return function Uint8Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -25013,50 +25477,50 @@ __webpack_require__(218)('Uint8', 1, function (init) {
 
 
 /***/ }),
-/* 218 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 if (__webpack_require__(6)) {
-  var LIBRARY = __webpack_require__(26);
+  var LIBRARY = __webpack_require__(27);
   var global = __webpack_require__(5);
-  var fails = __webpack_require__(8);
-  var $export = __webpack_require__(7);
-  var $typed = __webpack_require__(121);
-  var $buffer = __webpack_require__(219);
-  var ctx = __webpack_require__(46);
-  var anInstance = __webpack_require__(123);
-  var propertyDesc = __webpack_require__(36);
-  var hide = __webpack_require__(10);
-  var redefineAll = __webpack_require__(122);
+  var fails = __webpack_require__(9);
+  var $export = __webpack_require__(2);
+  var $typed = __webpack_require__(122);
+  var $buffer = __webpack_require__(216);
+  var ctx = __webpack_require__(51);
+  var anInstance = __webpack_require__(124);
+  var propertyDesc = __webpack_require__(26);
+  var hide = __webpack_require__(11);
+  var redefineAll = __webpack_require__(123);
   var toInteger = __webpack_require__(29);
-  var toLength = __webpack_require__(19);
-  var toIndex = __webpack_require__(124);
-  var toAbsoluteIndex = __webpack_require__(48);
-  var toPrimitive = __webpack_require__(44);
-  var has = __webpack_require__(18);
-  var classof = __webpack_require__(56);
-  var isObject = __webpack_require__(13);
-  var toObject = __webpack_require__(17);
-  var isArrayIter = __webpack_require__(220);
-  var create = __webpack_require__(38);
-  var getPrototypeOf = __webpack_require__(105);
-  var gOPN = __webpack_require__(53).f;
-  var getIterFn = __webpack_require__(221);
-  var uid = __webpack_require__(23);
-  var wks = __webpack_require__(3);
-  var createArrayMethod = __webpack_require__(106);
-  var createArrayIncludes = __webpack_require__(98);
-  var speciesConstructor = __webpack_require__(222);
-  var ArrayIterators = __webpack_require__(39);
+  var toLength = __webpack_require__(20);
+  var toIndex = __webpack_require__(125);
+  var toAbsoluteIndex = __webpack_require__(53);
+  var toPrimitive = __webpack_require__(49);
+  var has = __webpack_require__(19);
+  var classof = __webpack_require__(60);
+  var isObject = __webpack_require__(14);
+  var toObject = __webpack_require__(18);
+  var isArrayIter = __webpack_require__(217);
+  var create = __webpack_require__(40);
+  var getPrototypeOf = __webpack_require__(107);
+  var gOPN = __webpack_require__(41).f;
+  var getIterFn = __webpack_require__(218);
+  var uid = __webpack_require__(21);
+  var wks = __webpack_require__(4);
+  var createArrayMethod = __webpack_require__(63);
+  var createArrayIncludes = __webpack_require__(74);
+  var speciesConstructor = __webpack_require__(219);
+  var ArrayIterators = __webpack_require__(43);
   var Iterators = __webpack_require__(32);
-  var $iterDetect = __webpack_require__(223);
-  var setSpecies = __webpack_require__(224);
-  var arrayFill = __webpack_require__(125);
-  var arrayCopyWithin = __webpack_require__(225);
-  var $DP = __webpack_require__(9);
-  var $GOPD = __webpack_require__(70);
+  var $iterDetect = __webpack_require__(220);
+  var setSpecies = __webpack_require__(221);
+  var arrayFill = __webpack_require__(126);
+  var arrayCopyWithin = __webpack_require__(222);
+  var $DP = __webpack_require__(8);
+  var $GOPD = __webpack_require__(58);
   var dP = $DP.f;
   var gOPD = $GOPD.f;
   var RangeError = global.RangeError;
@@ -25500,26 +25964,26 @@ if (__webpack_require__(6)) {
 
 
 /***/ }),
-/* 219 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var global = __webpack_require__(5);
 var DESCRIPTORS = __webpack_require__(6);
-var LIBRARY = __webpack_require__(26);
-var $typed = __webpack_require__(121);
-var hide = __webpack_require__(10);
-var redefineAll = __webpack_require__(122);
-var fails = __webpack_require__(8);
-var anInstance = __webpack_require__(123);
+var LIBRARY = __webpack_require__(27);
+var $typed = __webpack_require__(122);
+var hide = __webpack_require__(11);
+var redefineAll = __webpack_require__(123);
+var fails = __webpack_require__(9);
+var anInstance = __webpack_require__(124);
 var toInteger = __webpack_require__(29);
-var toLength = __webpack_require__(19);
-var toIndex = __webpack_require__(124);
-var gOPN = __webpack_require__(53).f;
-var dP = __webpack_require__(9).f;
-var arrayFill = __webpack_require__(125);
-var setToStringTag = __webpack_require__(52);
+var toLength = __webpack_require__(20);
+var toIndex = __webpack_require__(125);
+var gOPN = __webpack_require__(41).f;
+var dP = __webpack_require__(8).f;
+var arrayFill = __webpack_require__(126);
+var setToStringTag = __webpack_require__(57);
 var ARRAY_BUFFER = 'ArrayBuffer';
 var DATA_VIEW = 'DataView';
 var PROTOTYPE = 'prototype';
@@ -25783,12 +26247,12 @@ exports[DATA_VIEW] = $DataView;
 
 
 /***/ }),
-/* 220 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
 var Iterators = __webpack_require__(32);
-var ITERATOR = __webpack_require__(3)('iterator');
+var ITERATOR = __webpack_require__(4)('iterator');
 var ArrayProto = Array.prototype;
 
 module.exports = function (it) {
@@ -25797,11 +26261,11 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 221 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof = __webpack_require__(56);
-var ITERATOR = __webpack_require__(3)('iterator');
+var classof = __webpack_require__(60);
+var ITERATOR = __webpack_require__(4)('iterator');
 var Iterators = __webpack_require__(32);
 module.exports = __webpack_require__(25).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
@@ -25811,13 +26275,13 @@ module.exports = __webpack_require__(25).getIteratorMethod = function (it) {
 
 
 /***/ }),
-/* 222 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
 var anObject = __webpack_require__(12);
-var aFunction = __webpack_require__(37);
-var SPECIES = __webpack_require__(3)('species');
+var aFunction = __webpack_require__(38);
+var SPECIES = __webpack_require__(4)('species');
 module.exports = function (O, D) {
   var C = anObject(O).constructor;
   var S;
@@ -25826,10 +26290,10 @@ module.exports = function (O, D) {
 
 
 /***/ }),
-/* 223 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ITERATOR = __webpack_require__(3)('iterator');
+var ITERATOR = __webpack_require__(4)('iterator');
 var SAFE_CLOSING = false;
 
 try {
@@ -25854,15 +26318,15 @@ module.exports = function (exec, skipClosing) {
 
 
 /***/ }),
-/* 224 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var global = __webpack_require__(5);
-var dP = __webpack_require__(9);
+var dP = __webpack_require__(8);
 var DESCRIPTORS = __webpack_require__(6);
-var SPECIES = __webpack_require__(3)('species');
+var SPECIES = __webpack_require__(4)('species');
 
 module.exports = function (KEY) {
   var C = global[KEY];
@@ -25874,15 +26338,15 @@ module.exports = function (KEY) {
 
 
 /***/ }),
-/* 225 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 
-var toObject = __webpack_require__(17);
-var toAbsoluteIndex = __webpack_require__(48);
-var toLength = __webpack_require__(19);
+var toObject = __webpack_require__(18);
+var toAbsoluteIndex = __webpack_require__(53);
+var toLength = __webpack_require__(20);
 
 module.exports = [].copyWithin || function copyWithin(target /* = 0 */, start /* = 0, end = @length */) {
   var O = toObject(this);
@@ -25907,19 +26371,19 @@ module.exports = [].copyWithin || function copyWithin(target /* = 0 */, start /*
 
 
 /***/ }),
-/* 226 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var anObject = __webpack_require__(12);
-var toLength = __webpack_require__(19);
-var advanceStringIndex = __webpack_require__(227);
-var regExpExec = __webpack_require__(229);
+var toLength = __webpack_require__(20);
+var advanceStringIndex = __webpack_require__(224);
+var regExpExec = __webpack_require__(226);
 
 // @@match logic
-__webpack_require__(230)('match', 1, function (defined, MATCH, $match, maybeCallNative) {
+__webpack_require__(227)('match', 1, function (defined, MATCH, $match, maybeCallNative) {
   return [
     // `String.prototype.match` method
     // https://tc39.github.io/ecma262/#sec-string.prototype.match
@@ -25954,12 +26418,12 @@ __webpack_require__(230)('match', 1, function (defined, MATCH, $match, maybeCall
 
 
 /***/ }),
-/* 227 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var at = __webpack_require__(228)(true);
+var at = __webpack_require__(225)(true);
 
  // `AdvanceStringIndex` abstract operation
 // https://tc39.github.io/ecma262/#sec-advancestringindex
@@ -25969,11 +26433,11 @@ module.exports = function (S, index, unicode) {
 
 
 /***/ }),
-/* 228 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var toInteger = __webpack_require__(29);
-var defined = __webpack_require__(47);
+var defined = __webpack_require__(52);
 // true  -> String#at
 // false -> String#codePointAt
 module.exports = function (TO_STRING) {
@@ -25992,13 +26456,13 @@ module.exports = function (TO_STRING) {
 
 
 /***/ }),
-/* 229 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var classof = __webpack_require__(56);
+var classof = __webpack_require__(60);
 var builtinExec = RegExp.prototype.exec;
 
  // `RegExpExec` abstract operation
@@ -26020,18 +26484,18 @@ module.exports = function (R, S) {
 
 
 /***/ }),
-/* 230 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-__webpack_require__(231);
-var redefine = __webpack_require__(16);
-var hide = __webpack_require__(10);
-var fails = __webpack_require__(8);
-var defined = __webpack_require__(47);
-var wks = __webpack_require__(3);
-var regexpExec = __webpack_require__(126);
+__webpack_require__(228);
+var redefine = __webpack_require__(17);
+var hide = __webpack_require__(11);
+var fails = __webpack_require__(9);
+var defined = __webpack_require__(52);
+var wks = __webpack_require__(4);
+var regexpExec = __webpack_require__(127);
 
 var SPECIES = wks('species');
 
@@ -26123,13 +26587,13 @@ module.exports = function (KEY, length, exec) {
 
 
 /***/ }),
-/* 231 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var regexpExec = __webpack_require__(126);
-__webpack_require__(7)({
+var regexpExec = __webpack_require__(127);
+__webpack_require__(2)({
   target: 'RegExp',
   proto: true,
   forced: regexpExec !== /./.exec
@@ -26139,15 +26603,140 @@ __webpack_require__(7)({
 
 
 /***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(2);
+// 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
+$export($export.S + $export.F * !__webpack_require__(6), 'Object', { defineProperties: __webpack_require__(104) });
+
+
+/***/ }),
+/* 230 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// https://github.com/tc39/proposal-object-getownpropertydescriptors
+var $export = __webpack_require__(2);
+var ownKeys = __webpack_require__(231);
+var toIObject = __webpack_require__(22);
+var gOPD = __webpack_require__(58);
+var createProperty = __webpack_require__(232);
+
+$export($export.S, 'Object', {
+  getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
+    var O = toIObject(object);
+    var getDesc = gOPD.f;
+    var keys = ownKeys(O);
+    var result = {};
+    var i = 0;
+    var key, desc;
+    while (keys.length > i) {
+      desc = getDesc(O, key = keys[i++]);
+      if (desc !== undefined) createProperty(result, key, desc);
+    }
+    return result;
+  }
+});
+
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// all object keys, includes non-enumerable and symbols
+var gOPN = __webpack_require__(41);
+var gOPS = __webpack_require__(54);
+var anObject = __webpack_require__(12);
+var Reflect = __webpack_require__(5).Reflect;
+module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
+  var keys = gOPN.f(anObject(it));
+  var getSymbols = gOPS.f;
+  return getSymbols ? keys.concat(getSymbols(it)) : keys;
+};
+
+
+/***/ }),
 /* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var $export = __webpack_require__(7);
-var aFunction = __webpack_require__(37);
-var toObject = __webpack_require__(17);
-var fails = __webpack_require__(8);
+var $defineProperty = __webpack_require__(8);
+var createDesc = __webpack_require__(26);
+
+module.exports = function (object, index, value) {
+  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $export = __webpack_require__(2);
+var $forEach = __webpack_require__(63)(0);
+var STRICT = __webpack_require__(44)([].forEach, true);
+
+$export($export.P + $export.F * !STRICT, 'Array', {
+  // 22.1.3.10 / 15.4.4.18 Array.prototype.forEach(callbackfn [, thisArg])
+  forEach: function forEach(callbackfn /* , thisArg */) {
+    return $forEach(this, callbackfn, arguments[1]);
+  }
+});
+
+
+/***/ }),
+/* 234 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $export = __webpack_require__(2);
+var $filter = __webpack_require__(63)(2);
+
+$export($export.P + $export.F * !__webpack_require__(44)([].filter, true), 'Array', {
+  // 22.1.3.7 / 15.4.4.20 Array.prototype.filter(callbackfn [, thisArg])
+  filter: function filter(callbackfn /* , thisArg */) {
+    return $filter(this, callbackfn, arguments[1]);
+  }
+});
+
+
+/***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $export = __webpack_require__(2);
+var $indexOf = __webpack_require__(74)(false);
+var $native = [].indexOf;
+var NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
+
+$export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(44)($native)), 'Array', {
+  // 22.1.3.11 / 15.4.4.14 Array.prototype.indexOf(searchElement [, fromIndex])
+  indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
+    return NEGATIVE_ZERO
+      // convert -0 to +0
+      ? $native.apply(this, arguments) || 0
+      : $indexOf(this, searchElement, arguments[1]);
+  }
+});
+
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $export = __webpack_require__(2);
+var aFunction = __webpack_require__(38);
+var toObject = __webpack_require__(18);
+var fails = __webpack_require__(9);
 var $sort = [].sort;
 var test = [1, 2, 3];
 
@@ -26158,7 +26747,7 @@ $export($export.P + $export.F * (fails(function () {
   // V8 bug
   test.sort(null);
   // Old WebKit
-}) || !__webpack_require__(107)($sort)), 'Array', {
+}) || !__webpack_require__(44)($sort)), 'Array', {
   // 22.1.3.25 Array.prototype.sort(comparefn)
   sort: function sort(comparefn) {
     return comparefn === undefined
@@ -26167,167 +26756,6 @@ $export($export.P + $export.F * (fails(function () {
   }
 });
 
-
-/***/ }),
-/* 233 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.params = void 0;
-
-var _jsYaml = __webpack_require__(35);
-
-var _utils = __webpack_require__(127);
-
-/* babel-plugin-inline-import './mainnet.yaml' */
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-const mainnetYaml = "# Mainnet preset\n# Note: the intention of this file (for now) is to illustrate what a mainnet configuration could look like.\n# Some of these constants may still change before the launch of Phase 0.\n\n\n# Misc\n# ---------------------------------------------------------------\n# 2**6 (= 64)\nMAX_COMMITTEES_PER_SLOT: 64\n# 2**7 (= 128)\nTARGET_COMMITTEE_SIZE: 128\n# 2**11 (= 2,048)\nMAX_VALIDATORS_PER_COMMITTEE: 2048\n# 2**2 (= 4)\nMIN_PER_EPOCH_CHURN_LIMIT: 4\n# 2**16 (= 65,536)\nCHURN_LIMIT_QUOTIENT: 65536\n# See issue 563\nSHUFFLE_ROUND_COUNT: 90\n# `2**14` (= 16,384)\nMIN_GENESIS_ACTIVE_VALIDATOR_COUNT: 16384\n# Jan 3, 2020\nMIN_GENESIS_TIME: 1578009600\n# 4\nHYSTERESIS_QUOTIENT: 4\n# 1 (minus 0.25)\nHYSTERESIS_DOWNWARD_MULTIPLIER: 1\n# 5 (plus 1.25)\nHYSTERESIS_UPWARD_MULTIPLIER: 5\n\n\n# Fork Choice\n# ---------------------------------------------------------------\n# 2**3 (= 8)\nSAFE_SLOTS_TO_UPDATE_JUSTIFIED: 8\n\n\n# Validator\n# ---------------------------------------------------------------\n# 2**10 (= 1,024)\nETH1_FOLLOW_DISTANCE: 1024\n# 2**4 (= 16)\nTARGET_AGGREGATORS_PER_COMMITTEE: 16\n# 2**0 (= 1)\nRANDOM_SUBNETS_PER_VALIDATOR: 1\n# 2**8 (= 256)\nEPOCHS_PER_RANDOM_SUBNET_SUBSCRIPTION: 256\n# 14 (estimate from Eth1 mainnet)\nSECONDS_PER_ETH1_BLOCK: 14\n\n\n# Deposit contract\n# ---------------------------------------------------------------\n# **TBD**\nDEPOSIT_CONTRACT_ADDRESS: 0x1234567890123456789012345678901234567890\n\n\n# Gwei values\n# ---------------------------------------------------------------\n# 2**0 * 10**9 (= 1,000,000,000) Gwei\nMIN_DEPOSIT_AMOUNT: 1000000000\n# 2**5 * 10**9 (= 32,000,000,000) Gwei\nMAX_EFFECTIVE_BALANCE: 32000000000\n# 2**4 * 10**9 (= 16,000,000,000) Gwei\nEJECTION_BALANCE: 16000000000\n# 2**0 * 10**9 (= 1,000,000,000) Gwei\nEFFECTIVE_BALANCE_INCREMENT: 1000000000\n\n\n# Initial values\n# ---------------------------------------------------------------\n# Mainnet initial fork version, recommend altering for testnets\nGENESIS_FORK_VERSION: 0x00000000\nBLS_WITHDRAWAL_PREFIX: 0x00\n\n\n# Time parameters\n# ---------------------------------------------------------------\n# 86400 seconds (1 day)\nMIN_GENESIS_DELAY: 86400\n# 12 seconds\nSECONDS_PER_SLOT: 12\n# 2**0 (= 1) slots 12 seconds\nMIN_ATTESTATION_INCLUSION_DELAY: 1\n# 2**5 (= 32) slots 6.4 minutes\nSLOTS_PER_EPOCH: 32\n# 2**0 (= 1) epochs 6.4 minutes\nMIN_SEED_LOOKAHEAD: 1\n# 2**2 (= 4) epochs 25.6 minutes\nMAX_SEED_LOOKAHEAD: 4\n# 2**5 (= 32) epochs ~3.4 hours\nEPOCHS_PER_ETH1_VOTING_PERIOD: 32\n# 2**13 (= 8,192) slots ~13 hours\nSLOTS_PER_HISTORICAL_ROOT: 8192\n# 2**8 (= 256) epochs ~27 hours\nMIN_VALIDATOR_WITHDRAWABILITY_DELAY: 256\n# 2**11 (= 2,048) epochs 9 days\nPERSISTENT_COMMITTEE_PERIOD: 2048\n# 2**6 (= 64) epochs ~7 hours\nMAX_EPOCHS_PER_CROSSLINK: 64\n# 2**2 (= 4) epochs 25.6 minutes\nMIN_EPOCHS_TO_INACTIVITY_PENALTY: 4\n\n\n# State vector lengths\n# ---------------------------------------------------------------\n# 2**16 (= 65,536) epochs ~0.8 years\nEPOCHS_PER_HISTORICAL_VECTOR: 65536\n# 2**13 (= 8,192) epochs ~36 days\nEPOCHS_PER_SLASHINGS_VECTOR: 8192\n# 2**24 (= 16,777,216) historical roots, ~26,131 years\nHISTORICAL_ROOTS_LIMIT: 16777216\n# 2**40 (= 1,099,511,627,776) validator spots\nVALIDATOR_REGISTRY_LIMIT: 1099511627776\n\n\n# Reward and penalty quotients\n# ---------------------------------------------------------------\n# 2**6 (= 64)\nBASE_REWARD_FACTOR: 64\n# 2**9 (= 512)\nWHISTLEBLOWER_REWARD_QUOTIENT: 512\n# 2**3 (= 8)\nPROPOSER_REWARD_QUOTIENT: 8\n# 2**25 (= 33,554,432)\nINACTIVITY_PENALTY_QUOTIENT: 33554432\n# 2**5 (= 32)\nMIN_SLASHING_PENALTY_QUOTIENT: 32\n\n\n# Max operations per block\n# ---------------------------------------------------------------\n# 2**4 (= 16)\nMAX_PROPOSER_SLASHINGS: 16\n# 2**0 (= 1)\nMAX_ATTESTER_SLASHINGS: 1\n# 2**7 (= 128)\nMAX_ATTESTATIONS: 128\n# 2**4 (= 16)\nMAX_DEPOSITS: 16\n# 2**4 (= 16)\nMAX_VOLUNTARY_EXITS: 16\n\n\n# Signature domains\n# ---------------------------------------------------------------\nDOMAIN_BEACON_PROPOSER: 0x00000000\nDOMAIN_BEACON_ATTESTER: 0x01000000\nDOMAIN_RANDAO: 0x02000000\nDOMAIN_DEPOSIT: 0x03000000\nDOMAIN_VOLUNTARY_EXIT: 0x04000000\nDOMAIN_SELECTION_PROOF: 0x05000000\nDOMAIN_AGGREGATE_AND_PROOF: 0x06000000\n# Phase 1\nDOMAIN_SHARD_PROPOSAL: 0x80000000\nDOMAIN_SHARD_COMMITTEE: 0x81000000\nDOMAIN_LIGHT_CLIENT: 0x82000000\nDOMAIN_CUSTODY_BIT_SLASHING: 0x83000000\n\n\n# Phase 1: Upgrade from Phase 0\n# ---------------------------------------------------------------\nPHASE_1_FORK_VERSION: 0x01000000\nINITIAL_ACTIVE_SHARDS: 64\n# Placeholder\nINITIAL_GASPRICE: 10\n\n\n# Phase 1: General\n# ---------------------------------------------------------------\n# 2**10` (= 1024)\nMAX_SHARDS: 1024\n# 2**3 (= 8) | online epochs | ~51 min\nONLINE_PERIOD: 8\n# 2**7 (= 128)\nLIGHT_CLIENT_COMMITTEE_SIZE: 128\n# 2**8 (= 256) | epochs | ~27 hours\nLIGHT_CLIENT_COMMITTEE_PERIOD: 256\n# 2**8 (= 256) | epochs | ~27 hours\nSHARD_COMMITTEE_PERIOD: 256\n# 2**18 (= 262,144)\nSHARD_BLOCK_CHUNK_SIZE: 262144\n# 2**2 (= 4)\nMAX_SHARD_BLOCK_CHUNKS: 4\n# 3 * 2**16` (= 196,608)\nTARGET_SHARD_BLOCK_SIZE: 196608\n# Note: MAX_SHARD_BLOCKS_PER_ATTESTATION is derived from the list length.\nSHARD_BLOCK_OFFSETS: [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233]\n# len(SHARD_BLOCK_OFFSETS)\nMAX_SHARD_BLOCKS_PER_ATTESTATION: 12\n# 2**14 (= 16,384) Gwei\nMAX_GASPRICE: 16384\n# 2**5 (= 32) Gwei\nMIN_GASPRICE: 32\n#  2**3 (= 8)\nGASPRICE_ADJUSTMENT_COEFFICIENT: 8\n\n\n# Phase 1: Custody Game\n# ---------------------------------------------------------------\n\n# Time parameters\n# 2**1 (= 2) epochs, 12.8 minutes\nRANDAO_PENALTY_EPOCHS: 2\n# 2**14 (= 16,384) epochs ~73 days\nEARLY_DERIVED_SECRET_PENALTY_MAX_FUTURE_EPOCHS: 16384\n# 2**11 (= 2,048) epochs, ~9 days\nEPOCHS_PER_CUSTODY_PERIOD: 2048\n# 2**11 (= 2,048) epochs, ~9 days\nCUSTODY_PERIOD_TO_RANDAO_PADDING: 2048\n# 2**7 (= 128) epochs, ~14 hours\nMAX_REVEAL_LATENESS_DECREMENT: 128\n\n# Max operations\n# 2**8 (= 256)\nMAX_CUSTODY_KEY_REVEALS: 256\nMAX_EARLY_DERIVED_SECRET_REVEALS: 1\nMAX_CUSTODY_SLASHINGS: 1\n\n# Reward and penalty quotients\nEARLY_DERIVED_SECRET_REVEAL_SLOT_REWARD_MULTIPLE: 2\n# 2**8 (= 256)\nMINOR_REWARD_QUOTIENT: 256\n";
-const params = (0, _utils.createIBeaconParams)((0, _jsYaml.load)(mainnetYaml, {
-  schema: _utils.schema
-}));
-exports.params = params;
-//# sourceMappingURL=mainnet.js.map
-
-/***/ }),
-/* 234 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(Buffer) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.typeMap = void 0;
-
-const HexBufferType = value => {
-  return Buffer.from(value.replace("0x", ""), "hex");
-};
-
-const typeMap = {
-  MIN_DEPOSIT_AMOUNT: BigInt,
-  MAX_EFFECTIVE_BALANCE: BigInt,
-  EJECTION_BALANCE: BigInt,
-  EFFECTIVE_BALANCE_INCREMENT: BigInt,
-  INACTIVITY_PENALTY_QUOTIENT: BigInt,
-  BLS_WITHDRAWAL_PREFIX: HexBufferType,
-  DEPOSIT_CONTRACT_ADDRESS: HexBufferType,
-  GENESIS_FORK_VERSION: HexBufferType
-};
-exports.typeMap = typeMap;
-//# sourceMappingURL=types.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(22).Buffer))
-
-/***/ }),
-/* 235 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.BASE_REWARDS_PER_EPOCH = exports.GENESIS_START_SHARD = void 0;
-const GENESIS_START_SHARD = 0;
-exports.GENESIS_START_SHARD = GENESIS_START_SHARD;
-const BASE_REWARDS_PER_EPOCH = 4;
-exports.BASE_REWARDS_PER_EPOCH = BASE_REWARDS_PER_EPOCH;
-//# sourceMappingURL=constants.js.map
-
-/***/ }),
-/* 236 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Domain = exports.BLSSignature = exports.BLSPubkey = exports.ForkDigest = exports.Version = exports.Root = exports.Gwei = exports.ValidatorIndex = exports.CommitteeIndex = exports.Epoch = exports.Slot = exports.Uint256 = exports.Uint128 = exports.Uint64 = exports.Number64 = exports.Uint32 = exports.Uint16 = exports.Uint8 = exports.Bytes96 = exports.Bytes48 = exports.Bytes32 = exports.Bytes8 = exports.Bytes4 = exports.Boolean = void 0;
-
-var _ssz = __webpack_require__(4);
-
-/**
- * @module sszTypes/generators
- */
-const Boolean = _ssz.booleanType;
-exports.Boolean = Boolean;
-const Bytes4 = new _ssz.ByteVectorType({
-  length: 4
-});
-exports.Bytes4 = Bytes4;
-const Bytes8 = new _ssz.ByteVectorType({
-  length: 8
-});
-exports.Bytes8 = Bytes8;
-const Bytes32 = new _ssz.ByteVectorType({
-  length: 32
-});
-exports.Bytes32 = Bytes32;
-const Bytes48 = new _ssz.ByteVectorType({
-  length: 48
-});
-exports.Bytes48 = Bytes48;
-const Bytes96 = new _ssz.ByteVectorType({
-  length: 96
-});
-exports.Bytes96 = Bytes96;
-const Uint8 = _ssz.byteType;
-exports.Uint8 = Uint8;
-const Uint16 = new _ssz.NumberUintType({
-  byteLength: 2
-});
-exports.Uint16 = Uint16;
-const Uint32 = _ssz.number32Type;
-exports.Uint32 = Uint32;
-const Number64 = new _ssz.NumberUintType({
-  byteLength: 8
-});
-exports.Number64 = Number64;
-const Uint64 = new _ssz.BigIntUintType({
-  byteLength: 8
-});
-exports.Uint64 = Uint64;
-const Uint128 = new _ssz.BigIntUintType({
-  byteLength: 16
-});
-exports.Uint128 = Uint128;
-const Uint256 = new _ssz.BigIntUintType({
-  byteLength: 32
-}); // Custom types, defined for type hinting and readability
-
-exports.Uint256 = Uint256;
-const Slot = Number64;
-exports.Slot = Slot;
-const Epoch = Number64;
-exports.Epoch = Epoch;
-const CommitteeIndex = Number64;
-exports.CommitteeIndex = CommitteeIndex;
-const ValidatorIndex = Number64;
-exports.ValidatorIndex = ValidatorIndex;
-const Gwei = Uint64;
-exports.Gwei = Gwei;
-const Root = Bytes32;
-exports.Root = Root;
-const Version = Bytes4;
-exports.Version = Version;
-const ForkDigest = Bytes4;
-exports.ForkDigest = ForkDigest;
-const BLSPubkey = Bytes48;
-exports.BLSPubkey = BLSPubkey;
-const BLSSignature = Bytes96;
-exports.BLSSignature = BLSSignature;
-const Domain = Bytes32;
-exports.Domain = Domain;
-//# sourceMappingURL=primitive.js.map
 
 /***/ }),
 /* 237 */
@@ -26339,229 +26767,50 @@ exports.Domain = Domain;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AttestationSubnets = exports.DepositDataRootList = exports.SigningRoot = exports.SignedBeaconBlockHeader = exports.BeaconBlockHeader = exports.DepositEvent = exports.DepositData = exports.DepositMessage = exports.HistoricalBatch = exports.HistoricalStateRoots = exports.HistoricalBlockRoots = exports.Eth1Data = exports.PendingAttestation = exports.CommitteeBits = exports.IndexedAttestation = exports.CommitteeIndices = exports.AttestationData = exports.Validator = exports.Checkpoint = exports.ENRForkID = exports.ForkData = exports.Fork = void 0;
-
-var _ssz = __webpack_require__(4);
-
-var _constants = __webpack_require__(92);
-
-/**
- * @module sszTypes/generators
- */
-const Fork = ssz => new _ssz.ContainerType({
-  fields: {
-    previousVersion: ssz.Version,
-    currentVersion: ssz.Version,
-    epoch: ssz.Epoch
+var _exportNames = {
+  phase0: true,
+  altair: true,
+  allForks: true
+};
+Object.defineProperty(exports, "phase0", {
+  enumerable: true,
+  get: function () {
+    return _phase.ts;
+  }
+});
+Object.defineProperty(exports, "altair", {
+  enumerable: true,
+  get: function () {
+    return _altair.ts;
+  }
+});
+Object.defineProperty(exports, "allForks", {
+  enumerable: true,
+  get: function () {
+    return _allForks.ts;
   }
 });
 
-exports.Fork = Fork;
+var _types = __webpack_require__(67);
 
-const ForkData = ssz => new _ssz.ContainerType({
-  fields: {
-    currentVersion: ssz.Version,
-    genesisValidatorsRoot: ssz.Root
-  }
+Object.keys(_types).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _types[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _types[key];
+    }
+  });
 });
 
-exports.ForkData = ForkData;
+var _phase = __webpack_require__(68);
 
-const ENRForkID = ssz => new _ssz.ContainerType({
-  fields: {
-    forkDigest: ssz.ForkDigest,
-    nextForkVersion: ssz.Version,
-    nextForkEpoch: ssz.Epoch
-  }
-});
+var _altair = __webpack_require__(93);
 
-exports.ENRForkID = ENRForkID;
-
-const Checkpoint = ssz => new _ssz.ContainerType({
-  fields: {
-    epoch: ssz.Epoch,
-    root: ssz.Root
-  }
-});
-
-exports.Checkpoint = Checkpoint;
-
-const Validator = ssz => new _ssz.ContainerType({
-  fields: {
-    pubkey: ssz.BLSPubkey,
-    withdrawalCredentials: ssz.Bytes32,
-    effectiveBalance: ssz.Gwei,
-    slashed: ssz.Boolean,
-    activationEligibilityEpoch: ssz.Epoch,
-    activationEpoch: ssz.Epoch,
-    exitEpoch: ssz.Epoch,
-    withdrawableEpoch: ssz.Epoch
-  }
-});
-
-exports.Validator = Validator;
-
-const AttestationData = ssz => new _ssz.ContainerType({
-  fields: {
-    slot: ssz.Slot,
-    index: ssz.CommitteeIndex,
-    beaconBlockRoot: ssz.Root,
-    source: ssz.Checkpoint,
-    target: ssz.Checkpoint
-  }
-});
-
-exports.AttestationData = AttestationData;
-
-const CommitteeIndices = (ssz, params) => new _ssz.ListType({
-  elementType: ssz.ValidatorIndex,
-  limit: params.MAX_VALIDATORS_PER_COMMITTEE
-});
-
-exports.CommitteeIndices = CommitteeIndices;
-
-const IndexedAttestation = ssz => new _ssz.ContainerType({
-  fields: {
-    attestingIndices: ssz.CommitteeIndices,
-    data: ssz.AttestationData,
-    signature: ssz.BLSSignature
-  }
-});
-
-exports.IndexedAttestation = IndexedAttestation;
-
-const CommitteeBits = (ssz, params) => new _ssz.BitListType({
-  limit: params.MAX_VALIDATORS_PER_COMMITTEE
-});
-
-exports.CommitteeBits = CommitteeBits;
-
-const PendingAttestation = ssz => new _ssz.ContainerType({
-  fields: {
-    aggregationBits: ssz.CommitteeBits,
-    data: ssz.AttestationData,
-    inclusionDelay: ssz.Slot,
-    proposerIndex: ssz.ValidatorIndex
-  }
-});
-
-exports.PendingAttestation = PendingAttestation;
-
-const Eth1Data = ssz => new _ssz.ContainerType({
-  fields: {
-    depositRoot: ssz.Root,
-    depositCount: ssz.Number64,
-    blockHash: ssz.Bytes32
-  }
-});
-
-exports.Eth1Data = Eth1Data;
-
-const HistoricalBlockRoots = (ssz, params) => new _ssz.VectorType({
-  elementType: new _ssz.RootType({
-    expandedType: () => ssz.BeaconBlock
-  }),
-  length: params.SLOTS_PER_HISTORICAL_ROOT
-});
-
-exports.HistoricalBlockRoots = HistoricalBlockRoots;
-
-const HistoricalStateRoots = (ssz, params) => new _ssz.VectorType({
-  elementType: new _ssz.RootType({
-    expandedType: () => ssz.BeaconState
-  }),
-  length: params.SLOTS_PER_HISTORICAL_ROOT
-});
-
-exports.HistoricalStateRoots = HistoricalStateRoots;
-
-const HistoricalBatch = ssz => new _ssz.ContainerType({
-  fields: {
-    blockRoots: ssz.HistoricalBlockRoots,
-    stateRoots: ssz.HistoricalStateRoots
-  }
-});
-
-exports.HistoricalBatch = HistoricalBatch;
-
-const DepositMessage = ssz => new _ssz.ContainerType({
-  fields: {
-    pubkey: ssz.BLSPubkey,
-    withdrawalCredentials: ssz.Bytes32,
-    amount: ssz.Gwei
-  }
-});
-
-exports.DepositMessage = DepositMessage;
-
-const DepositData = ssz => new _ssz.ContainerType({
-  fields: {
-    pubkey: ssz.BLSPubkey,
-    withdrawalCredentials: ssz.Bytes32,
-    amount: ssz.Gwei,
-    signature: ssz.BLSSignature
-  }
-});
-
-exports.DepositData = DepositData;
-
-const DepositEvent = ssz => new _ssz.ContainerType({
-  fields: {
-    index: ssz.Number64,
-    pubkey: ssz.BLSPubkey,
-    withdrawalCredentials: ssz.Bytes32,
-    amount: ssz.Gwei,
-    signature: ssz.BLSSignature
-  }
-});
-
-exports.DepositEvent = DepositEvent;
-
-const BeaconBlockHeader = ssz => new _ssz.ContainerType({
-  fields: {
-    slot: ssz.Slot,
-    proposerIndex: ssz.ValidatorIndex,
-    parentRoot: ssz.Root,
-    stateRoot: ssz.Root,
-    bodyRoot: ssz.Root
-  }
-});
-
-exports.BeaconBlockHeader = BeaconBlockHeader;
-
-const SignedBeaconBlockHeader = ssz => new _ssz.ContainerType({
-  fields: {
-    message: ssz.BeaconBlockHeader,
-    signature: ssz.BLSSignature
-  }
-});
-
-exports.SignedBeaconBlockHeader = SignedBeaconBlockHeader;
-
-const SigningRoot = ssz => new _ssz.ContainerType({
-  fields: {
-    objectRoot: ssz.Root,
-    domain: ssz.Domain
-  }
-});
-
-exports.SigningRoot = SigningRoot;
-
-const DepositDataRootList = ssz => new _ssz.ListType({
-  elementType: new _ssz.RootType({
-    expandedType: ssz.DepositData
-  }),
-  limit: 2 ** _constants.DEPOSIT_CONTRACT_TREE_DEPTH
-});
-
-exports.DepositDataRootList = DepositDataRootList;
-
-const AttestationSubnets = () => new _ssz.BitVectorType({
-  length: _constants.ATTESTATION_SUBNET_COUNT
-});
-
-exports.AttestationSubnets = AttestationSubnets;
-//# sourceMappingURL=misc.js.map
+var _allForks = __webpack_require__(139);
+//# sourceMappingURL=types.js.map
 
 /***/ }),
 /* 238 */
@@ -26573,73 +26822,111 @@ exports.AttestationSubnets = AttestationSubnets;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SignedVoluntaryExit = exports.VoluntaryExit = exports.Deposit = exports.Attestation = exports.AttesterSlashing = exports.ProposerSlashing = void 0;
 
-var _ssz = __webpack_require__(4);
+var _misc = __webpack_require__(128);
 
-var _constants = __webpack_require__(92);
-
-/**
- * @module sszTypes/generators
- */
-const ProposerSlashing = ssz => new _ssz.ContainerType({
-  fields: {
-    signedHeader1: ssz.SignedBeaconBlockHeader,
-    signedHeader2: ssz.SignedBeaconBlockHeader
-  }
+Object.keys(_misc).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _misc[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _misc[key];
+    }
+  });
 });
 
-exports.ProposerSlashing = ProposerSlashing;
+var _operations = __webpack_require__(129);
 
-const AttesterSlashing = ssz => new _ssz.ContainerType({
-  fields: {
-    attestation1: ssz.IndexedAttestation,
-    attestation2: ssz.IndexedAttestation
-  }
+Object.keys(_operations).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _operations[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _operations[key];
+    }
+  });
 });
 
-exports.AttesterSlashing = AttesterSlashing;
+var _block = __webpack_require__(239);
 
-const Attestation = ssz => new _ssz.ContainerType({
-  fields: {
-    aggregationBits: ssz.CommitteeBits,
-    data: ssz.AttestationData,
-    signature: ssz.BLSSignature
-  }
+Object.keys(_block).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _block[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _block[key];
+    }
+  });
 });
 
-exports.Attestation = Attestation;
+var _state = __webpack_require__(240);
 
-const Deposit = ssz => new _ssz.ContainerType({
-  fields: {
-    proof: new _ssz.VectorType({
-      elementType: ssz.Bytes32,
-      length: _constants.DEPOSIT_CONTRACT_TREE_DEPTH + 1
-    }),
-    data: ssz.DepositData
-  }
+Object.keys(_state).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _state[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _state[key];
+    }
+  });
 });
 
-exports.Deposit = Deposit;
+var _validator = __webpack_require__(130);
 
-const VoluntaryExit = ssz => new _ssz.ContainerType({
-  fields: {
-    epoch: ssz.Epoch,
-    validatorIndex: ssz.ValidatorIndex
-  }
+Object.keys(_validator).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _validator[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _validator[key];
+    }
+  });
 });
 
-exports.VoluntaryExit = VoluntaryExit;
+var _wire = __webpack_require__(241);
 
-const SignedVoluntaryExit = ssz => new _ssz.ContainerType({
-  fields: {
-    message: ssz.VoluntaryExit,
-    signature: ssz.BLSSignature
-  }
+Object.keys(_wire).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _wire[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _wire[key];
+    }
+  });
 });
 
-exports.SignedVoluntaryExit = SignedVoluntaryExit;
-//# sourceMappingURL=operations.js.map
+var _api = __webpack_require__(131);
+
+Object.keys(_api).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _api[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _api[key];
+    }
+  });
+});
+
+var _types = __webpack_require__(67);
+
+Object.keys(_types).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _types[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _types[key];
+    }
+  });
+});
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 /* 239 */
@@ -26647,71 +26934,6 @@ exports.SignedVoluntaryExit = SignedVoluntaryExit;
 
 "use strict";
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SignedBeaconBlock = exports.BeaconBlock = exports.BeaconBlockBody = void 0;
-
-var _ssz = __webpack_require__(4);
-
-/**
- * @module sszTypes/generators
- */
-const BeaconBlockBody = (ssz, params) => new _ssz.ContainerType({
-  fields: {
-    randaoReveal: ssz.BLSSignature,
-    eth1Data: ssz.Eth1Data,
-    graffiti: ssz.Bytes32,
-    proposerSlashings: new _ssz.ListType({
-      elementType: ssz.ProposerSlashing,
-      limit: params.MAX_PROPOSER_SLASHINGS
-    }),
-    attesterSlashings: new _ssz.ListType({
-      elementType: ssz.AttesterSlashing,
-      limit: params.MAX_ATTESTER_SLASHINGS
-    }),
-    attestations: new _ssz.ListType({
-      elementType: ssz.Attestation,
-      limit: params.MAX_ATTESTATIONS
-    }),
-    deposits: new _ssz.ListType({
-      elementType: ssz.Deposit,
-      limit: params.MAX_DEPOSITS
-    }),
-    voluntaryExits: new _ssz.ListType({
-      elementType: ssz.SignedVoluntaryExit,
-      limit: params.MAX_VOLUNTARY_EXITS
-    })
-  }
-});
-
-exports.BeaconBlockBody = BeaconBlockBody;
-
-const BeaconBlock = ssz => new _ssz.ContainerType({
-  fields: {
-    slot: ssz.Slot,
-    proposerIndex: ssz.ValidatorIndex,
-    parentRoot: new _ssz.RootType({
-      expandedType: () => ssz.BeaconBlock
-    }),
-    stateRoot: new _ssz.RootType({
-      expandedType: () => ssz.BeaconState
-    }),
-    body: ssz.BeaconBlockBody
-  }
-});
-
-exports.BeaconBlock = BeaconBlock;
-
-const SignedBeaconBlock = ssz => new _ssz.ContainerType({
-  fields: {
-    message: ssz.BeaconBlock,
-    signature: ssz.BLSSignature
-  }
-});
-
-exports.SignedBeaconBlock = SignedBeaconBlock;
 //# sourceMappingURL=block.js.map
 
 /***/ }),
@@ -26720,82 +26942,6 @@ exports.SignedBeaconBlock = SignedBeaconBlock;
 
 "use strict";
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.BeaconState = exports.EpochAttestations = void 0;
-
-var _ssz = __webpack_require__(4);
-
-var _constants = __webpack_require__(92);
-
-/**
- * @module sszTypes/generators
- */
-const EpochAttestations = (ssz, params) => new _ssz.ListType({
-  elementType: ssz.PendingAttestation,
-  limit: params.MAX_ATTESTATIONS * params.SLOTS_PER_EPOCH
-});
-
-exports.EpochAttestations = EpochAttestations;
-
-const BeaconState = (ssz, params) => new _ssz.ContainerType({
-  fields: {
-    // Misc
-    genesisTime: ssz.Number64,
-    genesisValidatorsRoot: ssz.Root,
-    slot: ssz.Slot,
-    fork: ssz.Fork,
-    // History
-    latestBlockHeader: ssz.BeaconBlockHeader,
-    blockRoots: ssz.HistoricalBlockRoots,
-    stateRoots: ssz.HistoricalStateRoots,
-    historicalRoots: new _ssz.ListType({
-      elementType: new _ssz.RootType({
-        expandedType: ssz.HistoricalBatch
-      }),
-      limit: params.HISTORICAL_ROOTS_LIMIT
-    }),
-    // Eth1
-    eth1Data: ssz.Eth1Data,
-    eth1DataVotes: new _ssz.ListType({
-      elementType: ssz.Eth1Data,
-      limit: params.EPOCHS_PER_ETH1_VOTING_PERIOD * params.SLOTS_PER_EPOCH
-    }),
-    eth1DepositIndex: ssz.Number64,
-    // Registry
-    validators: new _ssz.ListType({
-      elementType: ssz.Validator,
-      limit: params.VALIDATOR_REGISTRY_LIMIT
-    }),
-    balances: new _ssz.ListType({
-      elementType: ssz.Gwei,
-      limit: params.VALIDATOR_REGISTRY_LIMIT
-    }),
-    randaoMixes: new _ssz.VectorType({
-      elementType: ssz.Bytes32,
-      length: params.EPOCHS_PER_HISTORICAL_VECTOR
-    }),
-    // Slashings
-    slashings: new _ssz.VectorType({
-      elementType: ssz.Gwei,
-      length: params.EPOCHS_PER_SLASHINGS_VECTOR
-    }),
-    // Attestations
-    previousEpochAttestations: ssz.EpochAttestations,
-    currentEpochAttestations: ssz.EpochAttestations,
-    // Finality
-    justificationBits: new _ssz.BitVectorType({
-      length: _constants.JUSTIFICATION_BITS_LENGTH
-    }),
-    previousJustifiedCheckpoint: ssz.Checkpoint,
-    currentJustifiedCheckpoint: ssz.Checkpoint,
-    finalizedCheckpoint: ssz.Checkpoint
-  }
-});
-
-exports.BeaconState = BeaconState;
 //# sourceMappingURL=state.js.map
 
 /***/ }),
@@ -26804,46 +26950,7 @@ exports.BeaconState = BeaconState;
 
 "use strict";
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SignedAggregateAndProof = exports.AggregateAndProof = exports.CommitteeAssignment = void 0;
-
-var _ssz = __webpack_require__(4);
-
-/**
- * @module sszTypes/generators
- */
-const CommitteeAssignment = ssz => new _ssz.ContainerType({
-  fields: {
-    validators: ssz.CommitteeIndices,
-    committeeIndex: ssz.CommitteeIndex,
-    slot: ssz.Slot
-  }
-});
-
-exports.CommitteeAssignment = CommitteeAssignment;
-
-const AggregateAndProof = ssz => new _ssz.ContainerType({
-  fields: {
-    aggregatorIndex: ssz.ValidatorIndex,
-    aggregate: ssz.Attestation,
-    selectionProof: ssz.BLSSignature
-  }
-});
-
-exports.AggregateAndProof = AggregateAndProof;
-
-const SignedAggregateAndProof = ssz => new _ssz.ContainerType({
-  fields: {
-    message: ssz.AggregateAndProof,
-    signature: ssz.BLSSignature
-  }
-});
-
-exports.SignedAggregateAndProof = SignedAggregateAndProof;
-//# sourceMappingURL=validator.js.map
+//# sourceMappingURL=wire.js.map
 
 /***/ }),
 /* 242 */
@@ -26855,59 +26962,477 @@ exports.SignedAggregateAndProof = SignedAggregateAndProof;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BeaconBlocksByRootRequest = exports.BeaconBlocksByRangeRequest = exports.Metadata = exports.Ping = exports.Goodbye = exports.Status = void 0;
+exports.SlashingProtectionAttestationLowerBound = exports.SlashingProtectionAttestation = exports.SlashingProtectionBlock = exports.Genesis = exports.BeaconBlocksByRootRequest = exports.BeaconBlocksByRangeRequest = exports.Metadata = exports.Ping = exports.Goodbye = exports.Status = exports.SignedAggregateAndProof = exports.AggregateAndProof = exports.CommitteeAssignment = exports.BeaconState = exports.EpochAttestations = exports.SignedBeaconBlock = exports.BeaconBlock = exports.BeaconBlockBody = exports.SignedVoluntaryExit = exports.VoluntaryExit = exports.ProposerSlashing = exports.Deposit = exports.AttesterSlashing = exports.Attestation = exports.SigningData = exports.PendingAttestation = exports.IndexedAttestation = exports.AttestationData = exports.Validator = exports.HistoricalBatch = exports.HistoricalStateRoots = exports.HistoricalBlockRoots = exports.ENRForkID = exports.ForkData = exports.Fork = exports.Eth1DataOrdered = exports.Eth1Data = exports.DepositEvent = exports.DepositDataRootList = exports.DepositData = exports.DepositMessage = exports.CommitteeIndices = exports.CommitteeBits = exports.Checkpoint = exports.SignedBeaconBlockHeader = exports.BeaconBlockHeader = exports.AttestationSubnets = void 0;
 
-var _ssz = __webpack_require__(4);
+var _lodestarParams = __webpack_require__(132);
 
-/**
- * @module sszTypes/generators
- * */
-const Status = ssz => new _ssz.ContainerType({
+var _ssz = __webpack_require__(7);
+
+var _primitive = __webpack_require__(136);
+
+var _lazyVar = __webpack_require__(138);
+
+const {
+  Boolean,
+  Bytes32,
+  Number64,
+  Uint64,
+  Slot,
+  Epoch,
+  CommitteeIndex,
+  ValidatorIndex,
+  Gwei,
+  Root,
+  Version,
+  ForkDigest,
+  BLSPubkey,
+  BLSSignature,
+  Domain
+} = _primitive.ssz; // So the expandedRoots can be referenced, and break the circular dependency
+
+const typesRef = new _lazyVar.LazyVariable(); // Misc types
+// ==========
+
+const AttestationSubnets = new _ssz.BitVectorType({
+  length: _lodestarParams.ATTESTATION_SUBNET_COUNT
+});
+exports.AttestationSubnets = AttestationSubnets;
+const BeaconBlockHeader = new _ssz.ContainerType({
   fields: {
-    forkDigest: ssz.ForkDigest,
-    finalizedRoot: ssz.Root,
-    finalizedEpoch: ssz.Epoch,
-    headRoot: ssz.Root,
-    headSlot: ssz.Slot
+    slot: Slot,
+    proposerIndex: ValidatorIndex,
+    parentRoot: Root,
+    stateRoot: Root,
+    bodyRoot: Root
   }
 });
+exports.BeaconBlockHeader = BeaconBlockHeader;
+const SignedBeaconBlockHeader = new _ssz.ContainerType({
+  fields: {
+    message: BeaconBlockHeader,
+    signature: BLSSignature
+  }
+});
+exports.SignedBeaconBlockHeader = SignedBeaconBlockHeader;
+const Checkpoint = new _ssz.ContainerType({
+  fields: {
+    epoch: Epoch,
+    root: Root
+  }
+});
+exports.Checkpoint = Checkpoint;
+const CommitteeBits = new _ssz.BitListType({
+  limit: _lodestarParams.MAX_VALIDATORS_PER_COMMITTEE
+});
+exports.CommitteeBits = CommitteeBits;
+const CommitteeIndices = new _ssz.ListType({
+  elementType: ValidatorIndex,
+  limit: _lodestarParams.MAX_VALIDATORS_PER_COMMITTEE
+});
+exports.CommitteeIndices = CommitteeIndices;
+const DepositMessage = new _ssz.ContainerType({
+  fields: {
+    pubkey: BLSPubkey,
+    withdrawalCredentials: Bytes32,
+    amount: Gwei
+  }
+});
+exports.DepositMessage = DepositMessage;
+const DepositData = new _ssz.ContainerType({
+  fields: {
+    pubkey: BLSPubkey,
+    withdrawalCredentials: Bytes32,
+    amount: Gwei,
+    signature: BLSSignature
+  }
+});
+exports.DepositData = DepositData;
+const DepositDataRootList = new _ssz.ListType({
+  elementType: new _ssz.RootType({
+    expandedType: DepositData
+  }),
+  limit: 2 ** _lodestarParams.DEPOSIT_CONTRACT_TREE_DEPTH
+});
+exports.DepositDataRootList = DepositDataRootList;
+const DepositEvent = new _ssz.ContainerType({
+  fields: {
+    depositData: DepositData,
+    blockNumber: Number64,
+    index: Number64
+  }
+});
+exports.DepositEvent = DepositEvent;
+const Eth1Data = new _ssz.ContainerType({
+  fields: {
+    depositRoot: Root,
+    depositCount: Number64,
+    blockHash: Bytes32
+  }
+});
+exports.Eth1Data = Eth1Data;
+const Eth1DataOrdered = new _ssz.ContainerType({
+  fields: {
+    depositRoot: Root,
+    depositCount: Number64,
+    blockHash: Bytes32,
+    blockNumber: Number64
+  }
+});
+exports.Eth1DataOrdered = Eth1DataOrdered;
+const Fork = new _ssz.ContainerType({
+  fields: {
+    previousVersion: Version,
+    currentVersion: Version,
+    epoch: Epoch
+  }
+});
+exports.Fork = Fork;
+const ForkData = new _ssz.ContainerType({
+  fields: {
+    currentVersion: Version,
+    genesisValidatorsRoot: Root
+  }
+});
+exports.ForkData = ForkData;
+const ENRForkID = new _ssz.ContainerType({
+  fields: {
+    forkDigest: ForkDigest,
+    nextForkVersion: Version,
+    nextForkEpoch: Epoch
+  }
+});
+exports.ENRForkID = ENRForkID;
+const HistoricalBlockRoots = new _ssz.VectorType({
+  elementType: new _ssz.RootType({
+    expandedType: () => typesRef.get().BeaconBlock
+  }),
+  length: _lodestarParams.SLOTS_PER_HISTORICAL_ROOT
+});
+exports.HistoricalBlockRoots = HistoricalBlockRoots;
+const HistoricalStateRoots = new _ssz.VectorType({
+  elementType: new _ssz.RootType({
+    expandedType: () => typesRef.get().BeaconState
+  }),
+  length: _lodestarParams.SLOTS_PER_HISTORICAL_ROOT
+});
+exports.HistoricalStateRoots = HistoricalStateRoots;
+const HistoricalBatch = new _ssz.ContainerType({
+  fields: {
+    blockRoots: HistoricalBlockRoots,
+    stateRoots: HistoricalStateRoots
+  }
+});
+exports.HistoricalBatch = HistoricalBatch;
+const Validator = new _ssz.ContainerType({
+  fields: {
+    pubkey: BLSPubkey,
+    withdrawalCredentials: Bytes32,
+    effectiveBalance: Gwei,
+    slashed: Boolean,
+    activationEligibilityEpoch: Epoch,
+    activationEpoch: Epoch,
+    exitEpoch: Epoch,
+    withdrawableEpoch: Epoch
+  }
+}); // Misc dependants
 
+exports.Validator = Validator;
+const AttestationData = new _ssz.ContainerType({
+  fields: {
+    slot: Slot,
+    index: CommitteeIndex,
+    beaconBlockRoot: Root,
+    source: Checkpoint,
+    target: Checkpoint
+  }
+});
+exports.AttestationData = AttestationData;
+const IndexedAttestation = new _ssz.ContainerType({
+  fields: {
+    attestingIndices: CommitteeIndices,
+    data: AttestationData,
+    signature: BLSSignature
+  }
+});
+exports.IndexedAttestation = IndexedAttestation;
+const PendingAttestation = new _ssz.ContainerType({
+  fields: {
+    aggregationBits: CommitteeBits,
+    data: AttestationData,
+    inclusionDelay: Slot,
+    proposerIndex: ValidatorIndex
+  }
+});
+exports.PendingAttestation = PendingAttestation;
+const SigningData = new _ssz.ContainerType({
+  fields: {
+    objectRoot: Root,
+    domain: Domain
+  }
+}); // Operations types
+// ================
+
+exports.SigningData = SigningData;
+const Attestation = new _ssz.ContainerType({
+  fields: {
+    aggregationBits: CommitteeBits,
+    data: AttestationData,
+    signature: BLSSignature
+  }
+});
+exports.Attestation = Attestation;
+const AttesterSlashing = new _ssz.ContainerType({
+  fields: {
+    attestation1: IndexedAttestation,
+    attestation2: IndexedAttestation
+  }
+});
+exports.AttesterSlashing = AttesterSlashing;
+const Deposit = new _ssz.ContainerType({
+  fields: {
+    proof: new _ssz.VectorType({
+      elementType: Bytes32,
+      length: _lodestarParams.DEPOSIT_CONTRACT_TREE_DEPTH + 1
+    }),
+    data: DepositData
+  }
+});
+exports.Deposit = Deposit;
+const ProposerSlashing = new _ssz.ContainerType({
+  fields: {
+    signedHeader1: SignedBeaconBlockHeader,
+    signedHeader2: SignedBeaconBlockHeader
+  }
+});
+exports.ProposerSlashing = ProposerSlashing;
+const VoluntaryExit = new _ssz.ContainerType({
+  fields: {
+    epoch: Epoch,
+    validatorIndex: ValidatorIndex
+  }
+});
+exports.VoluntaryExit = VoluntaryExit;
+const SignedVoluntaryExit = new _ssz.ContainerType({
+  fields: {
+    message: VoluntaryExit,
+    signature: BLSSignature
+  }
+}); // Block types
+// ===========
+
+exports.SignedVoluntaryExit = SignedVoluntaryExit;
+const BeaconBlockBody = new _ssz.ContainerType({
+  fields: {
+    randaoReveal: BLSSignature,
+    eth1Data: Eth1Data,
+    graffiti: Bytes32,
+    proposerSlashings: new _ssz.ListType({
+      elementType: ProposerSlashing,
+      limit: _lodestarParams.MAX_PROPOSER_SLASHINGS
+    }),
+    attesterSlashings: new _ssz.ListType({
+      elementType: AttesterSlashing,
+      limit: _lodestarParams.MAX_ATTESTER_SLASHINGS
+    }),
+    attestations: new _ssz.ListType({
+      elementType: Attestation,
+      limit: _lodestarParams.MAX_ATTESTATIONS
+    }),
+    deposits: new _ssz.ListType({
+      elementType: Deposit,
+      limit: _lodestarParams.MAX_DEPOSITS
+    }),
+    voluntaryExits: new _ssz.ListType({
+      elementType: SignedVoluntaryExit,
+      limit: _lodestarParams.MAX_VOLUNTARY_EXITS
+    })
+  }
+});
+exports.BeaconBlockBody = BeaconBlockBody;
+const BeaconBlock = new _ssz.ContainerType({
+  fields: {
+    slot: Slot,
+    proposerIndex: ValidatorIndex,
+    parentRoot: new _ssz.RootType({
+      expandedType: () => typesRef.get().BeaconBlock
+    }),
+    stateRoot: new _ssz.RootType({
+      expandedType: () => typesRef.get().BeaconState
+    }),
+    body: BeaconBlockBody
+  }
+});
+exports.BeaconBlock = BeaconBlock;
+const SignedBeaconBlock = new _ssz.ContainerType({
+  fields: {
+    message: BeaconBlock,
+    signature: BLSSignature
+  }
+}); // State types
+// ===========
+
+exports.SignedBeaconBlock = SignedBeaconBlock;
+const EpochAttestations = new _ssz.ListType({
+  elementType: PendingAttestation,
+  limit: _lodestarParams.MAX_ATTESTATIONS * _lodestarParams.SLOTS_PER_EPOCH
+});
+exports.EpochAttestations = EpochAttestations;
+const BeaconState = new _ssz.ContainerType({
+  fields: {
+    // Misc
+    genesisTime: Number64,
+    genesisValidatorsRoot: Root,
+    slot: Slot,
+    fork: Fork,
+    // History
+    latestBlockHeader: BeaconBlockHeader,
+    blockRoots: HistoricalBlockRoots,
+    stateRoots: HistoricalStateRoots,
+    historicalRoots: new _ssz.ListType({
+      elementType: new _ssz.RootType({
+        expandedType: HistoricalBatch
+      }),
+      limit: _lodestarParams.HISTORICAL_ROOTS_LIMIT
+    }),
+    // Eth1
+    eth1Data: Eth1Data,
+    eth1DataVotes: new _ssz.ListType({
+      elementType: Eth1Data,
+      limit: _lodestarParams.EPOCHS_PER_ETH1_VOTING_PERIOD * _lodestarParams.SLOTS_PER_EPOCH
+    }),
+    eth1DepositIndex: Number64,
+    // Registry
+    validators: new _ssz.ListType({
+      elementType: Validator,
+      limit: _lodestarParams.VALIDATOR_REGISTRY_LIMIT
+    }),
+    balances: new _ssz.ListType({
+      elementType: Gwei,
+      limit: _lodestarParams.VALIDATOR_REGISTRY_LIMIT
+    }),
+    randaoMixes: new _ssz.VectorType({
+      elementType: Bytes32,
+      length: _lodestarParams.EPOCHS_PER_HISTORICAL_VECTOR
+    }),
+    // Slashings
+    slashings: new _ssz.VectorType({
+      elementType: Gwei,
+      length: _lodestarParams.EPOCHS_PER_SLASHINGS_VECTOR
+    }),
+    // Attestations
+    previousEpochAttestations: EpochAttestations,
+    currentEpochAttestations: EpochAttestations,
+    // Finality
+    justificationBits: new _ssz.BitVectorType({
+      length: _lodestarParams.JUSTIFICATION_BITS_LENGTH
+    }),
+    previousJustifiedCheckpoint: Checkpoint,
+    currentJustifiedCheckpoint: Checkpoint,
+    finalizedCheckpoint: Checkpoint
+  }
+}); // Validator types
+// ===============
+
+exports.BeaconState = BeaconState;
+const CommitteeAssignment = new _ssz.ContainerType({
+  fields: {
+    validators: CommitteeIndices,
+    committeeIndex: CommitteeIndex,
+    slot: Slot
+  }
+});
+exports.CommitteeAssignment = CommitteeAssignment;
+const AggregateAndProof = new _ssz.ContainerType({
+  fields: {
+    aggregatorIndex: ValidatorIndex,
+    aggregate: Attestation,
+    selectionProof: BLSSignature
+  }
+});
+exports.AggregateAndProof = AggregateAndProof;
+const SignedAggregateAndProof = new _ssz.ContainerType({
+  fields: {
+    message: AggregateAndProof,
+    signature: BLSSignature
+  }
+}); // ReqResp types
+// =============
+
+exports.SignedAggregateAndProof = SignedAggregateAndProof;
+const Status = new _ssz.ContainerType({
+  fields: {
+    forkDigest: ForkDigest,
+    finalizedRoot: Root,
+    finalizedEpoch: Epoch,
+    headRoot: Root,
+    headSlot: Slot
+  }
+});
 exports.Status = Status;
-
-const Goodbye = ssz => ssz.Uint64;
-
+const Goodbye = Uint64;
 exports.Goodbye = Goodbye;
-
-const Ping = ssz => ssz.Uint64;
-
+const Ping = Uint64;
 exports.Ping = Ping;
-
-const Metadata = ssz => new _ssz.ContainerType({
+const Metadata = new _ssz.ContainerType({
   fields: {
-    seqNumber: ssz.Uint64,
-    attnets: ssz.AttestationSubnets
+    seqNumber: Uint64,
+    attnets: AttestationSubnets
   }
 });
-
 exports.Metadata = Metadata;
-
-const BeaconBlocksByRangeRequest = ssz => new _ssz.ContainerType({
+const BeaconBlocksByRangeRequest = new _ssz.ContainerType({
   fields: {
-    startSlot: ssz.Slot,
-    count: ssz.Number64,
-    step: ssz.Number64
+    startSlot: Slot,
+    count: Number64,
+    step: Number64
   }
 });
-
 exports.BeaconBlocksByRangeRequest = BeaconBlocksByRangeRequest;
-
-const BeaconBlocksByRootRequest = ssz => new _ssz.ListType({
-  elementType: ssz.Root,
-  limit: 32000
-});
+const BeaconBlocksByRootRequest = new _ssz.ListType({
+  elementType: Root,
+  limit: _lodestarParams.MAX_REQUEST_BLOCKS
+}); // Api types
+// =========
 
 exports.BeaconBlocksByRootRequest = BeaconBlocksByRootRequest;
-//# sourceMappingURL=wire.js.map
+const Genesis = new _ssz.ContainerType({
+  fields: {
+    genesisValidatorsRoot: Root,
+    genesisTime: Uint64,
+    genesisForkVersion: Version
+  }
+}); // Non-speced types
+// ================
+
+exports.Genesis = Genesis;
+const SlashingProtectionBlock = new _ssz.ContainerType({
+  fields: {
+    slot: Slot,
+    signingRoot: Root
+  }
+});
+exports.SlashingProtectionBlock = SlashingProtectionBlock;
+const SlashingProtectionAttestation = new _ssz.ContainerType({
+  fields: {
+    sourceEpoch: Epoch,
+    targetEpoch: Epoch,
+    signingRoot: Root
+  }
+});
+exports.SlashingProtectionAttestation = SlashingProtectionAttestation;
+const SlashingProtectionAttestationLowerBound = new _ssz.ContainerType({
+  fields: {
+    minSourceEpoch: Epoch,
+    minTargetEpoch: Epoch
+  }
+}); // MUST set typesRef here, otherwise expandedType() calls will throw
+
+exports.SlashingProtectionAttestationLowerBound = SlashingProtectionAttestationLowerBound;
+typesRef.set({
+  BeaconBlock,
+  BeaconState
+});
+//# sourceMappingURL=sszTypes.js.map
 
 /***/ }),
 /* 243 */
@@ -26919,72 +27444,126 @@ exports.BeaconBlocksByRootRequest = BeaconBlocksByRootRequest;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ValidatorResponse = exports.SyncingStatus = exports.ProposerDuty = exports.AttesterDuty = exports.ForkResponse = exports.SubscribeToCommitteeSubnetPayload = void 0;
+exports.NEXT_SYNC_COMMITTEE_INDEX_FLOORLOG2 = exports.NEXT_SYNC_COMMITTEE_INDEX = exports.FINALIZED_ROOT_INDEX_FLOORLOG2 = exports.FINALIZED_ROOT_INDEX = exports.MIN_SYNC_COMMITTEE_PARTICIPANTS = exports.MAX_REQUEST_BLOCKS = exports.SYNC_COMMITTEE_SUBNET_COUNT = exports.TARGET_AGGREGATORS_PER_SYNC_SUBCOMMITTEE = exports.ATTESTATION_SUBNET_COUNT = exports.EPOCHS_PER_RANDOM_SUBNET_SUBSCRIPTION = exports.RANDOM_SUBNETS_PER_VALIDATOR = exports.TARGET_AGGREGATORS_PER_COMMITTEE = exports.PARTICIPATION_FLAG_WEIGHTS = exports.WEIGHT_DENOMINATOR = exports.PROPOSER_WEIGHT = exports.SYNC_REWARD_WEIGHT = exports.TIMELY_HEAD_WEIGHT = exports.TIMELY_TARGET_WEIGHT = exports.TIMELY_SOURCE_WEIGHT = exports.TIMELY_HEAD_FLAG_INDEX = exports.TIMELY_TARGET_FLAG_INDEX = exports.TIMELY_SOURCE_FLAG_INDEX = exports.DOMAIN_CONTRIBUTION_AND_PROOF = exports.DOMAIN_SYNC_COMMITTEE_SELECTION_PROOF = exports.DOMAIN_SYNC_COMMITTEE = exports.DOMAIN_AGGREGATE_AND_PROOF = exports.DOMAIN_SELECTION_PROOF = exports.DOMAIN_VOLUNTARY_EXIT = exports.DOMAIN_DEPOSIT = exports.DOMAIN_RANDAO = exports.DOMAIN_BEACON_ATTESTER = exports.DOMAIN_BEACON_PROPOSER = exports.ETH1_ADDRESS_WITHDRAWAL_PREFIX = exports.BLS_WITHDRAWAL_PREFIX = exports.JUSTIFICATION_BITS_LENGTH = exports.DEPOSIT_CONTRACT_TREE_DEPTH = exports.BASE_REWARDS_PER_EPOCH = exports.FAR_FUTURE_EPOCH = exports.GENESIS_EPOCH = exports.GENESIS_SLOT = void 0;
+// Misc
+const GENESIS_SLOT = 0;
+exports.GENESIS_SLOT = GENESIS_SLOT;
+const GENESIS_EPOCH = 0;
+exports.GENESIS_EPOCH = GENESIS_EPOCH;
+const FAR_FUTURE_EPOCH = Infinity;
+exports.FAR_FUTURE_EPOCH = FAR_FUTURE_EPOCH;
+const BASE_REWARDS_PER_EPOCH = 4;
+exports.BASE_REWARDS_PER_EPOCH = BASE_REWARDS_PER_EPOCH;
+const DEPOSIT_CONTRACT_TREE_DEPTH = 2 ** 5; // 32
 
-var _ssz = __webpack_require__(4);
+exports.DEPOSIT_CONTRACT_TREE_DEPTH = DEPOSIT_CONTRACT_TREE_DEPTH;
+const JUSTIFICATION_BITS_LENGTH = 4; // Withdrawal prefixes
 
-const SubscribeToCommitteeSubnetPayload = ssz => new _ssz.ContainerType({
-  fields: {
-    slot: ssz.Slot,
-    slotSignature: ssz.BLSSignature,
-    committeeIndex: ssz.CommitteeIndex,
-    aggregatorPubkey: ssz.BLSPubkey
-  }
-});
+exports.JUSTIFICATION_BITS_LENGTH = JUSTIFICATION_BITS_LENGTH;
+const BLS_WITHDRAWAL_PREFIX = Uint8Array.from([0]);
+exports.BLS_WITHDRAWAL_PREFIX = BLS_WITHDRAWAL_PREFIX;
+const ETH1_ADDRESS_WITHDRAWAL_PREFIX = Uint8Array.from([0]); // Domain types
 
-exports.SubscribeToCommitteeSubnetPayload = SubscribeToCommitteeSubnetPayload;
+exports.ETH1_ADDRESS_WITHDRAWAL_PREFIX = ETH1_ADDRESS_WITHDRAWAL_PREFIX;
+const DOMAIN_BEACON_PROPOSER = Uint8Array.from([0, 0, 0, 0]);
+exports.DOMAIN_BEACON_PROPOSER = DOMAIN_BEACON_PROPOSER;
+const DOMAIN_BEACON_ATTESTER = Uint8Array.from([1, 0, 0, 0]);
+exports.DOMAIN_BEACON_ATTESTER = DOMAIN_BEACON_ATTESTER;
+const DOMAIN_RANDAO = Uint8Array.from([2, 0, 0, 0]);
+exports.DOMAIN_RANDAO = DOMAIN_RANDAO;
+const DOMAIN_DEPOSIT = Uint8Array.from([3, 0, 0, 0]);
+exports.DOMAIN_DEPOSIT = DOMAIN_DEPOSIT;
+const DOMAIN_VOLUNTARY_EXIT = Uint8Array.from([4, 0, 0, 0]);
+exports.DOMAIN_VOLUNTARY_EXIT = DOMAIN_VOLUNTARY_EXIT;
+const DOMAIN_SELECTION_PROOF = Uint8Array.from([5, 0, 0, 0]);
+exports.DOMAIN_SELECTION_PROOF = DOMAIN_SELECTION_PROOF;
+const DOMAIN_AGGREGATE_AND_PROOF = Uint8Array.from([6, 0, 0, 0]);
+exports.DOMAIN_AGGREGATE_AND_PROOF = DOMAIN_AGGREGATE_AND_PROOF;
+const DOMAIN_SYNC_COMMITTEE = Uint8Array.from([7, 0, 0, 0]);
+exports.DOMAIN_SYNC_COMMITTEE = DOMAIN_SYNC_COMMITTEE;
+const DOMAIN_SYNC_COMMITTEE_SELECTION_PROOF = Uint8Array.from([8, 0, 0, 0]);
+exports.DOMAIN_SYNC_COMMITTEE_SELECTION_PROOF = DOMAIN_SYNC_COMMITTEE_SELECTION_PROOF;
+const DOMAIN_CONTRIBUTION_AND_PROOF = Uint8Array.from([9, 0, 0, 0]); // Participation flag indices
 
-const ForkResponse = ssz => new _ssz.ContainerType({
-  fields: {
-    fork: ssz.Fork,
-    chainId: ssz.Uint64,
-    genesisValidatorsRoot: ssz.Root
-  }
-});
+exports.DOMAIN_CONTRIBUTION_AND_PROOF = DOMAIN_CONTRIBUTION_AND_PROOF;
+const TIMELY_SOURCE_FLAG_INDEX = 0;
+exports.TIMELY_SOURCE_FLAG_INDEX = TIMELY_SOURCE_FLAG_INDEX;
+const TIMELY_TARGET_FLAG_INDEX = 1;
+exports.TIMELY_TARGET_FLAG_INDEX = TIMELY_TARGET_FLAG_INDEX;
+const TIMELY_HEAD_FLAG_INDEX = 2; // Incentivization weights
 
-exports.ForkResponse = ForkResponse;
+exports.TIMELY_HEAD_FLAG_INDEX = TIMELY_HEAD_FLAG_INDEX;
+const TIMELY_SOURCE_WEIGHT = BigInt(14);
+exports.TIMELY_SOURCE_WEIGHT = TIMELY_SOURCE_WEIGHT;
+const TIMELY_TARGET_WEIGHT = BigInt(26);
+exports.TIMELY_TARGET_WEIGHT = TIMELY_TARGET_WEIGHT;
+const TIMELY_HEAD_WEIGHT = BigInt(14);
+exports.TIMELY_HEAD_WEIGHT = TIMELY_HEAD_WEIGHT;
+const SYNC_REWARD_WEIGHT = BigInt(2);
+exports.SYNC_REWARD_WEIGHT = SYNC_REWARD_WEIGHT;
+const PROPOSER_WEIGHT = BigInt(8);
+exports.PROPOSER_WEIGHT = PROPOSER_WEIGHT;
+const WEIGHT_DENOMINATOR = BigInt(64); // altair misc
 
-const AttesterDuty = ssz => new _ssz.ContainerType({
-  fields: {
-    validatorPubkey: ssz.BLSPubkey,
-    aggregatorModulo: ssz.Number64,
-    committeeIndex: ssz.CommitteeIndex,
-    attestationSlot: ssz.Slot
-  }
-});
+exports.WEIGHT_DENOMINATOR = WEIGHT_DENOMINATOR;
+const PARTICIPATION_FLAG_WEIGHTS = [TIMELY_SOURCE_WEIGHT, TIMELY_TARGET_WEIGHT, TIMELY_HEAD_WEIGHT]; // phase0 validator
 
-exports.AttesterDuty = AttesterDuty;
+exports.PARTICIPATION_FLAG_WEIGHTS = PARTICIPATION_FLAG_WEIGHTS;
+const TARGET_AGGREGATORS_PER_COMMITTEE = 16;
+exports.TARGET_AGGREGATORS_PER_COMMITTEE = TARGET_AGGREGATORS_PER_COMMITTEE;
+const RANDOM_SUBNETS_PER_VALIDATOR = 1;
+exports.RANDOM_SUBNETS_PER_VALIDATOR = RANDOM_SUBNETS_PER_VALIDATOR;
+const EPOCHS_PER_RANDOM_SUBNET_SUBSCRIPTION = 256;
+/** Rationale: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#why-are-there-attestation_subnet_count-attestation-subnets */
 
-const ProposerDuty = ssz => new _ssz.ContainerType({
-  fields: {
-    slot: ssz.Slot,
-    proposerPubkey: ssz.BLSPubkey
-  }
-});
+exports.EPOCHS_PER_RANDOM_SUBNET_SUBSCRIPTION = EPOCHS_PER_RANDOM_SUBNET_SUBSCRIPTION;
+const ATTESTATION_SUBNET_COUNT = 64; // altair validator
 
-exports.ProposerDuty = ProposerDuty;
+exports.ATTESTATION_SUBNET_COUNT = ATTESTATION_SUBNET_COUNT;
+const TARGET_AGGREGATORS_PER_SYNC_SUBCOMMITTEE = 4;
+exports.TARGET_AGGREGATORS_PER_SYNC_SUBCOMMITTEE = TARGET_AGGREGATORS_PER_SYNC_SUBCOMMITTEE;
+const SYNC_COMMITTEE_SUBNET_COUNT = 4;
+exports.SYNC_COMMITTEE_SUBNET_COUNT = SYNC_COMMITTEE_SUBNET_COUNT;
+const MAX_REQUEST_BLOCKS = 2 ** 10; // 1024
+//
 
-const SyncingStatus = ssz => new _ssz.ContainerType({
-  fields: {
-    startingBlock: ssz.Uint64,
-    currentBlock: ssz.Uint64,
-    highestBlock: ssz.Uint64
-  }
-});
+exports.MAX_REQUEST_BLOCKS = MAX_REQUEST_BLOCKS;
+const MIN_SYNC_COMMITTEE_PARTICIPANTS = 1; // Lightclient pre-computed
 
-exports.SyncingStatus = SyncingStatus;
+/**
+ * ```ts
+ * config.types.altair.BeaconState.getPathGindex(["finalizedCheckpoint", "root"])
+ * ```
+ */
 
-const ValidatorResponse = ssz => new _ssz.ContainerType({
-  fields: {
-    index: ssz.ValidatorIndex,
-    pubkey: ssz.BLSPubkey,
-    balance: ssz.Gwei,
-    validator: ssz.Validator
-  }
-});
+exports.MIN_SYNC_COMMITTEE_PARTICIPANTS = MIN_SYNC_COMMITTEE_PARTICIPANTS;
+const FINALIZED_ROOT_INDEX = 105;
+/**
+ * ```ts
+ * Math.floor(Math.log2(FINALIZED_ROOT_INDEX))
+ * ```
+ */
 
-exports.ValidatorResponse = ValidatorResponse;
-//# sourceMappingURL=api.js.map
+exports.FINALIZED_ROOT_INDEX = FINALIZED_ROOT_INDEX;
+const FINALIZED_ROOT_INDEX_FLOORLOG2 = 6;
+/**
+ * ```ts
+ * config.types.altair.BeaconState.getPathGindex(["nextSyncCommittee"])
+ * ```
+ */
+
+exports.FINALIZED_ROOT_INDEX_FLOORLOG2 = FINALIZED_ROOT_INDEX_FLOORLOG2;
+const NEXT_SYNC_COMMITTEE_INDEX = 55;
+/**
+ * ```ts
+ * Math.floor(Math.log2(NEXT_SYNC_COMMITTEE_INDEX))
+ * ```
+ */
+
+exports.NEXT_SYNC_COMMITTEE_INDEX = NEXT_SYNC_COMMITTEE_INDEX;
+const NEXT_SYNC_COMMITTEE_INDEX_FLOORLOG2 = 5;
+exports.NEXT_SYNC_COMMITTEE_INDEX_FLOORLOG2 = NEXT_SYNC_COMMITTEE_INDEX_FLOORLOG2;
+//# sourceMappingURL=constants.js.map
 
 /***/ }),
 /* 244 */
@@ -26996,41 +27575,26 @@ exports.ValidatorResponse = ValidatorResponse;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.typeNames = void 0;
-const typeNames = [// primitive
+exports.PresetName = void 0;
+let PresetName;
+exports.PresetName = PresetName;
 
-/*
-"Boolean",
-"Bytes4",
-"Bytes8",
-"Bytes32",
-"Bytes48",
-"Bytes96",
-"Uint16",
-"Number64",
-"Uint64",
-"Uint256",
-"Slot",
-"Epoch",
-"CommitteeIndex",
-"ValidatorIndex",
-"Gwei",
-"BLSPubkey",
-"BLSSignature",
- */
-// misc
-"Fork", "ForkData", "ENRForkID", "Checkpoint", "Validator", "AttestationData", "CommitteeIndices", "IndexedAttestation", "CommitteeBits", "PendingAttestation", "Eth1Data", "HistoricalBlockRoots", "HistoricalStateRoots", "HistoricalBatch", "DepositMessage", "DepositData", "DepositEvent", "BeaconBlockHeader", "SignedBeaconBlockHeader", "SigningRoot", "DepositDataRootList", "AttestationSubnets", // operations
-"ProposerSlashing", "AttesterSlashing", "Attestation", "Deposit", "VoluntaryExit", "SignedVoluntaryExit", // block
-"BeaconBlockBody", "BeaconBlock", "SignedBeaconBlock", // state
-"EpochAttestations", "BeaconState", //validator
-"AggregateAndProof", "SignedAggregateAndProof", "CommitteeAssignment", // wire
-"Status", "Goodbye", "Ping", "Metadata", "BeaconBlocksByRangeRequest", "BeaconBlocksByRootRequest", //api
-"SubscribeToCommitteeSubnetPayload", "ForkResponse", "SyncingStatus", "AttesterDuty", "ProposerDuty", "ValidatorResponse"];
-exports.typeNames = typeNames;
-//# sourceMappingURL=interface.js.map
+(function (PresetName) {
+  PresetName["mainnet"] = "mainnet";
+  PresetName["minimal"] = "minimal";
+})(PresetName || (exports.PresetName = PresetName = {}));
+//# sourceMappingURL=presetName.js.map
 
 /***/ }),
 /* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=interface.js.map
+
+/***/ }),
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27039,24 +27603,1389 @@ exports.typeNames = typeNames;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.params = void 0;
+exports.BeaconPreset = void 0;
 
-var _jsYaml = __webpack_require__(35);
+var _ssz = __webpack_require__(7);
 
-var _utils = __webpack_require__(127);
+var _phase = __webpack_require__(134);
 
-/* babel-plugin-inline-import './minimal.yaml' */
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-const minimalYaml = "# Minimal preset\n\n\n# Misc\n# ---------------------------------------------------------------\n\n# [customized] Just 4 committees for slot for testing purposes\nMAX_COMMITTEES_PER_SLOT: 4\n# [customized] unsecure, but fast\nTARGET_COMMITTEE_SIZE: 4\n# 2**11 (= 2,048)\nMAX_VALIDATORS_PER_COMMITTEE: 2048\n# 2**2 (= 4)\nMIN_PER_EPOCH_CHURN_LIMIT: 4\n# 2**16 (= 65,536)\nCHURN_LIMIT_QUOTIENT: 65536\n# [customized] Faster, but unsecure.\nSHUFFLE_ROUND_COUNT: 10\n# [customized]\nMIN_GENESIS_ACTIVE_VALIDATOR_COUNT: 64\n# Jan 3, 2020\nMIN_GENESIS_TIME: 1578009600\n# 4\nHYSTERESIS_QUOTIENT: 4\n# 1 (minus 0.25)\nHYSTERESIS_DOWNWARD_MULTIPLIER: 1\n# 5 (plus 1.25)\nHYSTERESIS_UPWARD_MULTIPLIER: 5\n\n\n\n# Fork Choice\n# ---------------------------------------------------------------\n# 2**1 (= 1)\nSAFE_SLOTS_TO_UPDATE_JUSTIFIED: 2\n\n\n# Validator\n# ---------------------------------------------------------------\n# [customized] process deposits more quickly, but insecure\nETH1_FOLLOW_DISTANCE: 16\n# 2**4 (= 16)\nTARGET_AGGREGATORS_PER_COMMITTEE: 16\n# 2**0 (= 1)\nRANDOM_SUBNETS_PER_VALIDATOR: 1\n# 2**8 (= 256)\nEPOCHS_PER_RANDOM_SUBNET_SUBSCRIPTION: 256\n# 14 (estimate from Eth1 mainnet)\nSECONDS_PER_ETH1_BLOCK: 14\n\n\n# Deposit contract\n# ---------------------------------------------------------------\n# **TBD**\nDEPOSIT_CONTRACT_ADDRESS: 0x1234567890123456789012345678901234567890\n\n\n# Gwei values\n# ---------------------------------------------------------------\n# 2**0 * 10**9 (= 1,000,000,000) Gwei\nMIN_DEPOSIT_AMOUNT: 1000000000\n# 2**5 * 10**9 (= 32,000,000,000) Gwei\nMAX_EFFECTIVE_BALANCE: 32000000000\n# 2**4 * 10**9 (= 16,000,000,000) Gwei\nEJECTION_BALANCE: 16000000000\n# 2**0 * 10**9 (= 1,000,000,000) Gwei\nEFFECTIVE_BALANCE_INCREMENT: 1000000000\n\n\n# Initial values\n# ---------------------------------------------------------------\n# Highest byte set to 0x01 to avoid collisions with mainnet versioning\nGENESIS_FORK_VERSION: 0x00000001\nBLS_WITHDRAWAL_PREFIX: 0x00\n\n\n# Time parameters\n# ---------------------------------------------------------------\n# [customized] Faster to spin up testnets, but does not give validator reasonable warning time for genesis\nMIN_GENESIS_DELAY: 300\n# [customized] Faster for testing purposes\nSECONDS_PER_SLOT: 6\n# 2**0 (= 1) slots 6 seconds\nMIN_ATTESTATION_INCLUSION_DELAY: 1\n# [customized] fast epochs\nSLOTS_PER_EPOCH: 8\n# 2**0 (= 1) epochs\nMIN_SEED_LOOKAHEAD: 1\n# 2**2 (= 4) epochs\nMAX_SEED_LOOKAHEAD: 4\n# [customized] higher frequency new deposits from eth1 for testing\nEPOCHS_PER_ETH1_VOTING_PERIOD: 2\n# [customized] smaller state\nSLOTS_PER_HISTORICAL_ROOT: 64\n# 2**8 (= 256) epochs\nMIN_VALIDATOR_WITHDRAWABILITY_DELAY: 256\n# [customized] higher frequency of committee turnover and faster time to acceptable voluntary exit\nPERSISTENT_COMMITTEE_PERIOD: 128\n# [customized] fast catchup crosslinks\nMAX_EPOCHS_PER_CROSSLINK: 4\n# 2**2 (= 4) epochs\nMIN_EPOCHS_TO_INACTIVITY_PENALTY: 4\n\n\n# State vector lengths\n# ---------------------------------------------------------------\n# [customized] smaller state\nEPOCHS_PER_HISTORICAL_VECTOR: 64\n# [customized] smaller state\nEPOCHS_PER_SLASHINGS_VECTOR: 64\n# 2**24 (= 16,777,216) historical roots\nHISTORICAL_ROOTS_LIMIT: 16777216\n# 2**40 (= 1,099,511,627,776) validator spots\nVALIDATOR_REGISTRY_LIMIT: 1099511627776\n\n\n# Reward and penalty quotients\n# ---------------------------------------------------------------\n# 2**6 (= 64)\nBASE_REWARD_FACTOR: 64\n# 2**9 (= 512)\nWHISTLEBLOWER_REWARD_QUOTIENT: 512\n# 2**3 (= 8)\nPROPOSER_REWARD_QUOTIENT: 8\n# 2**25 (= 33,554,432)\nINACTIVITY_PENALTY_QUOTIENT: 33554432\n# 2**5 (= 32)\nMIN_SLASHING_PENALTY_QUOTIENT: 32\n\n\n# Max operations per block\n# ---------------------------------------------------------------\n# 2**4 (= 16)\nMAX_PROPOSER_SLASHINGS: 16\n# 2**0 (= 1)\nMAX_ATTESTER_SLASHINGS: 1\n# 2**7 (= 128)\nMAX_ATTESTATIONS: 128\n# 2**4 (= 16)\nMAX_DEPOSITS: 16\n# 2**4 (= 16)\nMAX_VOLUNTARY_EXITS: 16\n\n\n# Signature domains\n# ---------------------------------------------------------------\nDOMAIN_BEACON_PROPOSER: 0x00000000\nDOMAIN_BEACON_ATTESTER: 0x01000000\nDOMAIN_RANDAO: 0x02000000\nDOMAIN_DEPOSIT: 0x03000000\nDOMAIN_VOLUNTARY_EXIT: 0x04000000\nDOMAIN_SELECTION_PROOF: 0x05000000\nDOMAIN_AGGREGATE_AND_PROOF: 0x06000000\n# Phase 1\nDOMAIN_SHARD_PROPOSAL: 0x80000000\nDOMAIN_SHARD_COMMITTEE: 0x81000000\nDOMAIN_LIGHT_CLIENT: 0x82000000\nDOMAIN_CUSTODY_BIT_SLASHING: 0x83000000\n\n\n# Phase 1: Upgrade from Phase 0\n# ---------------------------------------------------------------\n# [customized] for testnet distinction\nPHASE_1_FORK_VERSION: 0x01000001\n# [customized] reduced for testing\nINITIAL_ACTIVE_SHARDS: 4\n# Placeholder\nINITIAL_GASPRICE: 10\n\n\n# Phase 1: General\n# ---------------------------------------------------------------\n# [customized] reduced for testing\nMAX_SHARDS: 8\n# 2**3 (= 8) | online epochs\nONLINE_PERIOD: 8\n# 2**7 (= 128)\nLIGHT_CLIENT_COMMITTEE_SIZE: 128\n# 2**8 (= 256) | epochs\nLIGHT_CLIENT_COMMITTEE_PERIOD: 256\n# 2**8 (= 256) | epochs\nSHARD_COMMITTEE_PERIOD: 256\n# 2**18 (= 262,144)\nSHARD_BLOCK_CHUNK_SIZE: 262144\n# 2**2 (= 4)\nMAX_SHARD_BLOCK_CHUNKS: 4\n# 3 * 2**16` (= 196,608)\nTARGET_SHARD_BLOCK_SIZE: 196608\n# Note: MAX_SHARD_BLOCKS_PER_ATTESTATION is derived from the list length.\nSHARD_BLOCK_OFFSETS: [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233]\n# len(SHARD_BLOCK_OFFSETS)\nMAX_SHARD_BLOCKS_PER_ATTESTATION: 12\n# 2**14 (= 16,384) Gwei\nMAX_GASPRICE: 16384\n# 2**5 (= 32) Gwei\nMIN_GASPRICE: 32\n#  2**3 (= 8)\nGASPRICE_ADJUSTMENT_COEFFICIENT: 8\n\n\n# Phase 1: Custody Game\n# ---------------------------------------------------------------\n\n# Time parameters\n# 2**1 (= 2) epochs\nRANDAO_PENALTY_EPOCHS: 2\n# [customized] quicker for testing\nEARLY_DERIVED_SECRET_PENALTY_MAX_FUTURE_EPOCHS: 4096\n# 2**11 (= 2,048) epochs\nEPOCHS_PER_CUSTODY_PERIOD: 2048\n# 2**11 (= 2,048) epochs\nCUSTODY_PERIOD_TO_RANDAO_PADDING: 2048\n# 2**7 (= 128) epochs\nMAX_REVEAL_LATENESS_DECREMENT: 128\n\n# Max operations\n# 2**8 (= 256)\nMAX_CUSTODY_KEY_REVEALS: 256\nMAX_EARLY_DERIVED_SECRET_REVEALS: 1\nMAX_CUSTODY_SLASHINGS: 1\n\n# Reward and penalty quotients\nEARLY_DERIVED_SECRET_REVEAL_SLOT_REWARD_MULTIPLE: 2\n# 2**8 (= 256)\nMINOR_REWARD_QUOTIENT: 256\n";
-const params = (0, _utils.createIBeaconParams)((0, _jsYaml.load)(minimalYaml, {
-  schema: _utils.schema
-}));
-exports.params = params;
-//# sourceMappingURL=minimal.js.map
+var _altair = __webpack_require__(135);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+const BeaconPreset = new _ssz.ContainerType({
+  fields: _objectSpread(_objectSpread({}, _phase.Phase0Preset.fields), _altair.AltairPreset.fields)
+});
+exports.BeaconPreset = BeaconPreset;
+//# sourceMappingURL=ssz.js.map
 
 /***/ }),
-/* 246 */
+/* 247 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=interface.js.map
+
+/***/ }),
+/* 248 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Phase0Preset = void 0;
+
+var _ssz = __webpack_require__(7);
+
+/* eslint-disable @typescript-eslint/naming-convention */
+const Number64 = new _ssz.NumberUintType({
+  byteLength: 8
+});
+const BigInt64 = new _ssz.BigIntUintType({
+  byteLength: 8
+});
+const Phase0Preset = new _ssz.ContainerType({
+  fields: {
+    // Misc
+    MAX_COMMITTEES_PER_SLOT: Number64,
+    TARGET_COMMITTEE_SIZE: Number64,
+    MAX_VALIDATORS_PER_COMMITTEE: Number64,
+    SHUFFLE_ROUND_COUNT: Number64,
+    HYSTERESIS_QUOTIENT: Number64,
+    HYSTERESIS_DOWNWARD_MULTIPLIER: Number64,
+    HYSTERESIS_UPWARD_MULTIPLIER: Number64,
+    // Fork choice
+    SAFE_SLOTS_TO_UPDATE_JUSTIFIED: Number64,
+    // Gwei Values
+    MIN_DEPOSIT_AMOUNT: BigInt64,
+    MAX_EFFECTIVE_BALANCE: BigInt64,
+    EFFECTIVE_BALANCE_INCREMENT: BigInt64,
+    // Time parameters
+    MIN_ATTESTATION_INCLUSION_DELAY: Number64,
+    SLOTS_PER_EPOCH: Number64,
+    MIN_SEED_LOOKAHEAD: Number64,
+    MAX_SEED_LOOKAHEAD: Number64,
+    EPOCHS_PER_ETH1_VOTING_PERIOD: Number64,
+    SLOTS_PER_HISTORICAL_ROOT: Number64,
+    MIN_EPOCHS_TO_INACTIVITY_PENALTY: Number64,
+    // State vector lengths
+    EPOCHS_PER_HISTORICAL_VECTOR: Number64,
+    EPOCHS_PER_SLASHINGS_VECTOR: Number64,
+    HISTORICAL_ROOTS_LIMIT: Number64,
+    VALIDATOR_REGISTRY_LIMIT: Number64,
+    // Reward and penalty quotients
+    BASE_REWARD_FACTOR: BigInt64,
+    WHISTLEBLOWER_REWARD_QUOTIENT: BigInt64,
+    PROPOSER_REWARD_QUOTIENT: BigInt64,
+    INACTIVITY_PENALTY_QUOTIENT: BigInt64,
+    MIN_SLASHING_PENALTY_QUOTIENT: BigInt64,
+    PROPORTIONAL_SLASHING_MULTIPLIER: BigInt64,
+    // Max operations per block
+    MAX_PROPOSER_SLASHINGS: Number64,
+    MAX_ATTESTER_SLASHINGS: Number64,
+    MAX_ATTESTATIONS: Number64,
+    MAX_DEPOSITS: Number64,
+    MAX_VOLUNTARY_EXITS: Number64
+  }
+});
+exports.Phase0Preset = Phase0Preset;
+//# sourceMappingURL=ssz.js.map
+
+/***/ }),
+/* 249 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=interface.js.map
+
+/***/ }),
+/* 250 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AltairPreset = void 0;
+
+var _ssz = __webpack_require__(7);
+
+/* eslint-disable @typescript-eslint/naming-convention */
+const Number64 = new _ssz.NumberUintType({
+  byteLength: 8
+});
+const BigInt64 = new _ssz.BigIntUintType({
+  byteLength: 8
+});
+const AltairPreset = new _ssz.ContainerType({
+  fields: {
+    SYNC_COMMITTEE_SIZE: Number64,
+    EPOCHS_PER_SYNC_COMMITTEE_PERIOD: Number64,
+    INACTIVITY_PENALTY_QUOTIENT_ALTAIR: BigInt64,
+    MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR: BigInt64,
+    PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR: BigInt64
+  }
+});
+exports.AltairPreset = AltairPreset;
+//# sourceMappingURL=ssz.js.map
+
+/***/ }),
+/* 251 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR = exports.MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR = exports.INACTIVITY_PENALTY_QUOTIENT_ALTAIR = exports.EPOCHS_PER_SYNC_COMMITTEE_PERIOD = exports.SYNC_COMMITTEE_SIZE = exports.MAX_VOLUNTARY_EXITS = exports.MAX_DEPOSITS = exports.MAX_ATTESTATIONS = exports.MAX_ATTESTER_SLASHINGS = exports.MAX_PROPOSER_SLASHINGS = exports.PROPORTIONAL_SLASHING_MULTIPLIER = exports.MIN_SLASHING_PENALTY_QUOTIENT = exports.INACTIVITY_PENALTY_QUOTIENT = exports.PROPOSER_REWARD_QUOTIENT = exports.WHISTLEBLOWER_REWARD_QUOTIENT = exports.BASE_REWARD_FACTOR = exports.VALIDATOR_REGISTRY_LIMIT = exports.HISTORICAL_ROOTS_LIMIT = exports.EPOCHS_PER_SLASHINGS_VECTOR = exports.EPOCHS_PER_HISTORICAL_VECTOR = exports.MIN_EPOCHS_TO_INACTIVITY_PENALTY = exports.SLOTS_PER_HISTORICAL_ROOT = exports.EPOCHS_PER_ETH1_VOTING_PERIOD = exports.MAX_SEED_LOOKAHEAD = exports.MIN_SEED_LOOKAHEAD = exports.SLOTS_PER_EPOCH = exports.MIN_ATTESTATION_INCLUSION_DELAY = exports.EFFECTIVE_BALANCE_INCREMENT = exports.MAX_EFFECTIVE_BALANCE = exports.MIN_DEPOSIT_AMOUNT = exports.SAFE_SLOTS_TO_UPDATE_JUSTIFIED = exports.HYSTERESIS_UPWARD_MULTIPLIER = exports.HYSTERESIS_DOWNWARD_MULTIPLIER = exports.HYSTERESIS_QUOTIENT = exports.SHUFFLE_ROUND_COUNT = exports.MAX_VALIDATORS_PER_COMMITTEE = exports.TARGET_COMMITTEE_SIZE = exports.MAX_COMMITTEES_PER_SLOT = exports.ACTIVE_PRESET = void 0;
+
+var _preset = __webpack_require__(133);
+
+var _mainnet = __webpack_require__(253);
+
+var _minimal = __webpack_require__(256);
+
+// load in an "active" preset
+let ACTIVE_PRESET;
+exports.ACTIVE_PRESET = ACTIVE_PRESET;
+let preset;
+
+switch (process.env.LODESTAR_PRESET) {
+  case _preset.PresetName.minimal:
+    exports.ACTIVE_PRESET = ACTIVE_PRESET = _preset.PresetName.minimal;
+    preset = _minimal.preset;
+    break;
+
+  case _preset.PresetName.mainnet:
+  default:
+    exports.ACTIVE_PRESET = ACTIVE_PRESET = _preset.PresetName.mainnet;
+    preset = _mainnet.preset;
+    break;
+}
+
+const {
+  MAX_COMMITTEES_PER_SLOT,
+  TARGET_COMMITTEE_SIZE,
+  MAX_VALIDATORS_PER_COMMITTEE,
+  SHUFFLE_ROUND_COUNT,
+  HYSTERESIS_QUOTIENT,
+  HYSTERESIS_DOWNWARD_MULTIPLIER,
+  HYSTERESIS_UPWARD_MULTIPLIER,
+  SAFE_SLOTS_TO_UPDATE_JUSTIFIED,
+  MIN_DEPOSIT_AMOUNT,
+  MAX_EFFECTIVE_BALANCE,
+  EFFECTIVE_BALANCE_INCREMENT,
+  MIN_ATTESTATION_INCLUSION_DELAY,
+  SLOTS_PER_EPOCH,
+  MIN_SEED_LOOKAHEAD,
+  MAX_SEED_LOOKAHEAD,
+  EPOCHS_PER_ETH1_VOTING_PERIOD,
+  SLOTS_PER_HISTORICAL_ROOT,
+  MIN_EPOCHS_TO_INACTIVITY_PENALTY,
+  EPOCHS_PER_HISTORICAL_VECTOR,
+  EPOCHS_PER_SLASHINGS_VECTOR,
+  HISTORICAL_ROOTS_LIMIT,
+  VALIDATOR_REGISTRY_LIMIT,
+  BASE_REWARD_FACTOR,
+  WHISTLEBLOWER_REWARD_QUOTIENT,
+  PROPOSER_REWARD_QUOTIENT,
+  INACTIVITY_PENALTY_QUOTIENT,
+  MIN_SLASHING_PENALTY_QUOTIENT,
+  PROPORTIONAL_SLASHING_MULTIPLIER,
+  MAX_PROPOSER_SLASHINGS,
+  MAX_ATTESTER_SLASHINGS,
+  MAX_ATTESTATIONS,
+  MAX_DEPOSITS,
+  MAX_VOLUNTARY_EXITS,
+  SYNC_COMMITTEE_SIZE,
+  EPOCHS_PER_SYNC_COMMITTEE_PERIOD,
+  INACTIVITY_PENALTY_QUOTIENT_ALTAIR,
+  MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR,
+  PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR
+} = preset;
+exports.PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR = PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR;
+exports.MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR = MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR;
+exports.INACTIVITY_PENALTY_QUOTIENT_ALTAIR = INACTIVITY_PENALTY_QUOTIENT_ALTAIR;
+exports.EPOCHS_PER_SYNC_COMMITTEE_PERIOD = EPOCHS_PER_SYNC_COMMITTEE_PERIOD;
+exports.SYNC_COMMITTEE_SIZE = SYNC_COMMITTEE_SIZE;
+exports.MAX_VOLUNTARY_EXITS = MAX_VOLUNTARY_EXITS;
+exports.MAX_DEPOSITS = MAX_DEPOSITS;
+exports.MAX_ATTESTATIONS = MAX_ATTESTATIONS;
+exports.MAX_ATTESTER_SLASHINGS = MAX_ATTESTER_SLASHINGS;
+exports.MAX_PROPOSER_SLASHINGS = MAX_PROPOSER_SLASHINGS;
+exports.PROPORTIONAL_SLASHING_MULTIPLIER = PROPORTIONAL_SLASHING_MULTIPLIER;
+exports.MIN_SLASHING_PENALTY_QUOTIENT = MIN_SLASHING_PENALTY_QUOTIENT;
+exports.INACTIVITY_PENALTY_QUOTIENT = INACTIVITY_PENALTY_QUOTIENT;
+exports.PROPOSER_REWARD_QUOTIENT = PROPOSER_REWARD_QUOTIENT;
+exports.WHISTLEBLOWER_REWARD_QUOTIENT = WHISTLEBLOWER_REWARD_QUOTIENT;
+exports.BASE_REWARD_FACTOR = BASE_REWARD_FACTOR;
+exports.VALIDATOR_REGISTRY_LIMIT = VALIDATOR_REGISTRY_LIMIT;
+exports.HISTORICAL_ROOTS_LIMIT = HISTORICAL_ROOTS_LIMIT;
+exports.EPOCHS_PER_SLASHINGS_VECTOR = EPOCHS_PER_SLASHINGS_VECTOR;
+exports.EPOCHS_PER_HISTORICAL_VECTOR = EPOCHS_PER_HISTORICAL_VECTOR;
+exports.MIN_EPOCHS_TO_INACTIVITY_PENALTY = MIN_EPOCHS_TO_INACTIVITY_PENALTY;
+exports.SLOTS_PER_HISTORICAL_ROOT = SLOTS_PER_HISTORICAL_ROOT;
+exports.EPOCHS_PER_ETH1_VOTING_PERIOD = EPOCHS_PER_ETH1_VOTING_PERIOD;
+exports.MAX_SEED_LOOKAHEAD = MAX_SEED_LOOKAHEAD;
+exports.MIN_SEED_LOOKAHEAD = MIN_SEED_LOOKAHEAD;
+exports.SLOTS_PER_EPOCH = SLOTS_PER_EPOCH;
+exports.MIN_ATTESTATION_INCLUSION_DELAY = MIN_ATTESTATION_INCLUSION_DELAY;
+exports.EFFECTIVE_BALANCE_INCREMENT = EFFECTIVE_BALANCE_INCREMENT;
+exports.MAX_EFFECTIVE_BALANCE = MAX_EFFECTIVE_BALANCE;
+exports.MIN_DEPOSIT_AMOUNT = MIN_DEPOSIT_AMOUNT;
+exports.SAFE_SLOTS_TO_UPDATE_JUSTIFIED = SAFE_SLOTS_TO_UPDATE_JUSTIFIED;
+exports.HYSTERESIS_UPWARD_MULTIPLIER = HYSTERESIS_UPWARD_MULTIPLIER;
+exports.HYSTERESIS_DOWNWARD_MULTIPLIER = HYSTERESIS_DOWNWARD_MULTIPLIER;
+exports.HYSTERESIS_QUOTIENT = HYSTERESIS_QUOTIENT;
+exports.SHUFFLE_ROUND_COUNT = SHUFFLE_ROUND_COUNT;
+exports.MAX_VALIDATORS_PER_COMMITTEE = MAX_VALIDATORS_PER_COMMITTEE;
+exports.TARGET_COMMITTEE_SIZE = TARGET_COMMITTEE_SIZE;
+exports.MAX_COMMITTEES_PER_SLOT = MAX_COMMITTEES_PER_SLOT;
+//# sourceMappingURL=activePreset.js.map
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(252)))
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 253 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.preset = exports.commit = void 0;
+
+var _phase = __webpack_require__(254);
+
+var _altair = __webpack_require__(255);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+const commit = "v1.1.0-alpha.7";
+exports.commit = commit;
+
+const preset = _objectSpread(_objectSpread({}, _phase.phase0), _altair.altair);
+
+exports.preset = preset;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.phase0 = void 0;
+
+/* eslint-disable @typescript-eslint/naming-convention */
+// Mainnet preset
+const phase0 = {
+  // Misc
+  // ---------------------------------------------------------------
+  // 2**6 (= 64)
+  MAX_COMMITTEES_PER_SLOT: 64,
+  // 2**7 (= 128)
+  TARGET_COMMITTEE_SIZE: 128,
+  // 2**11 (= 2,048)
+  MAX_VALIDATORS_PER_COMMITTEE: 2048,
+  // See issue 563
+  SHUFFLE_ROUND_COUNT: 90,
+  // 4
+  HYSTERESIS_QUOTIENT: 4,
+  // 1 (minus 0.25)
+  HYSTERESIS_DOWNWARD_MULTIPLIER: 1,
+  // 5 (plus 1.25)
+  HYSTERESIS_UPWARD_MULTIPLIER: 5,
+  // Fork Choice
+  // ---------------------------------------------------------------
+  // 2**3 (= 8)
+  SAFE_SLOTS_TO_UPDATE_JUSTIFIED: 8,
+  // Gwei values
+  // ---------------------------------------------------------------
+  // 2**0 * 10**9 (= 1,000,000,000) Gwei
+  MIN_DEPOSIT_AMOUNT: BigInt(1000000000),
+  // 2**5 * 10**9 (= 32,000,000,000) Gwei
+  MAX_EFFECTIVE_BALANCE: BigInt(32000000000),
+  // 2**0 * 10**9 (= 1,000,000,000) Gwei
+  EFFECTIVE_BALANCE_INCREMENT: BigInt(1000000000),
+  // Time parameters
+  // ---------------------------------------------------------------
+  // 2**0 (= 1) slots 12 seconds
+  MIN_ATTESTATION_INCLUSION_DELAY: 1,
+  // 2**5 (= 32) slots 6.4 minutes
+  SLOTS_PER_EPOCH: 32,
+  // 2**0 (= 1) epochs 6.4 minutes
+  MIN_SEED_LOOKAHEAD: 1,
+  // 2**2 (= 4) epochs 25.6 minutes
+  MAX_SEED_LOOKAHEAD: 4,
+  // 2**6 (= 64) epochs ~6.8 hours
+  EPOCHS_PER_ETH1_VOTING_PERIOD: 64,
+  // 2**13 (= 8,192) slots ~13 hours
+  SLOTS_PER_HISTORICAL_ROOT: 8192,
+  // 2**2 (= 4) epochs 25.6 minutes
+  MIN_EPOCHS_TO_INACTIVITY_PENALTY: 4,
+  // State vector lengths
+  // ---------------------------------------------------------------
+  // 2**16 (= 65,536) epochs ~0.8 years
+  EPOCHS_PER_HISTORICAL_VECTOR: 65536,
+  // 2**13 (= 8,192) epochs ~36 days
+  EPOCHS_PER_SLASHINGS_VECTOR: 8192,
+  // 2**24 (= 16,777,216) historical roots, ~26,131 years
+  HISTORICAL_ROOTS_LIMIT: 16777216,
+  // 2**40 (= 1,099,511,627,776) validator spots
+  VALIDATOR_REGISTRY_LIMIT: 1099511627776,
+  // Reward and penalty quotients
+  // ---------------------------------------------------------------
+  // 2**6 (= 64)
+  BASE_REWARD_FACTOR: BigInt(64),
+  // 2**9 (= 512)
+  WHISTLEBLOWER_REWARD_QUOTIENT: BigInt(512),
+  // 2**3 (= 8)
+  PROPOSER_REWARD_QUOTIENT: BigInt(8),
+  // 2**26 (= 67,108,864)
+  INACTIVITY_PENALTY_QUOTIENT: BigInt(67108864),
+  // 2**7 (= 128) (lower safety margin at Phase 0 genesis)
+  MIN_SLASHING_PENALTY_QUOTIENT: BigInt(128),
+  PROPORTIONAL_SLASHING_MULTIPLIER: BigInt(1),
+  // Max operations per block
+  // ---------------------------------------------------------------
+  // 2**4 (= 16)
+  MAX_PROPOSER_SLASHINGS: 16,
+  // 2**1 (= 2)
+  MAX_ATTESTER_SLASHINGS: 2,
+  // 2**7 (= 128)
+  MAX_ATTESTATIONS: 128,
+  // 2**4 (= 16)
+  MAX_DEPOSITS: 16,
+  // 2**4 (= 16)
+  MAX_VOLUNTARY_EXITS: 16
+};
+exports.phase0 = phase0;
+//# sourceMappingURL=phase0.js.map
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.altair = void 0;
+
+/* eslint-disable @typescript-eslint/naming-convention */
+const altair = {
+  SYNC_COMMITTEE_SIZE: 512,
+  EPOCHS_PER_SYNC_COMMITTEE_PERIOD: 256,
+  INACTIVITY_PENALTY_QUOTIENT_ALTAIR: BigInt(50331648),
+  MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR: BigInt(64),
+  PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR: BigInt(2)
+};
+exports.altair = altair;
+//# sourceMappingURL=altair.js.map
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.preset = exports.commit = void 0;
+
+var _phase = __webpack_require__(257);
+
+var _altair = __webpack_require__(258);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+const commit = "v1.1.0-alpha.7";
+exports.commit = commit;
+
+const preset = _objectSpread(_objectSpread({}, _phase.phase0), _altair.altair);
+
+exports.preset = preset;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 257 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.phase0 = void 0;
+
+/* eslint-disable @typescript-eslint/naming-convention */
+// Minimal preset
+const phase0 = {
+  // Misc
+  // ---------------------------------------------------------------
+  // [customized] Just 4 committees for slot for testing purposes
+  MAX_COMMITTEES_PER_SLOT: 4,
+  // [customized] unsecure, but fast
+  TARGET_COMMITTEE_SIZE: 4,
+  // 2**11 (= 2,048)
+  MAX_VALIDATORS_PER_COMMITTEE: 2048,
+  // [customized] Faster, but unsecure.
+  SHUFFLE_ROUND_COUNT: 10,
+  // 4
+  HYSTERESIS_QUOTIENT: 4,
+  // 1 (minus 0.25)
+  HYSTERESIS_DOWNWARD_MULTIPLIER: 1,
+  // 5 (plus 1.25)
+  HYSTERESIS_UPWARD_MULTIPLIER: 5,
+  // Fork Choice
+  // ---------------------------------------------------------------
+  // 2**1 (= 1)
+  SAFE_SLOTS_TO_UPDATE_JUSTIFIED: 2,
+  // Gwei values
+  // ---------------------------------------------------------------
+  // 2**0 * 10**9 (= 1,000,000,000) Gwei
+  MIN_DEPOSIT_AMOUNT: BigInt(1000000000),
+  // 2**5 * 10**9 (= 32,000,000,000) Gwei
+  MAX_EFFECTIVE_BALANCE: BigInt(32000000000),
+  // 2**0 * 10**9 (= 1,000,000,000) Gwei
+  EFFECTIVE_BALANCE_INCREMENT: BigInt(1000000000),
+  // Time parameters
+  // ---------------------------------------------------------------
+  // 2**0 (= 1) slots 6 seconds
+  MIN_ATTESTATION_INCLUSION_DELAY: 1,
+  // [customized] fast epochs
+  SLOTS_PER_EPOCH: 8,
+  // 2**0 (= 1) epochs
+  MIN_SEED_LOOKAHEAD: 1,
+  // 2**2 (= 4) epochs
+  MAX_SEED_LOOKAHEAD: 4,
+  // [customized] higher frequency new deposits from eth1 for testing
+  EPOCHS_PER_ETH1_VOTING_PERIOD: 4,
+  // [customized] smaller state
+  SLOTS_PER_HISTORICAL_ROOT: 64,
+
+  /*
+  // 2**8 (= 256) epochs
+  MIN_VALIDATOR_WITHDRAWABILITY_DELAY: 256,
+  // [customized] higher frequency of committee turnover and faster time to acceptable voluntary exit
+  SHARD_COMMITTEE_PERIOD: 64,
+  */
+  // 2**2 (= 4) epochs
+  MIN_EPOCHS_TO_INACTIVITY_PENALTY: 4,
+  // State vector lengths
+  // ---------------------------------------------------------------
+  // [customized] smaller state
+  EPOCHS_PER_HISTORICAL_VECTOR: 64,
+  // [customized] smaller state
+  EPOCHS_PER_SLASHINGS_VECTOR: 64,
+  // 2**24 (= 16,777,216) historical roots
+  HISTORICAL_ROOTS_LIMIT: 16777216,
+  // 2**40 (= 1,099,511,627,776) validator spots
+  VALIDATOR_REGISTRY_LIMIT: 1099511627776,
+  // Reward and penalty quotients
+  // ---------------------------------------------------------------
+  // 2**6 (= 64)
+  BASE_REWARD_FACTOR: BigInt(64),
+  // 2**9 (= 512)
+  WHISTLEBLOWER_REWARD_QUOTIENT: BigInt(512),
+  // 2**3 (= 8)
+  PROPOSER_REWARD_QUOTIENT: BigInt(8),
+  // [customized] 2**25 (= 33,554,432)
+  INACTIVITY_PENALTY_QUOTIENT: BigInt(33554432),
+  // [customized] 2**6 (= 64)
+  MIN_SLASHING_PENALTY_QUOTIENT: BigInt(64),
+  // [customized] 2 (lower safety margin than Phase 0 genesis but different than mainnet config for testing)
+  PROPORTIONAL_SLASHING_MULTIPLIER: BigInt(2),
+  // Max operations per block
+  // ---------------------------------------------------------------
+  // 2**4 (= 16)
+  MAX_PROPOSER_SLASHINGS: 16,
+  // 2**1 (= 2)
+  MAX_ATTESTER_SLASHINGS: 2,
+  // 2**7 (= 128)
+  MAX_ATTESTATIONS: 128,
+  // 2**4 (= 16)
+  MAX_DEPOSITS: 16,
+  // 2**4 (= 16)
+  MAX_VOLUNTARY_EXITS: 16
+};
+exports.phase0 = phase0;
+//# sourceMappingURL=phase0.js.map
+
+/***/ }),
+/* 258 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.altair = void 0;
+
+/* eslint-disable @typescript-eslint/naming-convention */
+const altair = {
+  SYNC_COMMITTEE_SIZE: 32,
+  EPOCHS_PER_SYNC_COMMITTEE_PERIOD: 8,
+  INACTIVITY_PENALTY_QUOTIENT_ALTAIR: BigInt(50331648),
+  MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR: BigInt(64),
+  PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR: BigInt(2)
+};
+exports.altair = altair;
+//# sourceMappingURL=altair.js.map
+
+/***/ }),
+/* 259 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ForkName = void 0;
+
+/**
+ * Forks in order of occurance
+ */
+let ForkName;
+exports.ForkName = ForkName;
+
+(function (ForkName) {
+  ForkName["phase0"] = "phase0";
+  ForkName["altair"] = "altair";
+})(ForkName || (exports.ForkName = ForkName = {}));
+//# sourceMappingURL=forkName.js.map
+
+/***/ }),
+/* 260 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _sync = __webpack_require__(261);
+
+Object.keys(_sync).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _sync[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _sync[key];
+    }
+  });
+});
+
+var _committee = __webpack_require__(262);
+
+Object.keys(_committee).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _committee[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _committee[key];
+    }
+  });
+});
+
+var _beacon = __webpack_require__(263);
+
+Object.keys(_beacon).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _beacon[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _beacon[key];
+    }
+  });
+});
+
+var _types = __webpack_require__(67);
+
+Object.keys(_types).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _types[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _types[key];
+    }
+  });
+});
+
+var _misc = __webpack_require__(128);
+
+Object.keys(_misc).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _misc[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _misc[key];
+    }
+  });
+});
+
+var _operations = __webpack_require__(129);
+
+Object.keys(_operations).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _operations[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _operations[key];
+    }
+  });
+});
+
+var _validator = __webpack_require__(130);
+
+Object.keys(_validator).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _validator[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _validator[key];
+    }
+  });
+});
+
+var _wire = __webpack_require__(264);
+
+Object.keys(_wire).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _wire[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _wire[key];
+    }
+  });
+});
+
+var _api = __webpack_require__(131);
+
+Object.keys(_api).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _api[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _api[key];
+    }
+  });
+});
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=sync.js.map
+
+/***/ }),
+/* 262 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=committee.js.map
+
+/***/ }),
+/* 263 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=beacon.js.map
+
+/***/ }),
+/* 264 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=wire.js.map
+
+/***/ }),
+/* 265 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LightClientStore = exports.LightClientUpdate = exports.LightClientSnapshot = exports.BeaconState = exports.SignedBeaconBlock = exports.BeaconBlock = exports.BeaconBlockBody = exports.HistoricalBatch = exports.HistoricalStateRoots = exports.HistoricalBlockRoots = exports.SyncAggregate = exports.SyncCommitteeBits = exports.SyncAggregatorSelectionData = exports.SignedContributionAndProof = exports.ContributionAndProof = exports.SyncCommitteeContribution = exports.SyncCommitteeMessage = exports.SyncCommittee = exports.Metadata = exports.SyncSubnets = void 0;
+
+var _lodestarParams = __webpack_require__(132);
+
+var _ssz = __webpack_require__(7);
+
+var _phase = __webpack_require__(68);
+
+var _primitive = __webpack_require__(136);
+
+var _lazyVar = __webpack_require__(138);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+const {
+  Bytes32,
+  Number64,
+  Uint64,
+  Slot,
+  SubCommitteeIndex,
+  ValidatorIndex,
+  Gwei,
+  Root,
+  Version,
+  BLSPubkey,
+  BLSSignature,
+  ParticipationFlags
+} = _primitive.ssz; // So the expandedRoots can be referenced, and break the circular dependency
+
+const typesRef = new _lazyVar.LazyVariable();
+const SyncSubnets = new _ssz.BitVectorType({
+  length: _lodestarParams.SYNC_COMMITTEE_SUBNET_COUNT
+});
+exports.SyncSubnets = SyncSubnets;
+const Metadata = new _ssz.ContainerType({
+  fields: {
+    seqNumber: Uint64,
+    attnets: _phase.ssz.AttestationSubnets,
+    syncnets: SyncSubnets
+  }
+});
+exports.Metadata = Metadata;
+const SyncCommittee = new _ssz.ContainerType({
+  fields: {
+    pubkeys: new _ssz.VectorType({
+      elementType: BLSPubkey,
+      length: _lodestarParams.SYNC_COMMITTEE_SIZE
+    }),
+    aggregatePubkey: BLSPubkey
+  }
+});
+exports.SyncCommittee = SyncCommittee;
+const SyncCommitteeMessage = new _ssz.ContainerType({
+  fields: {
+    slot: Slot,
+    beaconBlockRoot: Root,
+    validatorIndex: ValidatorIndex,
+    signature: BLSSignature
+  }
+});
+exports.SyncCommitteeMessage = SyncCommitteeMessage;
+const SyncCommitteeContribution = new _ssz.ContainerType({
+  fields: {
+    slot: Slot,
+    beaconBlockRoot: Root,
+    subCommitteeIndex: SubCommitteeIndex,
+    aggregationBits: new _ssz.BitVectorType({
+      length: _lodestarParams.SYNC_COMMITTEE_SIZE / _lodestarParams.SYNC_COMMITTEE_SUBNET_COUNT
+    }),
+    signature: BLSSignature
+  }
+});
+exports.SyncCommitteeContribution = SyncCommitteeContribution;
+const ContributionAndProof = new _ssz.ContainerType({
+  fields: {
+    aggregatorIndex: ValidatorIndex,
+    contribution: SyncCommitteeContribution,
+    selectionProof: BLSSignature
+  }
+});
+exports.ContributionAndProof = ContributionAndProof;
+const SignedContributionAndProof = new _ssz.ContainerType({
+  fields: {
+    message: ContributionAndProof,
+    signature: BLSSignature
+  }
+});
+exports.SignedContributionAndProof = SignedContributionAndProof;
+const SyncAggregatorSelectionData = new _ssz.ContainerType({
+  fields: {
+    slot: Slot,
+    subCommitteeIndex: SubCommitteeIndex
+  }
+});
+exports.SyncAggregatorSelectionData = SyncAggregatorSelectionData;
+const SyncCommitteeBits = new _ssz.BitVectorType({
+  length: _lodestarParams.SYNC_COMMITTEE_SIZE
+});
+exports.SyncCommitteeBits = SyncCommitteeBits;
+const SyncAggregate = new _ssz.ContainerType({
+  fields: {
+    syncCommitteeBits: SyncCommitteeBits,
+    syncCommitteeSignature: BLSSignature
+  }
+}); // Re-declare with the new expanded type
+
+exports.SyncAggregate = SyncAggregate;
+const HistoricalBlockRoots = new _ssz.VectorType({
+  elementType: new _ssz.RootType({
+    expandedType: () => typesRef.get().BeaconBlock
+  }),
+  length: _lodestarParams.SLOTS_PER_HISTORICAL_ROOT
+});
+exports.HistoricalBlockRoots = HistoricalBlockRoots;
+const HistoricalStateRoots = new _ssz.VectorType({
+  elementType: new _ssz.RootType({
+    expandedType: () => typesRef.get().BeaconState
+  }),
+  length: _lodestarParams.SLOTS_PER_HISTORICAL_ROOT
+});
+exports.HistoricalStateRoots = HistoricalStateRoots;
+const HistoricalBatch = new _ssz.ContainerType({
+  fields: {
+    blockRoots: HistoricalBlockRoots,
+    stateRoots: HistoricalStateRoots
+  }
+});
+exports.HistoricalBatch = HistoricalBatch;
+const BeaconBlockBody = new _ssz.ContainerType({
+  fields: _objectSpread(_objectSpread({}, _phase.ssz.BeaconBlockBody.fields), {}, {
+    syncAggregate: SyncAggregate
+  })
+});
+exports.BeaconBlockBody = BeaconBlockBody;
+const BeaconBlock = new _ssz.ContainerType({
+  fields: {
+    slot: Slot,
+    proposerIndex: ValidatorIndex,
+    // Reclare expandedType() with altair block and altair state
+    parentRoot: new _ssz.RootType({
+      expandedType: () => typesRef.get().BeaconBlock
+    }),
+    stateRoot: new _ssz.RootType({
+      expandedType: () => typesRef.get().BeaconState
+    }),
+    body: BeaconBlockBody
+  }
+});
+exports.BeaconBlock = BeaconBlock;
+const SignedBeaconBlock = new _ssz.ContainerType({
+  fields: {
+    message: BeaconBlock,
+    signature: BLSSignature
+  }
+}); //we don't reuse phase0.BeaconState fields since we need to replace some keys
+//and we cannot keep order doing that
+
+exports.SignedBeaconBlock = SignedBeaconBlock;
+const BeaconState = new _ssz.ContainerType({
+  fields: {
+    genesisTime: Number64,
+    genesisValidatorsRoot: Root,
+    slot: Slot,
+    fork: _phase.ssz.Fork,
+    // History
+    latestBlockHeader: _phase.ssz.BeaconBlockHeader,
+    blockRoots: HistoricalBlockRoots,
+    stateRoots: HistoricalStateRoots,
+    historicalRoots: new _ssz.ListType({
+      elementType: new _ssz.RootType({
+        expandedType: HistoricalBatch
+      }),
+      limit: _lodestarParams.HISTORICAL_ROOTS_LIMIT
+    }),
+    // Eth1
+    eth1Data: _phase.ssz.Eth1Data,
+    eth1DataVotes: new _ssz.ListType({
+      elementType: _phase.ssz.Eth1Data,
+      limit: _lodestarParams.EPOCHS_PER_ETH1_VOTING_PERIOD * _lodestarParams.SLOTS_PER_EPOCH
+    }),
+    eth1DepositIndex: Number64,
+    // Registry
+    validators: new _ssz.ListType({
+      elementType: _phase.ssz.Validator,
+      limit: _lodestarParams.VALIDATOR_REGISTRY_LIMIT
+    }),
+    balances: new _ssz.ListType({
+      elementType: Gwei,
+      limit: _lodestarParams.VALIDATOR_REGISTRY_LIMIT
+    }),
+    randaoMixes: new _ssz.VectorType({
+      elementType: Bytes32,
+      length: _lodestarParams.EPOCHS_PER_HISTORICAL_VECTOR
+    }),
+    // Slashings
+    slashings: new _ssz.VectorType({
+      elementType: Gwei,
+      length: _lodestarParams.EPOCHS_PER_SLASHINGS_VECTOR
+    }),
+    // Participation
+    previousEpochParticipation: new _ssz.ListType({
+      elementType: ParticipationFlags,
+      limit: _lodestarParams.VALIDATOR_REGISTRY_LIMIT
+    }),
+    currentEpochParticipation: new _ssz.ListType({
+      elementType: ParticipationFlags,
+      limit: _lodestarParams.VALIDATOR_REGISTRY_LIMIT
+    }),
+    // Finality
+    justificationBits: new _ssz.BitVectorType({
+      length: _lodestarParams.JUSTIFICATION_BITS_LENGTH
+    }),
+    previousJustifiedCheckpoint: _phase.ssz.Checkpoint,
+    currentJustifiedCheckpoint: _phase.ssz.Checkpoint,
+    finalizedCheckpoint: _phase.ssz.Checkpoint,
+    // Inactivity
+    inactivityScores: new _ssz.ListType({
+      elementType: Number64,
+      limit: _lodestarParams.VALIDATOR_REGISTRY_LIMIT
+    }),
+    // Sync
+    currentSyncCommittee: SyncCommittee,
+    nextSyncCommittee: SyncCommittee
+  }
+});
+exports.BeaconState = BeaconState;
+const LightClientSnapshot = new _ssz.ContainerType({
+  fields: {
+    header: _phase.ssz.BeaconBlockHeader,
+    nextSyncCommittee: SyncCommittee,
+    currentSyncCommittee: SyncCommittee
+  }
+});
+exports.LightClientSnapshot = LightClientSnapshot;
+const LightClientUpdate = new _ssz.ContainerType({
+  fields: {
+    header: _phase.ssz.BeaconBlockHeader,
+    nextSyncCommittee: SyncCommittee,
+    nextSyncCommitteeBranch: new _ssz.VectorType({
+      elementType: Bytes32,
+      length: _lodestarParams.NEXT_SYNC_COMMITTEE_INDEX_FLOORLOG2
+    }),
+    finalityHeader: _phase.ssz.BeaconBlockHeader,
+    finalityBranch: new _ssz.VectorType({
+      elementType: Bytes32,
+      length: _lodestarParams.FINALIZED_ROOT_INDEX_FLOORLOG2
+    }),
+    syncCommitteeBits: new _ssz.BitVectorType({
+      length: _lodestarParams.SYNC_COMMITTEE_SIZE
+    }),
+    syncCommitteeSignature: BLSSignature,
+    forkVersion: Version
+  }
+});
+exports.LightClientUpdate = LightClientUpdate;
+const LightClientStore = new _ssz.ContainerType({
+  fields: {
+    snapshot: LightClientSnapshot,
+    validUpdates: new _ssz.ListType({
+      elementType: LightClientUpdate,
+      limit: _lodestarParams.EPOCHS_PER_SYNC_COMMITTEE_PERIOD * _lodestarParams.SLOTS_PER_EPOCH
+    })
+  }
+}); // MUST set typesRef here, otherwise expandedType() calls will throw
+
+exports.LightClientStore = LightClientStore;
+typesRef.set({
+  BeaconBlock,
+  BeaconState
+});
+//# sourceMappingURL=sszTypes.js.map
+
+/***/ }),
+/* 266 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//# sourceMappingURL=types.js.map
+
+/***/ }),
+/* 267 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.allForks = void 0;
+
+var _phase = __webpack_require__(68);
+
+var _altair = __webpack_require__(93);
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+/**
+ * Index the ssz types that differ by fork
+ * A record of AllForksSSZTypes indexed by fork
+ */
+const allForks = {
+  phase0: {
+    BeaconBlockBody: _phase.ssz.BeaconBlockBody,
+    BeaconBlock: _phase.ssz.BeaconBlock,
+    SignedBeaconBlock: _phase.ssz.SignedBeaconBlock,
+    BeaconState: _phase.ssz.BeaconState,
+    Metadata: _phase.ssz.Metadata
+  },
+  altair: {
+    BeaconBlockBody: _altair.ssz.BeaconBlockBody,
+    BeaconBlock: _altair.ssz.BeaconBlock,
+    SignedBeaconBlock: _altair.ssz.SignedBeaconBlock,
+    BeaconState: _altair.ssz.BeaconState,
+    Metadata: _altair.ssz.Metadata
+  }
+};
+exports.allForks = allForks;
+//# sourceMappingURL=sszTypes.js.map
+
+/***/ }),
+/* 268 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _exportNames = {
+  allForks: true,
+  phase0: true,
+  altair: true
+};
+Object.defineProperty(exports, "phase0", {
+  enumerable: true,
+  get: function () {
+    return _phase.ssz;
+  }
+});
+Object.defineProperty(exports, "altair", {
+  enumerable: true,
+  get: function () {
+    return _altair.ssz;
+  }
+});
+exports.allForks = void 0;
+
+var _sszTypes = __webpack_require__(137);
+
+Object.keys(_sszTypes).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _sszTypes[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _sszTypes[key];
+    }
+  });
+});
+
+var _phase = __webpack_require__(68);
+
+var _altair = __webpack_require__(93);
+
+var _allForks = __webpack_require__(139);
+
+const allForks = _allForks.ssz.allForks;
+exports.allForks = allForks;
+//# sourceMappingURL=sszTypes.js.map
+
+/***/ }),
+/* 269 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.StringType = void 0;
+
+var _ssz = __webpack_require__(7);
+
+/* eslint-disable @typescript-eslint/naming-convention */
+class StringType extends _ssz.BasicType {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  struct_getSerializedLength(data) {
+    throw new Error("unsupported ssz operation");
+  }
+
+  struct_convertToJson(value) {
+    return value;
+  }
+
+  struct_convertFromJson(data) {
+    return data;
+  }
+
+  struct_assertValidValue(data) {
+    throw new Error("unsupported ssz operation");
+  }
+
+  serialize() {
+    throw new Error("unsupported ssz type for serialization");
+  }
+
+  struct_serializeToBytes() {
+    throw new Error("unsupported ssz type for serialization");
+  }
+
+  struct_deserializeFromBytes() {
+    throw new Error("unsupported ssz operation");
+  }
+
+  struct_defaultValue() {
+    return "something";
+  }
+
+}
+
+exports.StringType = StringType;
+//# sourceMappingURL=StringType.js.map
+
+/***/ }),
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27069,7 +28998,7 @@ exports.params = params;
 
 
 
-var ReactPropTypesSecret = __webpack_require__(247);
+var ReactPropTypesSecret = __webpack_require__(271);
 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
@@ -27127,7 +29056,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 247 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27146,7 +29075,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 248 */
+/* 272 */
 /***/ (function(module, exports) {
 
 function addMethods(worker, methods) {
@@ -27197,19 +29126,19 @@ module.exports = addMethods;
 
 
 /***/ }),
-/* 249 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _CSSTransition = _interopRequireDefault(__webpack_require__(250));
+var _CSSTransition = _interopRequireDefault(__webpack_require__(274));
 
-var _ReplaceTransition = _interopRequireDefault(__webpack_require__(255));
+var _ReplaceTransition = _interopRequireDefault(__webpack_require__(279));
 
-var _TransitionGroup = _interopRequireDefault(__webpack_require__(132));
+var _TransitionGroup = _interopRequireDefault(__webpack_require__(143));
 
-var _Transition = _interopRequireDefault(__webpack_require__(129));
+var _Transition = _interopRequireDefault(__webpack_require__(140));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27221,7 +29150,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 250 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27232,15 +29161,15 @@ exports.default = void 0;
 
 var PropTypes = _interopRequireWildcard(__webpack_require__(1));
 
-var _addClass = _interopRequireDefault(__webpack_require__(251));
+var _addClass = _interopRequireDefault(__webpack_require__(275));
 
-var _removeClass = _interopRequireDefault(__webpack_require__(254));
+var _removeClass = _interopRequireDefault(__webpack_require__(278));
 
 var _react = _interopRequireDefault(__webpack_require__(0));
 
-var _Transition = _interopRequireDefault(__webpack_require__(129));
+var _Transition = _interopRequireDefault(__webpack_require__(140));
 
-var _PropTypes = __webpack_require__(131);
+var _PropTypes = __webpack_require__(142);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27484,18 +29413,18 @@ exports.default = _default;
 module.exports = exports["default"];
 
 /***/ }),
-/* 251 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _interopRequireDefault = __webpack_require__(252);
+var _interopRequireDefault = __webpack_require__(276);
 
 exports.__esModule = true;
 exports.default = addClass;
 
-var _hasClass = _interopRequireDefault(__webpack_require__(253));
+var _hasClass = _interopRequireDefault(__webpack_require__(277));
 
 function addClass(element, className) {
   if (element.classList) element.classList.add(className);else if (!(0, _hasClass.default)(element, className)) if (typeof element.className === 'string') element.className = element.className + ' ' + className;else element.setAttribute('class', (element.className && element.className.baseVal || '') + ' ' + className);
@@ -27504,7 +29433,7 @@ function addClass(element, className) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 252 */
+/* 276 */
 /***/ (function(module, exports) {
 
 function _interopRequireDefault(obj) {
@@ -27516,7 +29445,7 @@ function _interopRequireDefault(obj) {
 module.exports = _interopRequireDefault;
 
 /***/ }),
-/* 253 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27532,7 +29461,7 @@ function hasClass(element, className) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 254 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27547,7 +29476,7 @@ module.exports = function removeClass(element, className) {
 };
 
 /***/ }),
-/* 255 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27560,9 +29489,9 @@ var _propTypes = _interopRequireDefault(__webpack_require__(1));
 
 var _react = _interopRequireDefault(__webpack_require__(0));
 
-var _reactDom = __webpack_require__(14);
+var _reactDom = __webpack_require__(15);
 
-var _TransitionGroup = _interopRequireDefault(__webpack_require__(132));
+var _TransitionGroup = _interopRequireDefault(__webpack_require__(143));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27697,7 +29626,7 @@ exports.default = _default;
 module.exports = exports["default"];
 
 /***/ }),
-/* 256 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27853,7 +29782,7 @@ function getNextChildMapping(nextProps, prevChildMapping, onExited) {
 }
 
 /***/ }),
-/* 257 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27868,7 +29797,7 @@ var _react = _interopRequireDefault(__webpack_require__(0));
 
 var _propTypes = _interopRequireDefault(__webpack_require__(1));
 
-var _emotion = __webpack_require__(93);
+var _emotion = __webpack_require__(94);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27897,7 +29826,7 @@ var _default = Spinner;
 exports.default = _default;
 
 /***/ }),
-/* 258 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27908,7 +29837,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _emotion = __webpack_require__(93);
+var _emotion = __webpack_require__(94);
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -28002,7 +29931,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 259 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28011,13 +29940,13 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(260));
-__export(__webpack_require__(261));
-__export(__webpack_require__(262));
+__export(__webpack_require__(284));
+__export(__webpack_require__(285));
+__export(__webpack_require__(286));
 
 
 /***/ }),
-/* 260 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28056,7 +29985,7 @@ exports.heightWidthRadiusDefaults = heightWidthRadiusDefaults;
 
 
 /***/ }),
-/* 261 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28106,7 +30035,7 @@ exports.calculateRgba = function (color, opacity) {
 
 
 /***/ }),
-/* 262 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28181,13 +30110,13 @@ exports.cssValue = cssValue;
 
 
 /***/ }),
-/* 263 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 264 */
+/* 288 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28195,14 +30124,14 @@ exports.cssValue = cssValue;
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.assign.js
-var es6_object_assign = __webpack_require__(139);
+var es6_object_assign = __webpack_require__(148);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
 var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__(14);
+var react_dom = __webpack_require__(15);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
 // CONCATENATED MODULE: ./src/components/ForkMe.tsx
@@ -28245,16 +30174,16 @@ function Header() {
   }, "here."))));
 }
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.symbol.async-iterator.js
-var es7_symbol_async_iterator = __webpack_require__(50);
+var es7_symbol_async_iterator = __webpack_require__(56);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.symbol.js
-var es6_symbol = __webpack_require__(51);
+var es6_symbol = __webpack_require__(39);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.define-property.js
-var es6_object_define_property = __webpack_require__(54);
+var es6_object_define_property = __webpack_require__(42);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.create.js
-var es6_object_create = __webpack_require__(55);
+var es6_object_create = __webpack_require__(59);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.regexp.to-string.js
 var es6_regexp_to_string = __webpack_require__(30);
@@ -28263,31 +30192,31 @@ var es6_regexp_to_string = __webpack_require__(30);
 var es6_date_to_string = __webpack_require__(31);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.to-string.js
-var es6_object_to_string = __webpack_require__(24);
+var es6_object_to_string = __webpack_require__(23);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.reflect.construct.js
-var es6_reflect_construct = __webpack_require__(57);
+var es6_reflect_construct = __webpack_require__(61);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.set-prototype-of.js
-var es6_object_set_prototype_of = __webpack_require__(58);
+var es6_object_set_prototype_of = __webpack_require__(62);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
-var es6_function_name = __webpack_require__(104);
+var es6_function_name = __webpack_require__(106);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.bind.js
-var es6_function_bind = __webpack_require__(72);
+var es6_function_bind = __webpack_require__(78);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom.iterable.js
-var web_dom_iterable = __webpack_require__(73);
+var web_dom_iterable = __webpack_require__(79);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.iterator.js
-var es6_array_iterator = __webpack_require__(39);
+var es6_array_iterator = __webpack_require__(43);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.keys.js
-var es6_object_keys = __webpack_require__(74);
+var es6_object_keys = __webpack_require__(80);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.map.js
-var es6_array_map = __webpack_require__(75);
+var es6_array_map = __webpack_require__(81);
 
 // CONCATENATED MODULE: ./src/components/display/NamedOutput.tsx
 
@@ -28334,13 +30263,13 @@ var ErrorBox_ErrorBox = function ErrorBox(_ref) {
 
 /* harmony default export */ var display_ErrorBox = (ErrorBox_ErrorBox);
 // EXTERNAL MODULE: ./node_modules/file-saver/dist/FileSaver.min.js
-var FileSaver_min = __webpack_require__(133);
+var FileSaver_min = __webpack_require__(144);
 
 // EXTERNAL MODULE: ./node_modules/@chainsafe/ssz/lib/index.js
-var lib = __webpack_require__(4);
+var lib = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./node_modules/js-yaml/index.js
-var js_yaml = __webpack_require__(35);
+var js_yaml = __webpack_require__(95);
 var js_yaml_default = /*#__PURE__*/__webpack_require__.n(js_yaml);
 
 // CONCATENATED MODULE: ./src/util/yaml/index.ts
@@ -28579,19 +30508,31 @@ var Output_Output = /*#__PURE__*/function (_React$Component) {
 
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.typed.uint8-array.js
-var es6_typed_uint8_array = __webpack_require__(217);
+var es6_typed_uint8_array = __webpack_require__(214);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.regexp.match.js
-var es6_regexp_match = __webpack_require__(226);
+var es6_regexp_match = __webpack_require__(223);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.define-properties.js
+var es6_object_define_properties = __webpack_require__(229);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es7.object.get-own-property-descriptors.js
+var es7_object_get_own_property_descriptors = __webpack_require__(230);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.for-each.js
+var es6_array_for_each = __webpack_require__(233);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.filter.js
+var es6_array_filter = __webpack_require__(234);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.index-of.js
+var es6_array_index_of = __webpack_require__(235);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.sort.js
-var es6_array_sort = __webpack_require__(232);
+var es6_array_sort = __webpack_require__(236);
 
-// EXTERNAL MODULE: ./node_modules/@chainsafe/lodestar-types/lib/ssz/presets/mainnet.js
-var mainnet = __webpack_require__(134);
-
-// EXTERNAL MODULE: ./node_modules/@chainsafe/lodestar-types/lib/ssz/presets/minimal.js
-var minimal = __webpack_require__(135);
+// EXTERNAL MODULE: ./node_modules/@chainsafe/lodestar-types/lib/index.js
+var lodestar_types_lib = __webpack_require__(48);
 
 // CONCATENATED MODULE: ./src/util/types.ts
 
@@ -28601,9 +30542,32 @@ var minimal = __webpack_require__(135);
 
 
 
-var presets = {
-  mainnet: mainnet["types"],
-  minimal: minimal["types"]
+
+
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+
+
+var phase0 = lodestar_types_lib["ssz"].phase0,
+    altair = lodestar_types_lib["ssz"].altair,
+    allForks = lodestar_types_lib["ssz"].allForks,
+    primitive = _objectWithoutProperties(lodestar_types_lib["ssz"], ["phase0", "altair", "allForks"]);
+
+var forks = {
+  phase0: _objectSpread(_objectSpread({}, phase0), primitive),
+  altair: _objectSpread(_objectSpread(_objectSpread({}, phase0), altair), primitive)
 };
 function typeNames(types) {
   return Object.keys(types).sort();
@@ -28645,7 +30609,7 @@ var prop_types = __webpack_require__(1);
 var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-function _objectWithoutPropertiesLoose(source, excluded) {
+function objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
   var target = {};
   var sourceKeys = Object.keys(source);
@@ -29064,7 +31028,7 @@ var Transition_Transition = /*#__PURE__*/function (_React$Component) {
         _onExiting = _this$props.onExiting,
         _onExited = _this$props.onExited,
         _nodeRef = _this$props.nodeRef,
-        childProps = _objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
+        childProps = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
 
     return (
       /*#__PURE__*/
@@ -29378,7 +31342,7 @@ var TransitionGroup_TransitionGroup = /*#__PURE__*/function (_React$Component) {
     var _this$props = this.props,
         Component = _this$props.component,
         childFactory = _this$props.childFactory,
-        props = _objectWithoutPropertiesLoose(_this$props, ["component", "childFactory"]);
+        props = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_this$props, ["component", "childFactory"]);
 
     var contextValue = this.state.contextValue;
     var children = values(this.state.children).map(childFactory);
@@ -29409,7 +31373,7 @@ TransitionGroup_TransitionGroup.defaultProps = defaultProps;
 
 
 
-function _defineProperty(obj, key, value) {
+function react_alert_defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -29442,7 +31406,7 @@ function react_alert_extends() {
   return react_alert_extends.apply(this, arguments);
 }
 
-function ownKeys(object, enumerableOnly) {
+function react_alert_ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
 
   if (Object.getOwnPropertySymbols) {
@@ -29461,13 +31425,13 @@ function _objectSpread2(target) {
     var source = arguments[i] != null ? arguments[i] : {};
 
     if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
+      react_alert_ownKeys(Object(source), true).forEach(function (key) {
+        react_alert_defineProperty(target, key, source[key]);
       });
     } else if (Object.getOwnPropertyDescriptors) {
       Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
     } else {
-      ownKeys(Object(source)).forEach(function (key) {
+      react_alert_ownKeys(Object(source)).forEach(function (key) {
         Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
       });
     }
@@ -29491,7 +31455,7 @@ function react_alert_objectWithoutPropertiesLoose(source, excluded) {
   return target;
 }
 
-function _objectWithoutProperties(source, excluded) {
+function react_alert_objectWithoutProperties(source, excluded) {
   if (source == null) return {};
 
   var target = react_alert_objectWithoutPropertiesLoose(source, excluded);
@@ -29655,7 +31619,7 @@ var react_alert_Wrapper = function Wrapper(_ref) {
       _ref$options = _ref.options,
       position = _ref$options.position,
       containerStyle = _ref$options.containerStyle,
-      props = _objectWithoutProperties(_ref, ["children", "options"]);
+      props = react_alert_objectWithoutProperties(_ref, ["children", "options"]);
 
   var styles = Object(react["useMemo"])(function () {
     return getStyles(position);
@@ -29667,21 +31631,21 @@ var react_alert_Wrapper = function Wrapper(_ref) {
 
 var _defaultStyle, _transitionStyles;
 var duration = 250;
-var defaultStyle = (_defaultStyle = {}, _defineProperty(_defaultStyle, transitions.FADE, {
+var defaultStyle = (_defaultStyle = {}, react_alert_defineProperty(_defaultStyle, transitions.FADE, {
   transition: "opacity ".concat(duration, "ms ease"),
   opacity: 0
-}), _defineProperty(_defaultStyle, transitions.SCALE, {
+}), react_alert_defineProperty(_defaultStyle, transitions.SCALE, {
   transform: 'scale(1)',
   transition: "all ".concat(duration, "ms ease-in-out")
 }), _defaultStyle);
-var transitionStyles = (_transitionStyles = {}, _defineProperty(_transitionStyles, transitions.FADE, {
+var transitionStyles = (_transitionStyles = {}, react_alert_defineProperty(_transitionStyles, transitions.FADE, {
   entering: {
     opacity: 0
   },
   entered: {
     opacity: 1
   }
-}), _defineProperty(_transitionStyles, transitions.SCALE, {
+}), react_alert_defineProperty(_transitionStyles, transitions.SCALE, {
   entering: {
     transform: 'scale(0)'
   },
@@ -29699,7 +31663,7 @@ var transitionStyles = (_transitionStyles = {}, _defineProperty(_transitionStyle
 var react_alert_Transtion = function Transtion(_ref) {
   var children = _ref.children,
       type = _ref.type,
-      props = _objectWithoutProperties(_ref, ["children", "type"]);
+      props = react_alert_objectWithoutProperties(_ref, ["children", "type"]);
 
   return react_default.a.createElement(esm_Transition, react_alert_extends({}, props, {
     timeout: duration
@@ -29729,7 +31693,7 @@ var react_alert_Provider = function Provider(_ref) {
       containerStyle = _ref.containerStyle,
       AlertComponent = _ref.template,
       Context = _ref.context,
-      props = _objectWithoutProperties(_ref, ["children", "offset", "position", "timeout", "type", "transition", "containerStyle", "template", "context"]);
+      props = react_alert_objectWithoutProperties(_ref, ["children", "offset", "position", "timeout", "type", "transition", "containerStyle", "template", "context"]);
 
   var root = Object(react["useRef"])(null);
   var alertContext = Object(react["useRef"])(null);
@@ -29918,7 +31882,7 @@ var react_alert_withAlert = function withAlert() {
 
 
 // EXTERNAL MODULE: ./node_modules/workerize-loader/dist!./src/components/worker.tsx
-var worker = __webpack_require__(62);
+var worker = __webpack_require__(69);
 var worker_default = /*#__PURE__*/__webpack_require__.n(worker);
 
 // CONCATENATED MODULE: ./src/components/Input.tsx
@@ -29968,8 +31932,13 @@ function Input_getPrototypeOf(o) { Input_getPrototypeOf = Object.setPrototypeOf 
 
  // eslint-disable-line import/no-unresolved
 
+function getRandomType(types) {
+  var names = typeNames(types);
+  return names[Math.floor(Math.random() * names.length)];
+}
+
 var workerInstance = worker_default()();
-var DEFAULT_PRESET = "mainnet";
+var DEFAULT_FORK = "phase0";
 
 var Input_Input = /*#__PURE__*/function (_React$Component) {
   Input_inherits(Input, _React$Component);
@@ -29982,16 +31951,15 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
     Input_classCallCheck(this, Input);
 
     _this = _super.call(this, props);
-    var types = presets[DEFAULT_PRESET];
-    var names = typeNames(types);
-    var initialType = names[Math.floor(Math.random() * names.length)];
+    var types = forks[DEFAULT_FORK];
+    var initialType = getRandomType(types);
     var sszType = types[initialType];
 
     _this.props.setOverlay(true, "Generating random ".concat(initialType, " value..."));
 
     workerInstance.createRandomValueWorker({
       sszTypeName: initialType,
-      presetName: DEFAULT_PRESET
+      forkName: DEFAULT_FORK
     }).then(function (value) {
       var input = inputTypes.yaml.dump(value, sszType);
 
@@ -30002,7 +31970,7 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
       return _this.handleError(error);
     });
     _this.state = {
-      presetName: DEFAULT_PRESET,
+      forkName: DEFAULT_FORK,
       input: "",
       sszTypeName: initialType,
       serializeInputType: "yaml",
@@ -30066,7 +32034,7 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "types",
     value: function types() {
-      return presets[this.state.presetName];
+      return forks[this.state.forkName];
     }
   }, {
     key: "getInputType",
@@ -30088,12 +32056,19 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
     value: function resetWith(inputType, sszTypeName) {
       var _this2 = this;
 
-      var sszType = this.types()[sszTypeName];
-      var presetName = this.state.presetName;
+      var types = this.types();
+      var sszType = types[sszTypeName]; // get a new ssz type if it's not in our fork
+
+      if (!sszType) {
+        sszTypeName = getRandomType(types);
+        sszType = types[sszTypeName];
+      }
+
+      var forkName = this.state.forkName;
       this.props.setOverlay(true, "Generating random ".concat(sszTypeName, " value..."));
       workerInstance.createRandomValueWorker({
         sszTypeName: sszTypeName,
-        presetName: presetName
+        forkName: forkName
       }).then(function (value) {
         var input = inputTypes[inputType].dump(value, sszType);
 
@@ -30119,12 +32094,12 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
-    key: "setPreset",
-    value: function setPreset(e) {
+    key: "setFork",
+    value: function setFork(e) {
       var _this3 = this;
 
       this.setState({
-        presetName: e.target.value
+        forkName: e.target.value
       }, function () {
         _this3.resetWith(_this3.getInputType(), _this3.state.sszTypeName);
       });
@@ -30168,11 +32143,11 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
     key: "doProcess",
     value: function doProcess() {
       var _this$state3 = this.state,
-          presetName = _this$state3.presetName,
-          sszTypeName = _this$state3.sszTypeName;
+          sszTypeName = _this$state3.sszTypeName,
+          forkName = _this$state3.forkName;
 
       try {
-        this.props.onProcess(presetName, sszTypeName, this.parsedInput(), this.types()[sszTypeName], this.getInputType());
+        this.props.onProcess(forkName, sszTypeName, this.parsedInput(), this.types()[sszTypeName], this.getInputType());
       } catch (e) {
         this.handleError(e);
       }
@@ -30211,7 +32186,9 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
         };
 
         reader.onerror = function (e) {
-          handleError(e);
+          if (e instanceof Error) {
+            handleError(e);
+          }
         };
       }
     }
@@ -30242,14 +32219,14 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
         className: "control"
       }, /*#__PURE__*/react["createElement"]("a", {
         className: "button is-static"
-      }, "Preset")), /*#__PURE__*/react["createElement"]("div", {
+      }, "Fork")), /*#__PURE__*/react["createElement"]("div", {
         className: "control"
       }, /*#__PURE__*/react["createElement"]("div", {
         className: "select"
       }, /*#__PURE__*/react["createElement"]("select", {
-        value: this.state.presetName,
-        onChange: this.setPreset.bind(this)
-      }, Object.keys(presets).map(function (name) {
+        value: this.state.forkName,
+        onChange: this.setFork.bind(this)
+      }, Object.keys(forks).map(function (name) {
         return /*#__PURE__*/react["createElement"]("option", {
           key: name,
           value: name
@@ -30312,11 +32289,11 @@ var Input_Input = /*#__PURE__*/function (_React$Component) {
 
 /* harmony default export */ var components_Input = (react_alert_withAlert()(Input_Input));
 // EXTERNAL MODULE: ./node_modules/react-loading-overlay/lib/LoadingOverlay.js
-var LoadingOverlay = __webpack_require__(136);
+var LoadingOverlay = __webpack_require__(145);
 var LoadingOverlay_default = /*#__PURE__*/__webpack_require__.n(LoadingOverlay);
 
 // EXTERNAL MODULE: ./node_modules/react-spinners/BounceLoader.js
-var BounceLoader = __webpack_require__(137);
+var BounceLoader = __webpack_require__(146);
 var BounceLoader_default = /*#__PURE__*/__webpack_require__.n(BounceLoader);
 
 // CONCATENATED MODULE: ./src/components/Serialize.tsx
@@ -30375,7 +32352,7 @@ var Serialize_Serialize = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      presetName: undefined,
+      forkName: undefined,
       name: "",
       input: undefined,
       deserialized: undefined,
@@ -30400,14 +32377,14 @@ var Serialize_Serialize = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "process",
-    value: function process(presetName, name, input, type) {
+    value: function process(forkName, name, input, type) {
       var _this2 = this;
 
       var error;
       this.setOverlay(true, this.props.serializeModeOn ? "Serializing..." : "Deserializing...");
       Serialize_workerInstance.serialize({
         sszTypeName: name,
-        presetName: presetName,
+        forkName: forkName,
         input: input
       }).then(function (result) {
         _this2.setState({
@@ -30423,7 +32400,7 @@ var Serialize_Serialize = /*#__PURE__*/function (_React$Component) {
 
       var deserialized = input;
       this.setState({
-        presetName: presetName,
+        forkName: forkName,
         name: name,
         input: input,
         sszType: type,
@@ -30577,7 +32554,7 @@ var Tabs_Tabs = /*#__PURE__*/function (_React$Component) {
 
 
 // EXTERNAL MODULE: ./package.json
-var package_0 = __webpack_require__(94);
+var package_0 = __webpack_require__(96);
 
 // CONCATENATED MODULE: ./src/components/Footer.tsx
 
@@ -30741,7 +32718,7 @@ var react_alert_template_basic_AlertTemplate = function AlertTemplate(_ref) {
 /* harmony default export */ var react_alert_template_basic = (react_alert_template_basic_AlertTemplate);
 
 // EXTERNAL MODULE: ./src/styles.scss
-var src_styles = __webpack_require__(263);
+var src_styles = __webpack_require__(287);
 
 // CONCATENATED MODULE: ./src/index.tsx
 
@@ -30764,7 +32741,7 @@ react_dom_default.a.render( /*#__PURE__*/react_default.a.createElement(react_ale
 }, src_options), /*#__PURE__*/react_default.a.createElement(App, null)), document.getElementById("app"));
 
 /***/ }),
-/* 265 */
+/* 289 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30782,23 +32759,23 @@ __webpack_require__.d(__webpack_exports__, "keyframes", function() { return /* b
 __webpack_require__.d(__webpack_exports__, "withEmotionCache", function() { return /* binding */ core_browser_esm_withEmotionCache; });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/inheritsLoose.js
-var inheritsLoose = __webpack_require__(138);
+var inheritsLoose = __webpack_require__(147);
 var inheritsLoose_default = /*#__PURE__*/__webpack_require__.n(inheritsLoose);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
 
 // EXTERNAL MODULE: ./node_modules/@emotion/cache/dist/cache.browser.esm.js + 2 modules
-var cache_browser_esm = __webpack_require__(64);
+var cache_browser_esm = __webpack_require__(71);
 
 // EXTERNAL MODULE: ./node_modules/@emotion/utils/dist/utils.browser.esm.js
-var utils_browser_esm = __webpack_require__(15);
+var utils_browser_esm = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/@emotion/serialize/dist/serialize.browser.esm.js + 3 modules
-var serialize_browser_esm = __webpack_require__(11);
+var serialize_browser_esm = __webpack_require__(13);
 
 // EXTERNAL MODULE: ./node_modules/@emotion/sheet/dist/sheet.browser.esm.js
-var sheet_browser_esm = __webpack_require__(63);
+var sheet_browser_esm = __webpack_require__(70);
 
 // CONCATENATED MODULE: ./node_modules/@emotion/css/dist/css.browser.esm.js
 
