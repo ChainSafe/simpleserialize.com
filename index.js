@@ -17084,7 +17084,7 @@ var Output = /*#__PURE__*/function (_React$Component) {
         hashTreeRootStr = hashTreeRoot && serializedOutput ? serializedOutput.dump(hashTreeRoot) : "";
       } else {
         var deserializedOuput = deserializeOutputTypes[outputType];
-        deserializedStr = deserialized !== undefined && deserializedOuput ? deserializedOuput.dump(deserialized, sszType) : "";
+        deserializedStr = deserialized !== undefined && deserializedOuput && sszType ? deserializedOuput.dump(deserialized, sszType) : "";
       }
 
       return /*#__PURE__*/react.createElement("div", {
@@ -17127,7 +17127,11 @@ var Output = /*#__PURE__*/function (_React$Component) {
       }), /*#__PURE__*/react.createElement("button", {
         disabled: !this.props.serialized,
         onClick: function onClick() {
-          return _this2.downloadFile(_this2.props.serialized, "ssz");
+          if (!_this2.props.serialized) {
+            throw new Error("Missing serialized data.");
+          }
+
+          _this2.downloadFile(_this2.props.serialized, "ssz");
         }
       }, "Download data as .ssz file")) : /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("textarea", {
         className: "textarea",
@@ -17137,7 +17141,11 @@ var Output = /*#__PURE__*/function (_React$Component) {
       }), /*#__PURE__*/react.createElement("button", {
         disabled: !deserializedStr,
         onClick: function onClick() {
-          return _this2.downloadFile(deserializedStr, _this2.state.outputType);
+          if (!deserializedStr) {
+            throw new Error("Missing deserialized data.");
+          }
+
+          _this2.downloadFile(deserializedStr, _this2.state.outputType);
         }
       }, "Download data as ." + this.state.outputType + " file"))));
     }
@@ -17158,6 +17166,8 @@ var Output = /*#__PURE__*/function (_React$Component) {
 var es_regexp_exec = __webpack_require__(4916);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.match.js
 var es_string_match = __webpack_require__(4723);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.constructor.js
+var es_array_buffer_constructor = __webpack_require__(8264);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.slice.js
 var es_array_buffer_slice = __webpack_require__(9575);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.uint8-array.js
@@ -18640,6 +18650,7 @@ function Input_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "f
 
 
 
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -18826,21 +18837,45 @@ var Input = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "parsedInput",
-    value: function parsedInput() {
-      var inputType = this.getInputType();
-      return inputTypes[inputType].parse(this.state.input, this.types()[this.state.sszTypeName]);
-    }
+    value: function () {
+      var _parsedInput = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+        var inputTypeStr, type, inputType, parsed;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                inputTypeStr = this.getInputType();
+                type = this.types()[this.state.sszTypeName];
+                inputType = inputTypes[inputTypeStr];
+                parsed = inputType.parse(this.state.input, type);
+                this.props.setOverlay(false);
+                return _context3.abrupt("return", parsed);
+
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function parsedInput() {
+        return _parsedInput.apply(this, arguments);
+      }
+
+      return parsedInput;
+    }()
   }, {
     key: "resetWith",
     value: function () {
-      var _resetWith = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(inputType, sszTypeName) {
+      var _resetWith = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(inputType, sszTypeName) {
         var _this$typesWorkerThre,
             _this2 = this;
 
         var types, sszType, forkName;
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 types = this.types();
                 sszType = types[sszTypeName]; // get a new ssz type if it's not in our fork
@@ -18853,11 +18888,11 @@ var Input = /*#__PURE__*/function (_React$Component) {
                 forkName = this.state.forkName;
                 this.props.setOverlay(true, "Generating random ".concat(sszTypeName, " value..."));
                 (_this$typesWorkerThre = this.typesWorkerThread) === null || _this$typesWorkerThre === void 0 ? void 0 : _this$typesWorkerThre.createRandomValue(sszTypeName, forkName).then( /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(value) {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(value) {
                     var input;
-                    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                    return regeneratorRuntime.wrap(function _callee4$(_context4) {
                       while (1) {
-                        switch (_context3.prev = _context3.next) {
+                        switch (_context4.prev = _context4.next) {
                           case 0:
                             input = inputTypes[inputType].dump(value, sszType);
 
@@ -18881,10 +18916,10 @@ var Input = /*#__PURE__*/function (_React$Component) {
 
                           case 4:
                           case "end":
-                            return _context3.stop();
+                            return _context4.stop();
                         }
                       }
-                    }, _callee3);
+                    }, _callee4);
                   }));
 
                   return function (_x3) {
@@ -18896,10 +18931,10 @@ var Input = /*#__PURE__*/function (_React$Component) {
 
               case 6:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
 
       function resetWith(_x, _x2) {
@@ -18915,20 +18950,20 @@ var Input = /*#__PURE__*/function (_React$Component) {
 
       this.setState({
         forkName: e.target.value
-      }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
-                _context5.next = 2;
+                _context6.next = 2;
                 return _this3.resetWith(_this3.getInputType(), _this3.state.sszTypeName);
 
               case 2:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5);
+        }, _callee6);
       })));
     }
   }, {
@@ -18957,20 +18992,20 @@ var Input = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "setSSZType",
     value: function () {
-      var _setSSZType = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(e) {
-        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+      var _setSSZType = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(e) {
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
-                _context6.next = 2;
+                _context7.next = 2;
                 return this.resetWith(this.getInputType(), e.target.value);
 
               case 2:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee7, this);
       }));
 
       function setSSZType(_x4) {
@@ -18988,22 +19023,46 @@ var Input = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "doProcess",
-    value: function doProcess() {
-      var _this$state3 = this.state,
-          sszTypeName = _this$state3.sszTypeName,
-          forkName = _this$state3.forkName;
+    value: function () {
+      var _doProcess = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+        var _this$state3, sszTypeName, forkName, parsedInput;
 
-      try {
-        this.props.onProcess(forkName, sszTypeName, this.parsedInput(), this.types()[sszTypeName], this.getInputType());
-      } catch (e) {
-        this.handleError(e);
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _this$state3 = this.state, sszTypeName = _this$state3.sszTypeName, forkName = _this$state3.forkName;
+                _context8.next = 3;
+                return this.parsedInput();
+
+              case 3:
+                parsedInput = _context8.sent;
+
+                try {
+                  this.props.onProcess(forkName, sszTypeName, parsedInput, this.types()[sszTypeName], this.getInputType());
+                } catch (e) {
+                  this.handleError(e);
+                }
+
+              case 5:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8, this);
+      }));
+
+      function doProcess() {
+        return _doProcess.apply(this, arguments);
       }
-    }
+
+      return doProcess;
+    }()
   }, {
     key: "processFileContents",
     value: function processFileContents(contents) {
       try {
-        if (!this.props.serializeModeOn) {
+        if (!this.props.serializeModeOn && contents instanceof ArrayBuffer) {
           this.setInput((0,lib.toHexString)(new Uint8Array(contents)));
         } else {
           this.setInput(contents);
@@ -19027,8 +19086,10 @@ var Input = /*#__PURE__*/function (_React$Component) {
         }
 
         reader.onload = function (e) {
-          if (e.target) {
-            processFileContents(e.target.result);
+          var _e$target;
+
+          if ((_e$target = e.target) !== null && _e$target !== void 0 && _e$target.result) {
+            if (e.target !== null) processFileContents(e.target.result);
           }
         };
 
@@ -19118,7 +19179,7 @@ var Input = /*#__PURE__*/function (_React$Component) {
         }, name);
       }))))))), /*#__PURE__*/react.createElement("textarea", {
         className: "textarea",
-        rows: this.state.input && this.getRows(),
+        rows: this.getRows(),
         value: this.state.input,
         onChange: function onChange(e) {
           return _this4.setInput(e.target.value);
@@ -19126,13 +19187,32 @@ var Input = /*#__PURE__*/function (_React$Component) {
       }), /*#__PURE__*/react.createElement("button", {
         className: "button is-primary is-medium is-fullwidth is-uppercase is-family-code submit",
         disabled: !(this.state.sszTypeName && this.state.input),
-        onClick: this.doProcess.bind(this)
+        onClick: /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+          return regeneratorRuntime.wrap(function _callee9$(_context9) {
+            while (1) {
+              switch (_context9.prev = _context9.next) {
+                case 0:
+                  _context9.next = 2;
+                  return _this4.doProcess();
+
+                case 2:
+                  return _context9.abrupt("return", _context9.sent);
+
+                case 3:
+                case "end":
+                  return _context9.stop();
+              }
+            }
+          }, _callee9);
+        }))
       }, serializeModeOn ? "Serialize" : "Deserialize"));
     }
   }]);
 
   return Input;
-}(react.Component);
+}(react.Component); // @TODO: not sure what to put here instead of any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 
 /* harmony default export */ const components_Input = (withAlert()(Input));
 // EXTERNAL MODULE: ./node_modules/react-loading-overlay/lib/LoadingOverlay.js
@@ -19203,9 +19283,9 @@ var Serialize = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
+      input: undefined,
       forkName: undefined,
       name: "",
-      input: undefined,
       deserialized: undefined,
       sszType: undefined,
       error: undefined,
@@ -19284,26 +19364,31 @@ var Serialize = /*#__PURE__*/function (_React$Component) {
     key: "process",
     value: function () {
       var _process = Serialize_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(forkName, name, input, type) {
-        var _this$serializationWo,
-            _this2 = this;
+        var _this2 = this;
 
-        var error, deserialized;
+        var error, _this$serializationWo, deserialized;
+
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                this.setOverlay(true, this.props.serializeModeOn ? "Serializing..." : "Deserializing...");
-                (_this$serializationWo = this.serializationWorkerThread) === null || _this$serializationWo === void 0 ? void 0 : _this$serializationWo.serialize(name, forkName, input).then(function (data) {
-                  _this2.setState({
-                    hashTreeRoot: data.root,
-                    serialized: data.serialized
-                  });
+                if (this.props.serializeModeOn) {
+                  this.setOverlay(true, "Serializing...");
+                  (_this$serializationWo = this.serializationWorkerThread) === null || _this$serializationWo === void 0 ? void 0 : _this$serializationWo.serialize(name, forkName, input).then(function (data) {
+                    _this2.setState({
+                      hashTreeRoot: data.root,
+                      serialized: data.serialized
+                    });
 
-                  _this2.setOverlay(false);
-                })["catch"](function (e) {
-                  return error = e.message;
-                }); // note that all bottom nodes are converted to strings, so that they do not have to be formatted,
+                    _this2.setOverlay(false);
+                  })["catch"](function (e) {
+                    return error = e.message;
+                  });
+                } else {
+                  this.setOverlay(false);
+                } // note that all bottom nodes are converted to strings, so that they do not have to be formatted,
                 // and can be passed through React component properties.
+
 
                 deserialized = input;
                 this.setState({
@@ -19315,7 +19400,7 @@ var Serialize = /*#__PURE__*/function (_React$Component) {
                   deserialized: deserialized
                 });
 
-              case 4:
+              case 3:
               case "end":
                 return _context3.stop();
             }
@@ -19649,6 +19734,8 @@ function src_extends() { src_extends = Object.assign || function (target) { for 
 
 
 
+ // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 
 
 
@@ -26103,6 +26190,31 @@ module.exports = function (name) {
     }
   } return WellKnownSymbolsStore[name];
 };
+
+
+/***/ }),
+
+/***/ 8264:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var arrayBufferModule = __webpack_require__(3331);
+var setSpecies = __webpack_require__(6340);
+
+var ARRAY_BUFFER = 'ArrayBuffer';
+var ArrayBuffer = arrayBufferModule[ARRAY_BUFFER];
+var NativeArrayBuffer = global[ARRAY_BUFFER];
+
+// `ArrayBuffer` constructor
+// https://tc39.es/ecma262/#sec-arraybuffer-constructor
+$({ global: true, forced: NativeArrayBuffer !== ArrayBuffer }, {
+  ArrayBuffer: ArrayBuffer
+});
+
+setSpecies(ARRAY_BUFFER);
 
 
 /***/ }),
