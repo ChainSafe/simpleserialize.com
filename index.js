@@ -18682,12 +18682,7 @@ function Input_getPrototypeOf(o) { Input_getPrototypeOf = Object.setPrototypeOf 
 
 
 
-
-function getRandomType(types) {
-  var names = typeNames(types);
-  return names[Math.floor(Math.random() * names.length)];
-}
-
+var initialType = "BeaconBlock";
 var DEFAULT_FORK = "phase0";
 
 var Input = /*#__PURE__*/function (_React$Component) {
@@ -18702,7 +18697,6 @@ var Input = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     var types = forks[DEFAULT_FORK];
-    var initialType = getRandomType(types);
     _this.worker = props.worker;
     _this.state = {
       forkName: DEFAULT_FORK,
@@ -18710,7 +18704,8 @@ var Input = /*#__PURE__*/function (_React$Component) {
       sszTypeName: initialType,
       serializeInputType: "yaml",
       deserializeInputType: "hex",
-      value: ""
+      value: "",
+      userHasEditedInput: false
     };
     return _this;
   }
@@ -18869,10 +18864,10 @@ var Input = /*#__PURE__*/function (_React$Component) {
     key: "resetWith",
     value: function () {
       var _resetWith = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(inputType, sszTypeName) {
-        var _this$typesWorkerThre,
-            _this2 = this;
+        var _this2 = this;
 
-        var types, sszType, forkName;
+        var types, sszType, forkName, _this$typesWorkerThre;
+
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -18881,53 +18876,59 @@ var Input = /*#__PURE__*/function (_React$Component) {
                 sszType = types[sszTypeName]; // get a new ssz type if it's not in our fork
 
                 if (!sszType) {
-                  sszTypeName = getRandomType(types);
+                  sszTypeName = initialType;
                   sszType = types[sszTypeName];
                 }
 
-                forkName = this.state.forkName;
-                this.props.setOverlay(true, "Generating random ".concat(sszTypeName, " value..."));
-                (_this$typesWorkerThre = this.typesWorkerThread) === null || _this$typesWorkerThre === void 0 ? void 0 : _this$typesWorkerThre.createRandomValue(sszTypeName, forkName).then( /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(value) {
-                    var input;
-                    return regeneratorRuntime.wrap(function _callee4$(_context4) {
-                      while (1) {
-                        switch (_context4.prev = _context4.next) {
-                          case 0:
-                            input = inputTypes[inputType].dump(value, sszType);
+                forkName = this.state.forkName; // First set new type and name
 
-                            if (_this2.props.serializeModeOn) {
+                if (this.props.serializeModeOn) {
+                  this.setState({
+                    serializeInputType: inputType,
+                    sszTypeName: sszTypeName
+                  });
+                } else {
+                  this.setState({
+                    deserializeInputType: inputType,
+                    sszTypeName: sszTypeName
+                  });
+                }
+
+                if (this.state.userHasEditedInput) {
+                  this.doProcess.bind(this);
+                } else {
+                  this.props.setOverlay(true, "Generating random ".concat(sszTypeName, " value..."));
+                  (_this$typesWorkerThre = this.typesWorkerThread) === null || _this$typesWorkerThre === void 0 ? void 0 : _this$typesWorkerThre.createRandomValue(sszTypeName, forkName).then( /*#__PURE__*/function () {
+                    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(value) {
+                      var input;
+                      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                        while (1) {
+                          switch (_context4.prev = _context4.next) {
+                            case 0:
+                              input = inputTypes[inputType].dump(value, sszType);
+
                               _this2.setState({
-                                serializeInputType: inputType
+                                input: input,
+                                value: value
                               });
-                            } else {
-                              _this2.setState({
-                                deserializeInputType: inputType
-                              });
-                            }
 
-                            _this2.setState({
-                              sszTypeName: sszTypeName,
-                              input: input,
-                              value: value
-                            });
+                              _this2.props.setOverlay(false);
 
-                            _this2.props.setOverlay(false);
-
-                          case 4:
-                          case "end":
-                            return _context4.stop();
+                            case 3:
+                            case "end":
+                              return _context4.stop();
+                          }
                         }
-                      }
-                    }, _callee4);
-                  }));
+                      }, _callee4);
+                    }));
 
-                  return function (_x3) {
-                    return _ref.apply(this, arguments);
-                  };
-                }())["catch"](function (error) {
-                  return _this2.handleError(error);
-                });
+                    return function (_x3) {
+                      return _ref.apply(this, arguments);
+                    };
+                  }())["catch"](function (error) {
+                    return _this2.handleError(error);
+                  });
+                }
 
               case 6:
               case "end":
@@ -19018,7 +19019,8 @@ var Input = /*#__PURE__*/function (_React$Component) {
     key: "setInput",
     value: function setInput(input) {
       this.setState({
-        input: input
+        input: input,
+        userHasEditedInput: true
       });
     }
   }, {
