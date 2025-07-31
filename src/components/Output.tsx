@@ -3,7 +3,7 @@ import * as React from "react";
 import ErrorBox from "./display/ErrorBox";
 import NamedOutput from "./display/NamedOutput";
 
-import {Type} from "@chainsafe/ssz";
+import type {Type} from "@chainsafe/ssz";
 import {deserializeOutputTypes, serializeOutputTypes} from "../util/output_types";
 
 type Props<T> = {

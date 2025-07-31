@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 import {
-  Type,
+  type Type,
   isBitListType,
   isBitVectorType,
   isBooleanType,
@@ -18,8 +18,8 @@ import BN from "bn.js";
 // @ts-ignore
 import EyzyTree from "eyzy-tree";
 import * as React from "react";
-import {Node as SSZNode, getChildNodes, getRootNode, isBottomType} from "../util/partials";
-import {ForkName, forks} from "../util/types";
+import {type Node as SSZNode, getChildNodes, getRootNode, isBottomType} from "../util/partials";
+import {type ForkName, forks} from "../util/types";
 
 function getTypeName<T>(type: Type<T>, _types: Record<string, Type<T>>, name: string): string | undefined {
   if (isBooleanType(type)) return "bool";
