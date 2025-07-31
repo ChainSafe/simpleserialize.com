@@ -15,7 +15,7 @@
 		"lint:fix": "biome check --write"
 	},
 	"dependencies": {
-		"@babel/runtime": "^7.14.6",
+		"@babel/runtime": "^7.26.10",
 		"@babel/types": "^7.14.5",
 		"@chainsafe/ssz": "1.2.1",
 		"@lodestar/types": "^1.29.0",
