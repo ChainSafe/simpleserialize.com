@@ -1,12 +1,12 @@
-import {Type} from "@chainsafe/ssz";
+import type {Type} from "@chainsafe/ssz";
 import * as React from "react";
 import LoadingOverlay from "react-loading-overlay";
 import BounceLoader from "react-spinners/BounceLoader";
-import {ModuleThread, Thread, Worker, spawn} from "threads";
-import {ForkName} from "../util/types";
+import {type ModuleThread, Thread, Worker, spawn} from "threads";
+import type {ForkName} from "../util/types";
 import Input from "./Input";
 import Output from "./Output";
-import {SszWorker} from "./worker";
+import type {SszWorker} from "./worker";
 
 type Props = {
   serializeModeOn: boolean;

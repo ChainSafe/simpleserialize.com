@@ -1,12 +1,12 @@
-import {Type, toHexString} from "@chainsafe/ssz";
+import {type Type, toHexString} from "@chainsafe/ssz";
 import * as React from "react";
-import {ChangeEvent} from "react";
-import {AlertManager, withAlert} from "react-alert";
-import {ModuleThread, Thread, Worker, spawn} from "threads";
+import type {ChangeEvent} from "react";
+import {type AlertManager, withAlert} from "react-alert";
+import {type ModuleThread, Thread, type Worker, spawn} from "threads";
 
 import {inputTypes} from "../util/input_types";
-import {ForkName, forks, typeNames} from "../util/types";
-import {SszWorker} from "./worker";
+import {type ForkName, forks, typeNames} from "../util/types";
+import type {SszWorker} from "./worker";
 
 const initialType = "BeaconBlock";
 
