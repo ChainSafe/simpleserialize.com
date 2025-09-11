@@ -1012,15 +1012,45 @@
   resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-darwin-arm64/-/hashtree-darwin-arm64-1.0.1.tgz#e2c60090c56a1c8dc8bdff329856184ad32e4cd5"
   integrity sha512-+KmEgQMpO7FDL3klAcpXbQ4DPZvfCe0qSaBBrtT4vLF8V1JGm3sp+j7oibtxtOsLKz7nJMiK1pZExi7vjXu8og==
 
+"@chainsafe/hashtree-darwin-arm64@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-darwin-arm64/-/hashtree-darwin-arm64-1.0.2.tgz#fcf09de55e8b666fa86d2136d285a4ea55f066c0"
+  integrity sha512-yIIwn9SUR5ZTl2vN1QqRtDFL/w2xYW4o68A1k8UexMbieGAnE7Ab7NvtCZRHRe8x0eONO46F/bWn5bxxyYlFXw==
+
 "@chainsafe/hashtree-linux-arm64-gnu@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-linux-arm64-gnu/-/hashtree-linux-arm64-gnu-1.0.1.tgz#49d2604a6c9106219448af3eaf76f4da6e44daca"
   integrity sha512-p1hnhGq2aFY+Zhdn1Q6L/6yLYNKjqXfn/Pc8jiM0e3+Lf/hB+yCdqYVu1pto26BrZjugCFZfupHaL4DjUTDttw==
 
+"@chainsafe/hashtree-linux-arm64-gnu@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-linux-arm64-gnu/-/hashtree-linux-arm64-gnu-1.0.2.tgz#0af39b6f25ed77a2185151484c67636c3bfd7138"
+  integrity sha512-MDz1xBRTRHw2eezGqx1Ff8NoeUUQP3bhbeeVG8ZZTkFYqvRc8O65OQOTtgO+fFGvqnDjVBSRHmiTXU5eNeH/mQ==
+
+"@chainsafe/hashtree-linux-arm64-musl@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-linux-arm64-musl/-/hashtree-linux-arm64-musl-1.0.2.tgz#40911e7427d88a1febca23f96f83f009977dbbf9"
+  integrity sha512-BUy+/9brJwAFAtraro4y/1F+aP/8j/7HrnYdde8PTu7jHWAClI9xZygadaJbk0GoWxyCOUAJKUs8KHVnYxJDeg==
+
 "@chainsafe/hashtree-linux-x64-gnu@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-linux-x64-gnu/-/hashtree-linux-x64-gnu-1.0.1.tgz#31c5a2bb196b78f04f2bf4bfb5c1bf1f3331f071"
   integrity sha512-uCIGuUWuWV0LiB4KLMy6JFa7Jp6NmPl3hKF5BYWu8TzUBe7vSXMZfqTzGxXPggFYN2/0KymfRdG9iDCOJfGRqg==
+
+"@chainsafe/hashtree-linux-x64-gnu@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-linux-x64-gnu/-/hashtree-linux-x64-gnu-1.0.2.tgz#98d30f22200c0a4afd496b1466c51f9a42aa9e4f"
+  integrity sha512-bFy9ffFG77SivmeOjOlZmOCrxzQ/WqUESy0I+dW6IX7wquTXHldJKWvohs9+FEn3TSXgeigFmEATz5tfxBfIZw==
+
+"@chainsafe/hashtree-linux-x64-musl@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-linux-x64-musl/-/hashtree-linux-x64-musl-1.0.2.tgz#b7aa71150dd6c4687a0f529a5cee052e36a99fb3"
+  integrity sha512-mbJB3C0RjwpqOMPZIUQm3IBH6d3sYiKDXMU6ORt5nuk7Ix2I80xxffAciDO1d7kKNnW6HStOj5s/rGhIDxK1ug==
+
+"@chainsafe/hashtree-win32-x64-msvc@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/hashtree-win32-x64-msvc/-/hashtree-win32-x64-msvc-1.0.2.tgz#1b9fbb3f6a4b51f36b9efd42db9ab0308580b518"
+  integrity sha512-wXFhGqaydgadefQbjSTGqZY1R1MBhnJj+gbJhULNRUXco5pHsXfOk3QhCDAefp1PPW+wQwfT4clEnQCqJIf58w==
 
 "@chainsafe/hashtree@1.0.1":
   version "1.0.1"
@@ -1031,6 +1061,18 @@
     "@chainsafe/hashtree-linux-arm64-gnu" "1.0.1"
     "@chainsafe/hashtree-linux-x64-gnu" "1.0.1"
 
+"@chainsafe/hashtree@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/hashtree/-/hashtree-1.0.2.tgz#2a16b49e491bef9e5760cd1010363cb3d1351fb8"
+  integrity sha512-OaWjsZ6S/GaT2RvaqdpsF5Mux8qQOE2KbitX2yHmQJZNUZkdh7C3N4PA5LsvewqX+z8Nkv8mr1uSe0LSrHGiQw==
+  optionalDependencies:
+    "@chainsafe/hashtree-darwin-arm64" "1.0.2"
+    "@chainsafe/hashtree-linux-arm64-gnu" "1.0.2"
+    "@chainsafe/hashtree-linux-arm64-musl" "1.0.2"
+    "@chainsafe/hashtree-linux-x64-gnu" "1.0.2"
+    "@chainsafe/hashtree-linux-x64-musl" "1.0.2"
+    "@chainsafe/hashtree-win32-x64-msvc" "1.0.2"
+
 "@chainsafe/persistent-merkle-tree@1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@chainsafe/persistent-merkle-tree/-/persistent-merkle-tree-1.2.0.tgz#a402debcae6b386c51564c8cbacc9b0d56f64486"
@@ -1040,13 +1082,30 @@
     "@chainsafe/hashtree" "1.0.1"
     "@noble/hashes" "^1.3.0"
 
-"@chainsafe/ssz@1.2.1", "@chainsafe/ssz@^1.2.1":
+"@chainsafe/persistent-merkle-tree@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@chainsafe/persistent-merkle-tree/-/persistent-merkle-tree-1.2.1.tgz#80f052e4a04c63304d5198dbf2fa49e104a0365a"
+  integrity sha512-AOSEVLfaqwb9eTCKuY1ri0DrRxVQ3Rh+we1VBj1GahUGfEdE8OC3Vkbca7Up6RoI9Ip9FLnI31Y7AjKH9ZqAGA==
+  dependencies:
+    "@chainsafe/as-sha256" "1.2.0"
+    "@chainsafe/hashtree" "1.0.2"
+    "@noble/hashes" "^1.3.0"
+
+"@chainsafe/ssz@1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@chainsafe/ssz/-/ssz-1.2.1.tgz#a9a89c9706de33444c0ee64fbc461ae6001132af"
   integrity sha512-rchrNF+tJ1yOMZS5CQK3bK5UZC1vQP8ANxW4McRedvBls5b9Mvn+LtbOE4wffrVMOxQzOXcBGZDoCPPJYX76Rg==
   dependencies:
     "@chainsafe/as-sha256" "1.2.0"
     "@chainsafe/persistent-merkle-tree" "1.2.0"
+
+"@chainsafe/ssz@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/ssz/-/ssz-1.2.2.tgz#3c41b70bac9e646cb4cce0d49bda176ca87984ad"
+  integrity sha512-kIA3fJO6h2RsQndsNBlCSQYB4xfdZGMQvNPKPgbiB0mysV6okuxeJU3Nyl16xDCKv3tqej76eGYHcyjMVt7V1w==
+  dependencies:
+    "@chainsafe/as-sha256" "1.2.0"
+    "@chainsafe/persistent-merkle-tree" "1.2.1"
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
@@ -1204,18 +1263,18 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.5.tgz#4fc56c15c580b9adb7dc3c333a134e540b44bfb1"
   integrity sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==
 
-"@lodestar/params@^1.32.0":
-  version "1.32.0"
-  resolved "https://registry.yarnpkg.com/@lodestar/params/-/params-1.32.0.tgz#eb0ba0c66bb24abda0b12abf7969d185877bf1f7"
-  integrity sha512-VKRDrjO8PGsWsCKYL85Hqz/+xre8bdqavJgEXK7uya6EcE46xFFWiH/Jrn8a0A83YxgDlGSk8WR0szEg+dtSSQ==
+"@lodestar/params@^1.34.1":
+  version "1.34.1"
+  resolved "https://registry.yarnpkg.com/@lodestar/params/-/params-1.34.1.tgz#486238274a52c93d383d97d8beb9e0a32a7750da"
+  integrity sha512-ufzGzUrNko3Mj2Dooq5wYcJzrrXrYQ9G+N3mnQpOke5DvejZtYNgBV+W05uBymPd/BsT4tBCP0SjfHu3enxuig==
 
-"@lodestar/types@^1.29.0":
-  version "1.32.0"
-  resolved "https://registry.yarnpkg.com/@lodestar/types/-/types-1.32.0.tgz#968c833240adac0fe07d254966cda4c2087d451e"
-  integrity sha512-w8eR/q5cgRrWxJAiSfbrnAfaavTDW+w49wF5gPZ8JDHW0RkfZZx3taYB5elNolPsOZNQJm0wxhK9iVIq2YeNyg==
+"@lodestar/types@^1.34.0":
+  version "1.34.1"
+  resolved "https://registry.yarnpkg.com/@lodestar/types/-/types-1.34.1.tgz#7a7ea573d32006f90ea39561746bedd7ca56073f"
+  integrity sha512-QgX/yzWxGSGvFQzx20NoKmXb/2YyUKuVZmtUvKcApyQ6CLJGXgCY0Ygf7HsdP2nNMW4Rkv/0aGFew8WTp8rG+w==
   dependencies:
-    "@chainsafe/ssz" "^1.2.1"
-    "@lodestar/params" "^1.32.0"
+    "@chainsafe/ssz" "^1.2.2"
+    "@lodestar/params" "^1.34.1"
     ethereum-cryptography "^2.0.0"
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":

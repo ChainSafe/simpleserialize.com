@@ -19,6 +19,7 @@ let {
 	electra,
 	fulu,
 	sszTypesFor,
+	gloas,
 	...primitive
 } = ssz;
 
@@ -28,6 +29,7 @@ bellatrix = patchSszTypes(bellatrix);
 capella = patchSszTypes(capella);
 deneb = patchSszTypes(deneb);
 electra = patchSszTypes(electra);
+fulu = patchSszTypes(fulu);
 primitive = patchSszTypes(primitive);
 
 export const forks = {
@@ -50,6 +52,16 @@ export const forks = {
 		...capella,
 		...deneb,
 		...electra,
+		...primitive,
+	},
+	fulu: {
+		...phase0,
+		...altair,
+		...bellatrix,
+		...capella,
+		...deneb,
+		...electra,
+		...fulu,
 		...primitive,
 	},
 } as Record<string, Record<string, Type<unknown>>>;
