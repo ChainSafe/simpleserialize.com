@@ -17213,7 +17213,6 @@ __webpack_require__.d(phase0_sszTypes_namespaceObject, {
   BeaconBlockHeader: () => (BeaconBlockHeader),
   BeaconBlockHeaderBigint: () => (BeaconBlockHeaderBigint),
   BeaconBlocksByRangeRequest: () => (BeaconBlocksByRangeRequest),
-  BeaconBlocksByRootRequest: () => (BeaconBlocksByRootRequest),
   BeaconState: () => (BeaconState),
   Checkpoint: () => (Checkpoint),
   CheckpointBigint: () => (CheckpointBigint),
@@ -17454,19 +17453,37 @@ __webpack_require__.d(electra_sszTypes_namespaceObject, {
 var fulu_sszTypes_namespaceObject = {};
 __webpack_require__.r(fulu_sszTypes_namespaceObject);
 __webpack_require__.d(fulu_sszTypes_namespaceObject, {
+  BeaconBlock: () => (fulu_sszTypes_BeaconBlock),
   BeaconState: () => (fulu_sszTypes_BeaconState),
+  Blob: () => (fulu_sszTypes_Blob),
+  BlobsBundle: () => (sszTypes_BlobsBundle),
+  BlockContents: () => (fulu_sszTypes_BlockContents),
   Cell: () => (Cell),
   DataColumn: () => (DataColumn),
-  DataColumnIdentifier: () => (DataColumnIdentifier),
   DataColumnSidecar: () => (DataColumnSidecar),
   DataColumnSidecars: () => (DataColumnSidecars),
   DataColumnSidecarsByRangeRequest: () => (DataColumnSidecarsByRangeRequest),
-  DataColumnSidecarsByRootRequest: () => (DataColumnSidecarsByRootRequest),
+  DataColumns: () => (DataColumns),
+  DataColumnsByRootIdentifier: () => (DataColumnsByRootIdentifier),
   ExtendedMatrix: () => (ExtendedMatrix),
+  KZGProof: () => (sszTypes_KZGProof),
+  KZGProofs: () => (sszTypes_KZGProofs),
   KzgCommitmentsInclusionProof: () => (KzgCommitmentsInclusionProof),
   MatrixEntry: () => (MatrixEntry),
   Metadata: () => (fulu_sszTypes_Metadata),
-  ProposerLookahead: () => (ProposerLookahead)
+  ProposerLookahead: () => (ProposerLookahead),
+  SignedBeaconBlock: () => (fulu_sszTypes_SignedBeaconBlock),
+  SignedBlockContents: () => (fulu_sszTypes_SignedBlockContents),
+  Status: () => (sszTypes_Status)
+});
+
+// NAMESPACE OBJECT: ./node_modules/@lodestar/types/lib/gloas/sszTypes.js
+var gloas_sszTypes_namespaceObject = {};
+__webpack_require__.r(gloas_sszTypes_namespaceObject);
+__webpack_require__.d(gloas_sszTypes_namespaceObject, {
+  BeaconBlock: () => (gloas_sszTypes_BeaconBlock),
+  BeaconState: () => (gloas_sszTypes_BeaconState),
+  SignedBeaconBlock: () => (gloas_sszTypes_SignedBeaconBlock)
 });
 
 // NAMESPACE OBJECT: ./node_modules/@lodestar/types/lib/sszTypes.js
@@ -17519,6 +17536,7 @@ __webpack_require__.d(lib_sszTypes_namespaceObject, {
   deneb: () => (deneb),
   electra: () => (electra),
   fulu: () => (fulu),
+  gloas: () => (gloas),
   phase0: () => (phase0),
   sszTypesFor: () => (sszTypesFor)
 });
@@ -18816,7 +18834,7 @@ var withAlert = function withAlert() {
 
 
 ;// ./package.json
-const package_namespaceObject = /*#__PURE__*/JSON.parse('{"El":{"Gd":"1.2.1","jK":"^1.29.0"}}');
+const package_namespaceObject = /*#__PURE__*/JSON.parse('{"El":{"Gd":"1.2.1","jK":"^1.34.0"}}');
 ;// ./src/components/Footer.tsx
 
 
@@ -18862,7 +18880,7 @@ function ForkMe() {
 }
 ;// ./src/components/Header.tsx
 
-var SPEC_VERSION = "1.5.0";
+var SPEC_VERSION = "1.6.0";
 function Header() {
   return /*#__PURE__*/react.createElement("div", {
     className: "section"
@@ -34973,6 +34991,8 @@ const mainnetPreset = {
     WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA: 4096,
     // FULU
     ///////////
+    NUMBER_OF_COLUMNS: 128,
+    CELLS_PER_EXT_BLOB: 128,
     FIELD_ELEMENTS_PER_CELL: 64,
     FIELD_ELEMENTS_PER_EXT_BLOB: 8192,
     KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH: 4,
@@ -35117,10 +35137,12 @@ const minimalPreset = {
     PENDING_CONSOLIDATIONS_LIMIT: 64,
     MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD: 2,
     WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA: 4096,
-    MAX_BLOB_COMMITMENTS_PER_BLOCK: 32,
-    KZG_COMMITMENT_INCLUSION_PROOF_DEPTH: 10,
+    MAX_BLOB_COMMITMENTS_PER_BLOCK: 4096,
+    KZG_COMMITMENT_INCLUSION_PROOF_DEPTH: 17,
     // FULU
     ///////////
+    NUMBER_OF_COLUMNS: 128,
+    CELLS_PER_EXT_BLOB: 128,
     FIELD_ELEMENTS_PER_CELL: 64,
     FIELD_ELEMENTS_PER_EXT_BLOB: 8192,
     KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH: 4,
@@ -35215,6 +35237,8 @@ const types_beaconPresetTypes = {
     WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA: "number",
     // FULU
     ///////////
+    NUMBER_OF_COLUMNS: "number",
+    CELLS_PER_EXT_BLOB: "number",
     FIELD_ELEMENTS_PER_CELL: "number",
     FIELD_ELEMENTS_PER_EXT_BLOB: "number",
     KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH: "number",
@@ -35326,6 +35350,7 @@ var ForkName;
     ForkName["deneb"] = "deneb";
     ForkName["electra"] = "electra";
     ForkName["fulu"] = "fulu";
+    ForkName["gloas"] = "gloas";
 })(ForkName || (ForkName = {}));
 /**
  * Fork sequence number in order of occurrence
@@ -35339,6 +35364,7 @@ var ForkSeq;
     ForkSeq[ForkSeq["deneb"] = 4] = "deneb";
     ForkSeq[ForkSeq["electra"] = 5] = "electra";
     ForkSeq[ForkSeq["fulu"] = 6] = "fulu";
+    ForkSeq[ForkSeq["gloas"] = 7] = "gloas";
 })(ForkSeq || (ForkSeq = {}));
 function exclude(coll, val) {
     return coll.filter((f) => !val.includes(f));
@@ -35398,6 +35424,18 @@ const forkPostFulu = exclude(forkAll, [
 ]);
 function isForkPostFulu(fork) {
     return isForkPostElectra(fork) && fork !== ForkName.electra;
+}
+const forkPostGloas = exclude(forkAll, [
+    ForkName.phase0,
+    ForkName.altair,
+    ForkName.bellatrix,
+    ForkName.capella,
+    ForkName.deneb,
+    ForkName.electra,
+    ForkName.fulu,
+]);
+function isForkPostGloas(fork) {
+    return isForkPostFulu(fork) && fork !== ForkName.fulu;
 }
 /**
  * @deprecated Use `forkPostAltair` instead.
@@ -35465,7 +35503,7 @@ const ACTIVE_PRESET = userSelectedPreset ??
 const activePreset = { ...presets[ACTIVE_PRESET], ...userOverrides };
 // These variables must be exported individually and explicitly
 // in order to be accessible as top-level exports
-const { MAX_COMMITTEES_PER_SLOT, TARGET_COMMITTEE_SIZE, MAX_VALIDATORS_PER_COMMITTEE, SHUFFLE_ROUND_COUNT, HYSTERESIS_QUOTIENT, HYSTERESIS_DOWNWARD_MULTIPLIER, HYSTERESIS_UPWARD_MULTIPLIER, MIN_DEPOSIT_AMOUNT, MAX_EFFECTIVE_BALANCE, EFFECTIVE_BALANCE_INCREMENT, MIN_ATTESTATION_INCLUSION_DELAY, SLOTS_PER_EPOCH, MIN_SEED_LOOKAHEAD, MAX_SEED_LOOKAHEAD, EPOCHS_PER_ETH1_VOTING_PERIOD, SLOTS_PER_HISTORICAL_ROOT, MIN_EPOCHS_TO_INACTIVITY_PENALTY, EPOCHS_PER_HISTORICAL_VECTOR, EPOCHS_PER_SLASHINGS_VECTOR, HISTORICAL_ROOTS_LIMIT, VALIDATOR_REGISTRY_LIMIT, BASE_REWARD_FACTOR, WHISTLEBLOWER_REWARD_QUOTIENT, PROPOSER_REWARD_QUOTIENT, INACTIVITY_PENALTY_QUOTIENT, MIN_SLASHING_PENALTY_QUOTIENT, PROPORTIONAL_SLASHING_MULTIPLIER, MAX_PROPOSER_SLASHINGS, MAX_ATTESTER_SLASHINGS, MAX_ATTESTATIONS, MAX_DEPOSITS, MAX_VOLUNTARY_EXITS, SYNC_COMMITTEE_SIZE, EPOCHS_PER_SYNC_COMMITTEE_PERIOD, INACTIVITY_PENALTY_QUOTIENT_ALTAIR, MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR, PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR, MIN_SYNC_COMMITTEE_PARTICIPANTS, UPDATE_TIMEOUT, INACTIVITY_PENALTY_QUOTIENT_BELLATRIX, MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX, PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX, MAX_BYTES_PER_TRANSACTION, MAX_TRANSACTIONS_PER_PAYLOAD, BYTES_PER_LOGS_BLOOM, MAX_EXTRA_DATA_BYTES, MAX_BLS_TO_EXECUTION_CHANGES, MAX_WITHDRAWALS_PER_PAYLOAD, MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP, FIELD_ELEMENTS_PER_BLOB, MAX_BLOB_COMMITMENTS_PER_BLOCK, KZG_COMMITMENT_INCLUSION_PROOF_DEPTH, MAX_EFFECTIVE_BALANCE_ELECTRA, MIN_ACTIVATION_BALANCE, PENDING_DEPOSITS_LIMIT, PENDING_PARTIAL_WITHDRAWALS_LIMIT, PENDING_CONSOLIDATIONS_LIMIT, MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA, MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD, MAX_DEPOSIT_REQUESTS_PER_PAYLOAD, MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD, MAX_ATTESTER_SLASHINGS_ELECTRA, MAX_ATTESTATIONS_ELECTRA, MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP, MAX_PENDING_DEPOSITS_PER_EPOCH, WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA, FIELD_ELEMENTS_PER_CELL, FIELD_ELEMENTS_PER_EXT_BLOB, KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH, } = activePreset;
+const { MAX_COMMITTEES_PER_SLOT, TARGET_COMMITTEE_SIZE, MAX_VALIDATORS_PER_COMMITTEE, SHUFFLE_ROUND_COUNT, HYSTERESIS_QUOTIENT, HYSTERESIS_DOWNWARD_MULTIPLIER, HYSTERESIS_UPWARD_MULTIPLIER, MIN_DEPOSIT_AMOUNT, MAX_EFFECTIVE_BALANCE, EFFECTIVE_BALANCE_INCREMENT, MIN_ATTESTATION_INCLUSION_DELAY, SLOTS_PER_EPOCH, MIN_SEED_LOOKAHEAD, MAX_SEED_LOOKAHEAD, EPOCHS_PER_ETH1_VOTING_PERIOD, SLOTS_PER_HISTORICAL_ROOT, MIN_EPOCHS_TO_INACTIVITY_PENALTY, EPOCHS_PER_HISTORICAL_VECTOR, EPOCHS_PER_SLASHINGS_VECTOR, HISTORICAL_ROOTS_LIMIT, VALIDATOR_REGISTRY_LIMIT, BASE_REWARD_FACTOR, WHISTLEBLOWER_REWARD_QUOTIENT, PROPOSER_REWARD_QUOTIENT, INACTIVITY_PENALTY_QUOTIENT, MIN_SLASHING_PENALTY_QUOTIENT, PROPORTIONAL_SLASHING_MULTIPLIER, MAX_PROPOSER_SLASHINGS, MAX_ATTESTER_SLASHINGS, MAX_ATTESTATIONS, MAX_DEPOSITS, MAX_VOLUNTARY_EXITS, SYNC_COMMITTEE_SIZE, EPOCHS_PER_SYNC_COMMITTEE_PERIOD, INACTIVITY_PENALTY_QUOTIENT_ALTAIR, MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR, PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR, MIN_SYNC_COMMITTEE_PARTICIPANTS, UPDATE_TIMEOUT, INACTIVITY_PENALTY_QUOTIENT_BELLATRIX, MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX, PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX, MAX_BYTES_PER_TRANSACTION, MAX_TRANSACTIONS_PER_PAYLOAD, BYTES_PER_LOGS_BLOOM, MAX_EXTRA_DATA_BYTES, MAX_BLS_TO_EXECUTION_CHANGES, MAX_WITHDRAWALS_PER_PAYLOAD, MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP, FIELD_ELEMENTS_PER_BLOB, MAX_BLOB_COMMITMENTS_PER_BLOCK, KZG_COMMITMENT_INCLUSION_PROOF_DEPTH, MAX_EFFECTIVE_BALANCE_ELECTRA, MIN_ACTIVATION_BALANCE, PENDING_DEPOSITS_LIMIT, PENDING_PARTIAL_WITHDRAWALS_LIMIT, PENDING_CONSOLIDATIONS_LIMIT, MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA, MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD, MAX_DEPOSIT_REQUESTS_PER_PAYLOAD, MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD, MAX_ATTESTER_SLASHINGS_ELECTRA, MAX_ATTESTATIONS_ELECTRA, MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP, MAX_PENDING_DEPOSITS_PER_EPOCH, WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA, NUMBER_OF_COLUMNS, CELLS_PER_EXT_BLOB, FIELD_ELEMENTS_PER_CELL, FIELD_ELEMENTS_PER_EXT_BLOB, KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH, } = activePreset;
 ////////////
 // Constants
 ////////////
@@ -35532,8 +35570,6 @@ const EPOCHS_PER_SUBNET_SUBSCRIPTION = 256;
 const TARGET_AGGREGATORS_PER_SYNC_SUBCOMMITTEE = 16;
 const SYNC_COMMITTEE_SUBNET_COUNT = 4;
 const SYNC_COMMITTEE_SUBNET_SIZE = Math.floor(SYNC_COMMITTEE_SIZE / SYNC_COMMITTEE_SUBNET_COUNT);
-const MAX_REQUEST_BLOCKS = 2 ** 10; // 1024
-const MAX_REQUEST_BLOCKS_DENEB = 2 ** 7; // 128
 // Lightclient pre-computed
 /**
  * ```ts
@@ -35599,10 +35635,10 @@ const BYTES_PER_FIELD_ELEMENT = 32;
 const BLOB_TX_TYPE = 0x03;
 const VERSIONED_HASH_VERSION_KZG = 0x01;
 // ssz.deneb.BeaconBlockBody.getPathInfo(['blobKzgCommitments',0]).gindex
-const KZG_COMMITMENT_GINDEX0 = ACTIVE_PRESET === PresetName.minimal ? 1728 : 221184;
+const KZG_COMMITMENT_GINDEX0 = 221184;
 const KZG_COMMITMENT_SUBTREE_INDEX0 = KZG_COMMITMENT_GINDEX0 - 2 ** KZG_COMMITMENT_INCLUSION_PROOF_DEPTH;
 // ssz.deneb.BlobSidecars.elementType.fixedSize
-const BLOBSIDECAR_FIXED_SIZE = ACTIVE_PRESET === PresetName.minimal ? 131704 : 131928;
+const BLOBSIDECAR_FIXED_SIZE = 131928;
 // Electra Misc
 const UNSET_DEPOSIT_REQUESTS_START_INDEX = (/* unused pure expression or super */ null && (2n ** 64n - 1n));
 const FULL_EXIT_REQUEST_AMOUNT = 0;
@@ -35618,73 +35654,616 @@ const NEXT_SYNC_COMMITTEE_INDEX_ELECTRA = 23;
 const DEPOSIT_REQUEST_TYPE = 0x00;
 const WITHDRAWAL_REQUEST_TYPE = 0x01;
 const CONSOLIDATION_REQUEST_TYPE = 0x02;
-// 128
-const NUMBER_OF_COLUMNS = (FIELD_ELEMENTS_PER_BLOB * 2) / FIELD_ELEMENTS_PER_CELL;
 const BYTES_PER_CELL = FIELD_ELEMENTS_PER_CELL * BYTES_PER_FIELD_ELEMENT;
-const CELLS_PER_EXT_BLOB = FIELD_ELEMENTS_PER_EXT_BLOB / FIELD_ELEMENTS_PER_CELL;
 // ssz.fulu.BeaconBlockBody.getPathInfo(['blobKzgCommitments']).gindex
 const KZG_COMMITMENTS_GINDEX = 27;
 const KZG_COMMITMENTS_SUBTREE_INDEX = KZG_COMMITMENTS_GINDEX - 2 ** KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH;
-const MAX_REQUEST_DATA_COLUMN_SIDECARS = MAX_REQUEST_BLOCKS_DENEB * NUMBER_OF_COLUMNS; // 16384
-const DATA_COLUMN_SIDECAR_SUBNET_COUNT = 128;
-const NUMBER_OF_CUSTODY_GROUPS = 128;
 //# sourceMappingURL=index.js.map
-;// ./node_modules/@noble/hashes/esm/_assert.js
-function number(n) {
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/gindex.js
+function gindex_bitIndexBigInt(v) {
+    return v.toString(2).length - 1;
+}
+function gindex_toGindex(depth, index) {
+    const anchor = BigInt(1) << BigInt(depth);
+    if (index >= anchor) {
+        throw new Error(`index ${index} too large for depth ${depth}`);
+    }
+    return anchor | index;
+}
+function gindex_toGindexBitstring(depth, index) {
+    const str = index ? Number(index).toString(2) : "";
+    if (str.length > depth) {
+        throw new Error("index too large for depth");
+    }
+    return `1${str.padStart(depth, "0")}`;
+}
+function lib_gindex_convertGindexToBitstring(gindex) {
+    if (typeof gindex === "string") {
+        if (gindex.length === 0) {
+            throw new Error(gindex_ERR_INVALID_GINDEX);
+        }
+        return gindex;
+    }
+    if (gindex < 1) {
+        throw new Error(gindex_ERR_INVALID_GINDEX);
+    }
+    return gindex.toString(2);
+}
+// Get the depth (root starting at 0) necessary to cover a subtree of `count` elements.
+// (in out): (0 0), (1 0), (2 1), (3 2), (4 2), (5 3), (6 3), (7 3), (8 3), (9 4)
+function gindex_countToDepth(count) {
+    if (count <= 1) {
+        return 0;
+    }
+    return (count - BigInt(1)).toString(2).length;
+}
+/**
+ * Iterate through Gindexes at a certain depth
+ */
+function gindex_iterateAtDepth(depth, startIndex, count) {
+    const anchor = BigInt(1) << BigInt(depth);
+    if (startIndex + count > anchor) {
+        throw new Error("Too large for depth");
+    }
+    let i = gindex_toGindex(depth, startIndex);
+    const last = i + count;
+    return {
+        [Symbol.iterator]() {
+            return {
+                next() {
+                    if (i < last) {
+                        const value = i;
+                        i++;
+                        return { done: false, value };
+                    }
+                    return { done: true, value: undefined };
+                },
+            };
+        },
+    };
+}
+/**
+ * Return Gindexes at a certain depth
+ */
+function gindex_getGindicesAtDepth(depth, startIndex, count) {
+    const anchor = BigInt(1) << BigInt(depth);
+    if (startIndex + count > anchor) {
+        throw new Error("Too large for depth");
+    }
+    let gindex = gindex_toGindex(depth, BigInt(startIndex));
+    const gindices = [];
+    for (let i = 0; i < count; i++) {
+        gindices.push(gindex++);
+    }
+    return gindices;
+}
+const gindex_ERR_INVALID_GINDEX = "Invalid gindex";
+function gindex_gindexIterator(gindex) {
+    let bitstring;
+    if (typeof gindex === "string") {
+        if (!gindex.length) {
+            throw new Error(gindex_ERR_INVALID_GINDEX);
+        }
+        bitstring = gindex;
+    }
+    else {
+        if (gindex < 1) {
+            throw new Error(gindex_ERR_INVALID_GINDEX);
+        }
+        bitstring = gindex.toString(2);
+    }
+    let i = 1;
+    const next = () => {
+        if (i === bitstring.length) {
+            return { done: true, value: undefined };
+        }
+        const bit = Number(bitstring[i]);
+        i++;
+        return { done: false, value: bit };
+    };
+    return {
+        [Symbol.iterator]() {
+            return { next };
+        },
+        remainingBitLength() {
+            return bitstring.length - i;
+        },
+    };
+}
+function gindex_getGindexBits(gindex) {
+    let bitstring;
+    if (typeof gindex === "string") {
+        if (!gindex.length) {
+            throw new Error(gindex_ERR_INVALID_GINDEX);
+        }
+        bitstring = gindex;
+    }
+    else {
+        if (gindex < 1) {
+            throw new Error(gindex_ERR_INVALID_GINDEX);
+        }
+        bitstring = gindex.toString(2);
+    }
+    const bits = [];
+    for (let i = 1; i < bitstring.length; i++) {
+        bits.push(Number(bitstring[i]));
+    }
+    return bits;
+}
+/**
+ * Concatenate Generalized Indices
+ * Given generalized indices i1 for A -> B, i2 for B -> C .... i_n for Y -> Z, returns
+ * the generalized index for A -> Z.
+ */
+function gindex_concatGindices(gindices) {
+    return BigInt(gindices.reduce((acc, gindex) => acc + gindex.toString(2).slice(1), "0b1"));
+}
+function lib_gindex_gindexSibling(gindex) {
+    return gindex ^ BigInt(1);
+}
+function lib_gindex_gindexParent(gindex) {
+    return gindex / BigInt(2);
+}
+function gindex_gindexChild(gindex, rightChild) {
+    return gindex * BigInt(2) + BigInt(rightChild);
+}
+//# sourceMappingURL=gindex.js.map
+;// ./node_modules/@lodestar/types/node_modules/@noble/hashes/esm/utils.js
+/**
+ * Utilities for hex, bytes, CSPRNG.
+ * @module
+ */
+/*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
+// We use WebCrypto aka globalThis.crypto, which exists in browsers and node.js 16+.
+// node.js versions earlier than v19 don't declare it in global scope.
+// For node.js, package.json#exports field mapping rewrites import
+// from `crypto` to `cryptoNode`, which imports native module.
+// Makes the utils un-importable in browsers without a bundler.
+// Once node.js 18 is deprecated (2025-04-30), we can just drop the import.
+
+/** Checks if something is Uint8Array. Be careful: nodejs Buffer will return true. */
+function utils_isBytes(a) {
+    return a instanceof Uint8Array || (ArrayBuffer.isView(a) && a.constructor.name === 'Uint8Array');
+}
+/** Asserts something is positive integer. */
+function utils_anumber(n) {
     if (!Number.isSafeInteger(n) || n < 0)
-        throw new Error(`positive integer expected, not ${n}`);
+        throw new Error('positive integer expected, got ' + n);
 }
-function _assert_bool(b) {
-    if (typeof b !== 'boolean')
-        throw new Error(`boolean expected, not ${b}`);
-}
-// copied from utils
-function _assert_isBytes(a) {
-    return (a instanceof Uint8Array ||
-        (a != null && typeof a === 'object' && a.constructor.name === 'Uint8Array'));
-}
-function bytes(b, ...lengths) {
-    if (!_assert_isBytes(b))
+/** Asserts something is Uint8Array. */
+function esm_utils_abytes(b, ...lengths) {
+    if (!utils_isBytes(b))
         throw new Error('Uint8Array expected');
     if (lengths.length > 0 && !lengths.includes(b.length))
-        throw new Error(`Uint8Array expected of length ${lengths}, not of length=${b.length}`);
+        throw new Error('Uint8Array expected of length ' + lengths + ', got length=' + b.length);
 }
-function hash(h) {
+/** Asserts something is hash */
+function utils_ahash(h) {
     if (typeof h !== 'function' || typeof h.create !== 'function')
-        throw new Error('Hash should be wrapped by utils.wrapConstructor');
-    number(h.outputLen);
-    number(h.blockLen);
+        throw new Error('Hash should be wrapped by utils.createHasher');
+    utils_anumber(h.outputLen);
+    utils_anumber(h.blockLen);
 }
-function exists(instance, checkFinished = true) {
+/** Asserts a hash instance has not been destroyed / finished */
+function utils_aexists(instance, checkFinished = true) {
     if (instance.destroyed)
         throw new Error('Hash instance has been destroyed');
     if (checkFinished && instance.finished)
         throw new Error('Hash#digest() has already been called');
 }
-function output(out, instance) {
-    bytes(out);
+/** Asserts output is properly-sized byte array */
+function utils_aoutput(out, instance) {
+    esm_utils_abytes(out);
     const min = instance.outputLen;
     if (out.length < min) {
-        throw new Error(`digestInto() expects output buffer of length at least ${min}`);
+        throw new Error('digestInto() expects output buffer of length at least ' + min);
     }
 }
+/** Cast u8 / u16 / u32 to u8. */
+function utils_u8(arr) {
+    return new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
+}
+/** Cast u8 / u16 / u32 to u32. */
+function utils_u32(arr) {
+    return new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
+}
+/** Zeroize a byte array. Warning: JS provides no guarantees. */
+function utils_clean(...arrays) {
+    for (let i = 0; i < arrays.length; i++) {
+        arrays[i].fill(0);
+    }
+}
+/** Create DataView of an array for easy byte-level manipulation. */
+function utils_createView(arr) {
+    return new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
+}
+/** The rotate right (circular right shift) operation for uint32 */
+function utils_rotr(word, shift) {
+    return (word << (32 - shift)) | (word >>> shift);
+}
+/** The rotate left (circular left shift) operation for uint32 */
+function utils_rotl(word, shift) {
+    return (word << shift) | ((word >>> (32 - shift)) >>> 0);
+}
+/** Is current platform little-endian? Most are. Big-Endian platform: IBM */
+const utils_isLE = /* @__PURE__ */ (/* unused pure expression or super */ null && ((() => new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44)()));
+/** The byte swap operation for uint32 */
+function utils_byteSwap(word) {
+    return (((word << 24) & 0xff000000) |
+        ((word << 8) & 0xff0000) |
+        ((word >>> 8) & 0xff00) |
+        ((word >>> 24) & 0xff));
+}
+/** Conditionally byte swap if on a big-endian platform */
+const utils_swap8IfBE = (/* unused pure expression or super */ null && (utils_isLE
+    ? (n) => n
+    : (n) => utils_byteSwap(n)));
+/** @deprecated */
+const utils_byteSwapIfBE = (/* unused pure expression or super */ null && (utils_swap8IfBE));
+/** In place byte swap for Uint32Array */
+function utils_byteSwap32(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = utils_byteSwap(arr[i]);
+    }
+    return arr;
+}
+const utils_swap32IfBE = (/* unused pure expression or super */ null && (utils_isLE
+    ? (u) => u
+    : utils_byteSwap32));
+// Built-in hex conversion https://caniuse.com/mdn-javascript_builtins_uint8array_fromhex
+const utils_hasHexBuiltin = /* @__PURE__ */ (/* unused pure expression or super */ null && ((() => 
+// @ts-ignore
+typeof Uint8Array.from([]).toHex === 'function' && typeof Uint8Array.fromHex === 'function')()));
+// Array where index 0xf0 (240) is mapped to string 'f0'
+const utils_hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
+/**
+ * Convert byte array to hex string. Uses built-in function, when available.
+ * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
+ */
+function utils_bytesToHex(bytes) {
+    esm_utils_abytes(bytes);
+    // @ts-ignore
+    if (utils_hasHexBuiltin)
+        return bytes.toHex();
+    // pre-caching improves the speed 6x
+    let hex = '';
+    for (let i = 0; i < bytes.length; i++) {
+        hex += utils_hexes[bytes[i]];
+    }
+    return hex;
+}
+// We use optimized technique to convert hex string to byte array
+const utils_asciis = { _0: 48, _9: 57, A: 65, F: 70, a: 97, f: 102 };
+function utils_asciiToBase16(ch) {
+    if (ch >= utils_asciis._0 && ch <= utils_asciis._9)
+        return ch - utils_asciis._0; // '2' => 50-48
+    if (ch >= utils_asciis.A && ch <= utils_asciis.F)
+        return ch - (utils_asciis.A - 10); // 'B' => 66-(65-10)
+    if (ch >= utils_asciis.a && ch <= utils_asciis.f)
+        return ch - (utils_asciis.a - 10); // 'b' => 98-(97-10)
+    return;
+}
+/**
+ * Convert hex string to byte array. Uses built-in function, when available.
+ * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
+ */
+function utils_hexToBytes(hex) {
+    if (typeof hex !== 'string')
+        throw new Error('hex string expected, got ' + typeof hex);
+    // @ts-ignore
+    if (utils_hasHexBuiltin)
+        return Uint8Array.fromHex(hex);
+    const hl = hex.length;
+    const al = hl / 2;
+    if (hl % 2)
+        throw new Error('hex string expected, got unpadded hex of length ' + hl);
+    const array = new Uint8Array(al);
+    for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
+        const n1 = utils_asciiToBase16(hex.charCodeAt(hi));
+        const n2 = utils_asciiToBase16(hex.charCodeAt(hi + 1));
+        if (n1 === undefined || n2 === undefined) {
+            const char = hex[hi] + hex[hi + 1];
+            throw new Error('hex string expected, got non-hex character "' + char + '" at index ' + hi);
+        }
+        array[ai] = n1 * 16 + n2; // multiply first octet, e.g. 'a3' => 10*16+3 => 160 + 3 => 163
+    }
+    return array;
+}
+/**
+ * There is no setImmediate in browser and setTimeout is slow.
+ * Call of async fn will return Promise, which will be fullfiled only on
+ * next scheduler queue processing step and this is exactly what we need.
+ */
+const utils_nextTick = async () => { };
+/** Returns control to thread each 'tick' ms to avoid blocking. */
+async function utils_asyncLoop(iters, tick, cb) {
+    let ts = Date.now();
+    for (let i = 0; i < iters; i++) {
+        cb(i);
+        // Date.now() is not monotonic, so in case if clock goes backwards we return return control too
+        const diff = Date.now() - ts;
+        if (diff >= 0 && diff < tick)
+            continue;
+        await utils_nextTick();
+        ts += diff;
+    }
+}
+/**
+ * Converts string to bytes using UTF8 encoding.
+ * @example utf8ToBytes('abc') // Uint8Array.from([97, 98, 99])
+ */
+function utils_utf8ToBytes(str) {
+    if (typeof str !== 'string')
+        throw new Error('string expected');
+    return new Uint8Array(new TextEncoder().encode(str)); // https://bugzil.la/1681809
+}
+/**
+ * Converts bytes to string using UTF8 encoding.
+ * @example bytesToUtf8(Uint8Array.from([97, 98, 99])) // 'abc'
+ */
+function utils_bytesToUtf8(bytes) {
+    return new TextDecoder().decode(bytes);
+}
+/**
+ * Normalizes (non-hex) string or Uint8Array to Uint8Array.
+ * Warning: when Uint8Array is passed, it would NOT get copied.
+ * Keep in mind for future mutable operations.
+ */
+function utils_toBytes(data) {
+    if (typeof data === 'string')
+        data = utils_utf8ToBytes(data);
+    esm_utils_abytes(data);
+    return data;
+}
+/**
+ * Helper for KDFs: consumes uint8array or string.
+ * When string is passed, does utf8 decoding, using TextDecoder.
+ */
+function utils_kdfInputToBytes(data) {
+    if (typeof data === 'string')
+        data = utils_utf8ToBytes(data);
+    esm_utils_abytes(data);
+    return data;
+}
+/** Copies several Uint8Arrays into one. */
+function utils_concatBytes(...arrays) {
+    let sum = 0;
+    for (let i = 0; i < arrays.length; i++) {
+        const a = arrays[i];
+        esm_utils_abytes(a);
+        sum += a.length;
+    }
+    const res = new Uint8Array(sum);
+    for (let i = 0, pad = 0; i < arrays.length; i++) {
+        const a = arrays[i];
+        res.set(a, pad);
+        pad += a.length;
+    }
+    return res;
+}
+function utils_checkOpts(defaults, opts) {
+    if (opts !== undefined && {}.toString.call(opts) !== '[object Object]')
+        throw new Error('options should be object or undefined');
+    const merged = Object.assign(defaults, opts);
+    return merged;
+}
+/** For runtime check if class implements interface */
+class utils_Hash {
+}
+/** Wraps hash function, creating an interface on top of it */
+function esm_utils_createHasher(hashCons) {
+    const hashC = (msg) => hashCons().update(utils_toBytes(msg)).digest();
+    const tmp = hashCons();
+    hashC.outputLen = tmp.outputLen;
+    hashC.blockLen = tmp.blockLen;
+    hashC.create = () => hashCons();
+    return hashC;
+}
+function utils_createOptHasher(hashCons) {
+    const hashC = (msg, opts) => hashCons(opts).update(utils_toBytes(msg)).digest();
+    const tmp = hashCons({});
+    hashC.outputLen = tmp.outputLen;
+    hashC.blockLen = tmp.blockLen;
+    hashC.create = (opts) => hashCons(opts);
+    return hashC;
+}
+function utils_createXOFer(hashCons) {
+    const hashC = (msg, opts) => hashCons(opts).update(utils_toBytes(msg)).digest();
+    const tmp = hashCons({});
+    hashC.outputLen = tmp.outputLen;
+    hashC.blockLen = tmp.blockLen;
+    hashC.create = (opts) => hashCons(opts);
+    return hashC;
+}
+const utils_wrapConstructor = (/* unused pure expression or super */ null && (esm_utils_createHasher));
+const utils_wrapConstructorWithOpts = (/* unused pure expression or super */ null && (utils_createOptHasher));
+const esm_utils_wrapXOFConstructorWithOpts = (/* unused pure expression or super */ null && (utils_createXOFer));
+/** Cryptographically secure PRNG. Uses internal OS-level `crypto.getRandomValues`. */
+function utils_randomBytes(bytesLength = 32) {
+    if (crypto && typeof crypto.getRandomValues === 'function') {
+        return crypto.getRandomValues(new Uint8Array(bytesLength));
+    }
+    // Legacy Node.js compatibility
+    if (crypto && typeof crypto.randomBytes === 'function') {
+        return Uint8Array.from(crypto.randomBytes(bytesLength));
+    }
+    throw new Error('crypto.getRandomValues must be defined');
+}
+//# sourceMappingURL=utils.js.map
+;// ./node_modules/@lodestar/types/node_modules/@noble/hashes/esm/_md.js
+/**
+ * Internal Merkle-Damgard hash utils.
+ * @module
+ */
 
-const assert = { number, bool: _assert_bool, bytes, hash, exists, output };
-/* harmony default export */ const _assert = (assert);
-//# sourceMappingURL=_assert.js.map
-;// ./node_modules/@noble/hashes/esm/_u64.js
+/** Polyfill for Safari 14. https://caniuse.com/mdn-javascript_builtins_dataview_setbiguint64 */
+function _md_setBigUint64(view, byteOffset, value, isLE) {
+    if (typeof view.setBigUint64 === 'function')
+        return view.setBigUint64(byteOffset, value, isLE);
+    const _32n = BigInt(32);
+    const _u32_max = BigInt(0xffffffff);
+    const wh = Number((value >> _32n) & _u32_max);
+    const wl = Number(value & _u32_max);
+    const h = isLE ? 4 : 0;
+    const l = isLE ? 0 : 4;
+    view.setUint32(byteOffset + h, wh, isLE);
+    view.setUint32(byteOffset + l, wl, isLE);
+}
+/** Choice: a ? b : c */
+function _md_Chi(a, b, c) {
+    return (a & b) ^ (~a & c);
+}
+/** Majority function, true if any two inputs is true. */
+function _md_Maj(a, b, c) {
+    return (a & b) ^ (a & c) ^ (b & c);
+}
+/**
+ * Merkle-Damgard hash construction base class.
+ * Could be used to create MD5, RIPEMD, SHA1, SHA2.
+ */
+class _md_HashMD extends utils_Hash {
+    constructor(blockLen, outputLen, padOffset, isLE) {
+        super();
+        this.finished = false;
+        this.length = 0;
+        this.pos = 0;
+        this.destroyed = false;
+        this.blockLen = blockLen;
+        this.outputLen = outputLen;
+        this.padOffset = padOffset;
+        this.isLE = isLE;
+        this.buffer = new Uint8Array(blockLen);
+        this.view = utils_createView(this.buffer);
+    }
+    update(data) {
+        utils_aexists(this);
+        data = utils_toBytes(data);
+        esm_utils_abytes(data);
+        const { view, buffer, blockLen } = this;
+        const len = data.length;
+        for (let pos = 0; pos < len;) {
+            const take = Math.min(blockLen - this.pos, len - pos);
+            // Fast path: we have at least one block in input, cast it to view and process
+            if (take === blockLen) {
+                const dataView = utils_createView(data);
+                for (; blockLen <= len - pos; pos += blockLen)
+                    this.process(dataView, pos);
+                continue;
+            }
+            buffer.set(data.subarray(pos, pos + take), this.pos);
+            this.pos += take;
+            pos += take;
+            if (this.pos === blockLen) {
+                this.process(view, 0);
+                this.pos = 0;
+            }
+        }
+        this.length += data.length;
+        this.roundClean();
+        return this;
+    }
+    digestInto(out) {
+        utils_aexists(this);
+        utils_aoutput(out, this);
+        this.finished = true;
+        // Padding
+        // We can avoid allocation of buffer for padding completely if it
+        // was previously not allocated here. But it won't change performance.
+        const { buffer, view, blockLen, isLE } = this;
+        let { pos } = this;
+        // append the bit '1' to the message
+        buffer[pos++] = 0b10000000;
+        utils_clean(this.buffer.subarray(pos));
+        // we have less than padOffset left in buffer, so we cannot put length in
+        // current block, need process it and pad again
+        if (this.padOffset > blockLen - pos) {
+            this.process(view, 0);
+            pos = 0;
+        }
+        // Pad until full block byte with zeros
+        for (let i = pos; i < blockLen; i++)
+            buffer[i] = 0;
+        // Note: sha512 requires length to be 128bit integer, but length in JS will overflow before that
+        // You need to write around 2 exabytes (u64_max / 8 / (1024**6)) for this to happen.
+        // So we just write lowest 64 bits of that value.
+        _md_setBigUint64(view, blockLen - 8, BigInt(this.length * 8), isLE);
+        this.process(view, 0);
+        const oview = utils_createView(out);
+        const len = this.outputLen;
+        // NOTE: we do division by 4 later, which should be fused in single op with modulo by JIT
+        if (len % 4)
+            throw new Error('_sha2: outputLen should be aligned to 32bit');
+        const outLen = len / 4;
+        const state = this.get();
+        if (outLen > state.length)
+            throw new Error('_sha2: outputLen bigger than state');
+        for (let i = 0; i < outLen; i++)
+            oview.setUint32(4 * i, state[i], isLE);
+    }
+    digest() {
+        const { buffer, outputLen } = this;
+        this.digestInto(buffer);
+        const res = buffer.slice(0, outputLen);
+        this.destroy();
+        return res;
+    }
+    _cloneInto(to) {
+        to || (to = new this.constructor());
+        to.set(...this.get());
+        const { blockLen, buffer, length, finished, destroyed, pos } = this;
+        to.destroyed = destroyed;
+        to.finished = finished;
+        to.length = length;
+        to.pos = pos;
+        if (length % blockLen)
+            to.buffer.set(buffer);
+        return to;
+    }
+    clone() {
+        return this._cloneInto();
+    }
+}
+/**
+ * Initial SHA-2 state: fractional parts of square roots of first 16 primes 2..53.
+ * Check out `test/misc/sha2-gen-iv.js` for recomputation guide.
+ */
+/** Initial SHA256 state. Bits 0..32 of frac part of sqrt of primes 2..19 */
+const _md_SHA256_IV = /* @__PURE__ */ Uint32Array.from([
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+]);
+/** Initial SHA224 state. Bits 32..64 of frac part of sqrt of primes 23..53 */
+const _md_SHA224_IV = /* @__PURE__ */ Uint32Array.from([
+    0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4,
+]);
+/** Initial SHA384 state. Bits 0..64 of frac part of sqrt of primes 23..53 */
+const _md_SHA384_IV = /* @__PURE__ */ Uint32Array.from([
+    0xcbbb9d5d, 0xc1059ed8, 0x629a292a, 0x367cd507, 0x9159015a, 0x3070dd17, 0x152fecd8, 0xf70e5939,
+    0x67332667, 0xffc00b31, 0x8eb44a87, 0x68581511, 0xdb0c2e0d, 0x64f98fa7, 0x47b5481d, 0xbefa4fa4,
+]);
+/** Initial SHA512 state. Bits 0..64 of frac part of sqrt of primes 2..19 */
+const _md_SHA512_IV = /* @__PURE__ */ Uint32Array.from([
+    0x6a09e667, 0xf3bcc908, 0xbb67ae85, 0x84caa73b, 0x3c6ef372, 0xfe94f82b, 0xa54ff53a, 0x5f1d36f1,
+    0x510e527f, 0xade682d1, 0x9b05688c, 0x2b3e6c1f, 0x1f83d9ab, 0xfb41bd6b, 0x5be0cd19, 0x137e2179,
+]);
+//# sourceMappingURL=_md.js.map
+;// ./node_modules/@lodestar/types/node_modules/@noble/hashes/esm/_u64.js
+/**
+ * Internal helpers for u64. BigUint64Array is too slow as per 2025, so we implement it using Uint32Array.
+ * @todo re-check https://issues.chromium.org/issues/42212588
+ * @module
+ */
 const _u64_U32_MASK64 = /* @__PURE__ */ BigInt(2 ** 32 - 1);
 const _u64_32n = /* @__PURE__ */ BigInt(32);
-// We are not using BigUint64Array, because they are extremely slow as per 2022
 function _u64_fromBig(n, le = false) {
     if (le)
         return { h: Number(n & _u64_U32_MASK64), l: Number((n >> _u64_32n) & _u64_U32_MASK64) };
     return { h: Number((n >> _u64_32n) & _u64_U32_MASK64) | 0, l: Number(n & _u64_U32_MASK64) | 0 };
 }
 function _u64_split(lst, le = false) {
-    let Ah = new Uint32Array(lst.length);
-    let Al = new Uint32Array(lst.length);
-    for (let i = 0; i < lst.length; i++) {
+    const len = lst.length;
+    let Ah = new Uint32Array(len);
+    let Al = new Uint32Array(len);
+    for (let i = 0; i < len; i++) {
         const { h, l } = _u64_fromBig(lst[i], le);
         [Ah[i], Al[i]] = [h, l];
     }
@@ -35735,6 +36314,10794 @@ const _u64_u64 = {
 };
 /* harmony default export */ const esm_u64 = ((/* unused pure expression or super */ null && (_u64_u64)));
 //# sourceMappingURL=_u64.js.map
+;// ./node_modules/@lodestar/types/node_modules/@noble/hashes/esm/sha2.js
+/**
+ * SHA2 hash function. A.k.a. sha256, sha384, sha512, sha512_224, sha512_256.
+ * SHA256 is the fastest hash implementable in JS, even faster than Blake3.
+ * Check out [RFC 4634](https://datatracker.ietf.org/doc/html/rfc4634) and
+ * [FIPS 180-4](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf).
+ * @module
+ */
+
+
+
+/**
+ * Round constants:
+ * First 32 bits of fractional parts of the cube roots of the first 64 primes 2..311)
+ */
+// prettier-ignore
+const sha2_SHA256_K = /* @__PURE__ */ Uint32Array.from([
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+]);
+/** Reusable temporary buffer. "W" comes straight from spec. */
+const sha2_SHA256_W = /* @__PURE__ */ new Uint32Array(64);
+class esm_sha2_SHA256 extends _md_HashMD {
+    constructor(outputLen = 32) {
+        super(64, outputLen, 8, false);
+        // We cannot use array here since array allows indexing by variable
+        // which means optimizer/compiler cannot use registers.
+        this.A = _md_SHA256_IV[0] | 0;
+        this.B = _md_SHA256_IV[1] | 0;
+        this.C = _md_SHA256_IV[2] | 0;
+        this.D = _md_SHA256_IV[3] | 0;
+        this.E = _md_SHA256_IV[4] | 0;
+        this.F = _md_SHA256_IV[5] | 0;
+        this.G = _md_SHA256_IV[6] | 0;
+        this.H = _md_SHA256_IV[7] | 0;
+    }
+    get() {
+        const { A, B, C, D, E, F, G, H } = this;
+        return [A, B, C, D, E, F, G, H];
+    }
+    // prettier-ignore
+    set(A, B, C, D, E, F, G, H) {
+        this.A = A | 0;
+        this.B = B | 0;
+        this.C = C | 0;
+        this.D = D | 0;
+        this.E = E | 0;
+        this.F = F | 0;
+        this.G = G | 0;
+        this.H = H | 0;
+    }
+    process(view, offset) {
+        // Extend the first 16 words into the remaining 48 words w[16..63] of the message schedule array
+        for (let i = 0; i < 16; i++, offset += 4)
+            sha2_SHA256_W[i] = view.getUint32(offset, false);
+        for (let i = 16; i < 64; i++) {
+            const W15 = sha2_SHA256_W[i - 15];
+            const W2 = sha2_SHA256_W[i - 2];
+            const s0 = utils_rotr(W15, 7) ^ utils_rotr(W15, 18) ^ (W15 >>> 3);
+            const s1 = utils_rotr(W2, 17) ^ utils_rotr(W2, 19) ^ (W2 >>> 10);
+            sha2_SHA256_W[i] = (s1 + sha2_SHA256_W[i - 7] + s0 + sha2_SHA256_W[i - 16]) | 0;
+        }
+        // Compression function main loop, 64 rounds
+        let { A, B, C, D, E, F, G, H } = this;
+        for (let i = 0; i < 64; i++) {
+            const sigma1 = utils_rotr(E, 6) ^ utils_rotr(E, 11) ^ utils_rotr(E, 25);
+            const T1 = (H + sigma1 + _md_Chi(E, F, G) + sha2_SHA256_K[i] + sha2_SHA256_W[i]) | 0;
+            const sigma0 = utils_rotr(A, 2) ^ utils_rotr(A, 13) ^ utils_rotr(A, 22);
+            const T2 = (sigma0 + _md_Maj(A, B, C)) | 0;
+            H = G;
+            G = F;
+            F = E;
+            E = (D + T1) | 0;
+            D = C;
+            C = B;
+            B = A;
+            A = (T1 + T2) | 0;
+        }
+        // Add the compressed chunk to the current hash value
+        A = (A + this.A) | 0;
+        B = (B + this.B) | 0;
+        C = (C + this.C) | 0;
+        D = (D + this.D) | 0;
+        E = (E + this.E) | 0;
+        F = (F + this.F) | 0;
+        G = (G + this.G) | 0;
+        H = (H + this.H) | 0;
+        this.set(A, B, C, D, E, F, G, H);
+    }
+    roundClean() {
+        utils_clean(sha2_SHA256_W);
+    }
+    destroy() {
+        this.set(0, 0, 0, 0, 0, 0, 0, 0);
+        utils_clean(this.buffer);
+    }
+}
+class sha2_SHA224 extends esm_sha2_SHA256 {
+    constructor() {
+        super(28);
+        this.A = _md_SHA224_IV[0] | 0;
+        this.B = _md_SHA224_IV[1] | 0;
+        this.C = _md_SHA224_IV[2] | 0;
+        this.D = _md_SHA224_IV[3] | 0;
+        this.E = _md_SHA224_IV[4] | 0;
+        this.F = _md_SHA224_IV[5] | 0;
+        this.G = _md_SHA224_IV[6] | 0;
+        this.H = _md_SHA224_IV[7] | 0;
+    }
+}
+// SHA2-512 is slower than sha256 in js because u64 operations are slow.
+// Round contants
+// First 32 bits of the fractional parts of the cube roots of the first 80 primes 2..409
+// prettier-ignore
+const sha2_K512 = /* @__PURE__ */ (() => _u64_split([
+    '0x428a2f98d728ae22', '0x7137449123ef65cd', '0xb5c0fbcfec4d3b2f', '0xe9b5dba58189dbbc',
+    '0x3956c25bf348b538', '0x59f111f1b605d019', '0x923f82a4af194f9b', '0xab1c5ed5da6d8118',
+    '0xd807aa98a3030242', '0x12835b0145706fbe', '0x243185be4ee4b28c', '0x550c7dc3d5ffb4e2',
+    '0x72be5d74f27b896f', '0x80deb1fe3b1696b1', '0x9bdc06a725c71235', '0xc19bf174cf692694',
+    '0xe49b69c19ef14ad2', '0xefbe4786384f25e3', '0x0fc19dc68b8cd5b5', '0x240ca1cc77ac9c65',
+    '0x2de92c6f592b0275', '0x4a7484aa6ea6e483', '0x5cb0a9dcbd41fbd4', '0x76f988da831153b5',
+    '0x983e5152ee66dfab', '0xa831c66d2db43210', '0xb00327c898fb213f', '0xbf597fc7beef0ee4',
+    '0xc6e00bf33da88fc2', '0xd5a79147930aa725', '0x06ca6351e003826f', '0x142929670a0e6e70',
+    '0x27b70a8546d22ffc', '0x2e1b21385c26c926', '0x4d2c6dfc5ac42aed', '0x53380d139d95b3df',
+    '0x650a73548baf63de', '0x766a0abb3c77b2a8', '0x81c2c92e47edaee6', '0x92722c851482353b',
+    '0xa2bfe8a14cf10364', '0xa81a664bbc423001', '0xc24b8b70d0f89791', '0xc76c51a30654be30',
+    '0xd192e819d6ef5218', '0xd69906245565a910', '0xf40e35855771202a', '0x106aa07032bbd1b8',
+    '0x19a4c116b8d2d0c8', '0x1e376c085141ab53', '0x2748774cdf8eeb99', '0x34b0bcb5e19b48a8',
+    '0x391c0cb3c5c95a63', '0x4ed8aa4ae3418acb', '0x5b9cca4f7763e373', '0x682e6ff3d6b2b8a3',
+    '0x748f82ee5defb2fc', '0x78a5636f43172f60', '0x84c87814a1f0ab72', '0x8cc702081a6439ec',
+    '0x90befffa23631e28', '0xa4506cebde82bde9', '0xbef9a3f7b2c67915', '0xc67178f2e372532b',
+    '0xca273eceea26619c', '0xd186b8c721c0c207', '0xeada7dd6cde0eb1e', '0xf57d4f7fee6ed178',
+    '0x06f067aa72176fba', '0x0a637dc5a2c898a6', '0x113f9804bef90dae', '0x1b710b35131c471b',
+    '0x28db77f523047d84', '0x32caab7b40c72493', '0x3c9ebe0a15c9bebc', '0x431d67c49c100d4c',
+    '0x4cc5d4becb3e42b6', '0x597f299cfc657e2a', '0x5fcb6fab3ad6faec', '0x6c44198c4a475817'
+].map(n => BigInt(n))))();
+const sha2_SHA512_Kh = /* @__PURE__ */ (() => sha2_K512[0])();
+const sha2_SHA512_Kl = /* @__PURE__ */ (() => sha2_K512[1])();
+// Reusable temporary buffers
+const sha2_SHA512_W_H = /* @__PURE__ */ new Uint32Array(80);
+const sha2_SHA512_W_L = /* @__PURE__ */ new Uint32Array(80);
+class sha2_SHA512 extends _md_HashMD {
+    constructor(outputLen = 64) {
+        super(128, outputLen, 16, false);
+        // We cannot use array here since array allows indexing by variable
+        // which means optimizer/compiler cannot use registers.
+        // h -- high 32 bits, l -- low 32 bits
+        this.Ah = _md_SHA512_IV[0] | 0;
+        this.Al = _md_SHA512_IV[1] | 0;
+        this.Bh = _md_SHA512_IV[2] | 0;
+        this.Bl = _md_SHA512_IV[3] | 0;
+        this.Ch = _md_SHA512_IV[4] | 0;
+        this.Cl = _md_SHA512_IV[5] | 0;
+        this.Dh = _md_SHA512_IV[6] | 0;
+        this.Dl = _md_SHA512_IV[7] | 0;
+        this.Eh = _md_SHA512_IV[8] | 0;
+        this.El = _md_SHA512_IV[9] | 0;
+        this.Fh = _md_SHA512_IV[10] | 0;
+        this.Fl = _md_SHA512_IV[11] | 0;
+        this.Gh = _md_SHA512_IV[12] | 0;
+        this.Gl = _md_SHA512_IV[13] | 0;
+        this.Hh = _md_SHA512_IV[14] | 0;
+        this.Hl = _md_SHA512_IV[15] | 0;
+    }
+    // prettier-ignore
+    get() {
+        const { Ah, Al, Bh, Bl, Ch, Cl, Dh, Dl, Eh, El, Fh, Fl, Gh, Gl, Hh, Hl } = this;
+        return [Ah, Al, Bh, Bl, Ch, Cl, Dh, Dl, Eh, El, Fh, Fl, Gh, Gl, Hh, Hl];
+    }
+    // prettier-ignore
+    set(Ah, Al, Bh, Bl, Ch, Cl, Dh, Dl, Eh, El, Fh, Fl, Gh, Gl, Hh, Hl) {
+        this.Ah = Ah | 0;
+        this.Al = Al | 0;
+        this.Bh = Bh | 0;
+        this.Bl = Bl | 0;
+        this.Ch = Ch | 0;
+        this.Cl = Cl | 0;
+        this.Dh = Dh | 0;
+        this.Dl = Dl | 0;
+        this.Eh = Eh | 0;
+        this.El = El | 0;
+        this.Fh = Fh | 0;
+        this.Fl = Fl | 0;
+        this.Gh = Gh | 0;
+        this.Gl = Gl | 0;
+        this.Hh = Hh | 0;
+        this.Hl = Hl | 0;
+    }
+    process(view, offset) {
+        // Extend the first 16 words into the remaining 64 words w[16..79] of the message schedule array
+        for (let i = 0; i < 16; i++, offset += 4) {
+            sha2_SHA512_W_H[i] = view.getUint32(offset);
+            sha2_SHA512_W_L[i] = view.getUint32((offset += 4));
+        }
+        for (let i = 16; i < 80; i++) {
+            // s0 := (w[i-15] rightrotate 1) xor (w[i-15] rightrotate 8) xor (w[i-15] rightshift 7)
+            const W15h = sha2_SHA512_W_H[i - 15] | 0;
+            const W15l = sha2_SHA512_W_L[i - 15] | 0;
+            const s0h = _u64_rotrSH(W15h, W15l, 1) ^ _u64_rotrSH(W15h, W15l, 8) ^ _u64_shrSH(W15h, W15l, 7);
+            const s0l = _u64_rotrSL(W15h, W15l, 1) ^ _u64_rotrSL(W15h, W15l, 8) ^ _u64_shrSL(W15h, W15l, 7);
+            // s1 := (w[i-2] rightrotate 19) xor (w[i-2] rightrotate 61) xor (w[i-2] rightshift 6)
+            const W2h = sha2_SHA512_W_H[i - 2] | 0;
+            const W2l = sha2_SHA512_W_L[i - 2] | 0;
+            const s1h = _u64_rotrSH(W2h, W2l, 19) ^ _u64_rotrBH(W2h, W2l, 61) ^ _u64_shrSH(W2h, W2l, 6);
+            const s1l = _u64_rotrSL(W2h, W2l, 19) ^ _u64_rotrBL(W2h, W2l, 61) ^ _u64_shrSL(W2h, W2l, 6);
+            // SHA256_W[i] = s0 + s1 + SHA256_W[i - 7] + SHA256_W[i - 16];
+            const SUMl = _u64_add4L(s0l, s1l, sha2_SHA512_W_L[i - 7], sha2_SHA512_W_L[i - 16]);
+            const SUMh = _u64_add4H(SUMl, s0h, s1h, sha2_SHA512_W_H[i - 7], sha2_SHA512_W_H[i - 16]);
+            sha2_SHA512_W_H[i] = SUMh | 0;
+            sha2_SHA512_W_L[i] = SUMl | 0;
+        }
+        let { Ah, Al, Bh, Bl, Ch, Cl, Dh, Dl, Eh, El, Fh, Fl, Gh, Gl, Hh, Hl } = this;
+        // Compression function main loop, 80 rounds
+        for (let i = 0; i < 80; i++) {
+            // S1 := (e rightrotate 14) xor (e rightrotate 18) xor (e rightrotate 41)
+            const sigma1h = _u64_rotrSH(Eh, El, 14) ^ _u64_rotrSH(Eh, El, 18) ^ _u64_rotrBH(Eh, El, 41);
+            const sigma1l = _u64_rotrSL(Eh, El, 14) ^ _u64_rotrSL(Eh, El, 18) ^ _u64_rotrBL(Eh, El, 41);
+            //const T1 = (H + sigma1 + Chi(E, F, G) + SHA256_K[i] + SHA256_W[i]) | 0;
+            const CHIh = (Eh & Fh) ^ (~Eh & Gh);
+            const CHIl = (El & Fl) ^ (~El & Gl);
+            // T1 = H + sigma1 + Chi(E, F, G) + SHA512_K[i] + SHA512_W[i]
+            // prettier-ignore
+            const T1ll = _u64_add5L(Hl, sigma1l, CHIl, sha2_SHA512_Kl[i], sha2_SHA512_W_L[i]);
+            const T1h = _u64_add5H(T1ll, Hh, sigma1h, CHIh, sha2_SHA512_Kh[i], sha2_SHA512_W_H[i]);
+            const T1l = T1ll | 0;
+            // S0 := (a rightrotate 28) xor (a rightrotate 34) xor (a rightrotate 39)
+            const sigma0h = _u64_rotrSH(Ah, Al, 28) ^ _u64_rotrBH(Ah, Al, 34) ^ _u64_rotrBH(Ah, Al, 39);
+            const sigma0l = _u64_rotrSL(Ah, Al, 28) ^ _u64_rotrBL(Ah, Al, 34) ^ _u64_rotrBL(Ah, Al, 39);
+            const MAJh = (Ah & Bh) ^ (Ah & Ch) ^ (Bh & Ch);
+            const MAJl = (Al & Bl) ^ (Al & Cl) ^ (Bl & Cl);
+            Hh = Gh | 0;
+            Hl = Gl | 0;
+            Gh = Fh | 0;
+            Gl = Fl | 0;
+            Fh = Eh | 0;
+            Fl = El | 0;
+            ({ h: Eh, l: El } = _u64_add(Dh | 0, Dl | 0, T1h | 0, T1l | 0));
+            Dh = Ch | 0;
+            Dl = Cl | 0;
+            Ch = Bh | 0;
+            Cl = Bl | 0;
+            Bh = Ah | 0;
+            Bl = Al | 0;
+            const All = _u64_add3L(T1l, sigma0l, MAJl);
+            Ah = _u64_add3H(All, T1h, sigma0h, MAJh);
+            Al = All | 0;
+        }
+        // Add the compressed chunk to the current hash value
+        ({ h: Ah, l: Al } = _u64_add(this.Ah | 0, this.Al | 0, Ah | 0, Al | 0));
+        ({ h: Bh, l: Bl } = _u64_add(this.Bh | 0, this.Bl | 0, Bh | 0, Bl | 0));
+        ({ h: Ch, l: Cl } = _u64_add(this.Ch | 0, this.Cl | 0, Ch | 0, Cl | 0));
+        ({ h: Dh, l: Dl } = _u64_add(this.Dh | 0, this.Dl | 0, Dh | 0, Dl | 0));
+        ({ h: Eh, l: El } = _u64_add(this.Eh | 0, this.El | 0, Eh | 0, El | 0));
+        ({ h: Fh, l: Fl } = _u64_add(this.Fh | 0, this.Fl | 0, Fh | 0, Fl | 0));
+        ({ h: Gh, l: Gl } = _u64_add(this.Gh | 0, this.Gl | 0, Gh | 0, Gl | 0));
+        ({ h: Hh, l: Hl } = _u64_add(this.Hh | 0, this.Hl | 0, Hh | 0, Hl | 0));
+        this.set(Ah, Al, Bh, Bl, Ch, Cl, Dh, Dl, Eh, El, Fh, Fl, Gh, Gl, Hh, Hl);
+    }
+    roundClean() {
+        utils_clean(sha2_SHA512_W_H, sha2_SHA512_W_L);
+    }
+    destroy() {
+        utils_clean(this.buffer);
+        this.set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+}
+class sha2_SHA384 extends sha2_SHA512 {
+    constructor() {
+        super(48);
+        this.Ah = _md_SHA384_IV[0] | 0;
+        this.Al = _md_SHA384_IV[1] | 0;
+        this.Bh = _md_SHA384_IV[2] | 0;
+        this.Bl = _md_SHA384_IV[3] | 0;
+        this.Ch = _md_SHA384_IV[4] | 0;
+        this.Cl = _md_SHA384_IV[5] | 0;
+        this.Dh = _md_SHA384_IV[6] | 0;
+        this.Dl = _md_SHA384_IV[7] | 0;
+        this.Eh = _md_SHA384_IV[8] | 0;
+        this.El = _md_SHA384_IV[9] | 0;
+        this.Fh = _md_SHA384_IV[10] | 0;
+        this.Fl = _md_SHA384_IV[11] | 0;
+        this.Gh = _md_SHA384_IV[12] | 0;
+        this.Gl = _md_SHA384_IV[13] | 0;
+        this.Hh = _md_SHA384_IV[14] | 0;
+        this.Hl = _md_SHA384_IV[15] | 0;
+    }
+}
+/**
+ * Truncated SHA512/256 and SHA512/224.
+ * SHA512_IV is XORed with 0xa5a5a5a5a5a5a5a5, then used as "intermediary" IV of SHA512/t.
+ * Then t hashes string to produce result IV.
+ * See `test/misc/sha2-gen-iv.js`.
+ */
+/** SHA512/224 IV */
+const sha2_T224_IV = /* @__PURE__ */ Uint32Array.from([
+    0x8c3d37c8, 0x19544da2, 0x73e19966, 0x89dcd4d6, 0x1dfab7ae, 0x32ff9c82, 0x679dd514, 0x582f9fcf,
+    0x0f6d2b69, 0x7bd44da8, 0x77e36f73, 0x04c48942, 0x3f9d85a8, 0x6a1d36c8, 0x1112e6ad, 0x91d692a1,
+]);
+/** SHA512/256 IV */
+const sha2_T256_IV = /* @__PURE__ */ Uint32Array.from([
+    0x22312194, 0xfc2bf72c, 0x9f555fa3, 0xc84c64c2, 0x2393b86b, 0x6f53b151, 0x96387719, 0x5940eabd,
+    0x96283ee2, 0xa88effe3, 0xbe5e1e25, 0x53863992, 0x2b0199fc, 0x2c85b8aa, 0x0eb72ddc, 0x81c52ca2,
+]);
+class sha2_SHA512_224 extends sha2_SHA512 {
+    constructor() {
+        super(28);
+        this.Ah = sha2_T224_IV[0] | 0;
+        this.Al = sha2_T224_IV[1] | 0;
+        this.Bh = sha2_T224_IV[2] | 0;
+        this.Bl = sha2_T224_IV[3] | 0;
+        this.Ch = sha2_T224_IV[4] | 0;
+        this.Cl = sha2_T224_IV[5] | 0;
+        this.Dh = sha2_T224_IV[6] | 0;
+        this.Dl = sha2_T224_IV[7] | 0;
+        this.Eh = sha2_T224_IV[8] | 0;
+        this.El = sha2_T224_IV[9] | 0;
+        this.Fh = sha2_T224_IV[10] | 0;
+        this.Fl = sha2_T224_IV[11] | 0;
+        this.Gh = sha2_T224_IV[12] | 0;
+        this.Gl = sha2_T224_IV[13] | 0;
+        this.Hh = sha2_T224_IV[14] | 0;
+        this.Hl = sha2_T224_IV[15] | 0;
+    }
+}
+class sha2_SHA512_256 extends sha2_SHA512 {
+    constructor() {
+        super(32);
+        this.Ah = sha2_T256_IV[0] | 0;
+        this.Al = sha2_T256_IV[1] | 0;
+        this.Bh = sha2_T256_IV[2] | 0;
+        this.Bl = sha2_T256_IV[3] | 0;
+        this.Ch = sha2_T256_IV[4] | 0;
+        this.Cl = sha2_T256_IV[5] | 0;
+        this.Dh = sha2_T256_IV[6] | 0;
+        this.Dl = sha2_T256_IV[7] | 0;
+        this.Eh = sha2_T256_IV[8] | 0;
+        this.El = sha2_T256_IV[9] | 0;
+        this.Fh = sha2_T256_IV[10] | 0;
+        this.Fl = sha2_T256_IV[11] | 0;
+        this.Gh = sha2_T256_IV[12] | 0;
+        this.Gl = sha2_T256_IV[13] | 0;
+        this.Hh = sha2_T256_IV[14] | 0;
+        this.Hl = sha2_T256_IV[15] | 0;
+    }
+}
+/**
+ * SHA2-256 hash function from RFC 4634.
+ *
+ * It is the fastest JS hash, even faster than Blake3.
+ * To break sha256 using birthday attack, attackers need to try 2^128 hashes.
+ * BTC network is doing 2^70 hashes/sec (2^95 hashes/year) as per 2025.
+ */
+const sha2_sha256 = /* @__PURE__ */ esm_utils_createHasher(() => new esm_sha2_SHA256());
+/** SHA2-224 hash function from RFC 4634 */
+const sha2_sha224 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new sha2_SHA224())));
+/** SHA2-512 hash function from RFC 4634. */
+const sha2_sha512 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new sha2_SHA512())));
+/** SHA2-384 hash function from RFC 4634. */
+const sha2_sha384 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new sha2_SHA384())));
+/**
+ * SHA2-512/256 "truncated" hash function, with improved resistance to length extension attacks.
+ * See the paper on [truncated SHA512](https://eprint.iacr.org/2010/548.pdf).
+ */
+const sha2_sha512_256 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new sha2_SHA512_256())));
+/**
+ * SHA2-512/224 "truncated" hash function, with improved resistance to length extension attacks.
+ * See the paper on [truncated SHA512](https://eprint.iacr.org/2010/548.pdf).
+ */
+const sha2_sha512_224 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new sha2_SHA512_224())));
+//# sourceMappingURL=sha2.js.map
+;// ./node_modules/@lodestar/types/node_modules/@noble/hashes/esm/sha256.js
+/**
+ * SHA2-256 a.k.a. sha256. In JS, it is the fastest hash, even faster than Blake3.
+ *
+ * To break sha256 using birthday attack, attackers need to try 2^128 hashes.
+ * BTC network is doing 2^70 hashes/sec (2^95 hashes/year) as per 2025.
+ *
+ * Check out [FIPS 180-4](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf).
+ * @module
+ * @deprecated
+ */
+
+/** @deprecated Use import from `noble/hashes/sha2` module */
+const esm_sha256_SHA256 = (/* unused pure expression or super */ null && (SHA256n));
+/** @deprecated Use import from `noble/hashes/sha2` module */
+const esm_sha256_sha256 = sha2_sha256;
+/** @deprecated Use import from `noble/hashes/sha2` module */
+const esm_sha256_SHA224 = (/* unused pure expression or super */ null && (SHA224n));
+/** @deprecated Use import from `noble/hashes/sha2` module */
+const esm_sha256_sha224 = (/* unused pure expression or super */ null && (sha224n));
+//# sourceMappingURL=sha256.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/zeroHash.js
+// use noble here instead of using hasher variable because this is used inside hasher itself
+// we cache zero hashes so performance is not a concern
+
+// create array of "zero hashes", successively hashed zero chunks
+const zeroHash_zeroHashes = [new Uint8Array(32)];
+function lib_zeroHash_zeroHash(depth) {
+    if (depth >= zeroHash_zeroHashes.length) {
+        for (let i = zeroHash_zeroHashes.length; i <= depth; i++) {
+            zeroHash_zeroHashes[i] = esm_sha256_sha256
+                .create()
+                .update(zeroHash_zeroHashes[i - 1])
+                .update(zeroHash_zeroHashes[i - 1])
+                .digest();
+        }
+    }
+    return zeroHash_zeroHashes[depth];
+}
+//# sourceMappingURL=zeroHash.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/hasher/util.js
+
+
+function util_hashObjectToUint8Array(obj) {
+    const byteArr = new Uint8Array(32);
+    hashObjectToByteArray(obj, byteArr, 0);
+    return byteArr;
+}
+function util_uint8ArrayToHashObject(byteArr) {
+    return hashObject_byteArrayToHashObject(byteArr, 0);
+}
+/** a SHA256 block is 64 bytes */
+const util_BLOCK_SIZE = 64;
+/**
+ * Merkleize multiple SHA256 blocks in a single Uint8Array into ${output} at ${offset}
+ *   - if padFor > 1 blocksBytes need to be multiple of 64 bytes.
+ *   - if padFor = 1, blocksBytes need to be at least 32 bytes
+ *   - if padFor = 0, throw error
+ * blocksBytes is unsafe because it's modified
+ */
+function util_doMerkleizeBlocksBytes(blocksBytes, padFor, output, offset, hashInto) {
+    if (padFor < 1) {
+        throw new Error(`Invalid padFor, expect to be greater than 0, got ${padFor}`);
+    }
+    const layerCount = Math.ceil(Math.log2(padFor));
+    if (blocksBytes.length === 0) {
+        output.set(lib_zeroHash_zeroHash(layerCount), offset);
+        return;
+    }
+    if (blocksBytes.length % 32 !== 0) {
+        throw new Error(`Invalid input length, expect to be multiple of 32 bytes, got ${blocksBytes.length}`);
+    }
+    // if padFor = 1, only need 32 bytes
+    if (padFor > 1 && blocksBytes.length % util_BLOCK_SIZE !== 0) {
+        throw new Error(`Invalid input length, expect to be multiple of 64 bytes, got ${blocksBytes.length}, padFor=${padFor}`);
+    }
+    let inputLength = blocksBytes.length;
+    let outputLength = Math.floor(inputLength / 2);
+    let bufferIn = blocksBytes;
+    // hash into the same buffer to save memory allocation
+    for (let layer = 0; layer < layerCount; layer++) {
+        const bufferOut = blocksBytes.subarray(0, outputLength);
+        hashInto(bufferIn, bufferOut);
+        const chunkCount = Math.floor(outputLength / 32);
+        if (chunkCount % 2 === 1 && layer < layerCount - 1) {
+            // extend to 1 more chunk
+            inputLength = outputLength + 32;
+            bufferIn = blocksBytes.subarray(0, inputLength);
+            bufferIn.set(lib_zeroHash_zeroHash(layer + 1), outputLength);
+        }
+        else {
+            bufferIn = bufferOut;
+            inputLength = outputLength;
+        }
+        outputLength = Math.floor(inputLength / 2);
+    }
+    output.set(bufferIn.subarray(0, 32), offset);
+}
+/**
+ * Merkleize multiple SHA256 blocks into ${output} at ${offset}
+ * @param blockLimit number of blocks, should be <= blocks.length so that consumer can reuse memory
+ * @param padFor is maxChunkCount, should be >= 2
+ * @param blocks is unsafe because it's modified
+ * @param output the result is stored here
+ * @param offset the offset to store the result
+ * @param hashInto the hash function of each hasher
+ * @param buffer is a temporary buffer of each hasher to work with the hashInto() function
+ */
+function util_doMerkleizeBlockArray(blocks, blockLimit, padFor, output, offset, hashInto, buffer) {
+    if (padFor < 1) {
+        throw new Error(`Invalid padFor, expect to be at least 1, got ${padFor}`);
+    }
+    if (blockLimit > blocks.length) {
+        throw new Error(`Invalid blockLimit, expect to be less than or equal blocks.length ${blocks.length}, got ${blockLimit}`);
+    }
+    const layerCount = Math.ceil(Math.log2(padFor));
+    if (blockLimit === 0) {
+        output.set(lib_zeroHash_zeroHash(layerCount), offset);
+        return;
+    }
+    for (const block of blocks) {
+        if (block.length !== util_BLOCK_SIZE) {
+            throw new Error(`Invalid block length, expect to be 64 bytes, got ${block.length}`);
+        }
+    }
+    // as-sha256 has a buffer of 4 * 64 bytes
+    // hashtree has a buffer of 16 * 64 bytes
+    if (buffer.length === 0 || buffer.length % (4 * util_BLOCK_SIZE) !== 0) {
+        throw new Error(`Invalid buffer length, expect to be multiple of 64 bytes, got ${buffer.length}`);
+    }
+    // batchSize is 4 for as-sha256, 16 for hashtree
+    const batchSize = Math.floor(buffer.length / util_BLOCK_SIZE);
+    const halfBatchSize = Math.floor(batchSize / 2);
+    let bufferIn = buffer;
+    // hash into the same buffer
+    let bufferOut = buffer.subarray(0, halfBatchSize * util_BLOCK_SIZE);
+    // ignore remaining blocks
+    let blockCount = blockLimit;
+    // hash into the same blocks to save memory allocation
+    for (let layer = 0; layer < layerCount; layer++) {
+        let outBlockIndex = 0;
+        const sameLayerLoop = Math.floor(blockCount / batchSize);
+        for (let i = 0; i < sameLayerLoop; i++) {
+            // populate bufferIn
+            for (let j = 0; j < batchSize; j++) {
+                const blockIndex = i * batchSize + j;
+                bufferIn.set(blocks[blockIndex], j * util_BLOCK_SIZE);
+            }
+            // hash into bufferOut
+            hashInto(bufferIn, bufferOut);
+            // copy bufferOut to blocks, bufferOut.len = halfBatchSize * BLOCK_SIZE
+            for (let j = 0; j < halfBatchSize; j++) {
+                blocks[outBlockIndex].set(bufferOut.subarray(j * util_BLOCK_SIZE, (j + 1) * util_BLOCK_SIZE));
+                outBlockIndex++;
+            }
+        }
+        // remaining blocks
+        const remainingBlocks = blockCount % batchSize;
+        bufferIn = buffer.subarray(0, remainingBlocks * util_BLOCK_SIZE);
+        bufferOut = buffer.subarray(0, Math.floor(bufferIn.length / 2));
+        // populate bufferIn
+        for (let blockIndex = Math.floor(blockCount / batchSize) * batchSize; blockIndex < blockCount; blockIndex++) {
+            bufferIn.set(blocks[blockIndex], (blockIndex % batchSize) * util_BLOCK_SIZE);
+        }
+        // hash into bufferOut
+        hashInto(bufferIn, bufferOut);
+        // copy bufferOut to blocks, note that bufferOut.len may not be divisible by BLOCK_SIZE
+        for (let j = 0; j < Math.floor(bufferOut.length / util_BLOCK_SIZE); j++) {
+            blocks[outBlockIndex].set(bufferOut.subarray(j * util_BLOCK_SIZE, (j + 1) * util_BLOCK_SIZE));
+            outBlockIndex++;
+        }
+        if (bufferOut.length % util_BLOCK_SIZE !== 0) {
+            // set the last 32 bytes of bufferOut
+            blocks[outBlockIndex].set(bufferOut.subarray(bufferOut.length - 32, bufferOut.length), 0);
+            // add zeroHash
+            blocks[outBlockIndex].set(lib_zeroHash_zeroHash(layer + 1), 32);
+            outBlockIndex++;
+        }
+        // end of layer, update blockCount, bufferIn, bufferOut
+        blockCount = outBlockIndex;
+        bufferIn = buffer.subarray(0, blockCount * util_BLOCK_SIZE);
+        bufferOut = buffer.subarray(0, Math.floor(bufferIn.length / 2));
+    }
+    // the end result stays in blocks[0]
+    output.set(blocks[0].subarray(0, 32), offset);
+}
+/**
+ * Input data is unsafe because it's modified
+ * given nLevel = 3
+ * digest multiple of 8 chunks = 256 bytes
+ * the result is multiple of 1 chunk = 32 bytes
+ * this is the same to hashTreeRoot() of multiple validators
+ */
+function util_doDigestNLevel(data, nLevel, hashInto) {
+    let inputLength = data.length;
+    const bytesInBatch = Math.pow(2, nLevel) * 32;
+    if (nLevel < 1) {
+        throw new Error(`Invalid nLevel, expect to be greater than 0, got ${nLevel}`);
+    }
+    if (inputLength % bytesInBatch !== 0) {
+        throw new Error(`Invalid input length, expect to be multiple of ${bytesInBatch} for nLevel ${nLevel}, got ${inputLength}`);
+    }
+    let outputLength = Math.floor(inputLength / 2);
+    // hash into same buffer
+    let bufferIn = data;
+    for (let i = nLevel; i > 0; i--) {
+        const bufferOut = bufferIn.subarray(0, outputLength);
+        hashInto(bufferIn, bufferOut);
+        bufferIn = bufferOut;
+        inputLength = outputLength;
+        outputLength = Math.floor(inputLength / 2);
+    }
+    return bufferIn;
+}
+//# sourceMappingURL=util.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/hasher/noble.js
+
+
+
+const noble_hash64Input = new Uint8Array(64);
+const hasher_noble_digest64 = (a, b) => esm_sha256_sha256.create().update(a).update(b).digest();
+const hasher_noble_hashInto = (input, output) => {
+    if (input.length % 64 !== 0) {
+        throw new Error(`Invalid input length ${input.length}`);
+    }
+    if (input.length !== output.length * 2) {
+        throw new Error(`Invalid output length ${output.length}`);
+    }
+    const count = Math.floor(input.length / 64);
+    for (let i = 0; i < count; i++) {
+        const offset = i * 64;
+        const in1 = input.subarray(offset, offset + 32);
+        const in2 = input.subarray(offset + 32, offset + 64);
+        const out = hasher_noble_digest64(in1, in2);
+        output.set(out, i * 32);
+    }
+};
+/** should be multiple of 64, make it the same to as-sha256 */
+const noble_buffer = new Uint8Array(4 * util_BLOCK_SIZE);
+const noble_hasher = {
+    name: "noble",
+    hashInto: hasher_noble_hashInto,
+    digest64: hasher_noble_digest64,
+    digest64Into: (a, b, output) => {
+        if (a.length !== 32 || b.length !== 32) {
+            throw new Error("Invalid input length");
+        }
+        if (output.length !== 32) {
+            throw new Error("Invalid output length");
+        }
+        noble_hash64Input.set(a, 0);
+        noble_hash64Input.set(b, 32);
+        hasher_noble_hashInto(noble_hash64Input, output);
+    },
+    digest64HashObjects: (left, right, parent) => {
+        byteArrayIntoHashObject(hasher_noble_digest64(util_hashObjectToUint8Array(left), util_hashObjectToUint8Array(right)), 0, parent);
+    },
+    merkleizeBlocksBytes(blocksBytes, padFor, output, offset) {
+        util_doMerkleizeBlocksBytes(blocksBytes, padFor, output, offset, hasher_noble_hashInto);
+    },
+    merkleizeBlockArray(blocks, blockLimit, padFor, output, offset) {
+        util_doMerkleizeBlockArray(blocks, blockLimit, padFor, output, offset, hasher_noble_hashInto, noble_buffer);
+    },
+    digestNLevel(data, nLevel) {
+        return util_doDigestNLevel(data, nLevel, hasher_noble_hashInto);
+    },
+    executeHashComputations: (hashComputations) => {
+        for (let level = hashComputations.length - 1; level >= 0; level--) {
+            const hcArr = hashComputations[level];
+            if (!hcArr) {
+                // should not happen
+                throw Error(`no hash computations for level ${level}`);
+            }
+            for (const hc of hcArr) {
+                hc.dest.applyHash(digest64HashObjects(hc.src0, hc.src1));
+            }
+        }
+    },
+};
+//# sourceMappingURL=noble.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/hasher/index.js
+
+
+
+/**
+ * Hasher used across the SSZ codebase, by default, this does not support batch hash.
+ */
+let lib_hasher_hasher = noble_hasher;
+/**
+ * Set the hasher to be used across the SSZ codebase
+ *
+ * WARNING: This function is intended for power users and must be executed before any other SSZ code is imported
+ */
+function hasher_setHasher(newHasher) {
+    lib_hasher_hasher = newHasher;
+}
+function lib_hasher_hashInto(data, output) {
+    lib_hasher_hasher.hashInto(data, output);
+}
+function lib_hasher_digest64(a, b) {
+    return lib_hasher_hasher.digest64(a, b);
+}
+function lib_hasher_digest64Into(a, b, output) {
+    lib_hasher_hasher.digest64Into(a, b, output);
+}
+function hasher_digestNLevel(data, nLevel) {
+    return lib_hasher_hasher.digestNLevel(data, nLevel);
+}
+function hasher_merkleizeBlocksBytes(blocksBytes, padFor, output, offset) {
+    lib_hasher_hasher.merkleizeBlocksBytes(blocksBytes, padFor, output, offset);
+}
+function hasher_merkleizeBlockArray(blocks, blockLimit, padFor, output, offset) {
+    lib_hasher_hasher.merkleizeBlockArray(blocks, blockLimit, padFor, output, offset);
+}
+function hasher_executeHashComputations(hashComputations) {
+    lib_hasher_hasher.executeHashComputations(hashComputations);
+}
+//# sourceMappingURL=index.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/node.js
+
+const node_TWO_POWER_32 = 2 ** 32;
+/**
+ * An immutable binary merkle tree node
+ */
+class node_Node {
+    /**
+     * May be null. This is to save an extra variable to check if a node has a root or not
+     */
+    h0;
+    h1;
+    h2;
+    h3;
+    h4;
+    h5;
+    h6;
+    h7;
+    constructor(h0, h1, h2, h3, h4, h5, h6, h7) {
+        this.h0 = h0;
+        this.h1 = h1;
+        this.h2 = h2;
+        this.h3 = h3;
+        this.h4 = h4;
+        this.h5 = h5;
+        this.h6 = h6;
+        this.h7 = h7;
+    }
+    applyHash(root) {
+        this.h0 = root.h0;
+        this.h1 = root.h1;
+        this.h2 = root.h2;
+        this.h3 = root.h3;
+        this.h4 = root.h4;
+        this.h5 = root.h5;
+        this.h6 = root.h6;
+        this.h7 = root.h7;
+    }
+}
+/**
+ * An immutable binary merkle tree node that has a `left` and `right` child
+ */
+class lib_node_BranchNode extends node_Node {
+    _left;
+    _right;
+    constructor(_left, _right) {
+        // First null value is to save an extra variable to check if a node has a root or not
+        super(null, 0, 0, 0, 0, 0, 0, 0);
+        this._left = _left;
+        this._right = _right;
+        if (!_left) {
+            throw new Error("Left node is undefined");
+        }
+        if (!_right) {
+            throw new Error("Right node is undefined");
+        }
+    }
+    get rootHashObject() {
+        if (this.h0 === null) {
+            lib_hasher_hasher.digest64HashObjects(this.left.rootHashObject, this.right.rootHashObject, this);
+        }
+        return this;
+    }
+    get root() {
+        return util_hashObjectToUint8Array(this.rootHashObject);
+    }
+    get left() {
+        return this._left;
+    }
+    get right() {
+        return this._right;
+    }
+    isLeaf() {
+        return false;
+    }
+}
+/**
+ * An immutable binary merkle tree node that has no children
+ */
+class node_LeafNode extends node_Node {
+    get rootHashObject() {
+        return this;
+    }
+    get root() {
+        return util_hashObjectToUint8Array(this);
+    }
+    get left() {
+        throw Error("LeafNode has no left node");
+    }
+    get right() {
+        throw Error("LeafNode has no right node");
+    }
+    static fromRoot(root) {
+        return node_LeafNode.fromHashObject(util_uint8ArrayToHashObject(root));
+    }
+    /**
+     * New LeafNode from existing HashObject.
+     */
+    static fromHashObject(ho) {
+        return new node_LeafNode(ho.h0, ho.h1, ho.h2, ho.h3, ho.h4, ho.h5, ho.h6, ho.h7);
+    }
+    /**
+     * New LeafNode with its internal value set to zero. Consider using `zeroNode(0)` if you don't need to mutate.
+     */
+    static fromZero() {
+        return new node_LeafNode(0, 0, 0, 0, 0, 0, 0, 0);
+    }
+    /**
+     * LeafNode with HashObject `(uint32, 0, 0, 0, 0, 0, 0, 0)`.
+     */
+    static fromUint32(uint32) {
+        return new node_LeafNode(uint32, 0, 0, 0, 0, 0, 0, 0);
+    }
+    /**
+     * Create a new LeafNode with the same internal values. The returned instance is safe to mutate
+     */
+    clone() {
+        return node_LeafNode.fromHashObject(this);
+    }
+    isLeaf() {
+        return true;
+    }
+    writeToBytes(data, start, size) {
+        // TODO: Optimize
+        data.set(this.root.slice(0, size), start);
+    }
+    getUint(uintBytes, offsetBytes, clipInfinity) {
+        const hIndex = Math.floor(offsetBytes / 4);
+        // number has to be masked from an h value
+        if (uintBytes < 4) {
+            const bitIndex = (offsetBytes % 4) * 8;
+            const h = node_getNodeH(this, hIndex);
+            if (uintBytes === 1) {
+                return 0xff & (h >> bitIndex);
+            }
+            return 0xffff & (h >> bitIndex);
+        }
+        // number equals the h value
+        if (uintBytes === 4) {
+            return node_getNodeH(this, hIndex) >>> 0;
+        }
+        // number spans 2 h values
+        if (uintBytes === 8) {
+            const low = node_getNodeH(this, hIndex);
+            const high = node_getNodeH(this, hIndex + 1);
+            if (high === 0)
+                return low >>> 0;
+            if (high === -1 && low === -1 && clipInfinity) {
+                // Limit uint returns
+                return Infinity;
+            }
+            return (low >>> 0) + (high >>> 0) * node_TWO_POWER_32;
+        }
+        // Bigger uint can't be represented
+        throw Error("uintBytes > 8");
+    }
+    getUintBigint(uintBytes, offsetBytes) {
+        const hIndex = Math.floor(offsetBytes / 4);
+        // number has to be masked from an h value
+        if (uintBytes < 4) {
+            const bitIndex = (offsetBytes % 4) * 8;
+            const h = node_getNodeH(this, hIndex);
+            if (uintBytes === 1)
+                return BigInt(0xff & (h >> bitIndex));
+            return BigInt(0xffff & (h >> bitIndex));
+        }
+        // number equals the h value
+        if (uintBytes === 4) {
+            return BigInt(node_getNodeH(this, hIndex) >>> 0);
+        }
+        // number spans multiple h values
+        const hRange = Math.ceil(uintBytes / 4);
+        let v = BigInt(0);
+        for (let i = 0; i < hRange; i++) {
+            v += BigInt(node_getNodeH(this, hIndex + i) >>> 0) << BigInt(32 * i);
+        }
+        return v;
+    }
+    setUint(uintBytes, offsetBytes, value, clipInfinity) {
+        const hIndex = Math.floor(offsetBytes / 4);
+        // number has to be masked from an h value
+        if (uintBytes < 4) {
+            const bitIndex = (offsetBytes % 4) * 8;
+            let h = node_getNodeH(this, hIndex);
+            if (uintBytes === 1) {
+                h &= ~(0xff << bitIndex);
+                h |= (0xff & value) << bitIndex;
+            }
+            else {
+                h &= ~(0xffff << bitIndex);
+                h |= (0xffff & value) << bitIndex;
+            }
+            node_setNodeH(this, hIndex, h);
+        }
+        // number equals the h value
+        else if (uintBytes === 4) {
+            node_setNodeH(this, hIndex, value);
+        }
+        // number spans 2 h values
+        else if (uintBytes === 8) {
+            if (value === Infinity && clipInfinity) {
+                node_setNodeH(this, hIndex, -1);
+                node_setNodeH(this, hIndex + 1, -1);
+            }
+            else {
+                node_setNodeH(this, hIndex, value & 0xffffffff);
+                node_setNodeH(this, hIndex + 1, (value / node_TWO_POWER_32) & 0xffffffff);
+            }
+        }
+        // Bigger uint can't be represented
+        else {
+            throw Error("uintBytes > 8");
+        }
+    }
+    setUintBigint(uintBytes, offsetBytes, valueBN) {
+        const hIndex = Math.floor(offsetBytes / 4);
+        // number has to be masked from an h value
+        if (uintBytes < 4) {
+            const value = Number(valueBN);
+            const bitIndex = (offsetBytes % 4) * 8;
+            let h = node_getNodeH(this, hIndex);
+            if (uintBytes === 1) {
+                h &= ~(0xff << bitIndex);
+                h |= (0xff & value) << bitIndex;
+            }
+            else {
+                h &= ~(0xffff << bitIndex);
+                h |= (0xffff & value) << bitIndex;
+            }
+            node_setNodeH(this, hIndex, h);
+        }
+        // number equals the h value
+        else if (uintBytes === 4) {
+            node_setNodeH(this, hIndex, Number(valueBN));
+        }
+        // number spans multiple h values
+        else {
+            const hEnd = hIndex + Math.ceil(uintBytes / 4);
+            for (let i = hIndex; i < hEnd; i++) {
+                node_setNodeH(this, i, Number(valueBN & BigInt(0xffffffff)));
+                valueBN = valueBN >> BigInt(32);
+            }
+        }
+    }
+    bitwiseOrUint(uintBytes, offsetBytes, value) {
+        const hIndex = Math.floor(offsetBytes / 4);
+        // number has to be masked from an h value
+        if (uintBytes < 4) {
+            const bitIndex = (offsetBytes % 4) * 8;
+            node_bitwiseOrNodeH(this, hIndex, value << bitIndex);
+        }
+        // number equals the h value
+        else if (uintBytes === 4) {
+            node_bitwiseOrNodeH(this, hIndex, value);
+        }
+        // number spans multiple h values
+        else {
+            const hEnd = hIndex + Math.ceil(uintBytes / 4);
+            for (let i = hIndex; i < hEnd; i++) {
+                node_bitwiseOrNodeH(this, i, value & 0xffffffff);
+                value >>= 32;
+            }
+        }
+    }
+}
+function node_identity(n) {
+    return n;
+}
+function node_compose(inner, outer) {
+    return (n) => outer(inner(n));
+}
+function node_getNodeH(node, hIndex) {
+    if (hIndex === 0)
+        return node.h0;
+    if (hIndex === 1)
+        return node.h1;
+    if (hIndex === 2)
+        return node.h2;
+    if (hIndex === 3)
+        return node.h3;
+    if (hIndex === 4)
+        return node.h4;
+    if (hIndex === 5)
+        return node.h5;
+    if (hIndex === 6)
+        return node.h6;
+    if (hIndex === 7)
+        return node.h7;
+    throw Error("hIndex > 7");
+}
+function node_setNodeH(node, hIndex, value) {
+    if (hIndex === 0)
+        node.h0 = value;
+    else if (hIndex === 1)
+        node.h1 = value;
+    else if (hIndex === 2)
+        node.h2 = value;
+    else if (hIndex === 3)
+        node.h3 = value;
+    else if (hIndex === 4)
+        node.h4 = value;
+    else if (hIndex === 5)
+        node.h5 = value;
+    else if (hIndex === 6)
+        node.h6 = value;
+    else if (hIndex === 7)
+        node.h7 = value;
+    else
+        throw Error("hIndex > 7");
+}
+function node_bitwiseOrNodeH(node, hIndex, value) {
+    if (hIndex === 0)
+        node.h0 |= value;
+    else if (hIndex === 1)
+        node.h1 |= value;
+    else if (hIndex === 2)
+        node.h2 |= value;
+    else if (hIndex === 3)
+        node.h3 |= value;
+    else if (hIndex === 4)
+        node.h4 |= value;
+    else if (hIndex === 5)
+        node.h5 |= value;
+    else if (hIndex === 6)
+        node.h6 |= value;
+    else if (hIndex === 7)
+        node.h7 |= value;
+    else
+        throw Error("hIndex > 7");
+}
+//# sourceMappingURL=node.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/hashComputation.js
+/**
+ * Model HashComputation[] at the same level that support reusing the same memory.
+ * Before every run, reset() should be called.
+ * After every run, clean() should be called.
+ */
+class hashComputation_HashComputationLevel {
+    _length;
+    _totalLength;
+    // use LinkedList to avoid memory allocation when the list grows
+    // always have a fixed head although length is 0
+    head;
+    tail;
+    pointer;
+    constructor() {
+        this._length = 0;
+        this._totalLength = 0;
+        this.head = {
+            src0: null,
+            src1: null,
+            dest: null,
+            next: null,
+        };
+        this.tail = null;
+        this.pointer = null;
+    }
+    get length() {
+        return this._length;
+    }
+    get totalLength() {
+        return this._totalLength;
+    }
+    /**
+     * run before every run
+     */
+    reset() {
+        // keep this.head object, only release the data
+        this.head.src0 = null;
+        this.head.src1 = null;
+        this.head.dest = null;
+        this.tail = null;
+        this._length = 0;
+        // totalLength is not reset
+        this.pointer = null;
+    }
+    /**
+     * Append a new HashComputation to tail.
+     * This will overwrite the existing HashComputation if it is not null, or grow the list if needed.
+     */
+    push(src0, src1, dest) {
+        if (this.tail !== null) {
+            let newTail = this.tail.next;
+            if (newTail !== null) {
+                newTail.src0 = src0;
+                newTail.src1 = src1;
+                newTail.dest = dest;
+            }
+            else {
+                // grow the list
+                newTail = { src0, src1, dest, next: null };
+                this.tail.next = newTail;
+                this._totalLength++;
+            }
+            this.tail = newTail;
+            this._length++;
+            return;
+        }
+        // first item
+        this.head.src0 = src0;
+        this.head.src1 = src1;
+        this.head.dest = dest;
+        this.tail = this.head;
+        this._length = 1;
+        if (this._totalLength === 0) {
+            this._totalLength = 1;
+        }
+        // else _totalLength > 0, do not set
+    }
+    /**
+     * run after every run
+     * hashComps may still refer to the old Nodes, we should release them to avoid memory leak.
+     */
+    clean() {
+        let hc = this.tail?.next ?? null;
+        while (hc !== null) {
+            if (hc.src0 === null) {
+                // we may have already cleaned it in the previous run, return early
+                break;
+            }
+            hc.src0 = null;
+            hc.src1 = null;
+            hc.dest = null;
+            hc = hc.next;
+        }
+    }
+    /**
+     * Implement Iterator for this class
+     */
+    next() {
+        if (!this.pointer || this.tail === null) {
+            return { done: true, value: undefined };
+        }
+        // never yield value beyond the tail
+        const value = this.pointer;
+        const isNull = value.src0 === null;
+        this.pointer = this.pointer.next;
+        return isNull ? { done: true, value: undefined } : { done: false, value };
+    }
+    /**
+     * This is convenient method to consume HashComputationLevel with for-of loop
+     * See "next" method above for the actual implementation
+     */
+    [Symbol.iterator]() {
+        this.pointer = this.head;
+        return this;
+    }
+    /**
+     * Not great due to memory allocation, for testing only.
+     * This converts all HashComputation with data to an array.
+     */
+    toArray() {
+        const hashComps = [];
+        for (const hc of this) {
+            hashComps.push(hc);
+        }
+        return hashComps;
+    }
+    /**
+     * For testing only.
+     * This dumps all backed HashComputation objects, note that some HashComputation may not have data.
+     */
+    dump() {
+        const hashComps = [];
+        let hc = null;
+        for (hc = this.head; hc !== null; hc = hc.next) {
+            hashComps.push(hc);
+        }
+        return hashComps;
+    }
+}
+/**
+ * Model HashComputationLevel[] at different levels.
+ */
+class hashComputation_HashComputationGroup {
+    byLevel;
+    constructor() {
+        this.byLevel = [];
+    }
+    reset() {
+        for (const level of this.byLevel) {
+            level.reset();
+        }
+    }
+    clean() {
+        for (const level of this.byLevel) {
+            level.clean();
+        }
+    }
+}
+/**
+ * Get HashComputations from a root node all the way to the leaf nodes.
+ * hcByLevel is the global array to store HashComputationLevel at different levels
+ * at this ${node}, we only add more HashComputations starting from ${index}
+ *
+ * ╔═══ hcByLevel ══════╗
+ * ║ level 0            ║
+ * ║ level 1            ║
+ * ║ ...                ║
+ * ║                    ║          node
+ * ║                    ║       /        \
+ * ║ level ${index}     ║      01        02
+ * ║                    ║    /    \    /    \
+ * ║ level ${index + 1} ║  03      04 05     06
+ * ║                    ║
+ * ║ ...                ║
+ * ╚════════════════════╝
+ */
+function hashComputation_getHashComputations(node, index, hcByLevel) {
+    if (node.h0 === null) {
+        const hashComputations = hashComputation_levelAtIndex(hcByLevel, index);
+        const { left, right } = node;
+        hashComputations.push(left, right, node);
+        // leaf nodes should have h0 to stop the recursion
+        hashComputation_getHashComputations(left, index + 1, hcByLevel);
+        hashComputation_getHashComputations(right, index + 1, hcByLevel);
+    }
+    // else stop the recursion, node is hashed
+}
+/**
+ * Utility to get HashComputationLevel at a specific index.
+ */
+function hashComputation_levelAtIndex(hcByLevel, index) {
+    if (hcByLevel[index] === undefined) {
+        hcByLevel[index] = new hashComputation_HashComputationLevel();
+    }
+    return hcByLevel[index];
+}
+//# sourceMappingURL=hashComputation.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/zeroNode.js
+
+const zeroNode_zeroes = [node_LeafNode.fromZero()];
+/**
+ * Return the `Node` at a specified height from the merkle tree made of "zero data"
+ * ```
+ *           ...
+ *          /
+ *         x           <- height 2
+ *      /     \
+ *     x       x       <- height 1
+ *   /  \      /  \
+ * 0x0  0x0  0x0  0x0  <- height 0
+ * ```
+ */
+function lib_zeroNode_zeroNode(height) {
+    if (height >= zeroNode_zeroes.length) {
+        for (let i = zeroNode_zeroes.length; i <= height; i++) {
+            zeroNode_zeroes[i] = new lib_node_BranchNode(zeroNode_zeroes[i - 1], zeroNode_zeroes[i - 1]);
+        }
+        // make sure hash is precomputed in order not to put zeroNodes to HashComputation
+        // otherwise get OOM
+        zeroNode_zeroes[height].root;
+    }
+    return zeroNode_zeroes[height];
+}
+//# sourceMappingURL=zeroNode.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/subtree.js
+
+
+
+function subtree_subtreeFillToDepth(bottom, depth) {
+    let node = bottom;
+    while (depth > 0) {
+        node = new BranchNode(node, node);
+        depth--;
+    }
+    return node;
+}
+function subtree_subtreeFillToLength(bottom, depth, length) {
+    const maxLength = 1 << depth;
+    if (length > maxLength)
+        throw new Error("ERR_TOO_MANY_NODES");
+    if (length === maxLength)
+        return subtree_subtreeFillToDepth(bottom, depth);
+    if (depth === 0) {
+        if (length === 1)
+            return bottom;
+        throw new Error("ERR_NAVIGATION");
+    }
+    if (depth === 1) {
+        return new BranchNode(bottom, length > 1 ? bottom : zeroNode(0));
+    }
+    const pivot = maxLength >> 1;
+    if (length <= pivot) {
+        return new BranchNode(subtree_subtreeFillToLength(bottom, depth - 1, length), zeroNode(depth - 1));
+    }
+    return new BranchNode(subtree_subtreeFillToDepth(bottom, depth - 1), subtree_subtreeFillToLength(bottom, depth - 1, length - pivot));
+}
+/**
+ * WARNING: Mutates the provided nodes array.
+ * TODO: Don't mutate the nodes array.
+ * hcByLevel is an output parameter that will be filled with the hash computations if exists.
+ */
+function subtree_subtreeFillToContents(nodes, depth, hcOffset = 0, hcByLevel = null) {
+    const maxLength = 2 ** depth;
+    if (nodes.length > maxLength) {
+        throw new Error(`nodes.length ${nodes.length} over maxIndex at depth ${depth}`);
+    }
+    if (nodes.length === 0) {
+        return lib_zeroNode_zeroNode(depth);
+    }
+    if (depth === 0) {
+        const node = nodes[0];
+        if (hcByLevel !== null) {
+            hashComputation_getHashComputations(node, hcOffset, hcByLevel);
+        }
+        return node;
+    }
+    if (depth === 1) {
+        // All nodes at depth 1 available
+        // If there is only one node, pad with zero node
+        const leftNode = nodes[0];
+        const rightNode = nodes.length > 1 ? nodes[1] : lib_zeroNode_zeroNode(0);
+        const rootNode = new lib_node_BranchNode(leftNode, rightNode);
+        if (hcByLevel !== null) {
+            hashComputation_getHashComputations(leftNode, hcOffset + 1, hcByLevel);
+            hashComputation_getHashComputations(rightNode, hcOffset + 1, hcByLevel);
+            hashComputation_levelAtIndex(hcByLevel, hcOffset).push(leftNode, rightNode, rootNode);
+        }
+        return rootNode;
+    }
+    let count = nodes.length;
+    for (let d = depth; d > 0; d--) {
+        const countRemainder = count % 2;
+        const countEven = count - countRemainder;
+        const offset = hcByLevel ? hcOffset + d - 1 : null;
+        // For each depth level compute the new BranchNodes and overwrite the nodes array
+        for (let i = 0; i < countEven; i += 2) {
+            const left = nodes[i];
+            const right = nodes[i + 1];
+            const node = new lib_node_BranchNode(left, right);
+            nodes[i / 2] = node;
+            if (offset !== null && hcByLevel !== null) {
+                hashComputation_levelAtIndex(hcByLevel, offset).push(left, right, node);
+                if (d === depth) {
+                    // bottom up strategy so we don't need to go down the tree except for the last level
+                    hashComputation_getHashComputations(left, offset + 1, hcByLevel);
+                    hashComputation_getHashComputations(right, offset + 1, hcByLevel);
+                }
+            }
+        }
+        if (countRemainder > 0) {
+            const left = nodes[countEven];
+            const right = lib_zeroNode_zeroNode(depth - d);
+            const node = new lib_node_BranchNode(left, right);
+            nodes[countEven / 2] = node;
+            if (offset !== null && hcByLevel !== null) {
+                if (d === depth) {
+                    // only go down on the last level
+                    hashComputation_getHashComputations(left, offset + 1, hcByLevel);
+                }
+                // no need to getHashComputations for zero node
+                hashComputation_levelAtIndex(hcByLevel, offset).push(left, right, node);
+            }
+        }
+        // If there was remainer, 2 nodes are added to the count
+        count = countEven / 2 + countRemainder;
+    }
+    return nodes[0];
+}
+//# sourceMappingURL=subtree.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/packedNode.js
+
+
+const packedNode_NUMBER_2_POW_32 = 2 ** 32;
+function packedNode_packedRootsBytesToNode(depth, dataView, start, end) {
+    const leafNodes = packedNode_packedRootsBytesToLeafNodes(dataView, start, end);
+    return subtree_subtreeFillToContents(leafNodes, depth);
+}
+/**
+ * Pack a list of uint64 numbers into a list of LeafNodes.
+ * Each value is UintNum64, which is 8 bytes long, which is 2 h values.
+ * Each 4 of them forms a LeafNode.
+ *
+ *      v0            v1           v2          v3
+ * |-------------|-------------|-------------|-------------|
+ *
+ *    h0     h1     h2     h3     h4     h5     h6     h7
+ * |------|------|------|------|------|------|------|------|
+ */
+function packedNode_packedUintNum64sToLeafNodes(values) {
+    const leafNodes = new Array(Math.ceil(values.length / 4));
+    for (let i = 0; i < values.length; i++) {
+        const nodeIndex = Math.floor(i / 4);
+        const leafNode = leafNodes[nodeIndex] ?? new node_LeafNode(0, 0, 0, 0, 0, 0, 0, 0);
+        const vIndex = i % 4;
+        const hIndex = 2 * vIndex;
+        const value = values[i];
+        // same logic to UintNumberType.value_serializeToBytes() for 8 bytes
+        if (value === Infinity) {
+            node_setNodeH(leafNode, hIndex, 0xffffffff);
+            node_setNodeH(leafNode, hIndex + 1, 0xffffffff);
+        }
+        else {
+            node_setNodeH(leafNode, hIndex, value & 0xffffffff);
+            node_setNodeH(leafNode, hIndex + 1, (value / packedNode_NUMBER_2_POW_32) & 0xffffffff);
+        }
+        leafNodes[nodeIndex] = leafNode;
+    }
+    return leafNodes;
+}
+/**
+ * Optimized deserialization of linear bytes to consecutive leaf nodes
+ */
+function packedNode_packedRootsBytesToLeafNodes(dataView, start, end) {
+    const size = end - start;
+    // If the offset in data is not a multiple of 4, Uint32Array can't be used
+    // > start offset of Uint32Array should be a multiple of 4
+    // NOTE: Performance tests show that using a DataView is as fast as Uint32Array
+    const fullNodeCount = Math.floor(size / 32);
+    const leafNodes = new Array(Math.ceil(size / 32));
+    // Efficiently construct the tree writing to hashObjects directly
+    // TODO: Optimize, with this approach each h property is written twice
+    for (let i = 0; i < fullNodeCount; i++) {
+        const offset = start + i * 32;
+        leafNodes[i] = new node_LeafNode(dataView.getInt32(offset + 0, true), dataView.getInt32(offset + 4, true), dataView.getInt32(offset + 8, true), dataView.getInt32(offset + 12, true), dataView.getInt32(offset + 16, true), dataView.getInt32(offset + 20, true), dataView.getInt32(offset + 24, true), dataView.getInt32(offset + 28, true));
+    }
+    // Consider that the last node may only include partial data
+    const remainderBytes = size % 32;
+    // Last node
+    if (remainderBytes > 0) {
+        const node = new node_LeafNode(0, 0, 0, 0, 0, 0, 0, 0);
+        leafNodes[fullNodeCount] = node;
+        // Loop to dynamically copy the full h values
+        const fullHCount = Math.floor(remainderBytes / 4);
+        for (let h = 0; h < fullHCount; h++) {
+            node_setNodeH(node, h, dataView.getInt32(start + fullNodeCount * 32 + h * 4, true));
+        }
+        const remainderUint32 = size % 4;
+        if (remainderUint32 > 0) {
+            let h = 0;
+            for (let i = 0; i < remainderUint32; i++) {
+                h |= dataView.getUint8(start + size - remainderUint32 + i) << (i * 8);
+            }
+            node_setNodeH(node, fullHCount, h);
+        }
+    }
+    return leafNodes;
+}
+/**
+ * Optimized serialization of consecutive leave nodes to linear bytes
+ */
+function packedNode_packedNodeRootsToBytes(dataView, start, size, nodes) {
+    // If the offset in data is not a multiple of 4, Uint32Array can't be used
+    // > start offset of Uint32Array should be a multiple of 4
+    // NOTE: Performance tests show that using a DataView is as fast as Uint32Array
+    // Consider that the last node may only include partial data
+    const remainderBytes = size % 32;
+    // Full nodes
+    // Efficiently get hashObjects data into data
+    const fullNodeCount = Math.floor(size / 32);
+    for (let i = 0; i < fullNodeCount; i++) {
+        const node = nodes[i];
+        const offset = start + i * 32;
+        dataView.setInt32(offset + 0, node.h0, true);
+        dataView.setInt32(offset + 4, node.h1, true);
+        dataView.setInt32(offset + 8, node.h2, true);
+        dataView.setInt32(offset + 12, node.h3, true);
+        dataView.setInt32(offset + 16, node.h4, true);
+        dataView.setInt32(offset + 20, node.h5, true);
+        dataView.setInt32(offset + 24, node.h6, true);
+        dataView.setInt32(offset + 28, node.h7, true);
+    }
+    // Last node
+    if (remainderBytes > 0) {
+        const node = nodes[fullNodeCount];
+        // Loop to dynamically copy the full h values
+        const fullHCount = Math.floor(remainderBytes / 4);
+        for (let h = 0; h < fullHCount; h++) {
+            dataView.setInt32(start + fullNodeCount * 32 + h * 4, node_getNodeH(node, h), true);
+        }
+        const remainderUint32 = size % 4;
+        if (remainderUint32 > 0) {
+            const h = node_getNodeH(node, fullHCount);
+            for (let i = 0; i < remainderUint32; i++) {
+                dataView.setUint8(start + size - remainderUint32 + i, (h >> (i * 8)) & 0xff);
+            }
+        }
+    }
+}
+//# sourceMappingURL=packedNode.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/proof/util.js
+
+// Not currently in use, but simpler implementation useful for testing
+/**
+ * Compute both the path and branch indices
+ *
+ * Path indices are parent indices upwards toward the root
+ * Branch indices are witnesses required for a merkle proof
+ */
+function util_computeProofGindices(gindex) {
+    const path = new Set();
+    const branch = new Set();
+    let g = gindex;
+    while (g > 1) {
+        path.add(g);
+        branch.add(gindexSibling(g));
+        g = gindexParent(g);
+    }
+    return { path, branch };
+}
+/**
+ * Compute both the path and branch indices
+ *
+ * Path indices are parent indices upwards toward the root
+ * Branch indices are witnesses required for a merkle proof
+ */
+function proof_util_computeProofBitstrings(gindex) {
+    const path = new Set();
+    const branch = new Set();
+    let g = gindex;
+    while (g.length > 1) {
+        path.add(g);
+        const lastBit = g.at(-1);
+        const parent = g.substring(0, g.length - 1);
+        branch.add(parent + (Number(lastBit) ^ 1));
+        g = parent;
+    }
+    return { path, branch };
+}
+/**
+ * Sort generalized indices in-order
+ * @param bitLength maximum bit length of generalized indices to sort
+ */
+function util_sortInOrderBitstrings(gindices, bitLength) {
+    if (!gindices.length) {
+        return [];
+    }
+    return gindices
+        .map((g) => g.padEnd(bitLength))
+        .sort()
+        .map((g) => g.trim());
+}
+/**
+ * Sort generalized indices in decreasing order
+ */
+function util_sortDecreasingBitstrings(gindices) {
+    if (!gindices.length) {
+        return [];
+    }
+    return gindices.sort((a, b) => {
+        if (a.length < b.length)
+            return 1;
+        if (b.length < a.length)
+            return -1;
+        let aPos0 = a.indexOf("0");
+        let bPos0 = b.indexOf("0");
+        while (true) {
+            if (aPos0 === -1)
+                return -1;
+            if (bPos0 === -1)
+                return 1;
+            if (aPos0 < bPos0)
+                return 1;
+            if (bPos0 < aPos0)
+                return -1;
+            aPos0 = a.indexOf("0", aPos0 + 1);
+            bPos0 = b.indexOf("0", bPos0 + 1);
+        }
+    });
+}
+/**
+ * Filter out parent generalized indices
+ */
+function util_filterParentBitstrings(gindices) {
+    const sortedBitstrings = gindices.slice().sort((a, b) => a.length - b.length);
+    const filtered = [];
+    outer: for (let i = 0; i < sortedBitstrings.length; i++) {
+        const bsA = sortedBitstrings[i];
+        for (let j = i + 1; j < sortedBitstrings.length; j++) {
+            const bsB = sortedBitstrings[j];
+            if (bsB.startsWith(bsA)) {
+                continue outer;
+            }
+        }
+        filtered.push(bsA);
+    }
+    return filtered;
+}
+var util_SortOrder;
+(function (SortOrder) {
+    SortOrder[SortOrder["InOrder"] = 0] = "InOrder";
+    SortOrder[SortOrder["Decreasing"] = 1] = "Decreasing";
+    SortOrder[SortOrder["Unsorted"] = 2] = "Unsorted";
+})(util_SortOrder || (util_SortOrder = {}));
+/**
+ * Return the set of generalized indices required for a multiproof
+ * This may include all leaves and any necessary witnesses
+ * @param gindices leaves to include in proof
+ * @returns all generalized indices required for a multiproof (leaves and witnesses), deduplicated and sorted
+ */
+function util_computeMultiProofBitstrings(gindices, includeLeaves = true, sortOrder = util_SortOrder.InOrder) {
+    const leaves = util_filterParentBitstrings(gindices);
+    // Maybe initialize the proof indices with the leaves
+    const proof = new Set(includeLeaves ? leaves : []);
+    const paths = new Set();
+    const branches = new Set();
+    // Collect all path indices and all branch indices
+    let maxBitLength = 1;
+    for (const gindex of leaves) {
+        if (gindex.length > maxBitLength)
+            maxBitLength = gindex.length;
+        const { path, branch } = proof_util_computeProofBitstrings(gindex);
+        for (const p of path) {
+            paths.add(p);
+        }
+        for (const b of branch) {
+            branches.add(b);
+        }
+    }
+    // Remove all branches that are included in the paths
+    for (const p of paths) {
+        branches.delete(p);
+    }
+    // Add all remaining branches to the leaves
+    for (const b of branches) {
+        proof.add(b);
+    }
+    switch (sortOrder) {
+        case util_SortOrder.InOrder:
+            return util_sortInOrderBitstrings(Array.from(proof), maxBitLength);
+        case util_SortOrder.Decreasing:
+            return util_sortDecreasingBitstrings(Array.from(proof));
+        case util_SortOrder.Unsorted:
+            return Array.from(proof);
+    }
+}
+//# sourceMappingURL=util.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/proof/compactMulti.js
+
+
+
+function compactMulti_computeDescriptor(indices) {
+    // include all helper indices
+    const proofBitstrings = new Set();
+    const pathBitstrings = new Set();
+    for (const leafIndex of indices) {
+        const leafBitstring = convertGindexToBitstring(leafIndex);
+        proofBitstrings.add(leafBitstring);
+        const { branch, path } = computeProofBitstrings(leafBitstring);
+        path.delete(leafBitstring);
+        for (const pathIndex of path) {
+            pathBitstrings.add(pathIndex);
+        }
+        for (const branchIndex of branch) {
+            proofBitstrings.add(branchIndex);
+        }
+    }
+    for (const pathIndex of pathBitstrings) {
+        proofBitstrings.delete(pathIndex);
+    }
+    // sort gindex bitstrings in-order
+    const allBitstringsSorted = Array.from(proofBitstrings).sort((a, b) => a.localeCompare(b));
+    // convert gindex bitstrings into descriptor bitstring
+    let descriptorBitstring = "";
+    for (const gindexBitstring of allBitstringsSorted) {
+        for (let i = 0; i < gindexBitstring.length; i++) {
+            if (gindexBitstring.at(-1 - i) === "1") {
+                descriptorBitstring += "1".padStart(i + 1, "0");
+                break;
+            }
+        }
+    }
+    // append zero bits to byte-alignt
+    if (descriptorBitstring.length % 8 !== 0) {
+        descriptorBitstring = descriptorBitstring.padEnd(8 - (descriptorBitstring.length % 8) + descriptorBitstring.length, "0");
+    }
+    // convert descriptor bitstring to bytes
+    const descriptor = new Uint8Array(descriptorBitstring.length / 8);
+    for (let i = 0; i < descriptor.length; i++) {
+        descriptor[i] = Number(`0b${descriptorBitstring.substring(i * 8, (i + 1) * 8)}`);
+    }
+    return descriptor;
+}
+function compactMulti_getBit(bitlist, bitIndex) {
+    const bit = bitIndex % 8;
+    const byteIdx = Math.floor(bitIndex / 8);
+    const byte = bitlist[byteIdx];
+    switch (bit) {
+        case 0:
+            return (byte & 0b1000_0000) !== 0;
+        case 1:
+            return (byte & 0b0100_0000) !== 0;
+        case 2:
+            return (byte & 0b0010_0000) !== 0;
+        case 3:
+            return (byte & 0b0001_0000) !== 0;
+        case 4:
+            return (byte & 0b0000_1000) !== 0;
+        case 5:
+            return (byte & 0b0000_0100) !== 0;
+        case 6:
+            return (byte & 0b0000_0010) !== 0;
+        case 7:
+            return (byte & 0b0000_0001) !== 0;
+        default:
+            throw new Error("unreachable");
+    }
+}
+function compactMulti_descriptorToBitlist(descriptor) {
+    const bools = [];
+    const maxBitLength = descriptor.length * 8;
+    let count0 = 0;
+    let count1 = 0;
+    for (let i = 0; i < maxBitLength; i++) {
+        const bit = compactMulti_getBit(descriptor, i);
+        bools.push(bit);
+        if (bit) {
+            count1++;
+        }
+        else {
+            count0++;
+        }
+        if (count1 > count0) {
+            i++;
+            if (i + 7 < maxBitLength) {
+                throw new Error("Invalid descriptor: too many bytes");
+            }
+            for (; i < maxBitLength; i++) {
+                const bit = compactMulti_getBit(descriptor, i);
+                if (bit) {
+                    throw new Error("Invalid descriptor: too many 1 bits");
+                }
+            }
+            return bools;
+        }
+    }
+    throw new Error("Invalid descriptor: not enough 1 bits");
+}
+function compactMulti_nodeToCompactMultiProof(node, bitlist, bitIndex) {
+    if (bitlist[bitIndex]) {
+        return [node.root];
+    }
+    const left = compactMulti_nodeToCompactMultiProof(node.left, bitlist, bitIndex + 1);
+    const right = compactMulti_nodeToCompactMultiProof(node.right, bitlist, bitIndex + left.length * 2);
+    return [...left, ...right];
+}
+/**
+ * Create a Node given a validated bitlist, leaves, and a pointer into the bitlist and leaves
+ *
+ * Recursive definition
+ */
+function compactMulti_compactMultiProofToNode(bitlist, leaves, pointer) {
+    if (bitlist[pointer.bitIndex++]) {
+        return node_LeafNode.fromRoot(leaves[pointer.leafIndex++]);
+    }
+    return new lib_node_BranchNode(compactMulti_compactMultiProofToNode(bitlist, leaves, pointer), compactMulti_compactMultiProofToNode(bitlist, leaves, pointer));
+}
+function compactMulti_createCompactMultiProof(rootNode, descriptor) {
+    return compactMulti_nodeToCompactMultiProof(rootNode, compactMulti_descriptorToBitlist(descriptor), 0);
+}
+function compactMulti_createNodeFromCompactMultiProof(leaves, descriptor) {
+    const bools = compactMulti_descriptorToBitlist(descriptor);
+    if (bools.length !== leaves.length * 2 - 1) {
+        throw new Error("Invalid multiproof: invalid number of leaves");
+    }
+    return compactMulti_compactMultiProofToNode(bools, leaves, { bitIndex: 0, leafIndex: 0 });
+}
+//# sourceMappingURL=compactMulti.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/proof/single.js
+
+
+const single_ERR_INVALID_NAV = "Invalid tree navigation";
+function single_createSingleProof(rootNode, index) {
+    const witnesses = [];
+    let node = rootNode;
+    for (const i of gindex_gindexIterator(index)) {
+        if (i) {
+            if (node.isLeaf())
+                throw new Error(single_ERR_INVALID_NAV);
+            witnesses.push(node.left.root);
+            node = node.right;
+        }
+        else {
+            if (node.isLeaf())
+                throw new Error(single_ERR_INVALID_NAV);
+            witnesses.push(node.right.root);
+            node = node.left;
+        }
+    }
+    return [node.root, witnesses.reverse()];
+}
+function single_createNodeFromSingleProof(gindex, leaf, witnesses) {
+    let node = node_LeafNode.fromRoot(leaf);
+    const w = witnesses.slice().reverse();
+    while (gindex > 1) {
+        const sibling = node_LeafNode.fromRoot(w.pop());
+        if (gindex % BigInt(2) === BigInt(0)) {
+            node = new lib_node_BranchNode(node, sibling);
+        }
+        else {
+            node = new lib_node_BranchNode(sibling, node);
+        }
+        gindex = gindex / BigInt(2);
+    }
+    return node;
+}
+//# sourceMappingURL=single.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/tree.js
+
+
+
+
+
+
+/**
+ * Binary merkle tree
+ *
+ * Wrapper around immutable `Node` to support mutability.
+ *
+ * Mutability between a parent tree and subtree is achieved by maintaining a `hook` callback, which updates the parent when the subtree is updated.
+ */
+class tree_Tree {
+    _rootNode;
+    hook;
+    constructor(node, hook) {
+        this._rootNode = node;
+        if (hook) {
+            if (typeof WeakRef === "undefined") {
+                this.hook = hook;
+            }
+            else {
+                this.hook = new WeakRef(hook);
+            }
+        }
+    }
+    /**
+     * The root hash of the tree
+     */
+    get root() {
+        return this.rootNode.root;
+    }
+    /**
+     * The root node of the tree
+     */
+    get rootNode() {
+        return this._rootNode;
+    }
+    /**
+     *
+     * Setting the root node will trigger a call to the tree's `hook` if it exists.
+     */
+    set rootNode(newRootNode) {
+        this._rootNode = newRootNode;
+        if (this.hook) {
+            // WeakRef should not change status during a program's execution
+            // So, use WeakRef feature detection to assume the type of this.hook
+            // to minimize the memory footprint of Tree
+            if (typeof WeakRef === "undefined") {
+                this.hook(newRootNode);
+            }
+            else {
+                const hookVar = this.hook.deref();
+                if (hookVar) {
+                    hookVar(newRootNode);
+                }
+                else {
+                    // Hook has been garbage collected, no need to keep the hookRef
+                    this.hook = undefined;
+                }
+            }
+        }
+    }
+    /**
+     * Create a `Tree` from a `Proof` object
+     */
+    static createFromProof(proof) {
+        return new tree_Tree(proof_createNodeFromProof(proof));
+    }
+    /**
+     * Return a copy of the tree
+     */
+    clone() {
+        return new tree_Tree(this.rootNode);
+    }
+    /**
+     * Return the subtree at the specified gindex.
+     *
+     * Note: The returned subtree will have a `hook` attached to the parent tree.
+     * Updates to the subtree will result in updates to the parent.
+     */
+    getSubtree(index) {
+        return new tree_Tree(this.getNode(index), (node) => this.setNode(index, node));
+    }
+    /**
+     * Return the node at the specified gindex.
+     */
+    getNode(gindex) {
+        return tree_getNode(this.rootNode, gindex);
+    }
+    /**
+     * Return the node at the specified depth and index.
+     *
+     * Supports index up to `Number.MAX_SAFE_INTEGER`.
+     */
+    getNodeAtDepth(depth, index) {
+        return tree_getNodeAtDepth(this.rootNode, depth, index);
+    }
+    /**
+     * Return the hash at the specified gindex.
+     */
+    getRoot(index) {
+        return this.getNode(index).root;
+    }
+    /**
+     * Set the node at at the specified gindex.
+     */
+    setNode(gindex, n) {
+        this.rootNode = tree_setNode(this.rootNode, gindex, n);
+    }
+    /**
+     * Traverse to the node at the specified gindex,
+     * then apply the function to get a new node and set the node at the specified gindex with the result.
+     *
+     * This is a convenient method to avoid traversing the tree 2 times to
+     * get and set.
+     */
+    setNodeWithFn(gindex, getNewNode) {
+        this.rootNode = tree_setNodeWithFn(this.rootNode, gindex, getNewNode);
+    }
+    /**
+     * Set the node at the specified depth and index.
+     *
+     * Supports index up to `Number.MAX_SAFE_INTEGER`.
+     */
+    setNodeAtDepth(depth, index, node) {
+        this.rootNode = tree_setNodeAtDepth(this.rootNode, depth, index, node);
+    }
+    /**
+     * Set the hash at the specified gindex.
+     *
+     * Note: This will set a new `LeafNode` at the specified gindex.
+     */
+    setRoot(index, root) {
+        this.setNode(index, node_LeafNode.fromRoot(root));
+    }
+    /**
+     * Fast read-only iteration
+     * In-order traversal of nodes at `depth`
+     * starting from the `startIndex`-indexed node
+     * iterating through `count` nodes
+     *
+     * Supports index up to `Number.MAX_SAFE_INTEGER`.
+     */
+    getNodesAtDepth(depth, startIndex, count) {
+        return tree_getNodesAtDepth(this.rootNode, depth, startIndex, count);
+    }
+    /**
+     * Fast read-only iteration
+     * In-order traversal of nodes at `depth`
+     * starting from the `startIndex`-indexed node
+     * iterating through `count` nodes
+     *
+     * Supports index up to `Number.MAX_SAFE_INTEGER`.
+     */
+    iterateNodesAtDepth(depth, startIndex, count) {
+        return tree_iterateNodesAtDepth(this.rootNode, depth, startIndex, count);
+    }
+    /**
+     * Return a merkle proof for the node at the specified gindex.
+     */
+    getSingleProof(index) {
+        return single_createSingleProof(this.rootNode, index)[1];
+    }
+    /**
+     * Return a merkle proof for the proof input.
+     *
+     * This method can be used to create multiproofs.
+     */
+    getProof(input) {
+        return proof_createProof(this.rootNode, input);
+    }
+}
+/**
+ * Return the node at the specified gindex.
+ */
+function tree_getNode(rootNode, gindex) {
+    const gindexBitstring = lib_gindex_convertGindexToBitstring(gindex);
+    let node = rootNode;
+    for (let i = 1; i < gindexBitstring.length; i++) {
+        if (node.isLeaf()) {
+            throw new Error(`Invalid tree - found leaf at depth ${i}`);
+        }
+        // If bit is set, means navigate right
+        node = gindexBitstring[i] === "1" ? node.right : node.left;
+    }
+    return node;
+}
+/**
+ * Set the node at at the specified gindex.
+ * Returns the new root node.
+ */
+function tree_setNode(rootNode, gindex, n) {
+    // Pre-compute entire bitstring instead of using an iterator (25% faster)
+    const gindexBitstring = lib_gindex_convertGindexToBitstring(gindex);
+    const parentNodes = tree_getParentNodes(rootNode, gindexBitstring);
+    return tree_rebindNodeToRoot(gindexBitstring, parentNodes, n);
+}
+/**
+ * Traverse to the node at the specified gindex,
+ * then apply the function to get a new node and set the node at the specified gindex with the result.
+ *
+ * This is a convenient method to avoid traversing the tree 2 times to
+ * get and set.
+ *
+ * Returns the new root node.
+ */
+function tree_setNodeWithFn(rootNode, gindex, getNewNode) {
+    // Pre-compute entire bitstring instead of using an iterator (25% faster)
+    const gindexBitstring = lib_gindex_convertGindexToBitstring(gindex);
+    const parentNodes = tree_getParentNodes(rootNode, gindexBitstring);
+    const lastParentNode = parentNodes.at(-1);
+    if (!lastParentNode)
+        throw new Error("Invalid tree - can not find last parent");
+    const lastBit = gindexBitstring.at(-1);
+    const oldNode = lastBit === "1" ? lastParentNode.right : lastParentNode.left;
+    const newNode = getNewNode(oldNode);
+    return tree_rebindNodeToRoot(gindexBitstring, parentNodes, newNode);
+}
+/**
+ * Traverse the tree from root node, ignore the last bit to get all parent nodes
+ * of the specified bitstring.
+ */
+function tree_getParentNodes(rootNode, bitstring) {
+    let node = rootNode;
+    // Keep a list of all parent nodes of node at gindex `index`. Then walk the list
+    // backwards to rebind them "recursively" with the new nodes without using functions
+    const parentNodes = [rootNode];
+    // Ignore the first bit, left right directions are at bits [1,..]
+    // Ignore the last bit, no need to push the target node to the parentNodes array
+    for (let i = 1; i < bitstring.length - 1; i++) {
+        // Compare to string directly to prevent unnecessary type conversions
+        if (bitstring[i] === "1") {
+            node = node.right;
+        }
+        else {
+            node = node.left;
+        }
+        parentNodes.push(node);
+    }
+    return parentNodes;
+}
+/**
+ * Build a new tree structure from bitstring, parentNodes and a new node.
+ * Returns the new root node.
+ */
+function tree_rebindNodeToRoot(bitstring, parentNodes, newNode) {
+    let node = newNode;
+    // Ignore the first bit, left right directions are at bits [1,..]
+    // Iterate the list backwards including the last bit, but offset the parentNodes array
+    // by one since the first bit in bitstring was ignored in the previous loop
+    for (let i = bitstring.length - 1; i >= 1; i--) {
+        if (bitstring[i] === "1") {
+            node = new lib_node_BranchNode(parentNodes[i - 1].left, node);
+        }
+        else {
+            node = new lib_node_BranchNode(node, parentNodes[i - 1].right);
+        }
+    }
+    return node;
+}
+/**
+ * Supports index up to `Number.MAX_SAFE_INTEGER`.
+ */
+function tree_getNodeAtDepth(rootNode, depth, index) {
+    if (depth === 0) {
+        return rootNode;
+    }
+    if (depth === 1) {
+        return index === 0 ? rootNode.left : rootNode.right;
+    }
+    // Ignore first bit "1", then substract 1 to get to the parent
+    const depthiRoot = depth - 1;
+    const depthiParent = 0;
+    let node = rootNode;
+    for (let d = depthiRoot; d >= depthiParent; d--) {
+        node = tree_isLeftNode(d, index) ? node.left : node.right;
+    }
+    return node;
+}
+/**
+ * Supports index up to `Number.MAX_SAFE_INTEGER`.
+ */
+function tree_setNodeAtDepth(rootNode, nodesDepth, index, nodeChanged) {
+    // TODO: OPTIMIZE (if necessary)
+    return tree_setNodesAtDepth(rootNode, nodesDepth, [index], [nodeChanged]);
+}
+/**
+ * Set multiple nodes in batch, editing and traversing nodes strictly once.
+ *
+ * - gindexes MUST be sorted in ascending order beforehand.
+ * - All gindexes must be at the exact same depth.
+ * - Depth must be > 0, if 0 just replace the root node.
+ *
+ * Strategy: for each gindex in `gindexes` navigate to the depth of its parent,
+ * and create a new parent. Then calculate the closest common depth with the next
+ * gindex and navigate upwards creating or caching nodes as necessary. Loop and repeat.
+ *
+ * Supports index up to `Number.MAX_SAFE_INTEGER`.
+ * @param hcByLevel an array of HashComputation[] by level (could be from 0 to `nodesDepth - 1`)
+ */
+function tree_setNodesAtDepth(rootNode, nodesDepth, indexes, nodes, hcOffset = 0, hcByLevel = null) {
+    // depth depthi   gindexes   indexes
+    // 0     1           1          0
+    // 1     0         2   3      0   1
+    // 2     -        4 5 6 7    0 1 2 3
+    // '10' means, at depth 1, node is at the left
+    //
+    // For index N check if the bit at position depthi is set to navigate right at depthi
+    // ```
+    // mask = 1 << depthi
+    // goRight = (N & mask) == mask
+    // ```
+    // If depth is 0 there's only one node max and the optimization below will cause a navigation error.
+    // For this case, check if there's a new root node and return it, otherwise the current rootNode.
+    if (nodesDepth === 0) {
+        return nodes.length > 0 ? nodes[0] : rootNode;
+    }
+    /**
+     * Contiguous filled stack of parent nodes. It get filled in the first descent
+     * Indexed by depthi
+     */
+    const parentNodeStack = new Array(nodesDepth);
+    /**
+     * Temp stack of left parent nodes, index by depthi.
+     * Node leftParentNodeStack[depthi] is a node at d = depthi - 1, such that:
+     * ```
+     * parentNodeStack[depthi].left = leftParentNodeStack[depthi]
+     * ```
+     */
+    const leftParentNodeStack = new Array(nodesDepth);
+    // Ignore first bit "1", then substract 1 to get to the parent
+    const depthiRoot = nodesDepth - 1;
+    const depthiParent = 0;
+    let depthi = depthiRoot;
+    let node = rootNode;
+    // Insert root node to make the loop below general
+    parentNodeStack[depthiRoot] = rootNode;
+    // TODO: Iterate to depth 32 to allow using bit ops
+    // for (; depthi >= 32; depthi--) {
+    //   node = node.left;
+    // }
+    for (let i = 0; i < indexes.length; i++) {
+        const index = indexes[i];
+        // Navigate down until parent depth, and store the chain of nodes
+        //
+        // Starts from latest common depth, so node is the parent node at `depthi`
+        // When persisting the next node, store at the `d - 1` since its the child of node at `depthi`
+        //
+        // Stops at the level above depthiParent. For the re-binding routing below node must be at depthiParent
+        for (let d = depthi; d > depthiParent; d--) {
+            node = tree_isLeftNode(d, index) ? node.left : node.right;
+            parentNodeStack[d - 1] = node;
+        }
+        depthi = depthiParent;
+        // If this is the left node, check first it the next node is on the right
+        //
+        //   -    If both nodes exist, create new
+        //  / \
+        // x   x
+        //
+        //   -    If only the left node exists, rebind left
+        //  / \
+        // x   -
+        //
+        //   -    If this is the right node, only the right node exists, rebind right
+        //  / \
+        // -   x
+        // d = 0, mask = 1 << d = 1
+        const isLeftLeafNode = (index & 1) !== 1;
+        if (isLeftLeafNode) {
+            // Next node is the very next to the right of current node
+            if (index + 1 === indexes[i + 1]) {
+                node = new lib_node_BranchNode(nodes[i], nodes[i + 1]);
+                if (hcByLevel != null) {
+                    // go with level of dest node (level 0 goes with root node)
+                    // in this case dest node is nodesDept - 2, same for below
+                    hashComputation_levelAtIndex(hcByLevel, nodesDepth - 1 + hcOffset).push(nodes[i], nodes[i + 1], node);
+                }
+                // Move pointer one extra forward since node has consumed two nodes
+                i++;
+            }
+            else {
+                const oldNode = node;
+                node = new lib_node_BranchNode(nodes[i], oldNode.right);
+                if (hcByLevel != null) {
+                    hashComputation_levelAtIndex(hcByLevel, nodesDepth - 1 + hcOffset).push(nodes[i], oldNode.right, node);
+                }
+            }
+        }
+        else {
+            const oldNode = node;
+            node = new lib_node_BranchNode(oldNode.left, nodes[i]);
+            if (hcByLevel != null) {
+                hashComputation_levelAtIndex(hcByLevel, nodesDepth - 1 + hcOffset).push(oldNode.left, nodes[i], node);
+            }
+        }
+        // Here `node` is the new BranchNode at depthi `depthiParent`
+        // Now climb upwards until finding the common node with the next index
+        // For the last iteration, climb to the root at `depthiRoot`
+        const isLastIndex = i >= indexes.length - 1;
+        const diffDepthi = isLastIndex ? depthiRoot : tree_findDiffDepthi(index, indexes[i + 1]);
+        // When climbing up from a left node there are two possible paths
+        // 1. Go to the right of the parent: Store left node to rebind latter
+        // 2. Go another level up: Will never visit the left node again, so must rebind now
+        // 🡼 \     Rebind left only, will never visit this node again
+        // 🡽 /\
+        //
+        //    / 🡽  Rebind left only (same as above)
+        // 🡽 /\
+        //
+        // 🡽 /\ 🡾  Store left node to rebind the entire node when returning
+        //
+        // 🡼 \     Rebind right with left if exists, will never visit this node again
+        //   /\ 🡼
+        //
+        //    / 🡽  Rebind right with left if exists (same as above)
+        //   /\ 🡼
+        for (let d = depthiParent + 1; d <= diffDepthi; d++) {
+            // If node is on the left, store for latter
+            // If node is on the right merge with stored left node
+            const depth = nodesDepth - d - 1;
+            if (depth < 0) {
+                throw Error(`Invalid depth ${depth}, d=${d}, nodesDepth=${nodesDepth}`);
+            }
+            if (tree_isLeftNode(d, index)) {
+                if (isLastIndex || d !== diffDepthi) {
+                    // If it's last index, bind with parent since it won't navigate to the right anymore
+                    // Also, if still has to move upwards, rebind since the node won't be visited anymore
+                    const oldNode = node;
+                    node = new lib_node_BranchNode(oldNode, parentNodeStack[d].right);
+                    if (hcByLevel != null) {
+                        hashComputation_levelAtIndex(hcByLevel, depth + hcOffset).push(oldNode, parentNodeStack[d].right, node);
+                    }
+                }
+                else {
+                    // Only store the left node if it's at d = diffDepth
+                    leftParentNodeStack[d] = node;
+                    node = parentNodeStack[d];
+                }
+            }
+            else {
+                const leftNode = leftParentNodeStack[d];
+                if (leftNode !== undefined) {
+                    const oldNode = node;
+                    node = new lib_node_BranchNode(leftNode, oldNode);
+                    if (hcByLevel != null) {
+                        hashComputation_levelAtIndex(hcByLevel, depth + hcOffset).push(leftNode, oldNode, node);
+                    }
+                    leftParentNodeStack[d] = undefined;
+                }
+                else {
+                    const oldNode = node;
+                    node = new lib_node_BranchNode(parentNodeStack[d].left, oldNode);
+                    if (hcByLevel != null) {
+                        hashComputation_levelAtIndex(hcByLevel, depth + hcOffset).push(parentNodeStack[d].left, oldNode, node);
+                    }
+                }
+            }
+        }
+        // Prepare next loop
+        // Go to the parent of the depth with diff, to switch branches to the right
+        depthi = diffDepthi;
+    }
+    // Done, return new root node
+    return node;
+}
+/**
+ * Fast read-only iteration
+ * In-order traversal of nodes at `depth`
+ * starting from the `startIndex`-indexed node
+ * iterating through `count` nodes
+ *
+ * **Strategy**
+ * 1. Navigate down to parentDepth storing a stack of parents
+ * 2. At target level push current node
+ * 3. Go up to the first level that navigated left
+ * 4. Repeat (1) for next index
+ */
+function tree_getNodesAtDepth(rootNode, depth, startIndex, count) {
+    // Optimized paths for short trees (x20 times faster)
+    if (depth === 0) {
+        return startIndex === 0 && count > 0 ? [rootNode] : [];
+    }
+    if (depth === 1) {
+        if (count === 0)
+            return [];
+        if (count === 1) {
+            return startIndex === 0 ? [rootNode.left] : [rootNode.right];
+        }
+        return [rootNode.left, rootNode.right];
+    }
+    // Ignore first bit "1", then substract 1 to get to the parent
+    const depthiRoot = depth - 1;
+    const depthiParent = 0;
+    let depthi = depthiRoot;
+    let node = rootNode;
+    // Contiguous filled stack of parent nodes. It get filled in the first descent
+    // Indexed by depthi
+    const parentNodeStack = new Array(depth);
+    const isLeftStack = new Array(depth);
+    const nodes = new Array(count);
+    // Insert root node to make the loop below general
+    parentNodeStack[depthiRoot] = rootNode;
+    for (let i = 0; i < count; i++) {
+        for (let d = depthi; d >= depthiParent; d--) {
+            if (d !== depthi) {
+                parentNodeStack[d] = node;
+            }
+            const isLeft = tree_isLeftNode(d, startIndex + i);
+            isLeftStack[d] = isLeft;
+            node = isLeft ? node.left : node.right;
+        }
+        nodes[i] = node;
+        // Find the first depth where navigation when left.
+        // Store that height and go right from there
+        for (let d = depthiParent; d <= depthiRoot; d++) {
+            if (isLeftStack[d] === true) {
+                depthi = d;
+                break;
+            }
+        }
+        node = parentNodeStack[depthi];
+    }
+    return nodes;
+}
+/**
+ * @see getNodesAtDepth but instead of pushing to an array, it yields
+ */
+function* tree_iterateNodesAtDepth(rootNode, depth, startIndex, count) {
+    const endIndex = startIndex + count;
+    // Ignore first bit "1", then substract 1 to get to the parent
+    const depthiRoot = depth - 1;
+    const depthiParent = 0;
+    let depthi = depthiRoot;
+    let node = rootNode;
+    // Contiguous filled stack of parent nodes. It get filled in the first descent
+    // Indexed by depthi
+    const parentNodeStack = new Array(depth);
+    const isLeftStack = new Array(depth);
+    // Insert root node to make the loop below general
+    parentNodeStack[depthiRoot] = rootNode;
+    for (let index = startIndex; index < endIndex; index++) {
+        for (let d = depthi; d >= depthiParent; d--) {
+            if (d !== depthi) {
+                parentNodeStack[d] = node;
+            }
+            const isLeft = tree_isLeftNode(d, index);
+            isLeftStack[d] = isLeft;
+            node = isLeft ? node.left : node.right;
+        }
+        yield node;
+        // Find the first depth where navigation when left.
+        // Store that height and go right from there
+        for (let d = depthiParent; d <= depthiRoot; d++) {
+            if (isLeftStack[d] === true) {
+                depthi = d;
+                break;
+            }
+        }
+        node = parentNodeStack[depthi];
+    }
+}
+/**
+ * Zero's all nodes right of index with constant depth of `nodesDepth`.
+ *
+ * For example, zero-ing this tree at depth 2 after index 0
+ * ```
+ *    X              X
+ *  X   X    ->    X   0
+ * X X X X        X 0 0 0
+ * ```
+ *
+ * Or, zero-ing this tree at depth 3 after index 2
+ * ```
+ *        X                     X
+ *    X       X             X       0
+ *  X   X   X   X    ->   X   X   0   0
+ * X X X X X X X X       X X X 0 0 0 0 0
+ * ```
+ *
+ * The strategy is to first navigate down to `nodesDepth` and `index` and keep a stack of parents.
+ * Then navigate up re-binding:
+ * - If navigated to the left rebind with zeroNode()
+ * - If navigated to the right rebind with parent.left from the stack
+ */
+function tree_treeZeroAfterIndex(rootNode, nodesDepth, index) {
+    // depth depthi   gindexes   indexes
+    // 0     1           1          0
+    // 1     0         2   3      0   1
+    // 2     -        4 5 6 7    0 1 2 3
+    // '10' means, at depth 1, node is at the left
+    //
+    // For index N check if the bit at position depthi is set to navigate right at depthi
+    // ```
+    // mask = 1 << depthi
+    // goRight = (N & mask) == mask
+    // ```
+    // Degenerate case where tree is zero after a negative index (-1).
+    // All positive indexes are zero, so the entire tree is zero. Return cached zero node as root.
+    if (index < 0) {
+        return lib_zeroNode_zeroNode(nodesDepth);
+    }
+    /**
+     * Contiguous filled stack of parent nodes. It get filled in the first descent
+     * Indexed by depthi
+     */
+    const parentNodeStack = new Array(nodesDepth);
+    // Ignore first bit "1", then substract 1 to get to the parent
+    const depthiRoot = nodesDepth - 1;
+    const depthiParent = 0;
+    let depthi = depthiRoot;
+    let node = rootNode;
+    // Insert root node to make the loop below general
+    parentNodeStack[depthiRoot] = rootNode;
+    // Navigate down until parent depth, and store the chain of nodes
+    //
+    // Stops at the depthiParent level. To rebind below down to `nodesDepth`
+    for (let d = depthi; d >= depthiParent; d--) {
+        node = tree_isLeftNode(d, index) ? node.left : node.right;
+        parentNodeStack[d - 1] = node;
+    }
+    depthi = depthiParent;
+    // Now climb up re-binding with either zero of existing tree.
+    for (let d = depthiParent; d <= depthiRoot; d++) {
+        if (tree_isLeftNode(d, index)) {
+            // If navigated to the left, then all the child nodes of the right node are NOT part of the new tree.
+            // So re-bind new `node` with a zeroNode at the current depth.
+            node = new lib_node_BranchNode(node, lib_zeroNode_zeroNode(d));
+        }
+        else {
+            // If navigated to the right, then all the child nodes of the left node are part of the new tree.
+            // So re-bind new `node` with the existing left node of the parent.
+            node = new lib_node_BranchNode(parentNodeStack[d].left, node);
+        }
+    }
+    // Done, return new root node
+    return node;
+}
+const tree_NUMBER_32_MAX = 0xffffffff;
+const lib_tree_NUMBER_2_POW_32 = 2 ** 32;
+/**
+ * depth depthi   gindexes   indexes
+ * 0     1           1          0
+ * 1     0         2   3      0   1
+ * 2     -        4 5 6 7    0 1 2 3
+ *
+ * **Conditions**:
+ * - `from` and `to` must not be equal
+ *
+ * @param from Index
+ * @param to Index
+ */
+function tree_findDiffDepthi(from, to) {
+    if (from === to || from < 0 || to < 0) {
+        throw Error(`Expect different positive inputs, from=${from} to=${to}`);
+    }
+    // 0 -> 0, 1 -> 1, 2 -> 2, 3 -> 2, 4 -> 3
+    const numBits0 = Math.ceil(Math.log2(from + 1));
+    const numBits1 = Math.ceil(Math.log2(to + 1));
+    // these indexes stay in 2 sides of a merkle tree
+    if (numBits0 !== numBits1) {
+        // must offset by one to match the depthi scale
+        return Math.max(numBits0, numBits1) - 1;
+    }
+    // same number of bits and > 32
+    if (numBits0 > 32) {
+        const highBits0 = Math.floor(from / lib_tree_NUMBER_2_POW_32) & tree_NUMBER_32_MAX;
+        const highBits1 = Math.floor(to / lib_tree_NUMBER_2_POW_32) & tree_NUMBER_32_MAX;
+        if (highBits0 === highBits1) {
+            // different part is just low bits
+            return tree_findDiffDepthi32Bits(from & tree_NUMBER_32_MAX, to & tree_NUMBER_32_MAX);
+        }
+        // highBits are different, no need to compare low bits
+        return 32 + tree_findDiffDepthi32Bits(highBits0, highBits1);
+    }
+    // same number of bits and <= 32
+    return tree_findDiffDepthi32Bits(from, to);
+}
+/**
+ * Returns true if the `index` at `depth` is a left node, false if it is a right node.
+ *
+ * Supports index up to `Number.MAX_SAFE_INTEGER`.
+ * In Eth2 case the biggest tree's index is 2**40 (VALIDATOR_REGISTRY_LIMIT)
+ */
+function tree_isLeftNode(depthi, index) {
+    if (depthi > 31) {
+        // Javascript can only do bitwise ops with 32 bit numbers.
+        // Shifting left 1 by 32 wraps around and becomes 1.
+        // Get the high part of `index` and adjust depthi
+        const indexHi = (index / 2 ** 32) >>> 0;
+        const mask = 1 << (depthi - 32);
+        return (indexHi & mask) !== mask;
+    }
+    const mask = 1 << depthi;
+    return (index & mask) !== mask;
+}
+/**
+ * Similar to findDiffDepthi() but for 32-bit numbers only
+ */
+function tree_findDiffDepthi32Bits(from, to) {
+    const xor = from ^ to;
+    if (xor === 0) {
+        // this should not happen as checked in `findDiffDepthi`
+        // otherwise this function return -1 which is weird for diffi
+        throw Error(`Do not support equal value from=${from} to=${to}`);
+    }
+    // (0,0) -> 0 | (0,1) -> 1 | (0,2) -> 2
+    // xor < 0 means the 1st bit of `from` and `to` is diffent, which mean num bits diff 32
+    const numBitsDiff = xor < 0 ? 32 : Math.ceil(Math.log2(xor + 1));
+    // must offset by one to match the depthi scale
+    return numBitsDiff - 1;
+}
+//# sourceMappingURL=tree.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/proof/multi.js
+
+
+
+/**
+ * Create an multiproof
+ *
+ * See https://github.com/ethereum/consensus-specs/blob/dev/ssz/merkle-proofs.md#merkle-multiproofs
+ *
+ * @param rootNode the root node of the tree
+ * @param gindices generalized indices of leaves to include in the proof
+ */
+function multi_createMultiProof(rootNode, gindices) {
+    const tree = new tree_Tree(rootNode);
+    const witnessGindices = util_computeMultiProofBitstrings(gindices.map((gindex) => gindex.toString(2)), false, util_SortOrder.Decreasing);
+    const leafGindices = gindices.slice().sort((a, b) => (a < b ? 1 : -1));
+    const leaves = leafGindices.map((gindex) => tree.getRoot(gindex));
+    const witnesses = witnessGindices.map((gindex) => tree.getRoot(gindex));
+    return [leaves, witnesses, leafGindices];
+}
+/**
+ * Recreate a `Node` given a multiproof
+ *
+ * See https://github.com/ethereum/consensus-specs/blob/dev/ssz/merkle-proofs.md#merkle-multiproofs
+ *
+ * @param leaves leaves of a EF multiproof
+ * @param witnesses witnesses of a EF multiproof
+ * @param gindices generalized indices of the leaves
+ */
+function multi_createNodeFromMultiProof(leaves, witnesses, gindices) {
+    if (leaves.length !== gindices.length) {
+        throw new Error("Leaves length should equal gindices length");
+    }
+    const leafBitstrings = gindices.map((gindex) => gindex.toString(2));
+    const witnessBitstrings = util_computeMultiProofBitstrings(leafBitstrings, false, util_SortOrder.Decreasing);
+    if (witnessBitstrings.length !== witnesses.length) {
+        throw new Error("Witnesses length should equal witnesses gindices length");
+    }
+    // Algorithm:
+    // create an object which tracks key-values for each level
+    // pre-load leaves and witnesses into the level object
+    // level by level, starting from the bottom,
+    // find the sibling, create the parent, store it in the next level up
+    // the root is in level 1
+    const maxLevel = Math.max(leafBitstrings[0]?.length ?? 0, witnessBitstrings[0]?.length ?? 0);
+    const levels = Object.fromEntries(Array.from({ length: maxLevel }, (_, i) => [i + 1, {}]));
+    // preload leaves and witnesses
+    for (let i = 0; i < leafBitstrings.length; i++) {
+        const leafBitstring = leafBitstrings[i];
+        const leaf = leaves[i];
+        levels[leafBitstring.length][leafBitstring] = node_LeafNode.fromRoot(leaf);
+    }
+    for (let i = 0; i < witnessBitstrings.length; i++) {
+        const witnessBitstring = witnessBitstrings[i];
+        const witness = witnesses[i];
+        levels[witnessBitstring.length][witnessBitstring] = node_LeafNode.fromRoot(witness);
+    }
+    for (let i = maxLevel; i > 1; i--) {
+        const level = levels[i];
+        const parentLevel = levels[i - 1];
+        for (const bitstring of Object.keys(level)) {
+            const node = level[bitstring];
+            // if the node doesn't exist, we've already processed its sibling
+            if (!node) {
+                continue;
+            }
+            const isLeft = bitstring.at(-1) === "0";
+            const parentBitstring = bitstring.substring(0, bitstring.length - 1);
+            const siblingBitstring = parentBitstring + (isLeft ? "1" : "0");
+            const siblingNode = level[siblingBitstring];
+            if (!siblingNode) {
+                throw new Error(`Sibling not found: ${siblingBitstring}`);
+            }
+            // store the parent node
+            const parentNode = isLeft ? new lib_node_BranchNode(node, siblingNode) : new lib_node_BranchNode(siblingNode, node);
+            parentLevel[parentBitstring] = parentNode;
+            // delete the used nodes
+            delete level[bitstring];
+            delete level[siblingBitstring];
+        }
+    }
+    const root = levels[1]["1"];
+    if (!root) {
+        throw new Error("Internal consistency error: no root found");
+    }
+    return root;
+}
+//# sourceMappingURL=multi.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/proof/treeOffset.js
+
+
+/**
+ * Compute offsets and leaves of a tree-offset proof
+ *
+ * Recursive function
+ *
+ * See https://github.com/protolambda/eth-merkle-trees/blob/master/tree_offsets.md
+ * @param node current node in the tree
+ * @param gindex current generalized index in the tree
+ * @param proofGindices generalized indices to left include in the proof - must be sorted in-order according to the tree
+ */
+function treeOffset_nodeToTreeOffsetProof(node, gindex, proofGindices) {
+    if (!proofGindices.length || !proofGindices[0].startsWith(gindex)) {
+        // there are no proof indices left OR the current subtree contains no remaining proof indices
+        return [[], []];
+    }
+    if (gindex === proofGindices[0]) {
+        // the current node is at the next proof index
+        proofGindices.shift();
+        return [[], [node.root]];
+    }
+    // recursively compute offsets, leaves for the left and right subtree
+    const [leftOffsets, leftLeaves] = treeOffset_nodeToTreeOffsetProof(node.left, `${gindex}0`, proofGindices);
+    const [rightOffsets, rightLeaves] = treeOffset_nodeToTreeOffsetProof(node.right, `${gindex}1`, proofGindices);
+    // the offset prepended to the list is # of leaves in the left subtree
+    const pivot = leftLeaves.length;
+    return [[pivot].concat(leftOffsets, rightOffsets), leftLeaves.concat(rightLeaves)];
+}
+/**
+ * Recreate a `Node` given offsets and leaves of a tree-offset proof
+ *
+ * Recursive definition
+ *
+ * See https://github.com/protolambda/eth-merkle-trees/blob/master/tree_offsets.md
+ */
+function treeOffset_treeOffsetProofToNode(offsets, leaves) {
+    if (!leaves.length)
+        throw new Error("Proof must contain gt 0 leaves");
+    if (leaves.length === 1)
+        return node_LeafNode.fromRoot(leaves[0]);
+    // the offset popped from the list is the # of leaves in the left subtree
+    const pivot = offsets[0];
+    return new lib_node_BranchNode(treeOffset_treeOffsetProofToNode(offsets.slice(1, pivot), leaves.slice(0, pivot)), treeOffset_treeOffsetProofToNode(offsets.slice(pivot), leaves.slice(pivot)));
+}
+/**
+ * Create a tree-offset proof
+ *
+ * @param rootNode the root node of the tree
+ * @param gindices generalized indices to include in the proof
+ */
+function treeOffset_createTreeOffsetProof(rootNode, gindices) {
+    return treeOffset_nodeToTreeOffsetProof(rootNode, "1", util_computeMultiProofBitstrings(gindices.map((g) => g.toString(2))));
+}
+/**
+ * Recreate a `Node` given a tree-offset proof
+ *
+ * @param offsets offsets of a tree-offset proof
+ * @param leaves leaves of a tree-offset proof
+ */
+function treeOffset_createNodeFromTreeOffsetProof(offsets, leaves) {
+    // TODO validation
+    return treeOffset_treeOffsetProofToNode(offsets, leaves);
+}
+function proof_treeOffset_computeTreeOffsetProofSerializedLength(offsets, leaves) {
+    // add 1 for # of leaves
+    return (offsets.length + 1) * 2 + leaves.length * 32;
+}
+// Serialized tree offset proof structure:
+// # of leaves - 2 bytes
+// offsets - 2 bytes each
+// leaves - 32 bytes each
+function proof_treeOffset_serializeTreeOffsetProof(output, byteOffset, offsets, leaves) {
+    const writer = new DataView(output.buffer, output.byteOffset, output.byteLength);
+    // set # of leaves
+    writer.setUint16(byteOffset, leaves.length, true);
+    // set offsets
+    const offsetsStartIndex = byteOffset + 2;
+    for (let i = 0; i < offsets.length; i++) {
+        writer.setUint16(i * 2 + offsetsStartIndex, offsets[i], true);
+    }
+    // set leaves
+    const leavesStartIndex = offsetsStartIndex + offsets.length * 2;
+    for (let i = 0; i < leaves.length; i++) {
+        output.set(leaves[i], i * 32 + leavesStartIndex);
+    }
+}
+function proof_treeOffset_deserializeTreeOffsetProof(data, byteOffset) {
+    const reader = new DataView(data.buffer, data.byteOffset, data.byteLength);
+    // get # of leaves
+    const leafCount = reader.getUint16(byteOffset, true);
+    if (data.length < (leafCount - 1) * 2 + leafCount * 32) {
+        throw new Error("Unable to deserialize tree offset proof: not enough bytes");
+    }
+    // get offsets
+    const offsetsStartIndex = byteOffset + 2;
+    const offsets = Array.from({ length: leafCount - 1 }, (_, i) => reader.getUint16(i * 2 + offsetsStartIndex, true));
+    // get leaves
+    const leavesStartIndex = offsetsStartIndex + offsets.length * 2;
+    const leaves = Array.from({ length: leafCount }, (_, i) => data.subarray(i * 32 + leavesStartIndex, (i + 1) * 32 + leavesStartIndex));
+    return [offsets, leaves];
+}
+//# sourceMappingURL=treeOffset.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/proof/index.js
+
+
+
+
+
+var proof_ProofType;
+(function (ProofType) {
+    ProofType["single"] = "single";
+    ProofType["treeOffset"] = "treeOffset";
+    ProofType["multi"] = "multi";
+    ProofType["compactMulti"] = "compactMulti";
+})(proof_ProofType || (proof_ProofType = {}));
+/**
+ * Serialized proofs are prepended with a single byte, denoting their type
+ */
+const proof_ProofTypeSerialized = [
+    proof_ProofType.single, // 0
+    proof_ProofType.treeOffset, // 1
+    proof_ProofType.multi, // 2
+    proof_ProofType.compactMulti, // 3
+];
+function proof_createProof(rootNode, input) {
+    switch (input.type) {
+        case proof_ProofType.single: {
+            const [leaf, witnesses] = single_createSingleProof(rootNode, input.gindex);
+            return {
+                type: proof_ProofType.single,
+                gindex: input.gindex,
+                leaf,
+                witnesses,
+            };
+        }
+        case proof_ProofType.treeOffset: {
+            const [offsets, leaves] = treeOffset_createTreeOffsetProof(rootNode, input.gindices);
+            return {
+                type: proof_ProofType.treeOffset,
+                offsets,
+                leaves,
+            };
+        }
+        case proof_ProofType.multi: {
+            const [leaves, witnesses, gindices] = multi_createMultiProof(rootNode, input.gindices);
+            return {
+                type: proof_ProofType.multi,
+                leaves,
+                witnesses,
+                gindices,
+            };
+        }
+        case proof_ProofType.compactMulti: {
+            const leaves = compactMulti_createCompactMultiProof(rootNode, input.descriptor);
+            return {
+                type: proof_ProofType.compactMulti,
+                leaves,
+                descriptor: input.descriptor,
+            };
+        }
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+function proof_createNodeFromProof(proof) {
+    switch (proof.type) {
+        case proof_ProofType.single:
+            return single_createNodeFromSingleProof(proof.gindex, proof.leaf, proof.witnesses);
+        case proof_ProofType.treeOffset:
+            return treeOffset_createNodeFromTreeOffsetProof(proof.offsets, proof.leaves);
+        case proof_ProofType.multi:
+            return multi_createNodeFromMultiProof(proof.leaves, proof.witnesses, proof.gindices);
+        case proof_ProofType.compactMulti:
+            return compactMulti_createNodeFromCompactMultiProof(proof.leaves, proof.descriptor);
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+function proof_serializeProof(proof) {
+    switch (proof.type) {
+        case proof_ProofType.single:
+        case proof_ProofType.multi:
+            throw new Error("Not implemented");
+        case proof_ProofType.treeOffset: {
+            const output = new Uint8Array(1 + computeTreeOffsetProofSerializedLength(proof.offsets, proof.leaves));
+            output[0] = proof_ProofTypeSerialized.indexOf(proof_ProofType.treeOffset);
+            serializeTreeOffsetProof(output, 1, proof.offsets, proof.leaves);
+            return output;
+        }
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+function proof_deserializeProof(data) {
+    const proofType = proof_ProofTypeSerialized[data[0]];
+    if (!proofType) {
+        throw new Error("Invalid proof type");
+    }
+    switch (proofType) {
+        case proof_ProofType.single:
+        case proof_ProofType.multi:
+            throw new Error("Not implemented");
+        case proof_ProofType.treeOffset: {
+            const [offsets, leaves] = deserializeTreeOffsetProof(data, 1);
+            return {
+                type: proof_ProofType.treeOffset,
+                offsets,
+                leaves,
+            };
+        }
+        default:
+            throw new Error("Invalid proof type");
+    }
+}
+//# sourceMappingURL=index.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/snapshot.js
+
+
+
+
+/**
+ * Given a tree, return a snapshot of the tree with the root, finalized nodes, and count.
+ * Tree could be full tree, or partial tree. See https://github.com/ChainSafe/ssz/issues/293
+ */
+function snapshot_toSnapshot(rootNode, depth, count) {
+    if (count < 0) {
+        throw new Error(`Expect count to be non-negative, got ${count}`);
+    }
+    const finalizedGindices = count > 0 ? snapshot_indexToFinalizedGindices(depth, count - 1) : [];
+    const finalized = finalizedGindices.map((gindex) => tree_getNode(rootNode, gindex).root);
+    return {
+        finalized,
+        count,
+    };
+}
+/**
+ * Given a snapshot, return root node of a tree.
+ * See https://github.com/ChainSafe/ssz/issues/293
+ */
+function snapshot_fromSnapshot(snapshot, depth) {
+    const tree = new tree_Tree(lib_zeroNode_zeroNode(depth));
+    const { count, finalized } = snapshot;
+    if (count < 0) {
+        throw new Error(`Expect count to be non-negative, got ${count}`);
+    }
+    const finalizedGindices = count > 0 ? snapshot_indexToFinalizedGindices(depth, count - 1) : [];
+    if (finalizedGindices.length !== finalized.length) {
+        throw new Error(`Expected ${finalizedGindices.length} finalized gindices, got ${finalized.length}`);
+    }
+    for (const [i, gindex] of finalizedGindices.entries()) {
+        const node = node_LeafNode.fromRoot(finalized[i]);
+        tree.setNode(gindex, node);
+    }
+    return tree.rootNode;
+}
+/**
+ * A finalized gindex means that the gindex is at the root of a subtree of the tree where there is no ZERO_NODE belong to it.
+ * Given a list of depth `depth` and an index `index`, return a list of finalized gindexes.
+ */
+function snapshot_indexToFinalizedGindices(depth, index) {
+    if (index < 0 || depth < 0) {
+        throw new Error(`Expect index and depth to be non-negative, got ${index} and ${depth}`);
+    }
+    // given this tree with depth 3 and index 6
+    //        X
+    //    X       X
+    //  X   X   X   0
+    // X X X X X X 0 0
+    // we'll extract the root 4 left most nodes, then root node of the next 2 nodes
+    // need to track the offset at each level to compute gindex of each root node
+    const offsetByDepth = Array.from({ length: depth + 1 }, () => 0);
+    // count starts with 1
+    let count = index + 1;
+    const result = [];
+    while (count > 0) {
+        const prevLog2 = Math.floor(Math.log2(count));
+        const prevPowerOf2 = 2 ** prevLog2;
+        const depthFromRoot = depth - prevLog2;
+        const finalizedGindex = gindex_toGindex(depthFromRoot, BigInt(offsetByDepth[depthFromRoot]));
+        result.push(finalizedGindex);
+        for (let i = 0; i <= prevLog2; i++) {
+            offsetByDepth[depthFromRoot + i] += Math.pow(2, i);
+        }
+        count -= prevPowerOf2;
+    }
+    return result;
+}
+//# sourceMappingURL=snapshot.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/persistent-merkle-tree/lib/index.js
+
+
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/util/merkleize.js
+/* provided dependency */ var util_merkleize_Buffer = __webpack_require__(8287)["hp"];
+
+
+/** Dedicated property to cache hashTreeRoot of immutable CompositeType values */
+const merkleize_symbolCachedPermanentRoot = Symbol("ssz_cached_permanent_root");
+/**
+ * Cache a root for a ValueWithCachedPermanentRoot instance
+ * - if safeCache is true and output is 32 bytes and offset is 0, use output directly
+ * - if safeCache, use output subarray
+ * - otherwise, need to clone the root at output offset
+ */
+function merkleize_cacheRoot(value, output, offset, safeCache) {
+    const cachedRoot = safeCache && output.length === 32 && offset === 0
+        ? output
+        : safeCache
+            ? output.subarray(offset, offset + 32)
+            : // Buffer.prototype.slice does not copy memory, Enforce Uint8Array usage https://github.com/nodejs/node/issues/28087
+                Uint8Array.prototype.slice.call(output, offset, offset + 32);
+    value[merkleize_symbolCachedPermanentRoot] = cachedRoot;
+}
+function merkleize_hash64(bytes32A, bytes32B) {
+    return lib_hasher_hasher.digest64(bytes32A, bytes32B);
+}
+function merkleize_merkleize(chunks, padFor) {
+    const layerCount = merkleize_bitLength(merkleize_nextPowerOf2(padFor) - 1);
+    if (chunks.length === 0) {
+        return zeroHash(layerCount);
+    }
+    let chunkCount = chunks.length;
+    // Instead of pushing on all padding zero chunks at the leaf level
+    // we push on zero hash chunks at the highest possible level to avoid over-hashing
+    for (let l = 0; l < layerCount; l++) {
+        const padCount = chunkCount % 2;
+        const paddedChunkCount = chunkCount + padCount;
+        // if the chunks.length is odd
+        // we need to push on the zero-hash of that level to merkleize that level
+        for (let i = 0; i < padCount; i++) {
+            chunks[chunkCount + i] = zeroHash(l);
+        }
+        for (let i = 0; i < paddedChunkCount; i += 2) {
+            chunks[i / 2] = merkleize_hash64(chunks[i], chunks[i + 1]);
+        }
+        chunkCount = paddedChunkCount / 2;
+    }
+    return chunks[0];
+}
+/** @ignore */
+function merkleize_mixInLength(root, length) {
+    const lengthBuf = util_merkleize_Buffer.alloc(32);
+    lengthBuf.writeUIntLE(length, 0, 6);
+    return merkleize_hash64(root, lengthBuf);
+}
+// x2 faster than bitLengthStr() which uses Number.toString(2)
+function merkleize_bitLength(i) {
+    if (i === 0) {
+        return 0;
+    }
+    return Math.floor(Math.log2(i)) + 1;
+}
+/**
+ * Given maxChunkCount return the chunkDepth
+ * ```
+ * n: [0,1,2,3,4,5,6,7,8,9]
+ * d: [0,0,1,2,2,3,3,3,3,4]
+ * ```
+ */
+function merkleize_maxChunksToDepth(n) {
+    if (n === 0)
+        return 0;
+    return Math.ceil(Math.log2(n));
+}
+/** @ignore */
+function merkleize_nextPowerOf2(n) {
+    return n <= 0 ? 1 : Math.pow(2, merkleize_bitLength(n - 1));
+}
+//# sourceMappingURL=merkleize.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/util/named.js
+function named_namedClass(superClass, className) {
+    return new Function("superClass", `return class ${className} extends superClass {}`)(superClass);
+}
+//# sourceMappingURL=named.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/value/bitArray.js
+/** Globally cache this information. @see getUint8ByteToBitBooleanArray */
+const bitArray_uint8ByteToBitBooleanArrays = new Array(256);
+/**
+ * BitArray may be represented as an array of bits or compressed into an array of bytes.
+ *
+ * **Array of bits**:
+ * Require 8.87 bytes per bit, so for 512 bits = 4500 bytes.
+ * Are 'faster' to iterate with native tooling but are as fast as array of bytes with precomputed caches.
+ *
+ * **Array of bytes**:
+ * Require an average cost of Uint8Array in JS = 220 bytes for 32 bytes, so for 512 bits = 220 bytes.
+ * With precomputed boolean arrays per bytes value are as fast to iterate as an array of bits above.
+ *
+ * This BitArray implementation will represent data as a Uint8Array since it's very cheap to deserialize and can be as
+ * fast to iterate as a native array of booleans, precomputing boolean arrays (total memory cost of 16000 bytes).
+ */
+class bitArray_BitArray {
+    uint8Array;
+    bitLen;
+    constructor(
+    /** Underlying BitArray Uint8Array data */
+    uint8Array, 
+    /** Immutable bitLen of this BitArray */
+    bitLen) {
+        this.uint8Array = uint8Array;
+        this.bitLen = bitLen;
+        if (uint8Array.length !== Math.ceil(bitLen / 8)) {
+            throw Error("BitArray uint8Array length does not match bitLen");
+        }
+    }
+    /** Returns a zero'ed BitArray of `bitLen` */
+    static fromBitLen(bitLen) {
+        return new bitArray_BitArray(new Uint8Array(Math.ceil(bitLen / 8)), bitLen);
+    }
+    /** Returns a BitArray of `bitLen` with a single bit set to true at position `bitIndex` */
+    static fromSingleBit(bitLen, bitIndex) {
+        const bitArray = bitArray_BitArray.fromBitLen(bitLen);
+        bitArray.set(bitIndex, true);
+        return bitArray;
+    }
+    /** Returns a BitArray from an array of booleans representation */
+    static fromBoolArray(bitBoolArr) {
+        const bitArray = bitArray_BitArray.fromBitLen(bitBoolArr.length);
+        for (let i = 0; i < bitBoolArr.length; i++) {
+            if (bitBoolArr[i] === true) {
+                bitArray.set(i, true);
+            }
+        }
+        return bitArray;
+    }
+    clone() {
+        // TODO: Benchmark if Uint8Array.slice(0) is the fastest way to copy data here
+        // Buffer.prototype.slice does not copy memory, Enforce Uint8Array usage https://github.com/nodejs/node/issues/28087
+        return new bitArray_BitArray(Uint8Array.prototype.slice.call(this.uint8Array, 0), this.bitLen);
+    }
+    /**
+     * Get bit value at index `bitIndex`
+     */
+    get(bitIndex) {
+        const byteIdx = Math.floor(bitIndex / 8);
+        const bitInBit = bitIndex % 8;
+        const mask = 1 << bitInBit;
+        return (this.uint8Array[byteIdx] & mask) === mask;
+    }
+    /**
+     * Set bit value at index `bitIndex`
+     */
+    set(bitIndex, bit) {
+        if (bitIndex >= this.bitLen) {
+            throw Error(`BitArray set bitIndex ${bitIndex} beyond bitLen ${this.bitLen}`);
+        }
+        const byteIdx = Math.floor(bitIndex / 8);
+        const bitInBit = bitIndex % 8;
+        const mask = 1 << bitInBit;
+        let byte = this.uint8Array[byteIdx];
+        if (bit) {
+            // For bit in byte, 1,0 OR 1 = 1
+            // byte 100110
+            // mask 010000
+            // res  110110
+            byte |= mask;
+            this.uint8Array[byteIdx] = byte;
+        }
+        else {
+            // For bit in byte, 1,0 OR 1 = 0
+            if ((byte & mask) === mask) {
+                // byte 110110
+                // mask 010000
+                // res  100110
+                byte ^= mask;
+                this.uint8Array[byteIdx] = byte;
+            }
+            else {
+                // Ok, bit is already 0
+            }
+        }
+    }
+    /** Merge two BitArray bitfields with OR. Must have the same bitLen */
+    mergeOrWith(bitArray2) {
+        if (bitArray2.bitLen !== this.bitLen) {
+            throw Error("Must merge BitArrays of same bitLen");
+        }
+        // Merge bitFields
+        for (let i = 0; i < this.uint8Array.length; i++) {
+            this.uint8Array[i] = this.uint8Array[i] | bitArray2.uint8Array[i];
+        }
+    }
+    /**
+     * Returns an array with the indexes which have a bit set to true
+     */
+    intersectValues(values) {
+        const yes = [];
+        if (values.length !== this.bitLen) {
+            throw Error(`Must not intersect values of length ${values.length} != bitLen ${this.bitLen}`);
+        }
+        const fullByteLen = Math.floor(this.bitLen / 8);
+        const remainderBits = this.bitLen % 8;
+        // Iterate over each byte of bits
+        const bytes = this.uint8Array;
+        for (let iByte = 0; iByte < fullByteLen; iByte++) {
+            // Get the precomputed boolean array for this byte
+            const booleansInByte = bitArray_getUint8ByteToBitBooleanArray(bytes[iByte]);
+            // For each bit in the byte check participation and add to indexesSelected array
+            for (let iBit = 0; iBit < 8; iBit++) {
+                if (booleansInByte[iBit]) {
+                    yes.push(values[iByte * 8 + iBit]);
+                }
+            }
+        }
+        if (remainderBits > 0) {
+            // Get the precomputed boolean array for this byte
+            const booleansInByte = bitArray_getUint8ByteToBitBooleanArray(bytes[fullByteLen]);
+            // For each bit in the byte check participation and add to indexesSelected array
+            for (let iBit = 0; iBit < remainderBits; iBit++) {
+                if (booleansInByte[iBit]) {
+                    yes.push(values[fullByteLen * 8 + iBit]);
+                }
+            }
+        }
+        return yes;
+    }
+    /**
+     * Returns the positions of all bits that are set to true
+     */
+    getTrueBitIndexes() {
+        const indexes = [];
+        // Iterate over each byte of bits
+        const bytes = this.uint8Array;
+        for (let iByte = 0, byteLen = bytes.length; iByte < byteLen; iByte++) {
+            // Get the precomputed boolean array for this byte
+            const booleansInByte = bitArray_getUint8ByteToBitBooleanArray(bytes[iByte]);
+            // For each bit in the byte check participation and add to indexesSelected array
+            for (let iBit = 0; iBit < 8; iBit++) {
+                if (booleansInByte[iBit]) {
+                    indexes.push(iByte * 8 + iBit);
+                }
+            }
+        }
+        return indexes;
+    }
+    /**
+     * Return the position of a single bit set.
+     * @returns
+     *  - number: if there's a single bit set, the number it the single bit set position
+     *  - null: if ERROR_MORE_THAN_ONE_BIT_SET or ERROR_NO_BIT_SET
+     */
+    getSingleTrueBit() {
+        let index = null;
+        const bytes = this.uint8Array;
+        // Iterate over each byte of bits
+        for (let iByte = 0, byteLen = bytes.length; iByte < byteLen; iByte++) {
+            // If it's exactly zero, there won't be any indexes, continue early
+            if (bytes[iByte] === 0) {
+                continue;
+            }
+            // Get the precomputed boolean array for this byte
+            const booleansInByte = bitArray_getUint8ByteToBitBooleanArray(bytes[iByte]);
+            // For each bit in the byte check participation and add to indexesSelected array
+            for (let iBit = 0; iBit < 8; iBit++) {
+                if (booleansInByte[iBit] === true) {
+                    if (index !== null) {
+                        // ERROR_MORE_THAN_ONE_BIT_SET
+                        return null;
+                    }
+                    index = iByte * 8 + iBit;
+                }
+            }
+        }
+        // ERROR_NO_BIT_SET
+        if (index === null)
+            return null;
+        return index;
+    }
+    toBoolArray() {
+        const bitBoolArr = new Array(this.bitLen);
+        for (let i = 0; i < this.bitLen; i++) {
+            bitBoolArr[i] = this.get(i);
+        }
+        return bitBoolArr;
+    }
+}
+/**
+ * Given a byte (0 -> 255), return a Array of boolean with length = 8, big endian.
+ * Ex: 1 => [true false false false false false false false]
+ *     5 => [true false true false false fase false false]
+ */
+function bitArray_getUint8ByteToBitBooleanArray(byte) {
+    if (!bitArray_uint8ByteToBitBooleanArrays[byte]) {
+        bitArray_uint8ByteToBitBooleanArrays[byte] = bitArray_computeUint8ByteToBitBooleanArray(byte);
+    }
+    return bitArray_uint8ByteToBitBooleanArrays[byte];
+}
+/** @see getUint8ByteToBitBooleanArray */
+function bitArray_computeUint8ByteToBitBooleanArray(byte) {
+    // this returns little endian
+    const binaryStr = byte.toString(2);
+    const binaryLength = binaryStr.length;
+    const bits = new Array(8);
+    for (let i = 0; i < 8; i++) {
+        bits[i] =
+            i < binaryLength
+                ? //
+                    binaryStr[binaryLength - i - 1] === "1"
+                : false;
+    }
+    return bits;
+}
+//# sourceMappingURL=bitArray.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/arrayBasic.js
+
+// There's a matrix of Array-ish types that require a combination of this functions.
+// Regular class extends syntax doesn't work because it can only extend a single class.
+//
+// Type of array: List, Vector. Changes length property
+// Type of element: Basic, Composite. Changes merkelization if packing or not.
+// If Composite: Fixed len, Variable len. Changes the serialization requiring offsets.
+/**
+ * SSZ Lists (variable-length arrays) include the length of the list in the tree
+ * This length is always in the same index in the tree
+ * ```
+ *   1
+ *  / \
+ * 2   3 // <-here
+ * ```
+ */
+function arrayBasic_getLengthFromRootNode(node) {
+    // Length is represented as a Uint32 at the start of the chunk:
+    // 4 = 4 bytes in Uint32
+    // 0 = 0 offset bytes in Node's data
+    return node.right.getUint(4, 0);
+}
+function arrayBasic_getChunksNodeFromRootNode(node) {
+    return node.left;
+}
+function arrayBasic_addLengthNode(chunksNode, length) {
+    return new lib_node_BranchNode(chunksNode, node_LeafNode.fromUint32(length));
+}
+function arrayBasic_setChunksNode(rootNode, chunksNode, newLength, hcOffset = 0, hcByLevel = null) {
+    const lengthNode = newLength !== null
+        ? // If newLength is set, create a new node for length
+            node_LeafNode.fromUint32(newLength)
+        : // else re-use existing node
+            rootNode.right;
+    const branchNode = new lib_node_BranchNode(chunksNode, lengthNode);
+    if (hcByLevel !== null) {
+        hashComputation_levelAtIndex(hcByLevel, hcOffset).push(chunksNode, lengthNode, branchNode);
+    }
+    return branchNode;
+}
+/**
+ * @param length In List length = value.length, Vector length = fixed value
+ */
+function arrayBasic_value_serializeToBytesArrayBasic(elementType, length, output, offset, value) {
+    const elSize = elementType.byteLength;
+    for (let i = 0; i < length; i++) {
+        elementType.value_serializeToBytes(output, offset + i * elSize, value[i]);
+    }
+    return offset + length * elSize;
+}
+function arrayBasic_value_deserializeFromBytesArrayBasic(elementType, data, start, end, arrayProps) {
+    const elSize = elementType.byteLength;
+    // Vector + List length validation
+    const length = (end - start) / elSize;
+    arrayBasic_assertValidArrayLength(length, arrayProps, true);
+    const values = new Array(length);
+    for (let i = 0; i < length; i++) {
+        // TODO: If faster, consider skipping size check for uint types
+        values[i] = elementType.value_deserializeFromBytes(data, start + i * elSize, start + (i + 1) * elSize);
+    }
+    return values;
+}
+/**
+ * @param length In List length = value.length, Vector length = fixed value
+ */
+function arrayBasic_tree_serializeToBytesArrayBasic(elementType, length, depth, output, offset, node, cachedNodes = null) {
+    const size = elementType.byteLength * length;
+    const chunkCount = Math.ceil(size / 32);
+    const nodes = cachedNodes ?? tree_getNodesAtDepth(node, depth, 0, chunkCount);
+    packedNode_packedNodeRootsToBytes(output.dataView, offset, size, nodes);
+    return offset + size;
+}
+// List of basic elements will pack them in merkelized form
+function arrayBasic_tree_deserializeFromBytesArrayBasic(elementType, chunkDepth, data, start, end, arrayProps) {
+    // Vector + List length validation
+    const length = (end - start) / elementType.byteLength;
+    arrayBasic_assertValidArrayLength(length, arrayProps, true);
+    // Abstract converting data to LeafNode to allow for custom data representation, such as the hashObject
+    const chunksNode = packedNode_packedRootsBytesToNode(chunkDepth, data.dataView, start, end);
+    if (arrayProps.isList) {
+        return arrayBasic_addLengthNode(chunksNode, length);
+    }
+    return chunksNode;
+}
+/**
+ * @param length In List length = undefined, Vector length = fixed value
+ */
+function arrayBasic_value_fromJsonArray(elementType, json, arrayProps) {
+    if (!Array.isArray(json)) {
+        throw Error("JSON is not an array");
+    }
+    arrayBasic_assertValidArrayLength(json.length, arrayProps);
+    const value = new Array(json.length);
+    for (let i = 0; i < json.length; i++) {
+        value[i] = elementType.fromJson(json[i]);
+    }
+    return value;
+}
+/**
+ * @param length In List length = undefined, Vector length = fixed value
+ */
+function arrayBasic_value_toJsonArray(elementType, value, arrayProps) {
+    const length = arrayProps.isList ? value.length : arrayProps.length;
+    const json = new Array(length);
+    for (let i = 0; i < length; i++) {
+        json[i] = elementType.toJson(value[i]);
+    }
+    return json;
+}
+/**
+ * Clone recursively an array of basic or composite types
+ */
+function arrayBasic_value_cloneArray(elementType, value) {
+    const newValue = new Array(value.length);
+    for (let i = 0; i < value.length; i++) {
+        newValue[i] = elementType.clone(value[i]);
+    }
+    return newValue;
+}
+/**
+ * Check recursively if a type is structuraly equal. Returns early
+ */
+function arrayBasic_value_equals(elementType, a, b) {
+    if (a.length !== b.length) {
+        return false;
+    }
+    for (let i = 0; i < a.length; i++) {
+        if (!elementType.equals(a[i], b[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+function arrayBasic_value_defaultValueArray(elementType, length) {
+    const values = new Array(length);
+    for (let i = 0; i < length; i++) {
+        values[i] = elementType.defaultValue();
+    }
+    return values;
+}
+/**
+ * @param checkNonDecimalLength Check that length is a multiple of element size.
+ * Optional since it's not necessary in getOffsetsArrayComposite() fn.
+ */
+function arrayBasic_assertValidArrayLength(length, arrayProps, checkNonDecimalLength) {
+    if (checkNonDecimalLength && length % 1 !== 0) {
+        throw Error("size not multiple of element fixedSize");
+    }
+    // Vector + List length validation
+    if (arrayProps.isList) {
+        if (length > arrayProps.limit) {
+            throw new Error(`Invalid list length ${length} over limit ${arrayProps.limit}`);
+        }
+    }
+    else {
+        if (length !== arrayProps.length) {
+            throw new Error(`Incorrect vector length ${length} expected ${arrayProps.length}`);
+        }
+    }
+}
+//# sourceMappingURL=arrayBasic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/util/byteArray.js
+// Caching this info costs about ~1000 bytes and speeds up toHexString() by x6
+const byteArray_hexByByte = new Array(256);
+function byteArray_toHexString(bytes) {
+    let hex = "0x";
+    for (const byte of bytes) {
+        if (!byteArray_hexByByte[byte]) {
+            byteArray_hexByByte[byte] = byte < 16 ? `0${byte.toString(16)}` : byte.toString(16);
+        }
+        hex += byteArray_hexByByte[byte];
+    }
+    return hex;
+}
+function byteArray_fromHexString(hex) {
+    if (typeof hex !== "string") {
+        throw new Error(`hex argument type ${typeof hex} must be of type string`);
+    }
+    if (hex.startsWith("0x")) {
+        hex = hex.slice(2);
+    }
+    if (hex.length % 2 !== 0) {
+        throw new Error(`hex string length ${hex.length} must be multiple of 2`);
+    }
+    const byteLen = hex.length / 2;
+    const bytes = new Uint8Array(byteLen);
+    for (let i = 0; i < byteLen; i++) {
+        const byte = parseInt(hex.slice(i * 2, (i + 1) * 2), 16);
+        bytes[i] = byte;
+    }
+    return bytes;
+}
+function byteArray_byteArrayEquals(a, b) {
+    if (a.length !== b.length) {
+        return false;
+    }
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i])
+            return false;
+    }
+    return true;
+}
+//# sourceMappingURL=byteArray.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/abstract.js
+
+/**
+ * A Tree View is a wrapper around a type and an SSZ Tree that contains:
+ * - data merkleized
+ * - a hook to its parent Tree to propagate changes upwards
+ *
+ * **View**
+ * - Best for simple usage where performance is NOT important
+ * - Applies changes immediately
+ * - Has reference to parent tree
+ * - Does NOT have caches for fast get / set ops
+ */
+class abstract_TreeView {
+    /** Serialize view to binary data */
+    serialize() {
+        const output = new Uint8Array(this.type.tree_serializedSize(this.node));
+        const dataView = new DataView(output.buffer, output.byteOffset, output.byteLength);
+        this.type.tree_serializeToBytes({ uint8Array: output, dataView }, 0, this.node);
+        return output;
+    }
+    /**
+     * Merkleize view and compute its hashTreeRoot.
+     *
+     * See spec for definition of hashTreeRoot:
+     * https://github.com/ethereum/consensus-specs/blob/dev/ssz/simple-serialize.md#merkleization
+     */
+    hashTreeRoot() {
+        return this.node.root;
+    }
+    /**
+     * Create a Merkle multiproof on this view's data.
+     * A `path` is an array of 'JSON' paths into the data
+     * @example
+     * ```ts
+     * state.createProof([
+     *   ["validators", 1234, "slashed"],
+     *   ["genesisTime"]
+     * ])
+     * ```
+     *
+     * See spec for definition of merkle multiproofs:
+     * https://github.com/ethereum/consensus-specs/blob/dev/ssz/merkle-proofs.md#merkle-multiproofs
+     */
+    createProof(paths) {
+        return this.type.tree_createProof(this.node, paths);
+    }
+    /**
+     * Transform the view into a value, from the current node instance.
+     * For ViewDU returns the value of the committed data, so call .commit() before if there are pending changes.
+     */
+    toValue() {
+        return this.type.tree_toValue(this.node);
+    }
+    /** Return a new Tree View instance referencing the same internal `Node`. Drops its existing `Tree` hook if any */
+    clone() {
+        return this.type.getView(new tree_Tree(this.node));
+    }
+}
+//# sourceMappingURL=abstract.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/bitArray.js
+
+/**
+ * Thin wrapper around BitArray to upstream changes to `tree` on every `this.set()`
+ */
+class bitArray_BitArrayTreeView extends abstract_TreeView {
+    type;
+    tree;
+    bitArray;
+    constructor(type, tree) {
+        super();
+        this.type = type;
+        this.tree = tree;
+        this.bitArray = type.tree_toValue(tree.rootNode);
+    }
+    get node() {
+        return this.tree.rootNode;
+    }
+    // Wrapped API from BitArray
+    /** @see BitArray.uint8Array */
+    get uint8Array() {
+        return this.bitArray.uint8Array;
+    }
+    /** @see BitArray.bitLen */
+    get bitLen() {
+        return this.bitArray.bitLen;
+    }
+    /** @see BitArray.get */
+    get(bitIndex) {
+        return this.bitArray.get(bitIndex);
+    }
+    /** @see BitArray.set */
+    set(bitIndex, bit) {
+        this.bitArray.set(bitIndex, bit);
+        // Upstream changes
+        this.tree.rootNode = this.type.value_toTree(this.bitArray);
+    }
+    /** @see BitArray.mergeOrWith */
+    mergeOrWith(bitArray2) {
+        this.bitArray.mergeOrWith(bitArray2);
+    }
+    /** @see BitArray.intersectValues */
+    intersectValues(values) {
+        return this.bitArray.intersectValues(values);
+    }
+    /** @see BitArray.getTrueBitIndexes */
+    getTrueBitIndexes() {
+        return this.bitArray.getTrueBitIndexes();
+    }
+    /** @see BitArray.getSingleTrueBit */
+    getSingleTrueBit() {
+        return this.bitArray.getSingleTrueBit();
+    }
+    /** @see BitArray.toBoolArray */
+    toBoolArray() {
+        return this.bitArray.toBoolArray();
+    }
+}
+//# sourceMappingURL=bitArray.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/abstract.js
+
+
+/**
+ * Always allocating a new HashComputationGroup for each hashTreeRoot() is not great for gc
+ * because a lot of ViewDUs are not changed and computed root already.
+ */
+const abstract_symbolCachedTreeRoot = Symbol("ssz_cached_tree_root");
+/**
+ * A Deferred Update Tree View (`ViewDU`) is a wrapper around a type and
+ * a SSZ Node that contains:
+ * - data merkleized
+ * - some arbitrary caches to speed up data manipulation required by the type
+ *
+ * **ViewDU**
+ * - Best for complex usage where performance is important
+ * - Defers changes to when commit is called
+ * - Does NOT have a reference to the parent ViewDU
+ * - Has caches for fast get / set ops
+ */
+class abstract_TreeViewDU extends abstract_TreeView {
+    /*
+     * By default use type to serialize ViewDU.
+     */
+    serializeToBytes(output, offset) {
+        return this.type.tree_serializeToBytes(output, offset, this.node);
+    }
+    /**
+     * Merkleize view and compute its hashTreeRoot.
+     * Commits any pending changes before computing the root.
+     *
+     * See spec for definition of hashTreeRoot:
+     * https://github.com/ethereum/consensus-specs/blob/dev/ssz/simple-serialize.md#merkleization
+     */
+    hashTreeRoot() {
+        this.commit();
+        return super.hashTreeRoot();
+    }
+    /**
+     * The same to hashTreeRoot() but with batch hash computation.
+     * Consumer can allocate and reuse a HashComputationGroup() if needed.
+     */
+    batchHashTreeRoot(hcGroup = new hashComputation_HashComputationGroup()) {
+        // in ethereum consensus, the only type goes with TVDU is BeaconState and it's really more efficient to hash the tree in batch
+        const offset = 0;
+        hcGroup.reset();
+        this.commit(offset, hcGroup.byLevel);
+        hcGroup.clean();
+        const cachedRoot = this.node[abstract_symbolCachedTreeRoot];
+        if (cachedRoot) {
+            return cachedRoot;
+        }
+        hasher_executeHashComputations(hcGroup.byLevel);
+        // This makes sure the root node is computed by batch
+        if (this.node.h0 === null) {
+            throw Error("Root is not computed by batch");
+        }
+        const root = this.node.root;
+        this.node[abstract_symbolCachedTreeRoot] = root;
+        return root;
+    }
+    /**
+     * Serialize view to binary data.
+     * Commits any pending changes before computing the root.
+     * This calls commit() which evict all pending HashComputations. Consider calling hashTreeRoot() before this
+     */
+    serialize() {
+        this.commit();
+        const output = new Uint8Array(this.type.tree_serializedSize(this.node));
+        const dataView = new DataView(output.buffer, output.byteOffset, output.byteLength);
+        this.serializeToBytes({ uint8Array: output, dataView }, 0);
+        return output;
+    }
+    /**
+     * Return a new ViewDU instance referencing the same internal `Node`.
+     *
+     * By default it will transfer the cache of this ViewDU to the new cloned instance. Set `dontTransferCache` to true
+     * to NOT transfer the cache to the cloned instance.
+     */
+    clone(dontTransferCache) {
+        if (dontTransferCache)
+            return this.type.getViewDU(this.node);
+        const cache = this.cache;
+        this.clearCache();
+        return this.type.getViewDU(this.node, cache);
+    }
+}
+//# sourceMappingURL=abstract.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/bitArray.js
+
+
+/**
+ * Thin wrapper around BitArray to upstream changes after `this.commit()`
+ */
+class bitArray_BitArrayTreeViewDU extends abstract_TreeViewDU {
+    type;
+    _rootNode;
+    /** Cached BitArray instance computed only on demand */
+    _bitArray = null;
+    constructor(type, _rootNode) {
+        super();
+        this.type = type;
+        this._rootNode = _rootNode;
+    }
+    get node() {
+        return this._rootNode;
+    }
+    get cache() {
+        // biome-ignore lint/suspicious/useGetterReturn: There is no cache to return
+        return;
+    }
+    // Wrapped API from BitArray
+    /** @see BitArray.uint8Array */
+    get uint8Array() {
+        return this.bitArray.uint8Array;
+    }
+    /** @see BitArray.bitLen */
+    get bitLen() {
+        return this.bitArray.bitLen;
+    }
+    /** Lazily computed bitArray instance */
+    get bitArray() {
+        if (this._bitArray === null) {
+            this._bitArray = this.type.tree_toValue(this._rootNode);
+        }
+        return this._bitArray;
+    }
+    commit(hcOffset = 0, hcByLevel = null) {
+        if (this._bitArray !== null) {
+            this._rootNode = this.type.value_toTree(this._bitArray);
+        }
+        if (hcByLevel !== null && this._rootNode.h0 === null) {
+            hashComputation_getHashComputations(this._rootNode, hcOffset, hcByLevel);
+        }
+    }
+    /** @see BitArray.get */
+    get(bitIndex) {
+        return this.bitArray.get(bitIndex);
+    }
+    /** @see BitArray.set */
+    set(bitIndex, bit) {
+        this.bitArray.set(bitIndex, bit);
+    }
+    /** @see BitArray.mergeOrWith */
+    mergeOrWith(bitArray2) {
+        this.bitArray.mergeOrWith(bitArray2);
+    }
+    /** @see BitArray.intersectValues */
+    intersectValues(values) {
+        return this.bitArray.intersectValues(values);
+    }
+    /** @see BitArray.getTrueBitIndexes */
+    getTrueBitIndexes() {
+        return this.bitArray.getTrueBitIndexes();
+    }
+    /** @see BitArray.getSingleTrueBit */
+    getSingleTrueBit() {
+        return this.bitArray.getSingleTrueBit();
+    }
+    /** @see BitArray.toBoolArray */
+    toBoolArray() {
+        return this.bitArray.toBoolArray();
+    }
+    clearCache() {
+        this._bitArray = null;
+    }
+}
+//# sourceMappingURL=bitArray.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/util/proof/treePostProcessFromProofNode.js
+
+/** Duplicated partial declaration to break circular dependency with CompositeType */
+function treePostProcessFromProofNode_isCompositeType(type) {
+    return !type.isBasic;
+}
+/**
+ * Navigates and mutates nodes to post process a tree created with `Tree.createFromProof`.
+ * Tree returns regular a tree with only BranchNode and LeafNode instances. However, SSZ features
+ * non-standard nodes that make proofs for those types to be un-usable. This include:
+ * - BranchNodeStruct: Must contain complete data `tree_fromProofNode` transforms a BranchNode and
+ *   all of its data into a single BranchNodeStruct instance.
+ *
+ * @param bitstring Bitstring without the leading "1", since it's only used to compute horizontal indexes.
+ */
+function treePostProcessFromProofNode_treePostProcessFromProofNode(node, type, bitstring = "", currentDepth = 0) {
+    // Must run tree_fromProofNode on the first received node (i.e. Validator object)
+    if (currentDepth === 0) {
+        const nodePost = type.tree_fromProofNode(node);
+        if (nodePost.done)
+            return nodePost.node;
+        node = nodePost.node;
+    }
+    const atTypeDepth = type.depth === currentDepth;
+    if (node.isLeaf()) {
+        if (atTypeDepth) {
+            const jsonPathProp = type.getIndexProperty(treePostProcessFromProofNode_bitstringToIndex(bitstring));
+            if (jsonPathProp === null) {
+                // bitstring is out of bounds, witness node
+                return node;
+            }
+            const childType = type.getPropertyType(jsonPathProp);
+            // If this type merkleized fits in a single chunk then this LeafNode includes all data
+            if (childType.maxChunkCount === 1 && treePostProcessFromProofNode_isCompositeType(childType)) {
+                return childType.tree_fromProofNode(node).node;
+            }
+            // Witness node
+            return node;
+        }
+        // LeafNode not at type depth is a witness or a length / selector nodes
+        return node;
+    }
+    if (atTypeDepth) {
+        const jsonPathProp = type.getIndexProperty(treePostProcessFromProofNode_bitstringToIndex(bitstring));
+        // bitstring is out of bounds, witness node
+        if (jsonPathProp === null)
+            return node;
+        const childType = type.getPropertyType(jsonPathProp);
+        if (!treePostProcessFromProofNode_isCompositeType(childType)) {
+            throw Error("BranchNode does not map to CompositeType");
+        }
+        const nodePost = childType.tree_fromProofNode(node);
+        // If tree_fromProofNode is the identity function, keep going, otherwise stop navigating
+        if (nodePost.done)
+            return nodePost.node;
+        return treePostProcessFromProofNode_treePostProcessFromProofNode(nodePost.node, childType);
+    }
+    // BranchNode at not type depth, keep navigating
+    const leftNode = treePostProcessFromProofNode_treePostProcessFromProofNode(node.left, type, `${bitstring}0`, currentDepth + 1);
+    const rightNode = treePostProcessFromProofNode_treePostProcessFromProofNode(node.right, type, `${bitstring}1`, currentDepth + 1);
+    if (leftNode === node.left && rightNode === node.right)
+        return node;
+    return new lib_node_BranchNode(leftNode, rightNode);
+}
+/** Return the node horizontal index given a bitstring without the leading "1" */
+function treePostProcessFromProofNode_bitstringToIndex(bitstring) {
+    if (bitstring === "")
+        return 0;
+    return parseInt(bitstring, 2);
+}
+//# sourceMappingURL=treePostProcessFromProofNode.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/abstract.js
+/**
+ * An SSZ type provides the following operations:
+ * - Serialization from/to bytes to either a value or a tree
+ * - Merkelization to compute the hashTreeRoot of both a value and a tree
+ * - Proof creation from trees
+ * - Create a View and a ViewDU instance from a tree
+ * - Manipulate views
+ */
+class abstract_Type {
+    /** INTERNAL METHOD: Merkleize value to tree */
+    value_toTree(value) {
+        // TODO: Un-performant path but useful for prototyping. Overwrite in Type if performance is important
+        const uint8Array = new Uint8Array(this.value_serializedSize(value));
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        this.value_serializeToBytes({ uint8Array, dataView }, 0, value);
+        return this.tree_deserializeFromBytes({ uint8Array, dataView }, 0, uint8Array.length);
+    }
+    /** INTERNAL METHOD: Un-merkleize tree to value */
+    tree_toValue(node) {
+        // TODO: Un-performant path but useful for prototyping. Overwrite in Type if performance is important
+        const uint8Array = new Uint8Array(this.tree_serializedSize(node));
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        this.tree_serializeToBytes({ uint8Array, dataView }, 0, node);
+        return this.value_deserializeFromBytes({ uint8Array, dataView }, 0, uint8Array.length);
+    }
+    /** Serialize a value to binary data */
+    serialize(value) {
+        const uint8Array = new Uint8Array(this.value_serializedSize(value));
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        this.value_serializeToBytes({ uint8Array, dataView }, 0, value);
+        return uint8Array;
+    }
+    /** Deserialize binary data to value */
+    deserialize(uint8Array) {
+        // Buffer.prototype.slice does not copy memory, force use Uint8Array.prototype.slice https://github.com/nodejs/node/issues/28087
+        // - Uint8Array.prototype.slice: Copy memory, safe to mutate
+        // - Buffer.prototype.slice: Does NOT copy memory, mutation affects both views
+        // We could ensure that all Buffer instances are converted to Uint8Array before calling value_deserializeFromBytes
+        // However doing that in a browser friendly way is not easy. Downstream code uses `Uint8Array.prototype.slice.call`
+        // to ensure Buffer.prototype.slice is never used. Unit tests also test non-mutability.
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        return this.value_deserializeFromBytes({ uint8Array, dataView }, 0, uint8Array.length);
+    }
+}
+//# sourceMappingURL=abstract.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/composite.js
+
+
+
+
+
+
+const composite_LENGTH_GINDEX = BigInt(3);
+/**
+ * Represents a composite type as defined in the spec:
+ * https://github.com/ethereum/consensus-specs/blob/dev/ssz/simple-serialize.md#composite-types
+ */
+class composite_CompositeType extends abstract_Type {
+    cachePermanentRootStruct;
+    isBasic = false;
+    blocksBuffer = new Uint8Array(0);
+    constructor(
+    /**
+     * Caches `hashTreeRoot()` result for struct values.
+     *
+     * WARNING: Must only be used for immutable values. The cached root is never discarded
+     */
+    cachePermanentRootStruct) {
+        super();
+        this.cachePermanentRootStruct = cachePermanentRootStruct;
+    }
+    /** New instance of a recursive zero'ed value converted to Tree View */
+    defaultView() {
+        return this.toView(this.defaultValue());
+    }
+    /** New instance of a recursive zero'ed value converted to Deferred Update Tree View */
+    defaultViewDU() {
+        return this.toViewDU(this.defaultValue());
+    }
+    /**
+     * Deserialize binary data to a Tree View.
+     * @see {@link CompositeType.getView}
+     */
+    deserializeToView(data) {
+        const dataView = new DataView(data.buffer, data.byteOffset, data.byteLength);
+        const node = this.tree_deserializeFromBytes({ uint8Array: data, dataView }, 0, data.length);
+        return this.getView(new tree_Tree(node));
+    }
+    /**
+     * Deserialize binary data to a Deferred Update Tree View.
+     * @see {@link CompositeType.getViewDU}
+     */
+    deserializeToViewDU(data) {
+        const dataView = new DataView(data.buffer, data.byteOffset, data.byteLength);
+        const node = this.tree_deserializeFromBytes({ uint8Array: data, dataView }, 0, data.length);
+        return this.getViewDU(node);
+    }
+    /**
+     * Transform value to a View.
+     * @see {@link CompositeType.getView}
+     */
+    toView(value) {
+        const node = this.value_toTree(value);
+        return this.getView(new tree_Tree(node));
+    }
+    /**
+     * Transform value to a ViewDU.
+     * @see {@link CompositeType.getViewDU}
+     */
+    toViewDU(value) {
+        const node = this.value_toTree(value);
+        return this.getViewDU(node);
+    }
+    /**
+     * Transform value to a View.
+     * @see {@link CompositeType.getView}
+     */
+    toValueFromView(view) {
+        const node = this.commitView(view);
+        return this.tree_toValue(node);
+    }
+    /**
+     * Transform value to a ViewDU.
+     * @see {@link CompositeType.getViewDU}
+     */
+    toValueFromViewDU(view) {
+        const node = this.commitViewDU(view);
+        return this.tree_toValue(node);
+    }
+    /**
+     * Transform a ViewDU to a View.
+     * @see {@link CompositeType.getView} and {@link CompositeType.getViewDU}
+     */
+    toViewFromViewDU(view) {
+        const node = this.commitViewDU(view);
+        return this.getView(new tree_Tree(node));
+    }
+    /**
+     * Transform a View to a ViewDU.
+     * @see {@link CompositeType.getView} and {@link CompositeType.getViewDU}
+     */
+    toViewDUFromView(view) {
+        const node = this.commitView(view);
+        return this.getViewDU(node);
+    }
+    // Merkleize API
+    hashTreeRoot(value) {
+        // Return cached mutable root if any
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                return cachedRoot;
+            }
+        }
+        const root = alloc_allocUnsafe(32);
+        const safeCache = true;
+        this.hashTreeRootInto(value, root, 0, safeCache);
+        // hashTreeRootInto will cache the root if cachePermanentRootStruct is true
+        return root;
+    }
+    hashTreeRootInto(value, output, offset, safeCache = false) {
+        // Return cached mutable root if any
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                output.set(cachedRoot, offset);
+                return;
+            }
+        }
+        const blocksBuffer = this.getBlocksBytes(value);
+        hasher_merkleizeBlocksBytes(blocksBuffer, this.maxChunkCount, output, offset);
+        if (this.cachePermanentRootStruct) {
+            merkleize_cacheRoot(value, output, offset, safeCache);
+        }
+    }
+    // For debugging and testing this feature
+    getCachedPermanentRoot(value) {
+        return value[merkleize_symbolCachedPermanentRoot];
+    }
+    // Proofs API
+    /**
+     * Create a Tree View from a Proof. Verifies that the Proof is correct against `root`.
+     * @see {@link CompositeType.getView}
+     */
+    createFromProof(proof, root) {
+        const rootNodeFromProof = tree_Tree.createFromProof(proof).rootNode;
+        const rootNode = treePostProcessFromProofNode_treePostProcessFromProofNode(rootNodeFromProof, this);
+        if (root !== undefined && !byteArray_byteArrayEquals(rootNode.root, root)) {
+            throw new Error("Proof does not match trusted root");
+        }
+        return this.getView(new tree_Tree(rootNode));
+    }
+    /** INTERNAL METHOD: For view's API, create proof from a tree */
+    tree_createProof(node, jsonPaths) {
+        const gindexes = this.tree_createProofGindexes(node, jsonPaths);
+        return proof_createProof(node, {
+            type: proof_ProofType.treeOffset,
+            gindices: gindexes,
+        });
+    }
+    /** INTERNAL METHOD: For view's API, create proof from a tree */
+    tree_createProofGindexes(node, jsonPaths) {
+        const gindexes = [];
+        for (const jsonPath of jsonPaths) {
+            const { type, gindex } = this.getPathInfo(jsonPath);
+            if (!type_composite_isCompositeType(type)) {
+                gindexes.push(gindex);
+            }
+            else {
+                // if the path subtype is composite, include the gindices of all the leaves
+                const leafGindexes = type.tree_getLeafGindices(gindex, type.fixedSize === null ? tree_getNode(node, gindex) : undefined);
+                for (const gindex of leafGindexes) {
+                    gindexes.push(gindex);
+                }
+            }
+        }
+        return gindexes;
+    }
+    /**
+     * Navigate to a subtype & gindex using a path
+     */
+    getPathInfo(path) {
+        const gindices = [];
+        let type = this;
+        for (const prop of path) {
+            if (type.isBasic) {
+                throw new Error("Invalid path: cannot navigate beyond a basic type");
+            }
+            const gindex = type.getPropertyGindex(prop);
+            // else stop navigating
+            if (gindex !== null) {
+                gindices.push(gindex);
+                type = type.getPropertyType(prop);
+            }
+        }
+        return {
+            type,
+            gindex: gindex_concatGindices(gindices),
+        };
+    }
+    /**
+     * INTERNAL METHOD: post process `Ǹode` instance created from a proof and return either the same node,
+     * and a new node representing the same data is a different `Node` instance. Currently used exclusively
+     * by ContainerNodeStruct to convert `BranchNode` into `BranchNodeStruct`.
+     */
+    tree_fromProofNode(node) {
+        return { node, done: false };
+    }
+}
+function type_composite_isCompositeType(type) {
+    return !type.isBasic;
+}
+//# sourceMappingURL=composite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/byteArray.js
+
+
+
+/**
+ * ByteArray: ordered array collection of byte values
+ * - Value: `Uint8Array`
+ * - View: `Uint8Array`
+ * - ViewDU: `Uint8Array`
+ *
+ * ByteArray is an immutable value which is represented by a Uint8Array for memory efficiency and performance.
+ * Note: Consumers of this type MUST never mutate the `Uint8Array` representation of a ByteArray.
+ */
+class byteArray_ByteArrayType extends composite_CompositeType {
+    isViewMutable = false;
+    defaultValue() {
+        // Since it's a byte array the minSize is bytes is the default size
+        return new Uint8Array(this.minSize);
+    }
+    getView(tree) {
+        return this.getViewDU(tree.rootNode);
+    }
+    getViewDU(node) {
+        return this.tree_toValue(node);
+    }
+    commitView(view) {
+        return this.commitViewDU(view);
+    }
+    // there is no respective ViewDU for this type
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        const uint8Array = new Uint8Array(this.value_serializedSize(view));
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        this.value_serializeToBytes({ uint8Array, dataView }, 0, view);
+        const node = this.tree_deserializeFromBytes({ uint8Array, dataView }, 0, uint8Array.length);
+        if (hcByLevel !== null && node.h0 === null) {
+            hashComputation_getHashComputations(node, hcOffset, hcByLevel);
+        }
+        return node;
+    }
+    cacheOfViewDU() {
+        return;
+    }
+    // Over-write to prevent serialize + deserialize
+    toView(value) {
+        return value;
+    }
+    toViewDU(value) {
+        return value;
+    }
+    // Serialization + deserialization (only value is generic)
+    value_serializeToBytes(output, offset, value) {
+        output.uint8Array.set(value, offset);
+        return offset + value.length;
+    }
+    value_deserializeFromBytes(data, start, end) {
+        this.assertValidSize(end - start);
+        return Uint8Array.prototype.slice.call(data.uint8Array, start, end);
+    }
+    value_toTree(value) {
+        // this saves 1 allocation of Uint8Array
+        const dataView = new DataView(value.buffer, value.byteOffset, value.byteLength);
+        return this.tree_deserializeFromBytes({ uint8Array: value, dataView }, 0, value.length);
+    }
+    // Merkleization
+    getBlocksBytes(value) {
+        // reallocate this.blocksBuffer if needed
+        if (value.length > this.blocksBuffer.length) {
+            const chunkCount = Math.ceil(value.length / 32);
+            this.blocksBuffer = new Uint8Array(Math.ceil(chunkCount / 2) * 64);
+        }
+        return byteArray_getBlocksBytes(value, this.blocksBuffer);
+    }
+    // Proofs
+    getPropertyGindex() {
+        // Stop navigating below this type. Must only request complete data
+        return null;
+    }
+    getPropertyType() {
+        throw Error("Must only request ByteArray complete data");
+    }
+    getIndexProperty() {
+        throw Error("Must only request ByteArray complete data");
+    }
+    tree_fromProofNode(node) {
+        return { node, done: true };
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        const byteLen = this.tree_getByteLen(rootNode);
+        const chunkCount = Math.ceil(byteLen / 32);
+        const startIndex = gindex_concatGindices([rootGindex, gindex_toGindex(this.depth, BigInt(0))]);
+        const gindices = new Array(chunkCount);
+        for (let i = 0, gindex = startIndex; i < chunkCount; i++, gindex++) {
+            gindices[i] = gindex;
+        }
+        // include the length chunk
+        if (this.isList) {
+            gindices.push(gindex_concatGindices([rootGindex, composite_LENGTH_GINDEX]));
+        }
+        return gindices;
+    }
+    // JSON
+    fromJson(json) {
+        const value = byteArray_fromHexString(json);
+        this.assertValidSize(value.length);
+        return value;
+    }
+    toJson(value) {
+        return byteArray_toHexString(value);
+    }
+    // ByteArray is immutable
+    clone(value) {
+        return value;
+    }
+    equals(a, b) {
+        return byteArray_byteArrayEquals(a, b);
+    }
+}
+function byteArray_getBlocksBytes(value, blocksBuffer) {
+    if (value.length > blocksBuffer.length) {
+        throw new Error(`data length ${value.length} exceeds blocksBuffer length ${blocksBuffer.length}`);
+    }
+    blocksBuffer.set(value);
+    const valueLen = value.length;
+    const blockByteLen = Math.ceil(valueLen / 64) * 64;
+    // all padding bytes must be zero, this is similar to set zeroHash(0)
+    blocksBuffer.subarray(valueLen, blockByteLen).fill(0);
+    return blocksBuffer.subarray(0, blockByteLen);
+}
+//# sourceMappingURL=byteArray.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/bitArray.js
+
+
+
+
+
+
+/**
+ * BitArray: ordered array collection of boolean values
+ * - Value: `BitArray`, @see BitArray for a justification of its memory efficiency and performance
+ * - View: `BitArrayTreeView`
+ * - ViewDU: `BitArrayTreeViewDU`
+ */
+class bitArray_BitArrayType extends composite_CompositeType {
+    isViewMutable = true;
+    getView(tree) {
+        return new bitArray_BitArrayTreeView(this, tree);
+    }
+    getViewDU(node) {
+        return new bitArray_BitArrayTreeViewDU(this, node);
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        view.commit(hcOffset, hcByLevel);
+        return view.node;
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    // Merkleization
+    getBlocksBytes(value) {
+        // reallocate this.blocksBuffer if needed
+        if (value.uint8Array.length > this.blocksBuffer.length) {
+            const chunkCount = Math.ceil(value.bitLen / 8 / 32);
+            this.blocksBuffer = new Uint8Array(Math.ceil(chunkCount / 2) * 64);
+        }
+        return byteArray_getBlocksBytes(value.uint8Array, this.blocksBuffer);
+    }
+    // Proofs
+    getPropertyGindex() {
+        // Stop navigating below this type. Must only request complete data
+        return null;
+    }
+    getPropertyType() {
+        /* istanbul ignore next - unreachable code, getPropertyGindex null return prevents this call */
+        throw Error("Must only request BitArray complete data");
+    }
+    getIndexProperty() {
+        /* istanbul ignore next - unreachable code, getPropertyGindex null return prevents this call */
+        throw Error("Must only request BitArray complete data");
+    }
+    tree_fromProofNode(node) {
+        return { node, done: true };
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        const byteLen = this.tree_getByteLen(rootNode);
+        const chunkCount = Math.ceil(byteLen / 32);
+        const startIndex = gindex_concatGindices([rootGindex, gindex_toGindex(this.depth, BigInt(0))]);
+        const gindices = new Array(chunkCount);
+        for (let i = 0, gindex = startIndex; i < chunkCount; i++, gindex++) {
+            gindices[i] = gindex;
+        }
+        // include the length chunk
+        if (this.isList) {
+            gindices.push(gindex_concatGindices([rootGindex, composite_LENGTH_GINDEX]));
+        }
+        return gindices;
+    }
+    // JSON
+    fromJson(json) {
+        const uint8Array = byteArray_fromHexString(json);
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        // value_deserializeFromBytes MUST validate length (limit, or length)
+        return this.value_deserializeFromBytes({ uint8Array, dataView }, 0, uint8Array.length);
+    }
+    toJson(value) {
+        return byteArray_toHexString(this.serialize(value));
+    }
+    clone(value) {
+        return value.clone();
+    }
+    equals(a, b) {
+        return a.bitLen === b.bitLen && byteArray_byteArrayEquals(a.uint8Array, b.uint8Array);
+    }
+}
+//# sourceMappingURL=bitArray.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/bitList.js
+/* provided dependency */ var type_bitList_Buffer = __webpack_require__(8287)["hp"];
+
+
+
+
+
+
+
+/**
+ * BitList: ordered variable-length collection of boolean values, limited to N bits
+ * - Notation `Bitlist[N]`
+ * - Value: `BitArray`, @see BitArray for a justification of its memory efficiency and performance
+ * - View: `BitArrayTreeView`
+ * - ViewDU: `BitArrayTreeViewDU`
+ */
+class bitList_BitListType extends bitArray_BitArrayType {
+    limitBits;
+    typeName;
+    depth;
+    chunkDepth;
+    fixedSize = null;
+    minSize = 1; // +1 for the extra padding bit
+    maxSize;
+    maxChunkCount;
+    isList = true;
+    mixInLengthBlockBytes = new Uint8Array(64);
+    mixInLengthBuffer = type_bitList_Buffer.from(this.mixInLengthBlockBytes.buffer, this.mixInLengthBlockBytes.byteOffset, this.mixInLengthBlockBytes.byteLength);
+    constructor(limitBits, opts) {
+        super();
+        this.limitBits = limitBits;
+        if (limitBits === 0)
+            throw Error("List limit must be > 0");
+        this.typeName = opts?.typeName ?? `BitList[${limitBits}]`;
+        // TODO Check that itemsPerChunk is an integer
+        this.maxChunkCount = Math.ceil(this.limitBits / 8 / 32);
+        this.chunkDepth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        // Depth includes the extra level for the length node
+        this.depth = 1 + this.chunkDepth;
+        this.maxSize = Math.ceil(limitBits / 8) + 1; // +1 for the extra padding bit
+    }
+    static named(limitBits, opts) {
+        return new (named_namedClass(bitList_BitListType, opts.typeName))(limitBits, opts);
+    }
+    defaultValue() {
+        return bitArray_BitArray.fromBitLen(0);
+    }
+    // Views: inherited from BitArrayType
+    // Serialization + deserialization
+    value_serializedSize(value) {
+        return bitList_bitLenToSerializedLength(value.bitLen);
+    }
+    value_serializeToBytes(output, offset, value) {
+        output.uint8Array.set(value.uint8Array, offset);
+        return bitList_applyPaddingBit(output.uint8Array, offset, value.bitLen);
+    }
+    value_deserializeFromBytes(data, start, end) {
+        const { uint8Array, bitLen } = this.deserializeUint8ArrayBitListFromBytes(data.uint8Array, start, end);
+        return new bitArray_BitArray(uint8Array, bitLen);
+    }
+    tree_serializedSize(node) {
+        return bitList_bitLenToSerializedLength(arrayBasic_getLengthFromRootNode(node));
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const chunksNode = arrayBasic_getChunksNodeFromRootNode(node);
+        const bitLen = arrayBasic_getLengthFromRootNode(node);
+        const byteLen = Math.ceil(bitLen / 8);
+        const chunkLen = Math.ceil(byteLen / 32);
+        const nodes = tree_getNodesAtDepth(chunksNode, this.chunkDepth, 0, chunkLen);
+        packedNode_packedNodeRootsToBytes(output.dataView, offset, byteLen, nodes);
+        return bitList_applyPaddingBit(output.uint8Array, offset, bitLen);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        const { uint8Array, bitLen } = this.deserializeUint8ArrayBitListFromBytes(data.uint8Array, start, end);
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        const chunksNode = packedNode_packedRootsBytesToNode(this.chunkDepth, dataView, 0, uint8Array.length);
+        return arrayBasic_addLengthNode(chunksNode, bitLen);
+    }
+    tree_getByteLen(node) {
+        if (!node)
+            throw new Error("BitListType requires a node to get leaves");
+        return Math.ceil(arrayBasic_getLengthFromRootNode(node) / 8);
+    }
+    // Merkleization: inherited from BitArrayType
+    hashTreeRoot(value) {
+        const root = alloc_allocUnsafe(32);
+        this.hashTreeRootInto(value, root, 0);
+        return root;
+    }
+    hashTreeRootInto(value, output, offset) {
+        super.hashTreeRootInto(value, this.mixInLengthBlockBytes, 0);
+        // mixInLength
+        this.mixInLengthBuffer.writeUIntLE(value.bitLen, 32, 6);
+        // one for hashTreeRoot(value), one for length
+        const chunkCount = 2;
+        hasher_merkleizeBlocksBytes(this.mixInLengthBlockBytes, chunkCount, output, offset);
+    }
+    // Proofs: inherited from BitArrayType
+    // JSON: inherited from BitArrayType
+    // Deserializer helpers
+    deserializeUint8ArrayBitListFromBytes(data, start, end) {
+        const { uint8Array, bitLen } = bitList_deserializeUint8ArrayBitListFromBytes(data, start, end);
+        if (bitLen > this.limitBits) {
+            throw Error(`bitLen over limit ${bitLen} > ${this.limitBits}`);
+        }
+        return { uint8Array, bitLen };
+    }
+}
+function bitList_deserializeUint8ArrayBitListFromBytes(data, start, end) {
+    if (end > data.length) {
+        throw Error(`BitList attempting to read byte ${end} of data length ${data.length}`);
+    }
+    const lastByte = data[end - 1];
+    const size = end - start;
+    if (lastByte === 0) {
+        throw new Error("Invalid deserialized bitlist, padding bit required");
+    }
+    if (lastByte === 1) {
+        // Buffer.prototype.slice does not copy memory, Enforce Uint8Array usage https://github.com/nodejs/node/issues/28087
+        const uint8Array = Uint8Array.prototype.slice.call(data, start, end - 1);
+        const bitLen = (size - 1) * 8;
+        return { uint8Array, bitLen };
+    }
+    // the last byte is > 1, so a padding bit will exist in the last byte and need to be removed
+    // Buffer.prototype.slice does not copy memory, Enforce Uint8Array usage https://github.com/nodejs/node/issues/28087
+    const uint8Array = Uint8Array.prototype.slice.call(data, start, end);
+    // mask lastChunkByte
+    const lastByteBitLength = lastByte.toString(2).length - 1;
+    const bitLen = (size - 1) * 8 + lastByteBitLength;
+    const mask = 0xff >> (8 - lastByteBitLength);
+    uint8Array[size - 1] &= mask;
+    return { uint8Array, bitLen };
+}
+function bitList_bitLenToSerializedLength(bitLen) {
+    const bytes = Math.ceil(bitLen / 8);
+    // +1 for the extra padding bit
+    return bitLen % 8 === 0 ? bytes + 1 : bytes;
+}
+/**
+ * Apply padding bit to a serialized BitList already written to `output` at `offset`
+ * @returns New offset after (maybe) writting a padding bit.
+ */
+function bitList_applyPaddingBit(output, offset, bitLen) {
+    const byteLen = Math.ceil(bitLen / 8);
+    const newOffset = offset + byteLen;
+    if (bitLen % 8 === 0) {
+        output[newOffset] = 1;
+        return newOffset + 1;
+    }
+    output[newOffset - 1] |= 1 << (bitLen % 8);
+    return newOffset;
+}
+//# sourceMappingURL=bitList.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/bitVector.js
+
+
+
+
+
+/**
+ * BitVector: ordered fixed-length collection of boolean values, with N bits
+ * - Notation: `Bitvector[N]`
+ * - Value: `BitArray`, @see BitArray for a justification of its memory efficiency and performance
+ * - View: `BitArrayTreeView`
+ * - ViewDU: `BitArrayTreeViewDU`
+ */
+class bitVector_BitVectorType extends bitArray_BitArrayType {
+    lengthBits;
+    typeName;
+    chunkCount;
+    depth;
+    fixedSize;
+    minSize;
+    maxSize;
+    maxChunkCount;
+    isList = false;
+    /**
+     * Mask to check if trailing bits are zero'ed. Mask returns bits that must be zero'ed
+     * ```
+     * lengthBits % 8 | zeroBitsMask
+     * 0              | 0
+     * 1              | 11111110
+     * 2              | 11111100
+     * 7              | 10000000
+     * ```
+     */
+    zeroBitsMask;
+    constructor(lengthBits, opts) {
+        super();
+        this.lengthBits = lengthBits;
+        if (lengthBits === 0)
+            throw Error("Vector length must be > 0");
+        this.typeName = opts?.typeName ?? `BitVector[${lengthBits}]`;
+        this.chunkCount = Math.ceil(this.lengthBits / 8 / 32);
+        this.maxChunkCount = this.chunkCount;
+        this.depth = merkleize_maxChunksToDepth(this.chunkCount);
+        this.fixedSize = Math.ceil(this.lengthBits / 8);
+        this.minSize = this.fixedSize;
+        this.maxSize = this.fixedSize;
+        // To cache mask for trailing zero bits validation
+        this.zeroBitsMask = lengthBits % 8 === 0 ? 0 : 0xff & (0xff << (lengthBits % 8));
+    }
+    static named(limitBits, opts) {
+        return new (named_namedClass(bitVector_BitVectorType, opts.typeName))(limitBits, opts);
+    }
+    defaultValue() {
+        return bitArray_BitArray.fromBitLen(this.lengthBits);
+    }
+    // Views: inherited from BitArrayType
+    // Serialization + deserialization
+    value_serializedSize() {
+        return this.fixedSize;
+    }
+    value_serializeToBytes(output, offset, value) {
+        output.uint8Array.set(value.uint8Array, offset);
+        return offset + this.fixedSize;
+    }
+    value_deserializeFromBytes(data, start, end) {
+        this.assertValidLength(data.uint8Array, start, end);
+        // Buffer.prototype.slice does not copy memory, Enforce Uint8Array usage https://github.com/nodejs/node/issues/28087
+        return new bitArray_BitArray(Uint8Array.prototype.slice.call(data.uint8Array, start, end), this.lengthBits);
+    }
+    tree_serializedSize() {
+        return this.fixedSize;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const nodes = tree_getNodesAtDepth(node, this.depth, 0, this.chunkCount);
+        packedNode_packedNodeRootsToBytes(output.dataView, offset, this.fixedSize, nodes);
+        return offset + this.fixedSize;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        this.assertValidLength(data.uint8Array, start, end);
+        return packedNode_packedRootsBytesToNode(this.depth, data.dataView, start, end);
+    }
+    tree_getByteLen() {
+        return this.fixedSize;
+    }
+    // Merkleization: inherited from BitArrayType
+    // Proofs: inherited from BitArrayType
+    // JSON: inherited from BitArrayType
+    // Deserializer helpers
+    assertValidLength(data, start, end) {
+        const size = end - start;
+        if (end - start !== this.fixedSize) {
+            throw Error(`Invalid BitVector size ${size} != ${this.fixedSize}`);
+        }
+        // If lengthBits is not aligned to bytes, ensure trailing bits are zeroed
+        if (
+        // If zeroBitsMask == 0, then the BitVector uses full bytes only
+        this.zeroBitsMask > 0 &&
+            // if the last byte is partial, retrieve it and use the cached mask to check if trailing bits are zeroed
+            (data[end - 1] & this.zeroBitsMask) > 0) {
+            throw Error("BitVector: nonzero bits past length");
+        }
+    }
+}
+//# sourceMappingURL=bitVector.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/basic.js
+
+/**
+ * Represents a basic type as defined in the spec:
+ * https://github.com/ethereum/consensus-specs/blob/dev/ssz/simple-serialize.md#basic-types
+ */
+class basic_BasicType extends abstract_Type {
+    isBasic = true;
+    // Basic types merkleize to exactly one chunk, thus depth of 0
+    depth = 0;
+    // Basic types merkleize to exactly one chunk
+    maxChunkCount = 1;
+    value_serializedSize() {
+        return this.byteLength;
+    }
+    tree_serializedSize() {
+        return this.byteLength;
+    }
+    assertValidSize(size) {
+        if (size !== this.byteLength) {
+            throw Error(`BasicType invalid size ${size} expected ${this.byteLength}`);
+        }
+    }
+    hashTreeRoot(value) {
+        const root = new Uint8Array(32);
+        this.hashTreeRootInto(value, root, 0);
+        return root;
+    }
+    hashTreeRootInto(value, output, offset) {
+        const uint8Array = output.subarray(offset, offset + 32);
+        // output could have preallocated data, some types may not fill the whole 32 bytes
+        uint8Array.fill(0);
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        this.value_serializeToBytes({ uint8Array, dataView }, 0, value);
+    }
+    clone(value) {
+        // All basic types are represented by primitive Javascript types, don't require clone
+        return value;
+    }
+    equals(a, b) {
+        // All basic types are represented by primitive Javascript types, the operator === is sufficient
+        return a === b;
+    }
+}
+function basic_isBasicType(type) {
+    return type.isBasic;
+}
+//# sourceMappingURL=basic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/boolean.js
+
+
+
+/**
+ * Boolean: True or False
+ * - Notation: `boolean`
+ */
+class boolean_BooleanType extends basic_BasicType {
+    typeName;
+    byteLength = 1;
+    itemsPerChunk = 32;
+    fixedSize = 1;
+    minSize = 1;
+    maxSize = 1;
+    constructor(opts) {
+        super();
+        this.typeName = opts?.typeName ?? "boolean";
+    }
+    static named(opts) {
+        return new (named_namedClass(boolean_BooleanType, opts.typeName))(opts);
+    }
+    defaultValue() {
+        return false;
+    }
+    // Serialization + deserialization
+    value_serializeToBytes(output, offset, value) {
+        output.uint8Array[offset] = value ? 1 : 0;
+        return offset + 1;
+    }
+    value_deserializeFromBytes(data, start, end) {
+        this.assertValidSize(end - start);
+        switch (data.uint8Array[start]) {
+            case 1:
+                return true;
+            case 0:
+                return false;
+            default:
+                throw new Error(`Boolean: invalid value: ${data.uint8Array[start]}`);
+        }
+    }
+    tree_serializeToBytes(output, offset, node) {
+        // TODO: Assumes LeafNode has 4 byte uints are primary unit
+        output.uint8Array[offset] = node.getUint(4, 0);
+        return offset + 1;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        this.assertValidSize(end - start);
+        const value = data.uint8Array[start];
+        if (value > 1) {
+            throw Error(`Boolean: invalid value ${value}`);
+        }
+        return node_LeafNode.fromUint32(value);
+    }
+    // Fast tree opts
+    tree_getFromNode(leafNode) {
+        return leafNode.getUint(4, 0) === 1;
+    }
+    tree_setToNode(leafNode, value) {
+        leafNode.setUint(4, 0, value ? 1 : 0);
+    }
+    tree_getFromPackedNode(leafNode, index) {
+        const offsetBytes = index % this.itemsPerChunk;
+        return leafNode.getUint(1, offsetBytes) !== 0;
+    }
+    tree_setToPackedNode(leafNode, index, value) {
+        const offsetBytes = index % this.itemsPerChunk;
+        leafNode.setUint(1, offsetBytes, value ? 1 : 0);
+    }
+    // JSON
+    fromJson(json) {
+        if (typeof json !== "boolean") {
+            throw Error(`JSON invalid type ${typeof json} expected boolean`);
+        }
+        return json;
+    }
+    toJson(value) {
+        return value;
+    }
+}
+//# sourceMappingURL=boolean.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/byteList.js
+/* provided dependency */ var type_byteList_Buffer = __webpack_require__(8287)["hp"];
+
+
+
+
+
+
+/**
+ * ByteList: Immutable alias of List[byte, N]
+ * - Notation: `ByteList[N]`
+ * - Value: `Uint8Array`
+ * - View: `Uint8Array`
+ * - ViewDU: `Uint8Array`
+ *
+ * ByteList is an immutable value which is represented by a Uint8Array for memory efficiency and performance.
+ * Note: Consumers of this type MUST never mutate the `Uint8Array` representation of a ByteList.
+ *
+ * For a `ByteListType` with mutability, use `ListBasicType(byteType)`
+ */
+class byteList_ByteListType extends byteArray_ByteArrayType {
+    limitBytes;
+    typeName;
+    // Immutable characteristics
+    depth;
+    chunkDepth;
+    fixedSize = null;
+    minSize;
+    maxSize;
+    maxChunkCount;
+    isList = true;
+    blockArray = [];
+    blockBytesLen = 0;
+    mixInLengthBlockBytes = new Uint8Array(64);
+    mixInLengthBuffer = type_byteList_Buffer.from(this.mixInLengthBlockBytes.buffer, this.mixInLengthBlockBytes.byteOffset, this.mixInLengthBlockBytes.byteLength);
+    constructor(limitBytes, opts) {
+        super();
+        this.limitBytes = limitBytes;
+        if (limitBytes === 0)
+            throw Error("List limit must be > 0");
+        this.typeName = opts?.typeName ?? `ByteList[${limitBytes}]`;
+        this.maxChunkCount = Math.ceil(this.limitBytes / 32);
+        this.chunkDepth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        this.depth = 1 + this.chunkDepth;
+        this.minSize = 0;
+        this.maxSize = this.limitBytes;
+    }
+    static named(limitBits, opts) {
+        return new (named_namedClass(byteList_ByteListType, opts.typeName))(limitBits, opts);
+    }
+    // Views: inherited from ByteArrayType
+    // Serialization + deserialization
+    value_serializedSize(value) {
+        return value.length;
+    }
+    // value_* inherited from ByteArrayType
+    tree_serializedSize(node) {
+        return arrayBasic_getLengthFromRootNode(node);
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const chunksNode = arrayBasic_getChunksNodeFromRootNode(node);
+        const byteLen = arrayBasic_getLengthFromRootNode(node);
+        const chunkLen = Math.ceil(byteLen / 32);
+        const nodes = tree_getNodesAtDepth(chunksNode, this.chunkDepth, 0, chunkLen);
+        packedNode_packedNodeRootsToBytes(output.dataView, offset, byteLen, nodes);
+        return offset + byteLen;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        this.assertValidSize(end - start);
+        const chunksNode = packedNode_packedRootsBytesToNode(this.chunkDepth, data.dataView, start, end);
+        return arrayBasic_addLengthNode(chunksNode, end - start);
+    }
+    tree_getByteLen(node) {
+        if (!node)
+            throw new Error("ByteListType requires a node to get leaves");
+        return arrayBasic_getLengthFromRootNode(node);
+    }
+    // Merkleization: inherited from ByteArrayType
+    hashTreeRoot(value) {
+        const root = alloc_allocUnsafe(32);
+        this.hashTreeRootInto(value, root, 0);
+        return root;
+    }
+    /**
+     * Use  merkleizeBlockArray() instead of merkleizeBlocksBytes() to avoid big memory allocation
+     */
+    hashTreeRootInto(value, output, offset) {
+        // should not call super.hashTreeRoot() here
+        // use  merkleizeBlockArray() instead of merkleizeBlocksBytes() to avoid big memory allocation
+        // reallocate this.blockArray if needed
+        if (value.length > this.blockBytesLen) {
+            const newBlockCount = Math.ceil(value.length / 64);
+            // this.blockBytesLen should be a multiple of 64
+            const oldBlockCount = Math.ceil(this.blockBytesLen / 64);
+            const blockDiff = newBlockCount - oldBlockCount;
+            const newBlocksBytes = new Uint8Array(blockDiff * 64);
+            for (let i = 0; i < blockDiff; i++) {
+                this.blockArray.push(newBlocksBytes.subarray(i * 64, (i + 1) * 64));
+                this.blockBytesLen += 64;
+            }
+        }
+        // populate this.blockArray
+        for (let i = 0; i < value.length; i += 64) {
+            const block = this.blockArray[i / 64];
+            // zero out the last block if it's over value.length
+            if (i + 64 > value.length) {
+                block.fill(0);
+            }
+            block.set(value.subarray(i, Math.min(i + 64, value.length)));
+        }
+        // compute hashTreeRoot
+        const blockLimit = Math.ceil(value.length / 64);
+        hasher_merkleizeBlockArray(this.blockArray, blockLimit, this.maxChunkCount, this.mixInLengthBlockBytes, 0);
+        // mixInLength
+        this.mixInLengthBuffer.writeUIntLE(value.length, 32, 6);
+        // one for hashTreeRoot(value), one for length
+        const chunkCount = 2;
+        hasher_merkleizeBlocksBytes(this.mixInLengthBlockBytes, chunkCount, output, offset);
+    }
+    // Proofs: inherited from BitArrayType
+    // JSON: inherited from ByteArrayType
+    assertValidSize(size) {
+        if (size > this.limitBytes) {
+            throw Error(`ByteList invalid size ${size} limit ${this.limitBytes}`);
+        }
+    }
+}
+//# sourceMappingURL=byteList.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/byteVector.js
+
+
+
+
+/**
+ * ByteVector: Immutable alias of Vector[byte, N]
+ * - Notation: `ByteVector[N]`
+ * - Value: `Uint8Array`
+ * - View: `Uint8Array`
+ * - ViewDU: `Uint8Array`
+ *
+ * ByteVector is an immutable value which is represented by a Uint8Array for memory efficiency and performance.
+ * Note: Consumers of this type MUST never mutate the `Uint8Array` representation of a ByteVector.
+ *
+ * For a `ByteVectorType` with mutability, use `VectorBasicType(byteType)`
+ */
+class byteVector_ByteVectorType extends byteArray_ByteArrayType {
+    lengthBytes;
+    typeName;
+    // Immutable characteristics
+    depth;
+    chunkDepth;
+    fixedSize;
+    minSize;
+    maxSize;
+    maxChunkCount;
+    isList = false;
+    constructor(lengthBytes, opts) {
+        super();
+        this.lengthBytes = lengthBytes;
+        if (lengthBytes === 0)
+            throw Error("Vector length must be > 0");
+        this.typeName = opts?.typeName ?? `ByteVector[${lengthBytes}]`;
+        this.maxChunkCount = Math.ceil(this.lengthBytes / 32);
+        this.chunkDepth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        this.depth = this.chunkDepth;
+        this.fixedSize = this.lengthBytes;
+        this.minSize = this.fixedSize;
+        this.maxSize = this.fixedSize;
+    }
+    static named(limitBits, opts) {
+        return new (named_namedClass(byteVector_ByteVectorType, opts.typeName))(limitBits, opts);
+    }
+    // Views: inherited from ByteArrayType
+    // Serialization + deserialization
+    value_serializedSize() {
+        return this.fixedSize;
+    }
+    // value_* inherited from ByteArrayType
+    tree_serializedSize() {
+        return this.fixedSize;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const nodes = tree_getNodesAtDepth(node, this.chunkDepth, 0, this.maxChunkCount);
+        packedNode_packedNodeRootsToBytes(output.dataView, offset, this.fixedSize, nodes);
+        return offset + this.fixedSize;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        this.assertValidSize(end - start);
+        return packedNode_packedRootsBytesToNode(this.chunkDepth, data.dataView, start, end);
+    }
+    tree_getByteLen() {
+        return this.lengthBytes;
+    }
+    // Merkleization: inherited from ByteArrayType
+    // Proofs: inherited from BitArrayType
+    // JSON: inherited from ByteArrayType
+    assertValidSize(size) {
+        if (size !== this.lengthBytes) {
+            throw Error(`ByteVector invalid size ${size} expected ${this.lengthBytes}`);
+        }
+    }
+}
+//# sourceMappingURL=byteVector.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/util/strings.js
+// Convert camelCase strings to various other formats  -- assumes input field is camelCase or camel1Case
+const strings_Case = {
+    snake: (field) => field
+        .replace(/[^0-z]/g, "")
+        .replace(/[a-z][A-Z]|[0-9][A-Z]/g, (substr) => `${substr[0]}_${substr[1].toLowerCase()}`),
+    constant: (field) => field
+        .replace(/[^0-z]/g, "")
+        .replace(/[a-z][A-Z]|[0-9][A-Z]/g, (substr) => `${substr[0]}_${substr[1]}`)
+        .toUpperCase(),
+    pascal: (field) => {
+        const first = field[0].toUpperCase();
+        return (first + field.slice(1)).replace(/[^0-z]/g, "");
+    },
+    camel: (field) => {
+        return field[0].toLowerCase() + field.slice(1);
+    },
+    header: (field) => {
+        const first = field[0].toUpperCase();
+        return (first +
+            field
+                .slice(1)
+                .replace(/[^0-z]/g, "")
+                .replace(/[a-z][A-Z]|[0-9][A-Z]/g, (substr) => `${substr[0]}-${substr[1]}`));
+    },
+    eth2: (field) => strings_Case.snake(field).replace(/(\d)$/, "_$1"),
+};
+//# sourceMappingURL=strings.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/container.js
+
+
+
+
+/**
+ * Intented usage:
+ *
+ * - Get initial BeaconState from disk.
+ * - Before applying next block, switch to mutable
+ * - Get some field, create a view in mutable mode
+ * - Do modifications of the state in the state transition function
+ * - When done, commit and apply new root node once to og BeaconState
+ * - However, keep all the caches and transfer them to the new BeaconState
+ *
+ * Questions:
+ * - Can the child views created in mutable mode switch to not mutable? If so, it seems that it needs to recursively
+ *   iterate the entire data structure and views
+ *
+ */
+class container_ContainerTreeView extends abstract_TreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super();
+        this.type = type;
+        this.tree = tree;
+    }
+    get node() {
+        return this.tree.rootNode;
+    }
+}
+function container_getContainerTreeViewClass(type) {
+    class CustomContainerTreeView extends container_ContainerTreeView {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (basic_isBasicType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    const leafNode = tree_getNodeAtDepth(this.node, this.type.depth, index);
+                    return fieldType.tree_getFromNode(leafNode);
+                },
+                set: function (value) {
+                    const leafNodePrev = tree_getNodeAtDepth(this.node, this.type.depth, index);
+                    const leafNode = leafNodePrev.clone();
+                    fieldType.tree_setToNode(leafNode, value);
+                    this.tree.setNodeAtDepth(this.type.depth, index, leafNode);
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView. The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeView of fieldName
+                get: function () {
+                    const gindex = gindex_toGindexBitstring(this.type.depth, index);
+                    return fieldType.getView(this.tree.getSubtree(gindex));
+                },
+                // Expects TreeView of fieldName
+                set: function (value) {
+                    const node = fieldType.commitView(value);
+                    this.tree.setNodeAtDepth(this.type.depth, index, node);
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomContainerTreeView, "name", { value: type.typeName, writable: false });
+    return CustomContainerTreeView;
+}
+//# sourceMappingURL=container.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/container.js
+
+
+
+
+class container_BasicContainerTreeViewDU extends abstract_TreeViewDU {
+    type;
+    _rootNode;
+    nodes = [];
+    caches;
+    nodesChanged = new Set();
+    viewsChanged = new Map();
+    nodesPopulated;
+    constructor(type, _rootNode, cache) {
+        super();
+        this.type = type;
+        this._rootNode = _rootNode;
+        if (cache) {
+            this.nodes = cache.nodes;
+            this.caches = cache.caches;
+            this.nodesPopulated = cache.nodesPopulated;
+        }
+        else {
+            this.nodes = [];
+            this.caches = [];
+            this.nodesPopulated = false;
+        }
+    }
+    get node() {
+        return this._rootNode;
+    }
+    get cache() {
+        return {
+            nodes: this.nodes,
+            caches: this.caches,
+            nodesPopulated: this.nodesPopulated,
+        };
+    }
+    /**
+     * When we need to compute HashComputations (hcByLevel != null):
+     *   - if old _rootNode is hashed, then only need to put pending changes to hcByLevel
+     *   - if old _rootNode is not hashed, need to traverse and put to hcByLevel
+     */
+    commit(hcOffset = 0, hcByLevel = null) {
+        const isOldRootHashed = this._rootNode.h0 !== null;
+        if (this.nodesChanged.size === 0 && this.viewsChanged.size === 0) {
+            if (!isOldRootHashed && hcByLevel !== null) {
+                hashComputation_getHashComputations(this._rootNode, hcOffset, hcByLevel);
+            }
+            return;
+        }
+        // each view may mutate hcByLevel at offset + depth
+        const offsetView = hcOffset + this.type.depth;
+        // if old root is not hashed, no need to pass hcByLevel to child view bc we need to do full traversal here
+        const byLevelView = hcByLevel != null && isOldRootHashed ? hcByLevel : null;
+        const nodesChanged = [];
+        for (const [index, view] of this.viewsChanged) {
+            const fieldType = this.type.fieldsEntries[index].fieldType;
+            const node = fieldType.commitViewDU(view, offsetView, byLevelView);
+            // there's a chance the view is not changed, no need to rebind nodes in that case
+            if (this.nodes[index] !== node) {
+                // Set new node in nodes array to ensure data represented in the tree and fast nodes access is equal
+                this.nodes[index] = node;
+                nodesChanged.push({ index, node });
+            }
+            // Cache the view's caches to preserve it's data after 'this.viewsChanged.clear()'
+            const cache = fieldType.cacheOfViewDU(view);
+            if (cache)
+                this.caches[index] = cache;
+        }
+        for (const index of this.nodesChanged) {
+            nodesChanged.push({ index, node: this.nodes[index] });
+        }
+        // TODO: Optimize to loop only once, Numerical sort ascending
+        const nodesChangedSorted = nodesChanged.sort((a, b) => a.index - b.index);
+        const { indexes, nodes } = this.parseNodesChanged(nodesChangedSorted);
+        this._rootNode = tree_setNodesAtDepth(this._rootNode, this.type.depth, indexes, nodes, hcOffset, isOldRootHashed ? hcByLevel : null);
+        // old root is not hashed, need to traverse
+        if (!isOldRootHashed && hcByLevel !== null) {
+            hashComputation_getHashComputations(this._rootNode, hcOffset, hcByLevel);
+        }
+        this.nodesChanged.clear();
+        this.viewsChanged.clear();
+    }
+    parseNodesChanged(nodes) {
+        const indexes = nodes.map((entry) => entry.index);
+        const nodesArray = nodes.map((entry) => entry.node);
+        return { indexes, nodes: nodesArray };
+    }
+    clearCache() {
+        this.nodes = [];
+        this.caches = [];
+        this.nodesPopulated = false;
+        // Must clear nodesChanged, otherwise a subsequent commit call will break, because it assumes a node is there
+        this.nodesChanged.clear();
+        // It's not necessary to clear this.viewsChanged since they have no effect on the cache.
+        // However preserving _SOME_ caches results in a very unpredictable experience.
+        this.viewsChanged.clear();
+    }
+}
+class container_ContainerTreeViewDU extends container_BasicContainerTreeViewDU {
+    type;
+    _rootNode;
+    constructor(type, _rootNode, cache) {
+        super(type, _rootNode, cache);
+        this.type = type;
+        this._rootNode = _rootNode;
+    }
+    /**
+     * Same method to `type/container.ts` that call ViewDU.serializeToBytes() of internal fields.
+     */
+    serializeToBytes(output, offset) {
+        this.commit();
+        let fixedIndex = offset;
+        let variableIndex = offset + this.type.fixedEnd;
+        for (let index = 0; index < this.type.fieldsEntries.length; index++) {
+            const { fieldType } = this.type.fieldsEntries[index];
+            let node = this.nodes[index];
+            if (node === undefined) {
+                node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+                this.nodes[index] = node;
+            }
+            if (fieldType.fixedSize === null) {
+                // write offset
+                output.dataView.setUint32(fixedIndex, variableIndex - offset, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                // basic types always have fixedSize
+                if (type_composite_isCompositeType(fieldType)) {
+                    const view = fieldType.getViewDU(node, this.caches[index]);
+                    if (view.serializeToBytes !== undefined) {
+                        variableIndex = view.serializeToBytes(output, variableIndex);
+                    }
+                    else {
+                        // some types don't define ViewDU as TreeViewDU, like the UnionType, in that case view.serializeToBytes = undefined
+                        variableIndex = fieldType.tree_serializeToBytes(output, variableIndex, node);
+                    }
+                }
+            }
+            else {
+                fixedIndex = fieldType.tree_serializeToBytes(output, fixedIndex, node);
+            }
+        }
+        return variableIndex;
+    }
+}
+function container_getContainerTreeViewDUClass(type) {
+    class CustomContainerTreeViewDU extends container_ContainerTreeViewDU {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (basic_isBasicType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    // First walk through the tree to get the root node for that index
+                    let node = this.nodes[index];
+                    if (node === undefined) {
+                        node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+                        this.nodes[index] = node;
+                    }
+                    return fieldType.tree_getFromNode(node);
+                },
+                set: function (value) {
+                    // Create new node if current leafNode is not dirty
+                    let nodeChanged;
+                    if (this.nodesChanged.has(index)) {
+                        // TODO: This assumes that node has already been populated
+                        nodeChanged = this.nodes[index];
+                    }
+                    else {
+                        const nodePrev = (this.nodes[index] ?? tree_getNodeAtDepth(this._rootNode, this.type.depth, index));
+                        nodeChanged = nodePrev.clone();
+                        // Store the changed node in the nodes cache
+                        this.nodes[index] = nodeChanged;
+                        this.nodesChanged.add(index);
+                    }
+                    fieldType.tree_setToNode(nodeChanged, value);
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView. The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeViewDU of fieldName
+                get: function () {
+                    const viewChanged = this.viewsChanged.get(index);
+                    if (viewChanged) {
+                        return viewChanged;
+                    }
+                    let node = this.nodes[index];
+                    if (node === undefined) {
+                        node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+                        this.nodes[index] = node;
+                    }
+                    // Keep a reference to the new view to call .commit on it latter, only if mutable
+                    const view = fieldType.getViewDU(node, this.caches[index]);
+                    if (fieldType.isViewMutable) {
+                        this.viewsChanged.set(index, view);
+                    }
+                    // No need to persist the child's view cache since a second get returns this view instance.
+                    // The cache is only persisted on commit where the viewsChanged map is dropped.
+                    return view;
+                },
+                // Expects TreeViewDU of fieldName
+                set: function (view) {
+                    // When setting a view:
+                    // - Not necessary to commit node
+                    // - Not necessary to persist cache
+                    // Just keeping a reference to the view in this.viewsChanged ensures consistency
+                    this.viewsChanged.set(index, view);
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomContainerTreeViewDU, "name", { value: type.typeName, writable: false });
+    return CustomContainerTreeViewDU;
+}
+//# sourceMappingURL=container.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/container.js
+
+
+
+
+
+
+
+/**
+ * Container: ordered heterogeneous collection of values
+ * - Notation: Custom name per instance
+ */
+class container_ContainerType extends composite_CompositeType {
+    fields;
+    opts;
+    typeName;
+    depth;
+    maxChunkCount;
+    fixedSize;
+    minSize;
+    maxSize;
+    isList = false;
+    isViewMutable = true;
+    // Precomputed data for faster serdes
+    fieldsEntries;
+    /** End of fixed section of serialized Container */
+    fixedEnd;
+    fieldsGindex;
+    jsonKeyToFieldName;
+    isFixedLen;
+    fieldRangesFixedLen;
+    /** Offsets position relative to start of serialized Container. Length may not equal field count. */
+    variableOffsetsPosition;
+    /** Cached TreeView constuctor with custom prototype for this Type's properties */
+    TreeView;
+    TreeViewDU;
+    constructor(fields, opts) {
+        super(opts?.cachePermanentRootStruct);
+        this.fields = fields;
+        this.opts = opts;
+        // Render detailed typeName. Consumers should overwrite since it can get long
+        this.typeName = opts?.typeName ?? container_renderContainerTypeName(fields);
+        this.maxChunkCount = Object.keys(fields).length;
+        this.depth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        // Precalculated data for faster serdes
+        this.fieldsEntries = [];
+        for (const fieldName of Object.keys(fields)) {
+            this.fieldsEntries.push({
+                fieldName,
+                fieldType: this.fields[fieldName],
+                jsonKey: container_precomputeJsonKey(fieldName, opts?.casingMap, opts?.jsonCase),
+                gindex: gindex_toGindex(this.depth, BigInt(this.fieldsEntries.length)),
+            });
+        }
+        if (this.fieldsEntries.length === 0) {
+            throw Error("Container must have > 0 fields");
+        }
+        // Precalculate for Proofs API
+        this.fieldsGindex = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            this.fieldsGindex[this.fieldsEntries[i].fieldName] = gindex_toGindex(this.depth, BigInt(i));
+        }
+        // To resolve JSON paths in fieldName notation and jsonKey notation
+        this.jsonKeyToFieldName = {};
+        for (const { fieldName, jsonKey } of this.fieldsEntries) {
+            this.jsonKeyToFieldName[jsonKey] = fieldName;
+        }
+        const { minLen, maxLen, fixedSize } = container_precomputeSizes(fields);
+        this.minSize = minLen;
+        this.maxSize = maxLen;
+        this.fixedSize = fixedSize;
+        const { isFixedLen, fieldRangesFixedLen, variableOffsetsPosition, fixedEnd } = container_precomputeSerdesData(fields);
+        this.isFixedLen = isFixedLen;
+        this.fieldRangesFixedLen = fieldRangesFixedLen;
+        this.variableOffsetsPosition = variableOffsetsPosition;
+        this.fixedEnd = fixedEnd;
+        // TODO: This options are necessary for ContainerNodeStruct to override this.
+        // Refactor this constructor to allow customization without pollutin the options
+        this.TreeView = opts?.getContainerTreeViewClass?.(this) ?? container_getContainerTreeViewClass(this);
+        this.TreeViewDU = opts?.getContainerTreeViewDUClass?.(this) ?? container_getContainerTreeViewDUClass(this);
+        const fieldBytes = this.fieldsEntries.length * 32;
+        this.blocksBuffer = new Uint8Array(Math.ceil(fieldBytes / 64) * 64);
+    }
+    static named(fields, opts) {
+        return new (named_namedClass(container_ContainerType, opts.typeName))(fields, opts);
+    }
+    defaultValue() {
+        const value = {};
+        for (const { fieldName, fieldType } of this.fieldsEntries) {
+            value[fieldName] = fieldType.defaultValue();
+        }
+        return value;
+    }
+    getView(tree) {
+        return new this.TreeView(this, tree);
+    }
+    getViewDU(node, cache) {
+        return new this.TreeViewDU(this, node, cache);
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        view.commit(hcOffset, hcByLevel);
+        return view.node;
+    }
+    // Serialization + deserialization
+    // -------------------------------
+    // Containers can mix fixed length and variable length data.
+    //
+    // Fixed part                         Variable part
+    // [field1 offset][field2 data       ][field1 data               ]
+    // [0x000000c]    [0xaabbaabbaabbaabb][0xffffffffffffffffffffffff]
+    value_serializedSize(value) {
+        let totalSize = 0;
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            // Offset (4 bytes) + size
+            totalSize +=
+                fieldType.fixedSize === null ? 4 + fieldType.value_serializedSize(value[fieldName]) : fieldType.fixedSize;
+        }
+        return totalSize;
+    }
+    value_serializeToBytes(output, offset, value) {
+        let fixedIndex = offset;
+        let variableIndex = offset + this.fixedEnd;
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            if (fieldType.fixedSize === null) {
+                // write offset
+                output.dataView.setUint32(fixedIndex, variableIndex - offset, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                variableIndex = fieldType.value_serializeToBytes(output, variableIndex, value[fieldName]);
+            }
+            else {
+                fixedIndex = fieldType.value_serializeToBytes(output, fixedIndex, value[fieldName]);
+            }
+        }
+        return variableIndex;
+    }
+    value_deserializeFromBytes(data, start, end) {
+        const fieldRanges = this.getFieldRanges(data.dataView, start, end);
+        const value = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            const fieldRange = fieldRanges[i];
+            value[fieldName] = fieldType.value_deserializeFromBytes(data, start + fieldRange.start, start + fieldRange.end);
+        }
+        return value;
+    }
+    tree_serializedSize(node) {
+        let totalSize = 0;
+        const nodes = tree_getNodesAtDepth(node, this.depth, 0, this.fieldsEntries.length);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType } = this.fieldsEntries[i];
+            const node = nodes[i];
+            // Offset (4 bytes) + size
+            totalSize += fieldType.fixedSize === null ? 4 + fieldType.tree_serializedSize(node) : fieldType.fixedSize;
+        }
+        return totalSize;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        let fixedIndex = offset;
+        let variableIndex = offset + this.fixedEnd;
+        const nodes = tree_getNodesAtDepth(node, this.depth, 0, this.fieldsEntries.length);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType } = this.fieldsEntries[i];
+            const node = nodes[i];
+            if (fieldType.fixedSize === null) {
+                // write offset
+                output.dataView.setUint32(fixedIndex, variableIndex - offset, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                variableIndex = fieldType.tree_serializeToBytes(output, variableIndex, node);
+            }
+            else {
+                fixedIndex = fieldType.tree_serializeToBytes(output, fixedIndex, node);
+            }
+        }
+        return variableIndex;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        const fieldRanges = this.getFieldRanges(data.dataView, start, end);
+        const nodes = new Array(this.fieldsEntries.length);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType } = this.fieldsEntries[i];
+            const fieldRange = fieldRanges[i];
+            nodes[i] = fieldType.tree_deserializeFromBytes(data, start + fieldRange.start, start + fieldRange.end);
+        }
+        return subtree_subtreeFillToContents(nodes, this.depth);
+    }
+    // Merkleization
+    getBlocksBytes(struct) {
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            fieldType.hashTreeRootInto(struct[fieldName], this.blocksBuffer, i * 32);
+        }
+        // remaining bytes are zeroed as we never write them
+        return this.blocksBuffer;
+    }
+    // Proofs
+    // getPropertyGindex
+    // getPropertyType
+    // tree_getLeafGindices
+    getPropertyGindex(prop) {
+        const gindex = this.fieldsGindex[prop] ?? this.fieldsGindex[this.jsonKeyToFieldName[prop]];
+        if (gindex === undefined)
+            throw Error(`Unknown container property ${prop}`);
+        return gindex;
+    }
+    getPropertyType(prop) {
+        const type = this.fields[prop] ?? this.fields[this.jsonKeyToFieldName[prop]];
+        if (type === undefined)
+            throw Error(`Unknown container property ${prop}`);
+        return type;
+    }
+    getIndexProperty(index) {
+        if (index >= this.fieldsEntries.length) {
+            return null;
+        }
+        return this.fieldsEntries[index].fieldName;
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        const gindices = [];
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            const fieldGindex = this.fieldsGindex[fieldName];
+            const fieldGindexFromRoot = gindex_concatGindices([rootGindex, fieldGindex]);
+            if (fieldType.isBasic) {
+                gindices.push(fieldGindexFromRoot);
+            }
+            else {
+                const compositeType = fieldType;
+                if (fieldType.fixedSize === null) {
+                    if (!rootNode) {
+                        throw new Error("variable type requires tree argument to get leaves");
+                    }
+                    gindices.push(...compositeType.tree_getLeafGindices(fieldGindexFromRoot, tree_getNode(rootNode, fieldGindex)));
+                }
+                else {
+                    gindices.push(...compositeType.tree_getLeafGindices(fieldGindexFromRoot));
+                }
+            }
+        }
+        return gindices;
+    }
+    // JSON
+    fromJson(json) {
+        if (typeof json !== "object") {
+            throw Error("JSON must be of type object");
+        }
+        if (json === null) {
+            throw Error("JSON must not be null");
+        }
+        const value = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, jsonKey } = this.fieldsEntries[i];
+            const jsonValue = json[jsonKey];
+            if (jsonValue === undefined) {
+                throw Error(`JSON expected key ${jsonKey} is undefined`);
+            }
+            value[fieldName] = fieldType.fromJson(jsonValue);
+        }
+        return value;
+    }
+    toJson(value) {
+        const json = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, jsonKey } = this.fieldsEntries[i];
+            json[jsonKey] = fieldType.toJson(value[fieldName]);
+        }
+        return json;
+    }
+    clone(value) {
+        const newValue = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            newValue[fieldName] = fieldType.clone(value[fieldName]);
+        }
+        return newValue;
+    }
+    equals(a, b) {
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            if (!fieldType.equals(a[fieldName], b[fieldName])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * Deserializer helper: Returns the bytes ranges of all fields, both variable and fixed size.
+     * Fields may not be contiguous in the serialized bytes, so the returned ranges are [start, end].
+     * - For fixed size fields re-uses the pre-computed values this.fieldRangesFixedLen
+     * - For variable size fields does a first pass over the fixed section to read offsets
+     */
+    getFieldRanges(data, start, end) {
+        if (this.variableOffsetsPosition.length === 0) {
+            // Validate fixed length container
+            const size = end - start;
+            if (size !== this.fixedEnd) {
+                throw Error(`${this.typeName} size ${size} not equal fixed size ${this.fixedEnd}`);
+            }
+            return this.fieldRangesFixedLen;
+        }
+        // Read offsets in one pass
+        const offsets = container_readVariableOffsets(data, start, end, this.fixedEnd, this.variableOffsetsPosition);
+        offsets.push(end - start); // The offsets are relative to the start
+        // Merge fieldRangesFixedLen + offsets in one array
+        let variableIdx = 0;
+        let fixedIdx = 0;
+        const fieldRanges = new Array(this.isFixedLen.length);
+        for (let i = 0; i < this.isFixedLen.length; i++) {
+            if (this.isFixedLen[i]) {
+                // push from fixLen ranges ++
+                fieldRanges[i] = this.fieldRangesFixedLen[fixedIdx++];
+            }
+            else {
+                // push from varLen ranges ++
+                fieldRanges[i] = { start: offsets[variableIdx], end: offsets[variableIdx + 1] };
+                variableIdx++;
+            }
+        }
+        return fieldRanges;
+    }
+}
+/**
+ * Returns the byte ranges of all variable size fields.
+ */
+function container_readVariableOffsets(data, start, end, fixedEnd, variableOffsetsPosition) {
+    // Since variable-sized values can be interspersed with fixed-sized values, we precalculate
+    // the offset indices so we can more easily deserialize the fields in once pass first we get the fixed sizes
+    // Note: `fixedSizes[i] = null` if that field has variable length
+    const size = end - start;
+    // with the fixed sizes, we can read the offsets, and store for our single pass
+    const offsets = new Array(variableOffsetsPosition.length);
+    for (let i = 0; i < variableOffsetsPosition.length; i++) {
+        const offset = data.getUint32(start + variableOffsetsPosition[i], true);
+        // Validate offsets. If the list is empty the offset points to the end of the buffer, offset == size
+        if (offset > size) {
+            throw new Error(`Offset out of bounds ${offset} > ${size}`);
+        }
+        if (i === 0) {
+            if (offset !== fixedEnd) {
+                throw new Error(`First offset must equal to fixedEnd ${offset} != ${fixedEnd}`);
+            }
+        }
+        else {
+            if (offset < offsets[i - 1]) {
+                throw new Error(`Offsets must be increasing ${offset} < ${offsets[i - 1]}`);
+            }
+        }
+        offsets[i] = offset;
+    }
+    return offsets;
+}
+/**
+ * Precompute fixed and variable offsets position for faster deserialization.
+ * @returns Does a single pass over all fields and returns:
+ * - isFixedLen: If field index [i] is fixed length
+ * - fieldRangesFixedLen: For fields with fixed length, their range of bytes
+ * - variableOffsetsPosition: Position of the 4 bytes offset for variable size fields
+ * - fixedEnd: End of the fixed size range
+ * -
+ */
+function container_precomputeSerdesData(fields) {
+    const isFixedLen = [];
+    const fieldRangesFixedLen = [];
+    const variableOffsetsPosition = [];
+    let pointerFixed = 0;
+    for (const fieldType of Object.values(fields)) {
+        isFixedLen.push(fieldType.fixedSize !== null);
+        if (fieldType.fixedSize === null) {
+            // Variable length
+            variableOffsetsPosition.push(pointerFixed);
+            pointerFixed += 4;
+        }
+        else {
+            fieldRangesFixedLen.push({ start: pointerFixed, end: pointerFixed + fieldType.fixedSize });
+            pointerFixed += fieldType.fixedSize;
+        }
+    }
+    return {
+        isFixedLen,
+        fieldRangesFixedLen,
+        variableOffsetsPosition,
+        fixedEnd: pointerFixed,
+    };
+}
+/**
+ * Precompute sizes of the Container doing one pass over fields
+ */
+function container_precomputeSizes(fields) {
+    let minLen = 0;
+    let maxLen = 0;
+    let fixedSize = 0;
+    for (const fieldType of Object.values(fields)) {
+        minLen += fieldType.minSize;
+        maxLen += fieldType.maxSize;
+        if (fieldType.fixedSize === null) {
+            // +4 for the offset
+            minLen += 4;
+            maxLen += 4;
+            fixedSize = null;
+        }
+        else if (fixedSize !== null) {
+            fixedSize += fieldType.fixedSize;
+        }
+    }
+    return { minLen, maxLen, fixedSize };
+}
+/**
+ * Compute the JSON key for each fieldName. There will exist a single JSON representation for each type.
+ * To transform JSON payloads to a casing that is different from the type's defined use external tooling.
+ */
+function container_precomputeJsonKey(fieldName, casingMap, jsonCase) {
+    if (casingMap) {
+        const keyFromCaseMap = casingMap[fieldName];
+        if (keyFromCaseMap === undefined) {
+            throw Error(`casingMap[${String(fieldName)}] not defined`);
+        }
+        return keyFromCaseMap;
+    }
+    if (jsonCase)
+        return strings_Case[jsonCase](fieldName);
+    return fieldName;
+}
+/**
+ * Render field typeNames for a detailed typeName of this Container
+ */
+function container_renderContainerTypeName(fields, prefix = "Container") {
+    const fieldNames = Object.keys(fields);
+    const fieldTypeNames = fieldNames
+        .map((fieldName) => `${String(fieldName)}: ${fields[fieldName].typeName}`)
+        .join(", ");
+    return `${prefix}({${fieldTypeNames}})`;
+}
+//# sourceMappingURL=container.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/branchNodeStruct.js
+
+/**
+ * BranchNode whose children's data is represented as a struct, not a tree.
+ *
+ * This approach is usefull for memory efficiency of data that is not modified often, for example the validators
+ * registry in Ethereum consensus `state.validators`. The tradeoff is that getting the hash, are proofs is more
+ * expensive because the tree has to be recreated every time.
+ */
+class branchNodeStruct_BranchNodeStruct extends node_Node {
+    valueToNode;
+    value;
+    constructor(valueToNode, value) {
+        // First null value is to save an extra variable to check if a node has a root or not
+        super(null, 0, 0, 0, 0, 0, 0, 0);
+        this.valueToNode = valueToNode;
+        this.value = value;
+    }
+    get rootHashObject() {
+        if (this.h0 === null) {
+            const node = this.valueToNode(this.value);
+            super.applyHash(node.rootHashObject);
+        }
+        return this;
+    }
+    get root() {
+        return util_hashObjectToUint8Array(this.rootHashObject);
+    }
+    get left() {
+        return this.valueToNode(this.value).left;
+    }
+    get right() {
+        return this.valueToNode(this.value).right;
+    }
+    isLeaf() {
+        return false;
+    }
+}
+//# sourceMappingURL=branchNodeStruct.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/containerNodeStruct.js
+
+
+
+/**
+ * Intented usage:
+ *
+ * - Get initial BeaconState from disk.
+ * - Before applying next block, switch to mutable
+ * - Get some field, create a view in mutable mode
+ * - Do modifications of the state in the state transition function
+ * - When done, commit and apply new root node once to og BeaconState
+ * - However, keep all the caches and transfer them to the new BeaconState
+ *
+ * Questions:
+ * - Can the child views created in mutable mode switch to not mutable? If so, it seems that it needs to recursively
+ *   iterate the entire data structure and views
+ *
+ */
+class view_containerNodeStruct_ContainerTreeView extends abstract_TreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super();
+        this.type = type;
+        this.tree = tree;
+    }
+    get node() {
+        return this.tree.rootNode;
+    }
+}
+function view_containerNodeStruct_getContainerTreeViewClass(type) {
+    class CustomContainerTreeView extends view_containerNodeStruct_ContainerTreeView {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (fieldType.isBasic) {
+            Object.defineProperty(CustomContainerTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    return this.tree.rootNode.value[fieldName];
+                },
+                set: function (value) {
+                    const node = this.tree.rootNode;
+                    const newNodeValue = this.type.clone(node.value);
+                    // TODO: Should this check for valid field name? Benchmark the cost
+                    newNodeValue[fieldName] = value;
+                    // biome-ignore lint/complexity/useLiteralKeys: The key `valueToNode` is private field
+                    this.tree.rootNode = new branchNodeStruct_BranchNodeStruct(node["valueToNode"], newNodeValue);
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView. The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeView of fieldName
+                get: function () {
+                    const { value } = this.tree.rootNode;
+                    return fieldType.toView(value[fieldName]);
+                },
+                // Expects TreeView of fieldName
+                set: function (view) {
+                    const node = this.tree.rootNode;
+                    const newNodeValue = this.type.clone(node.value);
+                    // TODO: Should this check for valid field name? Benchmark the cost
+                    newNodeValue[fieldName] = fieldType.toValueFromView(view);
+                    // biome-ignore lint/complexity/useLiteralKeys: The key `valueToNode` is private field
+                    this.tree.rootNode = new branchNodeStruct_BranchNodeStruct(node["valueToNode"], newNodeValue);
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomContainerTreeView, "name", { value: type.typeName, writable: false });
+    return CustomContainerTreeView;
+}
+//# sourceMappingURL=containerNodeStruct.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/containerNodeStruct.js
+
+
+class containerNodeStruct_ContainerNodeStructTreeViewDU extends abstract_TreeViewDU {
+    type;
+    valueChanged = null;
+    _rootNode;
+    constructor(type, node) {
+        super();
+        this.type = type;
+        this._rootNode = node;
+    }
+    get node() {
+        return this._rootNode;
+    }
+    get cache() {
+        // biome-ignore lint/suspicious/useGetterReturn: There is no cache to return
+        return;
+    }
+    get value() {
+        return this.valueChanged ?? this._rootNode.value;
+    }
+    /**
+     * There are 2 cases:
+     * - normal commit() or hashTreeRoot(): hcByLevel is null, no need to compute root
+     * - batchHashTreeRoot(): hcByLevel is not null, need to compute root because this does not support HashComputation
+     */
+    commit(_, hcByLevel = null) {
+        if (this.valueChanged !== null) {
+            const value = this.valueChanged;
+            this.valueChanged = null;
+            this._rootNode = this.type.value_toTree(value);
+        }
+        if (this._rootNode.h0 === null && hcByLevel !== null) {
+            // consumer is batchHashTreeRoot()
+            this._rootNode.rootHashObject;
+        }
+    }
+    clearCache() {
+        this.valueChanged = null;
+    }
+}
+function viewDU_containerNodeStruct_getContainerTreeViewDUClass(type) {
+    class CustomContainerTreeViewDU extends containerNodeStruct_ContainerNodeStructTreeViewDU {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (fieldType.isBasic) {
+            Object.defineProperty(CustomContainerTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    return (this.valueChanged || this._rootNode.value)[fieldName];
+                },
+                set: function (value) {
+                    if (this.valueChanged === null) {
+                        this.valueChanged = this.type.clone(this._rootNode.value);
+                    }
+                    this.valueChanged[fieldName] = value;
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView. The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeViewDU of fieldName
+                get: function () {
+                    const value = this.valueChanged || this._rootNode.value;
+                    return fieldType.toViewDU(value[fieldName]);
+                },
+                // Expects TreeViewDU of fieldName
+                set: function (view) {
+                    if (this.valueChanged === null) {
+                        this.valueChanged = this.type.clone(this._rootNode.value);
+                    }
+                    const value = fieldType.toValueFromViewDU(view);
+                    this.valueChanged[fieldName] = value;
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomContainerTreeViewDU, "name", { value: type.typeName, writable: false });
+    return CustomContainerTreeViewDU;
+}
+//# sourceMappingURL=containerNodeStruct.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/containerNodeStruct.js
+
+
+
+
+
+
+/**
+ * ContainerNodeStruct: ordered heterogeneous collection of values.
+ * - Notation: Custom name per instance
+ *
+ * A ContainerNodeStruct is identical to a Container type except that it represents tree data with a custom
+ * BranchNodeStruct node. This special branch node represents the data of its entire sub tree as a value, instead
+ * of a tree of nodes. This approach is a tradeoff:
+ *
+ * - More memory efficient
+ * - Faster reads, since it doesn't require parsing merkleized data
+ * - Slower hashing, since it has to merkleize the entire value everytime and has not intermediary hashing cache
+ *
+ * This tradeoff is good for data that is read often, written rarely, and consumes a lot of memory (i.e. Validator)
+ */
+class containerNodeStruct_ContainerNodeStructType extends container_ContainerType {
+    fields;
+    constructor(fields, opts) {
+        super(fields, {
+            // Overwrite default "Container" typeName
+            // Render detailed typeName. Consumers should overwrite since it can get long
+            typeName: opts?.typeName ?? container_renderContainerTypeName(fields, "ContainerNodeStruct"),
+            ...opts,
+            getContainerTreeViewClass: view_containerNodeStruct_getContainerTreeViewClass,
+            getContainerTreeViewDUClass: viewDU_containerNodeStruct_getContainerTreeViewDUClass,
+        });
+        this.fields = fields;
+        // ContainerNodeStructType TreeViews don't handle recursive mutable TreeViews like ContainerType does.
+        // Using ContainerNodeStructType for fields that have mutable views (like a ListBasic), will result in
+        // unnexpected behaviour if those child views are mutated.
+        //
+        // For example, this example below won't persist the pushed values to the list:
+        // ```ts
+        // const type = ContainerNodeStructType({a: new ListBasicType(byteType, 1)});
+        // const view = type.defaultViewDU();
+        // view.a.push(0)
+        // ```
+        // because the ListBasicViewDU in view.a will never propagate the changes upwards to its ContainerNodeStructType.
+        for (const { fieldName, fieldType } of this.fieldsEntries) {
+            if (type_composite_isCompositeType(fieldType) && fieldType.isViewMutable) {
+                throw Error(`ContainerNodeStructType field '${String(fieldName)}' ${fieldType.typeName} view is mutable`);
+            }
+        }
+    }
+    static named(fields, opts) {
+        return new (named_namedClass(container_ContainerType, opts.typeName))(fields, opts);
+    }
+    tree_serializedSize(node) {
+        return this.value_serializedSize(node.value);
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const { value } = node;
+        return this.value_serializeToBytes(output, offset, value);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        const value = this.value_deserializeFromBytes(data, start, end);
+        return new branchNodeStruct_BranchNodeStruct(this.valueToTree.bind(this), value);
+    }
+    // Proofs
+    // ContainerNodeStructType can only parse proofs that contain all the data.
+    // TODO: Support converting a partial tree to a partial value
+    getPropertyGindex() {
+        return null;
+    }
+    // Post process tree to convert regular BranchNode to BranchNodeStruct
+    // TODO: Optimize conversions
+    tree_fromProofNode(node) {
+        // TODO: Figure out from `node` alone if it contains complete data.
+        // Otherwise throw a nice error "ContainerNodeStruct type requires proofs for all its data"
+        const uint8Array = new Uint8Array(super.tree_serializedSize(node));
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        super.tree_serializeToBytes({ uint8Array, dataView }, 0, node);
+        const value = this.value_deserializeFromBytes({ uint8Array, dataView }, 0, uint8Array.length);
+        return {
+            node: new branchNodeStruct_BranchNodeStruct(this.valueToTree.bind(this), value),
+            done: true,
+        };
+    }
+    // Overwrites for fast conversion node <-> value
+    tree_toValue(node) {
+        return node.value;
+    }
+    value_toTree(value) {
+        return new branchNodeStruct_BranchNodeStruct(this.valueToTree.bind(this), value);
+    }
+    valueToTree(value) {
+        const uint8Array = new Uint8Array(this.value_serializedSize(value));
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        this.value_serializeToBytes({ uint8Array, dataView }, 0, value);
+        return super.tree_deserializeFromBytes({ uint8Array, dataView }, 0, uint8Array.length);
+    }
+}
+//# sourceMappingURL=containerNodeStruct.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/arrayBasic.js
+
+
+class arrayBasic_ArrayBasicTreeView extends abstract_TreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super();
+        this.type = type;
+        this.tree = tree;
+    }
+    /**
+     * Number of elements in the array. Equal to the Uint32 value of the Tree's length node
+     */
+    get length() {
+        return this.type.tree_getLength(this.tree.rootNode);
+    }
+    get node() {
+        return this.tree.rootNode;
+    }
+    /**
+     * Get element at `index`. Returns the Basic element type value directly
+     */
+    get(index) {
+        // First walk through the tree to get the root node for that index
+        const chunkIndex = Math.floor(index / this.type.itemsPerChunk);
+        const leafNode = this.tree.getNodeAtDepth(this.type.depth, chunkIndex);
+        return this.type.elementType.tree_getFromPackedNode(leafNode, index);
+    }
+    /**
+     * Set Basic element type `value` at `index`
+     */
+    set(index, value) {
+        const length = this.length;
+        if (index >= length) {
+            throw Error(`Error setting index over length ${index} > ${length}`);
+        }
+        const chunkIndex = Math.floor(index / this.type.itemsPerChunk);
+        const leafNodePrev = this.tree.getNodeAtDepth(this.type.depth, chunkIndex);
+        // Create a new node to preserve immutability
+        const leafNode = leafNodePrev.clone();
+        this.type.elementType.tree_setToPackedNode(leafNode, index, value);
+        // Commit immediately
+        this.tree.setNodeAtDepth(this.type.depth, chunkIndex, leafNode);
+    }
+    /**
+     * Get all values of this array as Basic element type values, from index zero to `this.length - 1`
+     * @param values optional output parameter, if is provided it must be an array of the same length as this array
+     */
+    getAll(values) {
+        if (values && values.length !== this.length) {
+            throw Error(`Expected ${this.length} values, got ${values.length}`);
+        }
+        const length = this.length;
+        const chunksNode = this.type.tree_getChunksNode(this.node);
+        const chunkCount = Math.ceil(length / this.type.itemsPerChunk);
+        const leafNodes = tree_getNodesAtDepth(chunksNode, this.type.chunkDepth, 0, chunkCount);
+        values = values ?? new Array(length);
+        const itemsPerChunk = this.type.itemsPerChunk; // Prevent many access in for loop below
+        const lenFullNodes = Math.floor(length / itemsPerChunk);
+        const remainder = length % itemsPerChunk;
+        for (let n = 0; n < lenFullNodes; n++) {
+            const leafNode = leafNodes[n];
+            // TODO: Implement add a fast bulk packed element reader in the elementType
+            // ```
+            // abstract getValuesFromPackedNode(leafNode: LeafNode, output: V[], indexOffset: number): void;
+            // ```
+            // if performance here is a problem
+            for (let i = 0; i < itemsPerChunk; i++) {
+                values[n * itemsPerChunk + i] = this.type.elementType.tree_getFromPackedNode(leafNode, i);
+            }
+        }
+        if (remainder > 0) {
+            const leafNode = leafNodes[lenFullNodes];
+            for (let i = 0; i < remainder; i++) {
+                values[lenFullNodes * itemsPerChunk + i] = this.type.elementType.tree_getFromPackedNode(leafNode, i);
+            }
+        }
+        return values;
+    }
+}
+//# sourceMappingURL=arrayBasic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/listBasic.js
+
+
+class listBasic_ListBasicTreeView extends arrayBasic_ArrayBasicTreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super(type, tree);
+        this.type = type;
+        this.tree = tree;
+    }
+    /**
+     * Adds one value element at the end of the array and adds 1 to the current Tree length.
+     */
+    push(value) {
+        const length = this.length;
+        if (length >= this.type.limit) {
+            throw Error("Error pushing over limit");
+        }
+        this.type.tree_setLength(this.tree, length + 1);
+        // If in new node..
+        if (length % this.type.itemsPerChunk === 0) {
+            // TODO: Optimize: This `inNewNode` could be ommitted but it would cause a full navigation in .set()
+            // Benchmark the cost of that navigation vs the extra math here
+            // TODO: Optimize: prevent double initialization
+            const leafNode = node_LeafNode.fromZero();
+            this.type.elementType.tree_setToPackedNode(leafNode, length, value);
+            // Commit immediately
+            const chunkIndex = Math.floor(length / this.type.itemsPerChunk);
+            this.tree.setNodeAtDepth(this.type.depth, chunkIndex, leafNode);
+        }
+        else {
+            // Re-use .set() since no new node is added
+            this.set(length, value);
+        }
+    }
+}
+//# sourceMappingURL=listBasic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/arrayBasic.js
+
+
+class arrayBasic_ArrayBasicTreeViewDU extends abstract_TreeViewDU {
+    type;
+    _rootNode;
+    nodes;
+    nodesChanged = new Set();
+    _length;
+    dirtyLength = false;
+    nodesPopulated;
+    constructor(type, _rootNode, cache) {
+        super();
+        this.type = type;
+        this._rootNode = _rootNode;
+        if (cache) {
+            this.nodes = cache.nodes;
+            this._length = cache.length;
+            this.nodesPopulated = cache.nodesPopulated;
+        }
+        else {
+            this.nodes = [];
+            this._length = this.type.tree_getLength(_rootNode);
+            this.nodesPopulated = false;
+        }
+    }
+    /**
+     * Number of elements in the array. Equal to un-commited length of the array
+     */
+    get length() {
+        return this._length;
+    }
+    get node() {
+        return this._rootNode;
+    }
+    get cache() {
+        return {
+            nodes: this.nodes,
+            length: this._length,
+            nodesPopulated: this.nodesPopulated,
+        };
+    }
+    /**
+     * Get element at `index`. Returns the Basic element type value directly
+     */
+    get(index) {
+        // First walk through the tree to get the root node for that index
+        const chunkIndex = Math.floor(index / this.type.itemsPerChunk);
+        let node = this.nodes[chunkIndex];
+        if (node === undefined) {
+            node = tree_getNodeAtDepth(this._rootNode, this.type.depth, chunkIndex);
+            this.nodes[chunkIndex] = node;
+        }
+        return this.type.elementType.tree_getFromPackedNode(node, index);
+    }
+    /**
+     * Set Basic element type `value` at `index`
+     */
+    set(index, value) {
+        if (index >= this._length) {
+            throw Error(`Error setting index over length ${index} > ${this._length}`);
+        }
+        const chunkIndex = Math.floor(index / this.type.itemsPerChunk);
+        // Create new node if current leafNode is not dirty
+        let nodeChanged;
+        if (this.nodesChanged.has(chunkIndex)) {
+            // TODO: This assumes that node has already been populated
+            nodeChanged = this.nodes[chunkIndex];
+        }
+        else {
+            const nodePrev = (this.nodes[chunkIndex] ??
+                tree_getNodeAtDepth(this._rootNode, this.type.depth, chunkIndex));
+            nodeChanged = nodePrev.clone();
+            // Store the changed node in the nodes cache
+            this.nodes[chunkIndex] = nodeChanged;
+            this.nodesChanged.add(chunkIndex);
+        }
+        this.type.elementType.tree_setToPackedNode(nodeChanged, index, value);
+    }
+    /**
+     * Get all values of this array as Basic element type values, from index zero to `this.length - 1`
+     * @param values optional output parameter, if is provided it must be an array of the same length as this array
+     */
+    getAll(values) {
+        if (values && values.length !== this._length) {
+            throw Error(`Expected ${this._length} values, got ${values.length}`);
+        }
+        if (!this.nodesPopulated) {
+            const nodesPrev = this.nodes;
+            const chunksNode = this.type.tree_getChunksNode(this.node);
+            const chunkCount = Math.ceil(this._length / this.type.itemsPerChunk);
+            this.nodes = tree_getNodesAtDepth(chunksNode, this.type.chunkDepth, 0, chunkCount);
+            // Re-apply changed nodes
+            for (const index of this.nodesChanged) {
+                this.nodes[index] = nodesPrev[index];
+            }
+            this.nodesPopulated = true;
+        }
+        values = values ?? new Array(this._length);
+        const itemsPerChunk = this.type.itemsPerChunk; // Prevent many access in for loop below
+        const lenFullNodes = Math.floor(this._length / itemsPerChunk);
+        const remainder = this._length % itemsPerChunk;
+        // TODO Optimize: caching the variables used in the loop above it
+        for (let n = 0; n < lenFullNodes; n++) {
+            const leafNode = this.nodes[n];
+            // TODO: Implement add a fast bulk packed element reader in the elementType
+            // ```
+            // abstract getValuesFromPackedNode(leafNode: LeafNode, output: V[], indexOffset: number): void;
+            // ```
+            // if performance here is a problem
+            for (let i = 0; i < itemsPerChunk; i++) {
+                values[n * itemsPerChunk + i] = this.type.elementType.tree_getFromPackedNode(leafNode, i);
+            }
+        }
+        if (remainder > 0) {
+            const leafNode = this.nodes[lenFullNodes];
+            for (let i = 0; i < remainder; i++) {
+                values[lenFullNodes * itemsPerChunk + i] = this.type.elementType.tree_getFromPackedNode(leafNode, i);
+            }
+        }
+        return values;
+    }
+    /**
+     * When we need to compute HashComputations (hcByLevel != null):
+     *   - if old _rootNode is hashed, then only need to put pending changes to hcByLevel
+     *   - if old _rootNode is not hashed, need to traverse and put to hcByLevel
+     */
+    commit(hcOffset = 0, hcByLevel = null) {
+        const isOldRootHashed = this._rootNode.h0 !== null;
+        if (this.nodesChanged.size === 0) {
+            if (!isOldRootHashed && hcByLevel !== null) {
+                hashComputation_getHashComputations(this._rootNode, hcOffset, hcByLevel);
+            }
+            return;
+        }
+        // Numerical sort ascending
+        const indexes = Array.from(this.nodesChanged.keys()).sort((a, b) => a - b);
+        const nodes = new Array(indexes.length);
+        for (let i = 0; i < indexes.length; i++) {
+            nodes[i] = this.nodes[indexes[i]];
+        }
+        const chunksNode = this.type.tree_getChunksNode(this._rootNode);
+        const offsetThis = hcOffset + this.type.tree_chunksNodeOffset();
+        const byLevelThis = hcByLevel != null && isOldRootHashed ? hcByLevel : null;
+        const newChunksNode = tree_setNodesAtDepth(chunksNode, this.type.chunkDepth, indexes, nodes, offsetThis, byLevelThis);
+        this._rootNode = this.type.tree_setChunksNode(this._rootNode, newChunksNode, this.dirtyLength ? this._length : null, hcOffset, isOldRootHashed ? hcByLevel : null);
+        if (!isOldRootHashed && hcByLevel !== null) {
+            hashComputation_getHashComputations(this._rootNode, hcOffset, hcByLevel);
+        }
+        this.nodesChanged.clear();
+        this.dirtyLength = false;
+    }
+    clearCache() {
+        this.nodes = [];
+        this.nodesPopulated = false;
+        // Must clear nodesChanged, otherwise a subsequent commit call will break, because it assumes a node is there
+        this.nodesChanged.clear();
+        // Reset cached length only if it has been mutated
+        if (this.dirtyLength) {
+            this._length = this.type.tree_getLength(this._rootNode);
+            this.dirtyLength = false;
+        }
+    }
+}
+//# sourceMappingURL=arrayBasic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/listBasic.js
+
+
+
+class listBasic_ListBasicTreeViewDU extends arrayBasic_ArrayBasicTreeViewDU {
+    type;
+    _rootNode;
+    constructor(type, _rootNode, cache) {
+        super(type, _rootNode, cache);
+        this.type = type;
+        this._rootNode = _rootNode;
+    }
+    /**
+     * Adds one value element at the end of the array and adds 1 to the un-commited ViewDU length
+     */
+    push(value) {
+        if (this._length >= this.type.limit) {
+            throw Error("Error pushing over limit");
+        }
+        // Mutate length before .set()
+        this.dirtyLength = true;
+        const index = this._length++;
+        // If in new node..
+        if (index % this.type.itemsPerChunk === 0) {
+            // Set a zero node to the nodes array to avoid a navigation downwards in .set()
+            const chunkIndex = Math.floor(index / this.type.itemsPerChunk);
+            this.nodes[chunkIndex] = lib_zeroNode_zeroNode(0);
+        }
+        this.set(index, value);
+    }
+    /**
+     * Returns a new ListBasicTreeViewDU instance with the values from 0 to `index`.
+     * To achieve it, rebinds the underlying tree zero-ing all nodes right of `chunkIindex`.
+     * Also set all value right of `index` in the same chunk to 0.
+     */
+    sliceTo(index) {
+        if (index < 0) {
+            throw new Error(`Does not support sliceTo() with negative index ${index}`);
+        }
+        // Commit before getting rootNode to ensure all pending data is in the rootNode
+        this.commit();
+        // All nodes beyond length are already zero
+        if (index >= this._length - 1) {
+            return this;
+        }
+        const rootNode = this._rootNode;
+        const chunkIndex = Math.floor(index / this.type.itemsPerChunk);
+        const nodePrev = (this.nodes[chunkIndex] ?? tree_getNodeAtDepth(rootNode, this.type.depth, chunkIndex));
+        // we can't set remaining items in the same chunk to 0 with tree_setToPackedNode api due to setBitwiseOR in UintNumberType
+        // instead, we set the same value in nodePrev up until index
+        const nodeChanged = node_LeafNode.fromZero();
+        for (let i = chunkIndex * this.type.itemsPerChunk; i <= index; i++) {
+            const prevValue = this.type.elementType.tree_getFromPackedNode(nodePrev, i);
+            this.type.elementType.tree_setToPackedNode(nodeChanged, i, prevValue);
+        }
+        const chunksNode = this.type.tree_getChunksNode(this._rootNode);
+        let newChunksNode = tree_setNodesAtDepth(chunksNode, this.type.chunkDepth, [chunkIndex], [nodeChanged]);
+        // also do the treeZeroAfterIndex operation on the chunks tree
+        newChunksNode = tree_treeZeroAfterIndex(newChunksNode, this.type.chunkDepth, chunkIndex);
+        // Must set new length and commit to tree to restore the same tree at that index
+        const newLength = index + 1;
+        const newRootNode = this.type.tree_setChunksNode(rootNode, newChunksNode, newLength);
+        return this.type.getViewDU(newRootNode);
+    }
+    /**
+     * Same method to `type/listBasic.ts` leveraging cached nodes.
+     */
+    serializeToBytes(output, offset) {
+        this.commit();
+        const { nodes, nodesPopulated } = this.cache;
+        const chunksNode = this.type.tree_getChunksNode(this._rootNode);
+        return arrayBasic_tree_serializeToBytesArrayBasic(this.type.elementType, this._length, this.type.chunkDepth, output, offset, chunksNode, nodesPopulated ? nodes : null);
+    }
+}
+//# sourceMappingURL=listBasic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/array.js
+
+
+
+/**
+ * Array: ordered homogeneous collection
+ */
+class array_ArrayType extends composite_CompositeType {
+    elementType;
+    constructor(elementType, cachePermanentRootStruct) {
+        super(cachePermanentRootStruct);
+        this.elementType = elementType;
+    }
+    defaultValue() {
+        return arrayBasic_value_defaultValueArray(this.elementType, this.defaultLen);
+    }
+    // Proofs
+    getPropertyType() {
+        return this.elementType;
+    }
+    getPropertyGindex(prop) {
+        if (typeof prop !== "number") {
+            throw Error(`Invalid array index: ${prop}`);
+        }
+        const chunkIdx = Math.floor(prop / this.itemsPerChunk);
+        return gindex_toGindex(this.depth, BigInt(chunkIdx));
+    }
+    getIndexProperty(index) {
+        return index;
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        let length;
+        if (this.isList) {
+            if (!rootNode) {
+                throw new Error("List type requires tree argument to get leaves");
+            }
+            length = this.tree_getLength(rootNode);
+        }
+        else {
+            // Vectors don't need a rootNode to return length
+            length = this.tree_getLength(null);
+        }
+        const gindices = [];
+        if (type_composite_isCompositeType(this.elementType)) {
+            // Underlying elements exist one per chunk
+            // Iterate through chunk gindices, recursively fetching leaf gindices from each chunk
+            const startIndex = gindex_toGindex(this.depth, BigInt(0));
+            const endGindex = startIndex + BigInt(length);
+            const extendedStartIndex = gindex_concatGindices([rootGindex, startIndex]);
+            if (this.elementType.fixedSize === null) {
+                if (!rootNode) {
+                    /* istanbul ignore next - unreachable code */
+                    throw new Error("Array of variable size requires tree argument to get leaves");
+                }
+                // variable-length elements must pass the underlying subtrees to determine the length
+                for (let gindex = startIndex, extendedGindex = extendedStartIndex; gindex < endGindex; gindex++, extendedGindex++) {
+                    gindices.push(...this.elementType.tree_getLeafGindices(extendedGindex, tree_getNode(rootNode, gindex)));
+                }
+            }
+            else {
+                for (let i = 0, extendedGindex = extendedStartIndex; i < length; i++, extendedGindex++) {
+                    gindices.push(...this.elementType.tree_getLeafGindices(extendedGindex));
+                }
+            }
+        }
+        // Basic
+        else {
+            const chunkCount = Math.ceil(length / this.itemsPerChunk);
+            const startIndex = gindex_concatGindices([rootGindex, gindex_toGindex(this.depth, BigInt(0))]);
+            const endGindex = startIndex + BigInt(chunkCount);
+            for (let gindex = startIndex; gindex < endGindex; gindex++) {
+                gindices.push(gindex);
+            }
+        }
+        // include the length chunk
+        if (this.isList) {
+            gindices.push(gindex_concatGindices([rootGindex, composite_LENGTH_GINDEX]));
+        }
+        return gindices;
+    }
+    // JSON
+    fromJson(json) {
+        // TODO: Do a better typesafe approach, all final classes of ArrayType implement ArrayProps
+        // There are multiple tests that cover this path for all clases
+        return arrayBasic_value_fromJsonArray(this.elementType, json, this);
+    }
+    toJson(value) {
+        return arrayBasic_value_toJsonArray(this.elementType, value, this);
+    }
+    clone(value) {
+        return arrayBasic_value_cloneArray(this.elementType, value);
+    }
+    equals(a, b) {
+        return arrayBasic_value_equals(this.elementType, a, b);
+    }
+}
+//# sourceMappingURL=array.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/listBasic.js
+/* provided dependency */ var type_listBasic_Buffer = __webpack_require__(8287)["hp"];
+
+
+
+
+
+
+
+
+/**
+ * List: ordered variable-length homogeneous collection, limited to N values
+ *
+ * Array of Basic type:
+ * - Basic types are max 32 bytes long so multiple values may be packed in the same node.
+ * - Basic types are never returned in a view wrapper, but their value representation
+ */
+class listBasic_ListBasicType extends array_ArrayType {
+    elementType;
+    limit;
+    typeName;
+    itemsPerChunk;
+    depth;
+    chunkDepth;
+    maxChunkCount;
+    fixedSize = null;
+    minSize;
+    maxSize;
+    isList = true;
+    isViewMutable = true;
+    mixInLengthBlockBytes = new Uint8Array(64);
+    mixInLengthBuffer = type_listBasic_Buffer.from(this.mixInLengthBlockBytes.buffer, this.mixInLengthBlockBytes.byteOffset, this.mixInLengthBlockBytes.byteLength);
+    defaultLen = 0;
+    constructor(elementType, limit, opts) {
+        super(elementType, opts?.cachePermanentRootStruct);
+        this.elementType = elementType;
+        this.limit = limit;
+        if (!elementType.isBasic)
+            throw Error("elementType must be basic");
+        if (limit === 0)
+            throw Error("List limit must be > 0");
+        this.typeName = opts?.typeName ?? `List[${elementType.typeName}, ${limit}]`;
+        // TODO Check that itemsPerChunk is an integer
+        this.itemsPerChunk = 32 / elementType.byteLength;
+        this.maxChunkCount = Math.ceil((this.limit * elementType.byteLength) / 32);
+        this.chunkDepth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        // Depth includes the extra level for the length node
+        this.depth = this.chunkDepth + 1;
+        this.minSize = 0;
+        this.maxSize = this.limit * elementType.maxSize;
+    }
+    static named(elementType, limit, opts) {
+        return new (named_namedClass(listBasic_ListBasicType, opts.typeName))(elementType, limit, opts);
+    }
+    getView(tree) {
+        return new listBasic_ListBasicTreeView(this, tree);
+    }
+    getViewDU(node, cache) {
+        // cache type should be validated (if applicate) in the view
+        // biome-ignore lint/suspicious/noExplicitAny: We need to use `any` here explicitly
+        return new listBasic_ListBasicTreeViewDU(this, node, cache);
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        view.commit(hcOffset, hcByLevel);
+        return view.node;
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    // Serialization + deserialization
+    value_serializedSize(value) {
+        return value.length * this.elementType.byteLength;
+    }
+    value_serializeToBytes(output, offset, value) {
+        return arrayBasic_value_serializeToBytesArrayBasic(this.elementType, value.length, output, offset, value);
+    }
+    value_deserializeFromBytes(data, start, end) {
+        return arrayBasic_value_deserializeFromBytesArrayBasic(this.elementType, data, start, end, this);
+    }
+    tree_serializedSize(node) {
+        return this.tree_getLength(node) * this.elementType.byteLength;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const chunksNode = this.tree_getChunksNode(node);
+        const length = this.tree_getLength(node);
+        return arrayBasic_tree_serializeToBytesArrayBasic(this.elementType, length, this.chunkDepth, output, offset, chunksNode);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        return arrayBasic_tree_deserializeFromBytesArrayBasic(this.elementType, this.chunkDepth, data, start, end, this);
+    }
+    // Helpers for TreeView
+    tree_getLength(node) {
+        return node.right.getUint(4, 0);
+    }
+    tree_setLength(tree, length) {
+        tree.rootNode = arrayBasic_addLengthNode(tree.rootNode.left, length);
+    }
+    tree_getChunksNode(node) {
+        return node.left;
+    }
+    tree_chunksNodeOffset() {
+        // one more level for length, see setChunksNode below
+        return 1;
+    }
+    tree_setChunksNode(rootNode, chunksNode, newLength, hcOffset = 0, hcByLevel = null) {
+        return arrayBasic_setChunksNode(rootNode, chunksNode, newLength, hcOffset, hcByLevel);
+    }
+    // Merkleization
+    hashTreeRoot(value) {
+        // Return cached mutable root if any
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                return cachedRoot;
+            }
+        }
+        const root = alloc_allocUnsafe(32);
+        const safeCache = true;
+        this.hashTreeRootInto(value, root, 0, safeCache);
+        // hashTreeRootInto will cache the root if cachePermanentRootStruct is true
+        return root;
+    }
+    hashTreeRootInto(value, output, offset, safeCache = false) {
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                output.set(cachedRoot, offset);
+                return;
+            }
+        }
+        super.hashTreeRootInto(value, this.mixInLengthBlockBytes, 0);
+        // mixInLength
+        this.mixInLengthBuffer.writeUIntLE(value.length, 32, 6);
+        // one for hashTreeRoot(value), one for length
+        const chunkCount = 2;
+        hasher_merkleizeBlocksBytes(this.mixInLengthBlockBytes, chunkCount, output, offset);
+        if (this.cachePermanentRootStruct) {
+            merkleize_cacheRoot(value, output, offset, safeCache);
+        }
+    }
+    getBlocksBytes(value) {
+        const byteLen = this.value_serializedSize(value);
+        const blockByteLen = Math.ceil(byteLen / 64) * 64;
+        // reallocate this.blocksBuffer if needed
+        if (byteLen > this.blocksBuffer.length) {
+            // pad 1 chunk if maxChunkCount is not even
+            this.blocksBuffer = new Uint8Array(blockByteLen);
+        }
+        const blockBytes = this.blocksBuffer.subarray(0, blockByteLen);
+        const uint8Array = blockBytes.subarray(0, byteLen);
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        arrayBasic_value_serializeToBytesArrayBasic(this.elementType, value.length, { uint8Array, dataView }, 0, value);
+        // all padding bytes must be zero, this is similar to set zeroHash(0)
+        this.blocksBuffer.subarray(byteLen, blockByteLen).fill(0);
+        return blockBytes;
+    }
+}
+//# sourceMappingURL=listBasic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/arrayComposite.js
+
+
+class arrayComposite_ArrayCompositeTreeView extends abstract_TreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super();
+        this.type = type;
+        this.tree = tree;
+    }
+    /**
+     * Number of elements in the array. Equal to the Uint32 value of the Tree's length node
+     */
+    get length() {
+        return this.type.tree_getLength(this.tree.rootNode);
+    }
+    /**
+     * Returns the View's Tree rootNode
+     */
+    get node() {
+        return this.tree.rootNode;
+    }
+    /**
+     * Get element at `index`. Returns a view of the Composite element type
+     */
+    get(index) {
+        // TODO: Optimize without bitstring
+        const gindex = gindex_toGindexBitstring(this.type.depth, index);
+        const subtree = this.tree.getSubtree(gindex);
+        return this.type.elementType.getView(subtree);
+    }
+    /**
+     * Get element at `index`. Returns a view of the Composite element type.
+     * DOES NOT PROPAGATE CHANGES: use only for reads and to skip parent references.
+     */
+    getReadonly(index) {
+        // TODO: Optimize without bitstring
+        const gindex = gindex_toGindexBitstring(this.type.depth, index);
+        // tree.getSubtree but without the hook
+        const subtree = new tree_Tree(this.tree.getNode(gindex));
+        return this.type.elementType.getView(subtree);
+    }
+    /**
+     * Set Composite element type `view` at `index`
+     */
+    set(index, view) {
+        const length = this.length;
+        if (index >= length) {
+            throw Error(`Error setting index over length ${index} > ${length}`);
+        }
+        const node = this.type.elementType.commitView(view);
+        this.tree.setNodeAtDepth(this.type.depth, index, node);
+    }
+    /**
+     * Returns an array of views of all elements in the array, from index zero to `this.length - 1`.
+     * The returned views don't have a parent hook to this View's Tree, so changes in the returned views won't be
+     * propagated upwards. To get linked element Views use `this.get()`
+     * @param views optional output parameter, if is provided it must be an array of the same length as this array
+     */
+    getAllReadonly(views) {
+        if (views && views.length !== this.length) {
+            throw Error(`Expected ${this.length} views, got ${views.length}`);
+        }
+        const length = this.length;
+        const chunksNode = this.type.tree_getChunksNode(this.node);
+        const nodes = tree_getNodesAtDepth(chunksNode, this.type.chunkDepth, 0, length);
+        views = views ?? new Array(length);
+        for (let i = 0; i < length; i++) {
+            // TODO: Optimize
+            views[i] = this.type.elementType.getView(new tree_Tree(nodes[i]));
+        }
+        return views;
+    }
+    /**
+     * Returns an array of values of all elements in the array, from index zero to `this.length - 1`.
+     * The returned values are not Views so any changes won't be propagated upwards.
+     * To get linked element Views use `this.get()`
+     * @param values optional output parameter, if is provided it must be an array of the same length as this array
+     */
+    getAllReadonlyValues(values) {
+        if (values && values.length !== this.length) {
+            throw Error(`Expected ${this.length} values, got ${values.length}`);
+        }
+        const length = this.length;
+        const chunksNode = this.type.tree_getChunksNode(this.node);
+        const nodes = tree_getNodesAtDepth(chunksNode, this.type.chunkDepth, 0, length);
+        values = values ?? new Array(length);
+        for (let i = 0; i < length; i++) {
+            values[i] = this.type.elementType.tree_toValue(nodes[i]);
+        }
+        return values;
+    }
+}
+//# sourceMappingURL=arrayComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/listComposite.js
+
+class listComposite_ListCompositeTreeView extends arrayComposite_ArrayCompositeTreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super(type, tree);
+        this.type = type;
+        this.tree = tree;
+    }
+    /**
+     * Adds one view element at the end of the array and adds 1 to the current Tree length.
+     */
+    push(view) {
+        const length = this.length;
+        if (length >= this.type.limit) {
+            throw Error("Error pushing over limit");
+        }
+        this.type.tree_setLength(this.tree, length + 1);
+        // No need for pre-initialization like in ListBasic.push since ArrayCompositeTreeView.set() doesn't do a get node
+        this.set(length, view);
+    }
+}
+//# sourceMappingURL=listComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/arrayComposite.js
+
+
+function arrayComposite_minSizeArrayComposite(elementType, minCount) {
+    // Variable Length
+    if (elementType.fixedSize === null) {
+        return minCount * (4 + elementType.minSize);
+    }
+    // Fixed length
+    return minCount * elementType.minSize;
+}
+function arrayComposite_maxSizeArrayComposite(elementType, maxCount) {
+    // Variable Length
+    if (elementType.fixedSize === null) {
+        return maxCount * (4 + elementType.maxSize);
+    }
+    // Fixed length
+    return maxCount * elementType.maxSize;
+}
+function arrayComposite_value_serializedSizeArrayComposite(elementType, length, value) {
+    // Variable Length
+    if (elementType.fixedSize === null) {
+        let size = 0;
+        for (let i = 0; i < length; i++) {
+            size += 4 + elementType.value_serializedSize(value[i]);
+        }
+        return size;
+    }
+    // Fixed length
+    return length * elementType.fixedSize;
+}
+/**
+ * @param length In List length = value.length, Vector length = fixed value
+ */
+function arrayComposite_value_serializeToBytesArrayComposite(elementType, length, output, offset, value) {
+    // Variable length
+    if (elementType.fixedSize === null) {
+        let variableIndex = offset + length * 4;
+        for (let i = 0; i < length; i++) {
+            // write offset
+            output.dataView.setUint32(offset + i * 4, variableIndex - offset, true);
+            // write serialized element to variable section
+            variableIndex = elementType.value_serializeToBytes(output, variableIndex, value[i]);
+        }
+        return variableIndex;
+    }
+    // Fixed length
+    for (let i = 0; i < length; i++) {
+        elementType.value_serializeToBytes(output, offset + i * elementType.fixedSize, value[i]);
+    }
+    return offset + length * elementType.fixedSize;
+}
+function arrayComposite_value_deserializeFromBytesArrayComposite(elementType, data, start, end, arrayProps) {
+    const offsets = arrayComposite_readOffsetsArrayComposite(elementType.fixedSize, data.dataView, start, end, arrayProps);
+    const length = offsets.length; // Capture length before pushing end offset
+    const values = new Array(length);
+    // offests include the last element end
+    for (let i = 0; i < length; i++) {
+        // The offsets are relative to the start
+        const startEl = start + offsets[i];
+        const endEl = i === length - 1 ? end : start + offsets[i + 1];
+        values[i] = elementType.value_deserializeFromBytes(data, startEl, endEl);
+    }
+    return values;
+}
+/**
+ * @param length In List length = value.length, Vector length = fixed value
+ */
+function arrayComposite_tree_serializedSizeArrayComposite(elementType, length, depth, node) {
+    // Variable Length
+    if (elementType.fixedSize === null) {
+        const nodes = tree_getNodesAtDepth(node, depth, 0, length);
+        let size = 0;
+        for (let i = 0; i < nodes.length; i++) {
+            size += 4 + elementType.tree_serializedSize(nodes[i]);
+        }
+        return size;
+    }
+    // Fixed length
+    return length * elementType.fixedSize;
+}
+/**
+ * @param length In List length = value.length, Vector length = fixed value
+ */
+function arrayComposite_tree_serializeToBytesArrayComposite(elementType, length, depth, node, output, offset, cachedNodes = null) {
+    const nodes = cachedNodes ?? tree_getNodesAtDepth(node, depth, 0, length);
+    // Variable Length
+    // Indices contain offsets, which are indices deeper in the byte array
+    if (elementType.fixedSize === null) {
+        let variableIndex = offset + length * 4;
+        const { dataView } = output;
+        for (let i = 0; i < nodes.length; i++) {
+            // write offset
+            dataView.setUint32(offset + i * 4, variableIndex - offset, true);
+            // write serialized element to variable section
+            variableIndex = elementType.tree_serializeToBytes(output, variableIndex, nodes[i]);
+        }
+        return variableIndex;
+    }
+    // Fixed length
+    for (let i = 0; i < nodes.length; i++) {
+        offset = elementType.tree_serializeToBytes(output, offset, nodes[i]);
+    }
+    return offset;
+}
+function arrayComposite_tree_deserializeFromBytesArrayComposite(elementType, chunkDepth, data, start, end, arrayProps) {
+    const offsets = arrayComposite_readOffsetsArrayComposite(elementType.fixedSize, data.dataView, start, end, arrayProps);
+    const length = offsets.length; // Capture length before pushing end offset
+    const nodes = new Array(length);
+    // offests include the last element end
+    for (let i = 0; i < length; i++) {
+        // The offsets are relative to the start
+        const startEl = start + offsets[i];
+        const endEl = i === length - 1 ? end : start + offsets[i + 1];
+        nodes[i] = elementType.tree_deserializeFromBytes(data, startEl, endEl);
+    }
+    // Abstract converting data to LeafNode to allow for custom data representation, such as the hashObject
+    const chunksNode = subtree_subtreeFillToContents(nodes, chunkDepth);
+    // TODO: Add LeafNode.fromUint()
+    if (arrayProps.isList) {
+        return arrayBasic_addLengthNode(chunksNode, length);
+    }
+    return chunksNode;
+}
+function arrayComposite_value_getBlocksBytesArrayComposite(elementType, length, value, blocksBuffer) {
+    const blockBytesLen = Math.ceil(length / 2) * 64;
+    if (blockBytesLen > blocksBuffer.length) {
+        throw new Error(`blocksBuffer is too small: ${blocksBuffer.length} < ${blockBytesLen}`);
+    }
+    const blocksBytes = blocksBuffer.subarray(0, blockBytesLen);
+    for (let i = 0; i < length; i++) {
+        elementType.hashTreeRootInto(value[i], blocksBytes, i * 32);
+    }
+    const isOddChunk = length % 2 === 1;
+    if (isOddChunk) {
+        // similar to append zeroHash(0)
+        blocksBytes.subarray(length * 32, blockBytesLen).fill(0);
+    }
+    return blocksBytes;
+}
+function arrayComposite_readOffsetsArrayComposite(elementFixedSize, data, start, end, arrayProps) {
+    const size = end - start;
+    let offsets;
+    // Variable Length
+    // Indices contain offsets, which are indices deeper in the byte array
+    if (elementFixedSize === null) {
+        offsets = arrayComposite_readVariableOffsetsArrayComposite(data, start, size);
+    }
+    // Fixed length
+    else {
+        // There's no valid CompositeType with fixed size 0, it's un-rechable code. But prevents diving by zero
+        /* istanbul ignore if */
+        if (elementFixedSize === 0) {
+            throw Error("element fixed length is 0");
+        }
+        if (size % elementFixedSize !== 0) {
+            throw Error(`size ${size} is not multiple of element fixedSize ${elementFixedSize}`);
+        }
+        const length = size / elementFixedSize;
+        offsets = new Uint32Array(length);
+        for (let i = 0; i < length; i++) {
+            offsets[i] = i * elementFixedSize;
+        }
+    }
+    // Vector + List length validation
+    arrayBasic_assertValidArrayLength(offsets.length, arrayProps);
+    return offsets;
+}
+/**
+ * Reads the values of contiguous variable offsets. Provided buffer includes offsets that point to position
+ * within `size`. This function also validates that all offsets are in range.
+ */
+function arrayComposite_readVariableOffsetsArrayComposite(dataView, start, size) {
+    if (size === 0) {
+        return new Uint32Array(0);
+    }
+    // all elements are variable-sized
+    // indices contain offsets, which are indices deeper in the byte array
+    // The serialized data will start with offsets of all the serialized objects (BYTES_PER_LENGTH_OFFSET bytes each)
+    const firstOffset = dataView.getUint32(start, true);
+    // Using the first offset, we can compute the length of the list (divide by BYTES_PER_LENGTH_OFFSET), as it gives
+    // us the total number of bytes in the offset data
+    const offsetDataLength = firstOffset;
+    if (firstOffset === 0) {
+        throw Error("First offset must be > 0");
+    }
+    if (offsetDataLength % 4 !== 0) {
+        throw Error("Offset data length not multiple of 4");
+    }
+    const offsetCount = offsetDataLength / 4;
+    const offsets = new Uint32Array(offsetCount);
+    offsets[0] = firstOffset;
+    // ArrayComposite has a contiguous section of offsets, then the data
+    //
+    //    [offset 1] [offset 2] [data 1 ..........] [data 2 ..]
+    // 0x 08000000   0e000000   010002000300        01000200
+    //
+    // Ensure that:
+    // - Offsets point to regions of > 0 bytes, i.e. are increasing
+    // - Offsets don't point to bytes outside of the array's size
+    //
+    // In the example above the first offset is 8, so 8 / 4 = 2 offsets.
+    // Then, read the rest of offsets to get offsets = [8, 14]
+    for (let offsetIdx = 1; offsetIdx < offsetCount; offsetIdx++) {
+        const offset = dataView.getUint32(start + offsetIdx * 4, true);
+        offsets[offsetIdx] = offset;
+        // Offsets must point to data within the Array bytes section
+        if (offset > size) {
+            throw new Error(`Offset out of bounds ${offset} > ${size}`);
+        }
+        if (offset < offsets[offsetIdx - 1]) {
+            throw new Error(`Offsets must be increasing ${offset} < ${offsets[offsetIdx - 1]}`);
+        }
+    }
+    return offsets;
+}
+//# sourceMappingURL=arrayComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/util/snapshot.js
+
+
+/**
+ * Create a zero snapshot with the given chunksDepth.
+ */
+function snapshot_zeroSnapshot(chunkDepth) {
+    return {
+        finalized: [],
+        count: 0,
+        root: merkleize_hash64(lib_zeroHash_zeroHash(chunkDepth), lib_zeroHash_zeroHash(0)),
+    };
+}
+//# sourceMappingURL=snapshot.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/arrayComposite.js
+
+
+class arrayComposite_ArrayCompositeTreeViewDU extends abstract_TreeViewDU {
+    type;
+    _rootNode;
+    nodes;
+    caches;
+    viewsChanged = new Map();
+    _length;
+    // TODO: Consider these properties are not accessible in the cache object persisted in the parent's cache.
+    // nodes, caches, _length, and nodesPopulated are mutated. Consider having them in a _cache object such that
+    // mutations affect the cache already found in the parent object
+    dirtyLength = false;
+    nodesPopulated;
+    constructor(type, _rootNode, cache) {
+        super();
+        this.type = type;
+        this._rootNode = _rootNode;
+        if (cache) {
+            this.nodes = cache.nodes;
+            this.caches = cache.caches;
+            this._length = cache.length;
+            this.nodesPopulated = cache.nodesPopulated;
+        }
+        else {
+            this.nodes = [];
+            this.caches = [];
+            this._length = this.type.tree_getLength(_rootNode);
+            // If there are exactly 0 nodes, nodesPopulated = true because 0 / 0 are in the nodes array
+            this.nodesPopulated = this._length === 0;
+        }
+    }
+    /**
+     * Number of elements in the array. Equal to un-commited length of the array
+     */
+    get length() {
+        return this._length;
+    }
+    get node() {
+        return this._rootNode;
+    }
+    get cache() {
+        return {
+            nodes: this.nodes,
+            caches: this.caches,
+            length: this._length,
+            nodesPopulated: this.nodesPopulated,
+        };
+    }
+    /**
+     * Get element at `index`. Returns a view of the Composite element type.
+     *
+     * NOTE: Assumes that any view created here will change and will call .commit() on it.
+     * .get() should be used only for cases when something may mutate. To get all items without
+     * triggering a .commit() in all them use .getAllReadOnly().
+     */
+    get(index) {
+        const viewChanged = this.viewsChanged.get(index);
+        if (viewChanged) {
+            return viewChanged;
+        }
+        let node = this.nodes[index];
+        if (node === undefined) {
+            node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+            this.nodes[index] = node;
+        }
+        // Keep a reference to the new view to call .commit on it latter, only if mutable
+        const view = this.type.elementType.getViewDU(node, this.caches[index]);
+        if (this.type.elementType.isViewMutable) {
+            this.viewsChanged.set(index, view);
+        }
+        // No need to persist the child's view cache since a second get returns this view instance.
+        // The cache is only persisted on commit where the viewsChanged map is dropped.
+        return view;
+    }
+    /**
+     * Get element at `index`. Returns a view of the Composite element type.
+     * DOES NOT PROPAGATE CHANGES: use only for reads and to skip parent references.
+     */
+    getReadonly(index) {
+        const viewChanged = this.viewsChanged.get(index);
+        if (viewChanged) {
+            return viewChanged;
+        }
+        let node = this.nodes[index];
+        if (node === undefined) {
+            node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+            this.nodes[index] = node;
+        }
+        return this.type.elementType.getViewDU(node, this.caches[index]);
+    }
+    // Did not implemented
+    // `getReadonlyValue(index: number): ValueOf<ElementType>`
+    // because it can break in unexpected ways if there are pending changes in this.viewsChanged.
+    // This function could first check if `this.viewsChanged` has a view for `index` and commit it,
+    // but that would be pretty slow, and the same result can be achieved with
+    // `this.getReadonly(index).toValue()`
+    /**
+     * Set Composite element type `view` at `index`
+     */
+    set(index, view) {
+        if (index >= this._length) {
+            throw Error(`Error setting index over length ${index} > ${this._length}`);
+        }
+        // When setting a view:
+        // - Not necessary to commit node
+        // - Not necessary to persist cache
+        // Just keeping a reference to the view in this.viewsChanged ensures consistency
+        this.viewsChanged.set(index, view);
+    }
+    /**
+     * Returns all elements at every index, if an index is modified it will return the modified view.
+     * No need to commit() before calling this function.
+     * @param views optional output parameter, if is provided it must be an array of the same length as this array
+     */
+    getAllReadonly(views) {
+        if (views && views.length !== this._length) {
+            throw Error(`Expected ${this._length} views, got ${views.length}`);
+        }
+        this.populateAllOldNodes();
+        views = views ?? new Array(this._length);
+        for (let i = 0; i < this._length; i++) {
+            // this will get pending change first, if not it will get from the `this.nodes` array
+            views[i] = this.getReadonly(i);
+        }
+        return views;
+    }
+    /**
+     * Apply `fn` to each ViewDU in the array.
+     * Similar to getAllReadOnly(), no need to commit() before calling this function.
+     * if an item is modified it will return the modified view.
+     */
+    forEach(fn) {
+        this.populateAllOldNodes();
+        for (let i = 0; i < this._length; i++) {
+            fn(this.getReadonly(i), i);
+        }
+    }
+    /**
+     * WARNING: Returns all commited changes, if there are any pending changes commit them beforehand
+     * @param values optional output parameter, if is provided it must be an array of the same length as this array
+     */
+    getAllReadonlyValues(values) {
+        if (values && values.length !== this._length) {
+            throw Error(`Expected ${this._length} values, got ${values.length}`);
+        }
+        this.populateAllNodes();
+        values = values ?? new Array(this._length);
+        for (let i = 0; i < this._length; i++) {
+            values[i] = this.type.elementType.tree_toValue(this.nodes[i]);
+        }
+        return values;
+    }
+    /**
+     * Apply `fn` to each value in the array
+     */
+    forEachValue(fn) {
+        this.populateAllNodes();
+        for (let i = 0; i < this._length; i++) {
+            fn(this.type.elementType.tree_toValue(this.nodes[i]), i);
+        }
+    }
+    /**
+     * Get by range of indexes. Returns an array of views of the Composite element type.
+     * This is similar to getAllReadonly() where we dont have to commit() before calling this function.
+     */
+    getReadonlyByRange(startIndex, count) {
+        if (startIndex < 0) {
+            throw Error(`Error getting by range, startIndex < 0: ${startIndex}`);
+        }
+        if (count <= 0) {
+            throw Error(`Error getting by range, count <= 0: ${count}`);
+        }
+        const originalLength = this.dirtyLength ? this.type.tree_getLength(this._rootNode) : this._length;
+        if (startIndex >= originalLength) {
+            throw Error(`Error getting by range, startIndex >= length: ${startIndex} >= ${originalLength}`);
+        }
+        count = Math.min(count, originalLength - startIndex);
+        let dataAvailable = true;
+        for (let i = startIndex; i < startIndex + count; i++) {
+            if (this.nodes[i] == null) {
+                dataAvailable = false;
+                break;
+            }
+        }
+        // if one of nodes is not available, get all nodes at depth
+        if (!dataAvailable) {
+            const nodes = tree_getNodesAtDepth(this._rootNode, this.type.depth, startIndex, count);
+            for (const [i, node] of nodes.entries()) {
+                this.nodes[startIndex + i] = node;
+            }
+        }
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            result[i] = this.getReadonly(startIndex + i);
+        }
+        return result;
+    }
+    /**
+     * When we need to compute HashComputations (hcByLevel != null):
+     *   - if old _rootNode is hashed, then only need to put pending changes to hcByLevel
+     *   - if old _rootNode is not hashed, need to traverse and put to hcByLevel
+     */
+    commit(hcOffset = 0, hcByLevel = null) {
+        const isOldRootHashed = this._rootNode.h0 !== null;
+        if (this.viewsChanged.size === 0) {
+            if (!isOldRootHashed && hcByLevel !== null) {
+                hashComputation_getHashComputations(this._rootNode, hcOffset, hcByLevel);
+            }
+            return;
+        }
+        // each view may mutate hcByLevel at offset + depth
+        const offsetView = hcOffset + this.type.depth;
+        // Depth includes the extra level for the length node
+        const byLevelView = hcByLevel != null && isOldRootHashed ? hcByLevel : null;
+        const nodesChanged = [];
+        for (const [index, view] of this.viewsChanged) {
+            const node = this.type.elementType.commitViewDU(view, offsetView, byLevelView);
+            // there's a chance the view is not changed, no need to rebind nodes in that case
+            if (this.nodes[index] !== node) {
+                // Set new node in nodes array to ensure data represented in the tree and fast nodes access is equal
+                this.nodes[index] = node;
+                nodesChanged.push({ index, node });
+            }
+            // Cache the view's caches to preserve it's data after 'this.viewsChanged.clear()'
+            const cache = this.type.elementType.cacheOfViewDU(view);
+            if (cache)
+                this.caches[index] = cache;
+        }
+        // TODO: Optimize to loop only once, Numerical sort ascending
+        const nodesChangedSorted = nodesChanged.sort((a, b) => a.index - b.index);
+        const indexes = nodesChangedSorted.map((entry) => entry.index);
+        const nodes = nodesChangedSorted.map((entry) => entry.node);
+        const chunksNode = this.type.tree_getChunksNode(this._rootNode);
+        const offsetThis = hcOffset + this.type.tree_chunksNodeOffset();
+        const byLevelThis = hcByLevel != null && isOldRootHashed ? hcByLevel : null;
+        const newChunksNode = tree_setNodesAtDepth(chunksNode, this.type.chunkDepth, indexes, nodes, offsetThis, byLevelThis);
+        this._rootNode = this.type.tree_setChunksNode(this._rootNode, newChunksNode, this.dirtyLength ? this._length : null, hcOffset, hcByLevel);
+        if (!isOldRootHashed && hcByLevel !== null) {
+            hashComputation_getHashComputations(this._rootNode, hcOffset, hcByLevel);
+        }
+        this.viewsChanged.clear();
+        this.dirtyLength = false;
+    }
+    clearCache() {
+        this.nodes = [];
+        this.caches = [];
+        this.nodesPopulated = false;
+        // It's not necessary to clear this.viewsChanged since they have no effect on the cache.
+        // However preserving _SOME_ caches results in a very unpredictable experience.
+        this.viewsChanged.clear();
+        // Reset cached length only if it has been mutated
+        if (this.dirtyLength) {
+            this._length = this.type.tree_getLength(this._rootNode);
+            this.dirtyLength = false;
+        }
+    }
+    populateAllNodes() {
+        // If there's uncommited changes it may break.
+        // this.length can be increased but this._rootNode doesn't have that item
+        if (this.viewsChanged.size > 0) {
+            throw Error("Must commit changes before reading all nodes");
+        }
+        if (!this.nodesPopulated) {
+            this.nodes = tree_getNodesAtDepth(this._rootNode, this.type.depth, 0, this.length);
+            this.nodesPopulated = true;
+        }
+    }
+    /**
+     * Similar to `populateAllNodes` but this does not require a commit() before reading all nodes.
+     * If there are pendingChanges, they will NOT be included in the `nodes` array.
+     */
+    populateAllOldNodes() {
+        if (!this.nodesPopulated) {
+            const originalLength = this.dirtyLength ? this.type.tree_getLength(this._rootNode) : this._length;
+            this.nodes = tree_getNodesAtDepth(this._rootNode, this.type.depth, 0, originalLength);
+            this.nodesPopulated = true;
+        }
+    }
+}
+//# sourceMappingURL=arrayComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/listComposite.js
+
+
+
+
+class listComposite_ListCompositeTreeViewDU extends arrayComposite_ArrayCompositeTreeViewDU {
+    type;
+    _rootNode;
+    constructor(type, _rootNode, cache) {
+        super(type, _rootNode, cache);
+        this.type = type;
+        this._rootNode = _rootNode;
+    }
+    /**
+     * Adds one value element at the end of the array and adds 1 to the un-commited ViewDU length
+     */
+    push(view) {
+        if (this._length >= this.type.limit) {
+            throw Error("Error pushing over limit");
+        }
+        this.dirtyLength = true;
+        const index = this._length++;
+        // No need for pre-initialization like in ListBasic.push since ArrayCompositeTreeViewDU.set() doesn't do a get node
+        this.set(index, view);
+    }
+    /**
+     * Returns a new ListCompositeTreeViewDU instance with the values from 0 to `index`.
+     * The new list is equivalent to (pseudo-code):
+     *
+     * ```ts
+     * const nodes = getChunkNodes()
+     * return listFromChunkNodes(nodes.slice(0, index + 1))
+     * ```
+     *
+     * To achieve it, rebinds the underlying tree zero-ing all nodes right of `index`.
+     *
+     * Note: Using index = -1, returns an empty list of length 0.
+     */
+    sliceTo(index) {
+        // Commit before getting rootNode to ensure all pending data is in the rootNode
+        this.commit();
+        const rootNode = this._rootNode;
+        const length = this._length;
+        // All nodes beyond length are already zero
+        // Array of length 2: [X,X,0,0], for index >= 1 no action needed
+        if (index >= length - 1) {
+            return this;
+        }
+        // Since this is a List, do the treeZeroAfterIndex operation on the chunks tree
+        const chunksNode = this.type.tree_getChunksNode(rootNode);
+        const newChunksNode = tree_treeZeroAfterIndex(chunksNode, this.type.chunkDepth, index);
+        // Must set new length and commit to tree to restore the same tree at that index
+        const newLength = index + 1;
+        const newRootNode = this.type.tree_setChunksNode(rootNode, newChunksNode, newLength);
+        return this.rootNodeToViewDU(newRootNode);
+    }
+    /**
+     * Returns a new ListCompositeTreeViewDU instance with the values from `index` to the end of list
+     *
+     * ```ts
+     * const nodes = getChunkNodes()
+     * return listFromChunkNodes(node.slice(index))
+     * ```
+     *
+     * Note: If index === n, returns an empty list of length 0
+     *
+     */
+    sliceFrom(index) {
+        // Commit before getting rootNode to ensure all pending data is in the rootNode
+        this.commit();
+        // populate to `this.nodes` to ensure all nodes are loaded
+        this.populateAllNodes();
+        // If negative index, try to make it positive long as |index| < length
+        if (index < 0) {
+            index += this.nodes.length;
+        }
+        // If slicing from 0 or neg index, no slicing is necesary
+        if (index <= 0) {
+            return this;
+        }
+        let newChunksNode;
+        let newLength;
+        if (index >= this.nodes.length) {
+            newChunksNode = lib_zeroNode_zeroNode(this.type.chunkDepth);
+            newLength = 0;
+        }
+        else {
+            const nodes = this.nodes.slice(index);
+            newChunksNode = subtree_subtreeFillToContents(nodes, this.type.chunkDepth);
+            newLength = nodes.length;
+        }
+        const newRootNode = this.type.tree_setChunksNode(this._rootNode, newChunksNode, newLength);
+        return this.rootNodeToViewDU(newRootNode);
+    }
+    /**
+     * Create snapshot from the first `count` elements of the list.
+     */
+    toSnapshot(count) {
+        // Commit before getting rootNode to ensure all pending data is in the rootNode
+        this.commit();
+        if (count < 0 || count > this._length) {
+            throw Error(`Invalid count ${count}, length is ${this._length}`);
+        }
+        if (count === 0) {
+            return snapshot_zeroSnapshot(this.type.chunkDepth);
+        }
+        // sliceTo is inclusive
+        const rootNode = this.sliceTo(count - 1)._rootNode;
+        const chunksNode = this.type.tree_getChunksNode(rootNode);
+        const snapshot = snapshot_toSnapshot(chunksNode, this.type.chunkDepth, count);
+        return { ...snapshot, root: rootNode.root };
+    }
+    /**
+     * Same method to `type/listComposite.ts` leveraging cached nodes.
+     */
+    serializeToBytes(output, offset) {
+        this.commit();
+        this.populateAllNodes();
+        const chunksNode = this.type.tree_getChunksNode(this._rootNode);
+        return arrayComposite_tree_serializeToBytesArrayComposite(this.type.elementType, this._length, this.type.chunkDepth, chunksNode, output, offset, this.nodes);
+    }
+    rootNodeToViewDU(rootNode) {
+        return this.type.getViewDU(rootNode);
+    }
+}
+//# sourceMappingURL=listComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/listComposite.js
+/* provided dependency */ var type_listComposite_Buffer = __webpack_require__(8287)["hp"];
+
+
+
+
+
+
+
+
+
+/**
+ * List: ordered variable-length homogeneous collection, limited to N values
+ *
+ * Array of Composite type:
+ * - Composite types always take at least one chunk
+ * - Composite types are always returned as views
+ */
+class listComposite_ListCompositeType extends array_ArrayType {
+    elementType;
+    limit;
+    typeName;
+    itemsPerChunk = 1;
+    depth;
+    chunkDepth;
+    maxChunkCount;
+    fixedSize = null;
+    minSize;
+    maxSize;
+    isList = true;
+    isViewMutable = true;
+    blockArray = [];
+    mixInLengthBlockBytes = new Uint8Array(64);
+    mixInLengthBuffer = type_listComposite_Buffer.from(this.mixInLengthBlockBytes.buffer, this.mixInLengthBlockBytes.byteOffset, this.mixInLengthBlockBytes.byteLength);
+    defaultLen = 0;
+    constructor(elementType, limit, opts) {
+        super(elementType, opts?.cachePermanentRootStruct);
+        this.elementType = elementType;
+        this.limit = limit;
+        if (elementType.isBasic)
+            throw Error("elementType must not be basic");
+        if (limit === 0)
+            throw Error("List limit must be > 0");
+        this.typeName = opts?.typeName ?? `List[${elementType.typeName}, ${limit}]`;
+        this.maxChunkCount = this.limit;
+        this.chunkDepth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        // Depth includes the extra level for the length node
+        this.depth = this.chunkDepth + 1;
+        this.minSize = 0;
+        this.maxSize = arrayComposite_maxSizeArrayComposite(elementType, this.limit);
+    }
+    // biome-ignore lint/suspicious/noExplicitAny: We need to use `any` here explicitly
+    static named(elementType, limit, opts) {
+        return new (named_namedClass(listComposite_ListCompositeType, opts.typeName))(elementType, limit, opts);
+    }
+    getView(tree) {
+        return new listComposite_ListCompositeTreeView(this, tree);
+    }
+    getViewDU(node, cache) {
+        // cache type should be validated (if applicate) in the view
+        // biome-ignore lint/suspicious/noExplicitAny: We need to use `any` here explicitly
+        return new listComposite_ListCompositeTreeViewDU(this, node, cache);
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        view.commit(hcOffset, hcByLevel);
+        return view.node;
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    // Serialization + deserialization
+    value_serializedSize(value) {
+        return arrayComposite_value_serializedSizeArrayComposite(this.elementType, value.length, value);
+    }
+    value_serializeToBytes(output, offset, value) {
+        return arrayComposite_value_serializeToBytesArrayComposite(this.elementType, value.length, output, offset, value);
+    }
+    value_deserializeFromBytes(data, start, end) {
+        return arrayComposite_value_deserializeFromBytesArrayComposite(this.elementType, data, start, end, this);
+    }
+    tree_serializedSize(node) {
+        const chunksNode = this.tree_getChunksNode(node);
+        const length = this.tree_getLength(node);
+        return arrayComposite_tree_serializedSizeArrayComposite(this.elementType, length, this.chunkDepth, chunksNode);
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const chunksNode = this.tree_getChunksNode(node);
+        const length = this.tree_getLength(node);
+        return arrayComposite_tree_serializeToBytesArrayComposite(this.elementType, length, this.chunkDepth, chunksNode, output, offset);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        return arrayComposite_tree_deserializeFromBytesArrayComposite(this.elementType, this.chunkDepth, data, start, end, this);
+    }
+    // Helpers for TreeView
+    tree_getLength(node) {
+        return arrayBasic_getLengthFromRootNode(node);
+    }
+    tree_setLength(tree, length) {
+        tree.rootNode = arrayBasic_addLengthNode(tree.rootNode.left, length);
+    }
+    tree_getChunksNode(node) {
+        return node.left;
+    }
+    tree_chunksNodeOffset() {
+        // one more level for length, see setChunksNode below
+        return 1;
+    }
+    tree_setChunksNode(rootNode, chunksNode, newLength, hcOffset = 0, hcByLevel = null) {
+        return arrayBasic_setChunksNode(rootNode, chunksNode, newLength, hcOffset, hcByLevel);
+    }
+    // Merkleization
+    hashTreeRoot(value) {
+        // Return cached mutable root if any
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                return cachedRoot;
+            }
+        }
+        const root = alloc_allocUnsafe(32);
+        const safeCache = true;
+        this.hashTreeRootInto(value, root, 0, safeCache);
+        // hashTreeRootInto will cache the root if cachePermanentRootStruct is true
+        return root;
+    }
+    hashTreeRootInto(value, output, offset, safeCache = false) {
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                output.set(cachedRoot, offset);
+                return;
+            }
+        }
+        // should not call super.hashTreeRootInto() here
+        // use  merkleizeBlockArray() instead of merkleizeBlocksBytes() to avoid big memory allocation
+        // reallocate this.blockArray if needed
+        if (value.length > this.blockArray.length) {
+            const blockDiff = value.length - this.blockArray.length;
+            const newBlocksBytes = new Uint8Array(blockDiff * 64);
+            for (let i = 0; i < blockDiff; i++) {
+                this.blockArray.push(newBlocksBytes.subarray(i * 64, (i + 1) * 64));
+            }
+        }
+        // populate this.blockArray
+        for (let i = 0; i < value.length; i++) {
+            // 2 values share a block
+            const block = this.blockArray[Math.floor(i / 2)];
+            const offset = i % 2 === 0 ? 0 : 32;
+            this.elementType.hashTreeRootInto(value[i], block, offset);
+        }
+        const blockLimit = Math.ceil(value.length / 2);
+        // zero out the last block if needed
+        if (value.length % 2 === 1) {
+            this.blockArray[blockLimit - 1].fill(0, 32);
+        }
+        // compute hashTreeRoot
+        hasher_merkleizeBlockArray(this.blockArray, blockLimit, this.maxChunkCount, this.mixInLengthBlockBytes, 0);
+        // mixInLength
+        this.mixInLengthBuffer.writeUIntLE(value.length, 32, 6);
+        // one for hashTreeRoot(value), one for length
+        const chunkCount = 2;
+        hasher_merkleizeBlocksBytes(this.mixInLengthBlockBytes, chunkCount, output, offset);
+        if (this.cachePermanentRootStruct) {
+            merkleize_cacheRoot(value, output, offset, safeCache);
+        }
+    }
+    getBlocksBytes() {
+        // we use merkleizeBlockArray for hashTreeRoot() computation
+        throw Error("getBlockBytes should not be called for ListCompositeType");
+    }
+}
+//# sourceMappingURL=listComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/partialListComposite.js
+
+
+
+/**
+ * Similar to ListCompositeTreeViewDU but this is created from a snapshot so some methods are not supported
+ * for some specific index ranges.
+ * Note that the backed tree is not a full tree, but a partial tree created from a snapshot.
+ */
+class partialListComposite_PartialListCompositeTreeViewDU extends listComposite_ListCompositeTreeViewDU {
+    type;
+    _rootNode;
+    snapshot;
+    constructor(type, _rootNode, snapshot, cache) {
+        super(type, _rootNode, cache);
+        this.type = type;
+        this._rootNode = _rootNode;
+        this.snapshot = snapshot;
+    }
+    /**
+     * Create snapshot from the first `count` elements of the list.
+     */
+    toSnapshot(count) {
+        if (count < this.snapshot.count) {
+            throw new Error(`Cannot create snapshot with count ${count} less than existing snapshot count ${this.snapshot.count}`);
+        }
+        return super.toSnapshot(count);
+    }
+    /** Methods in ArrayCompositeTreeViewDU */
+    get(index) {
+        if (index < this.snapshot.count) {
+            throw new Error(`Cannot get index ${index} less than existing snapshot count ${this.snapshot.count}`);
+        }
+        return super.get(index);
+    }
+    getReadonly(index) {
+        if (index < this.snapshot.count) {
+            throw new Error(`Cannot get index ${index} less than existing snapshot count ${this.snapshot.count}`);
+        }
+        return super.getReadonly(index);
+    }
+    set(index, view) {
+        if (index < this.snapshot.count) {
+            throw new Error(`Cannot set index ${index} less than existing snapshot count ${this.snapshot.count}`);
+        }
+        super.set(index, view);
+    }
+    getAllReadonly() {
+        throw new Error("getAllReadonly() is not supported for PartialListCompositeTreeViewDU");
+    }
+    getAllReadonlyValues() {
+        throw new Error("getAllReadonlyValues() is not supported for PartialListCompositeTreeViewDU");
+    }
+    // commit() is inherited from ArrayCompositeTreeViewDU
+    /** Methods in ListCompositeTreeViewDU */
+    // push() is inherited from ListCompositeTreeViewDU
+    /**
+     * Similar to ListCompositeTreeViewDU.sliceTo() but:
+     * - throw error if index < snapshot.count - 1
+     * - special handle for index === snapshot.count - 1, we restore from snapshot
+     */
+    sliceTo(index) {
+        if (index < this.snapshot.count - 1) {
+            throw new Error(`Cannot slice to index ${index} less than existing snapshot count - 1 ${this.snapshot.count - 1}`);
+        }
+        this.commit();
+        if (index === this.snapshot.count - 1) {
+            // super.sliceTo() uses treeZeroAfterIndex() which does not work well in this case
+            // this is because treeZeroAfterIndex() requires navigating the tree to index first which we don't have in this case
+            return this.type.toPartialViewDU(this.snapshot);
+        }
+        return super.sliceTo(index);
+    }
+    /**
+     * Similar to ListCompositeTreeViewDU.sliceFrom() but here we cannot call `populateAllNodes()` to get all nodes
+     * Use getNodesAtDepth() instead
+     */
+    sliceFrom(index) {
+        if (index < this.snapshot.count - 1) {
+            throw new Error(`Cannot slice to index ${index} less than existing snapshot count ${this.snapshot.count - 1}`);
+        }
+        // Commit before getting rootNode to ensure all pending data is in the rootNode
+        this.commit();
+        let newChunksNode;
+        let newLength;
+        if (index >= this.length) {
+            newChunksNode = lib_zeroNode_zeroNode(this.type.chunkDepth);
+            newLength = 0;
+        }
+        else {
+            const nodeCount = this.length - index;
+            const nodes = tree_getNodesAtDepth(this._rootNode, this.type.depth, index, nodeCount);
+            newChunksNode = subtree_subtreeFillToContents(nodes, this.type.chunkDepth);
+            newLength = nodes.length;
+        }
+        const newRootNode = this.type.tree_setChunksNode(this._rootNode, newChunksNode, newLength);
+        // Use zeroSnapshot because this is equivalent to a full tree
+        return new partialListComposite_PartialListCompositeTreeViewDU(this.type, newRootNode, snapshot_zeroSnapshot(this.type.chunkDepth));
+    }
+    serializeToBytes() {
+        throw new Error("serializeToBytes() is not supported for PartialListCompositeTreeViewDU");
+    }
+    /** Methods in TreeViewDU */
+    // hashTreeRoot() is inherited from TreeViewDU
+    // batchHashTreeRoot() is inherited from TreeViewDU
+    /**
+     * Does not support serialize and deserialize, it works through snapshot.
+     */
+    serialize() {
+        throw new Error("serialize() is not supported for PartialListCompositeTreeViewDU");
+    }
+    /**
+     * Clone using rootNodeToViewDU() instead of getViewDU().
+     */
+    clone(dontTransferCache) {
+        if (dontTransferCache)
+            return this.rootNodeToViewDU(this.node);
+        const cache = this.cache;
+        this.clearCache();
+        return this.rootNodeToViewDU(this.node, cache);
+    }
+    /**
+     * Mainly used for testing, to ensure the snapshot is correct.
+     * Set undefined values for items 0 to snapshot.count - 1
+     */
+    toValue() {
+        const values = new Array(this.length);
+        const snapshotCount = this.snapshot.count;
+        const allNodes = tree_getNodesAtDepth(this._rootNode, this.type.depth, snapshotCount, this.length - snapshotCount);
+        const type = this.type.elementType;
+        // value of 0 to snapshot.count - 1 is from snapshot, and they are undefined
+        for (let i = snapshotCount; i < this.length; i++) {
+            values[i] = type.toValueFromViewDU(type.getViewDU(allNodes[i - snapshotCount]));
+        }
+        return values;
+    }
+    /**
+     * Throw error because we only have partial tree in this case.
+     */
+    populateAllNodes() {
+        throw new Error("populateAllNodes() is not supported for PartialListCompositeTreeViewDU");
+    }
+    /**
+     * Since this.type.getViewDU() is not supported for this type, create a new PartialListCompositeTreeViewDU instead.
+     */
+    rootNodeToViewDU(rootNode, cache) {
+        return new partialListComposite_PartialListCompositeTreeViewDU(this.type, rootNode, this.snapshot, cache);
+    }
+}
+//# sourceMappingURL=partialListComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/partialListComposite.js
+
+
+
+
+
+
+/**
+ * Similar to ListCompositeType, this is mainly used to create a PartialListCompositeTreeViewDU from a snapshot.
+ * The ViewDU created is a partial tree created from a snapshot, not a full tree.
+ * Note that this class only inherits minimal methods as defined in ArrayType of ../view/arrayBasic.ts
+ * It'll throw errors for all other methods, most of the usage is in the ViewDU class.
+ */
+class partialListComposite_PartialListCompositeType extends listComposite_ListCompositeType {
+    elementType;
+    limit;
+    constructor(elementType, limit, opts) {
+        super(elementType, limit, opts);
+        this.elementType = elementType;
+        this.limit = limit;
+        // only inherit methods in ArrayType of ../view/arrayBasic.ts
+        const inheritedMethods = [
+            "tree_getLength",
+            "tree_setLength",
+            "tree_getChunksNode",
+            "tree_chunksNodeOffset",
+            "tree_setChunksNode",
+        ];
+        const methodNames = Object.getOwnPropertyNames(listComposite_ListCompositeType.prototype).filter((prop) => prop !== "constructor" &&
+            typeof this[prop] === "function" &&
+            !inheritedMethods.includes(prop));
+        // throw errors for all remaining methods
+        for (const methodName of methodNames) {
+            this[methodName] = () => {
+                throw new Error(`Method ${methodName} is not implemented for PartialListCompositeType`);
+            };
+        }
+    }
+    /**
+     * Create a PartialListCompositeTreeViewDU from a snapshot.
+     */
+    toPartialViewDU(snapshot) {
+        const chunksNode = snapshot_fromSnapshot(snapshot, this.chunkDepth);
+        const rootNode = arrayBasic_addLengthNode(chunksNode, snapshot.count);
+        if (!byteArray_byteArrayEquals(rootNode.root, snapshot.root)) {
+            throw new Error(`Snapshot root is incorrect, expected ${snapshot.root}, got ${rootNode.root}`);
+        }
+        return new partialListComposite_PartialListCompositeTreeViewDU(this, rootNode, snapshot);
+    }
+    /**
+     * Creates a PartialListCompositeTreeViewDU from a zero snapshot.
+     */
+    defaultPartialViewDU() {
+        const rootNode = arrayBasic_addLengthNode(lib_zeroNode_zeroNode(this.chunkDepth), 0);
+        return new partialListComposite_PartialListCompositeTreeViewDU(this, rootNode, snapshot_zeroSnapshot(this.chunkDepth));
+    }
+}
+//# sourceMappingURL=partialListComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/none.js
+
+
+class none_NoneType extends basic_BasicType {
+    typeName = "none";
+    byteLength = 0;
+    itemsPerChunk = 32;
+    fixedSize = 0;
+    minSize = 0;
+    maxSize = 0;
+    defaultValue() {
+        return null;
+    }
+    // bytes serdes
+    value_serializeToBytes(_output, offset, _value) {
+        return offset;
+    }
+    value_deserializeFromBytes(_data, _start) {
+        return null;
+    }
+    tree_serializeToBytes(_output, offset, _node) {
+        return offset;
+    }
+    tree_deserializeFromBytes(_data, _start, _end) {
+        return lib_zeroNode_zeroNode(0);
+    }
+    // Fast tree opts
+    tree_getFromNode(_leafNode) {
+        return null;
+    }
+    tree_setToNode(_leafNode, _value) {
+        return;
+    }
+    tree_getFromPackedNode(_leafNode, _index) {
+        return null;
+    }
+    tree_setToPackedNode(_leafNode, _index, _value) {
+        return;
+    }
+    // JSON
+    fromJson(json) {
+        if (json !== null) {
+            throw Error("JSON invalid type none must be null");
+        }
+        return null;
+    }
+    toJson(_value) {
+        return null;
+    }
+}
+//# sourceMappingURL=none.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/uint.js
+
+
+
+const uint_MAX_SAFE_INTEGER_BN = BigInt(Number.MAX_SAFE_INTEGER);
+const uint_BIGINT_2_POW_64 = BigInt(2) ** BigInt(64);
+const uint_BIGINT_2_POW_128 = BigInt(2) ** BigInt(128);
+const uint_BIGINT_2_POW_192 = BigInt(2) ** BigInt(192);
+// const BIGINT_64_MAX = BigInt("0xffffffffffffffff");
+const type_uint_NUMBER_2_POW_32 = 2 ** 32;
+const type_uint_NUMBER_32_MAX = 0xffffffff;
+const uint_uintNumberByteLens = (/* unused pure expression or super */ null && ([1, 2, 4, 8]));
+const uint_uintBigintByteLens = (/* unused pure expression or super */ null && ([1, 2, 4, 8, 16, 32]));
+/**
+ * Uint: N-bit unsigned integer (where N in [8, 16, 32, 64, 128, 256])
+ * - Notation: uintN
+ *
+ * UintNumber is represented as the Javascript primitive value 'Number'.
+ *
+ * The Number type is a double-precision 64-bit binary format IEEE 754 value (numbers between -(2^53 − 1) and
+ * 2^53 − 1). It also has the symbolic value: +Infinity.
+ *
+ * As of 2021 performance of 'Number' is extremely faster than 'BigInt'. Some values are spec'ed as Uint64 but
+ * practically they will never exceed 53 bits, such as any unit time or simple counters. This type is an optimization
+ * for these cases, as UintNumber64 can represent any value between 0 and 2^53−1 as well as the max value 2^64-1.
+ */
+class uint_UintNumberType extends basic_BasicType {
+    byteLength;
+    typeName;
+    itemsPerChunk;
+    fixedSize;
+    minSize;
+    maxSize;
+    maxDecimalStr;
+    clipInfinity;
+    setBitwiseOR;
+    constructor(byteLength, opts) {
+        super();
+        this.byteLength = byteLength;
+        if (byteLength > 8) {
+            throw Error("UintNumber byteLength limit is 8");
+        }
+        if (Math.log2(byteLength) % 1 !== 0) {
+            throw Error("byteLength must be a power of 2");
+        }
+        this.typeName = opts?.typeName ?? `uint${byteLength * 8}`;
+        if (opts?.clipInfinity)
+            this.typeName += "Inf";
+        if (opts?.setBitwiseOR)
+            this.typeName += "OR";
+        this.itemsPerChunk = 32 / this.byteLength;
+        this.fixedSize = byteLength;
+        this.minSize = byteLength;
+        this.maxSize = byteLength;
+        this.maxDecimalStr = (BigInt(2) ** BigInt(this.byteLength * 8) - BigInt(1)).toString(10);
+        this.clipInfinity = opts?.clipInfinity === true;
+        this.setBitwiseOR = opts?.setBitwiseOR === true;
+    }
+    static named(byteLength, opts) {
+        return new (named_namedClass(uint_UintNumberType, opts.typeName))(byteLength, opts);
+    }
+    defaultValue() {
+        return 0;
+    }
+    // Serialization + deserialization
+    value_serializeToBytes({ dataView }, offset, value) {
+        switch (this.byteLength) {
+            case 1:
+                dataView.setInt8(offset, value);
+                break;
+            case 2:
+                dataView.setUint16(offset, value, true);
+                break;
+            case 4:
+                dataView.setUint32(offset, value, true);
+                break;
+            case 8:
+                if (value === Infinity) {
+                    // TODO: Benchmark if it's faster to set BIGINT_64_MAX once
+                    dataView.setUint32(offset, 0xffffffff);
+                    dataView.setUint32(offset + 4, 0xffffffff);
+                }
+                else {
+                    dataView.setUint32(offset, value & 0xffffffff, true);
+                    dataView.setUint32(offset + 4, (value / type_uint_NUMBER_2_POW_32) & 0xffffffff, true);
+                }
+                break;
+        }
+        return offset + this.byteLength;
+    }
+    value_deserializeFromBytes({ dataView }, start, end) {
+        this.assertValidSize(end - start);
+        switch (this.byteLength) {
+            case 1:
+                return dataView.getUint8(start);
+            case 2:
+                return dataView.getUint16(start, true);
+            case 4:
+                return dataView.getUint32(start, true);
+            case 8: {
+                const a = dataView.getUint32(start, true);
+                const b = dataView.getUint32(start + 4, true);
+                if (b === type_uint_NUMBER_32_MAX && a === type_uint_NUMBER_32_MAX && this.clipInfinity) {
+                    return Infinity;
+                }
+                return b * type_uint_NUMBER_2_POW_32 + a;
+            }
+        }
+    }
+    value_toTree(value) {
+        const node = node_LeafNode.fromZero();
+        node.setUint(this.byteLength, 0, value, this.clipInfinity);
+        return node;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const value = node.getUint(this.byteLength, 0, this.clipInfinity);
+        this.value_serializeToBytes(output, offset, value);
+        return offset + this.byteLength;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        this.assertValidSize(end - start);
+        const value = this.value_deserializeFromBytes(data, start, end);
+        const node = node_LeafNode.fromZero();
+        node.setUint(this.byteLength, 0, value, this.clipInfinity);
+        return node;
+    }
+    // Fast Tree access
+    tree_getFromNode(leafNode) {
+        return leafNode.getUint(this.byteLength, 0, this.clipInfinity);
+    }
+    tree_setToNode(leafNode, value) {
+        this.tree_setToPackedNode(leafNode, 0, value);
+    }
+    tree_getFromPackedNode(leafNode, index) {
+        const offsetBytes = this.byteLength * (index % this.itemsPerChunk);
+        return leafNode.getUint(this.byteLength, offsetBytes, this.clipInfinity);
+    }
+    tree_setToPackedNode(leafNode, index, value) {
+        const offsetBytes = this.byteLength * (index % this.itemsPerChunk);
+        // TODO: Benchmark the cost of this if, and consider using a different class
+        if (this.setBitwiseOR) {
+            leafNode.bitwiseOrUint(this.byteLength, offsetBytes, value);
+        }
+        else {
+            leafNode.setUint(this.byteLength, offsetBytes, value, this.clipInfinity);
+        }
+    }
+    // JSON
+    fromJson(json) {
+        if (typeof json === "number") {
+            return json;
+        }
+        if (typeof json === "string") {
+            if (this.clipInfinity && json === this.maxDecimalStr) {
+                // Allow to handle max possible number
+                return Infinity;
+            }
+            const num = Number.parseInt(json, 10);
+            if (Number.isNaN(num))
+                throw Error("JSON invalid number isNaN");
+            if (num > Number.MAX_SAFE_INTEGER) {
+                // Throw to prevent decimal precision errors downstream
+                throw Error("JSON invalid number > MAX_SAFE_INTEGER");
+            }
+            return num;
+        }
+        if (typeof json === "bigint") {
+            if (json > uint_MAX_SAFE_INTEGER_BN) {
+                // Throw to prevent decimal precision errors downstream
+                throw Error("JSON invalid number > MAX_SAFE_INTEGER_BN");
+            }
+            return Number(json);
+        }
+        throw Error(`JSON invalid type ${typeof json} expected number`);
+    }
+    toJson(value) {
+        if (value === Infinity) {
+            return this.maxDecimalStr;
+        }
+        return value.toString(10);
+    }
+}
+/**
+ * Uint: N-bit unsigned integer (where N in [8, 16, 32, 64, 128, 256])
+ * - Notation: uintN
+ *
+ * UintBigint is represented as the Javascript primitive value 'BigInt'.
+ *
+ * The BigInt type is a numeric primitive in JavaScript that can represent integers with arbitrary precision.
+ * With BigInts, you can safely store and operate on large integers even beyond the safe integer limit for Numbers.
+ *
+ * As of 2021 performance of 'Number' is extremely faster than 'BigInt'. For Uint values under 53 bits use UintNumber.
+ * For other values that may exceed 53 bits, use UintBigint.
+ */
+class uint_UintBigintType extends basic_BasicType {
+    byteLength;
+    typeName;
+    // Immutable characteristics
+    itemsPerChunk;
+    fixedSize;
+    minSize;
+    maxSize;
+    constructor(byteLength, opts) {
+        super();
+        this.byteLength = byteLength;
+        if (byteLength > 32) {
+            throw Error("UintBigint byteLength limit is 32");
+        }
+        if (Math.log2(byteLength) % 1 !== 0) {
+            throw Error("byteLength must be a power of 2");
+        }
+        this.typeName = opts?.typeName ?? `uintBigint${byteLength * 8}`;
+        this.byteLength = byteLength;
+        this.itemsPerChunk = 32 / this.byteLength;
+        this.fixedSize = byteLength;
+        this.minSize = byteLength;
+        this.maxSize = byteLength;
+    }
+    static named(byteLength, opts) {
+        return new (named_namedClass(uint_UintBigintType, opts.typeName))(byteLength, opts);
+    }
+    defaultValue() {
+        return BigInt(0);
+    }
+    // Serialization + deserialization
+    value_serializeToBytes({ dataView }, offset, value) {
+        switch (this.byteLength) {
+            case 1:
+                dataView.setInt8(offset, Number(value));
+                break;
+            case 2:
+                dataView.setUint16(offset, Number(value), true);
+                break;
+            case 4:
+                dataView.setUint32(offset, Number(value), true);
+                break;
+            case 8:
+                dataView.setBigUint64(offset, value, true);
+                break;
+            default: {
+                for (let i = 0; i < this.byteLength; i += 8) {
+                    if (i > 0)
+                        value = value / uint_BIGINT_2_POW_64;
+                    const lo = BigInt.asUintN(64, value);
+                    dataView.setBigUint64(offset + i, lo, true);
+                }
+            }
+        }
+        return offset + this.byteLength;
+    }
+    value_deserializeFromBytes({ dataView }, start, end) {
+        const size = end - start;
+        if (size !== this.byteLength) {
+            throw Error(`Invalid size ${size} expected ${this.byteLength}`);
+        }
+        // Note: pre-assigning the right function at the constructor to avoid this switch is not faster
+        switch (this.byteLength) {
+            case 1:
+                return BigInt(dataView.getUint8(start));
+            case 2:
+                return BigInt(dataView.getUint16(start, true));
+            case 4:
+                return BigInt(dataView.getUint32(start, true));
+            case 8:
+                return dataView.getBigUint64(start, true);
+            case 16: {
+                const a = dataView.getBigUint64(start, true);
+                const b = dataView.getBigUint64(start + 8, true);
+                return b * uint_BIGINT_2_POW_64 + a;
+            }
+            case 32: {
+                const a = dataView.getBigUint64(start, true);
+                const b = dataView.getBigUint64(start + 8, true);
+                const c = dataView.getBigUint64(start + 16, true);
+                const d = dataView.getBigUint64(start + 24, true);
+                return d * uint_BIGINT_2_POW_192 + c * uint_BIGINT_2_POW_128 + b * uint_BIGINT_2_POW_64 + a;
+            }
+        }
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const value = node.getUintBigint(this.byteLength, 0);
+        this.value_serializeToBytes(output, offset, value);
+        return offset + this.byteLength;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        const size = end - start;
+        if (size !== this.byteLength) {
+            throw Error(`Invalid size ${size} expected ${this.byteLength}`);
+        }
+        const value = this.value_deserializeFromBytes(data, start, end);
+        const node = node_LeafNode.fromZero();
+        node.setUintBigint(this.byteLength, 0, value);
+        return node;
+    }
+    // Fast Tree access
+    tree_getFromNode(leafNode) {
+        return leafNode.getUintBigint(this.byteLength, 0);
+    }
+    /** Mutates node to set value */
+    tree_setToNode(leafNode, value) {
+        this.tree_setToPackedNode(leafNode, 0, value);
+    }
+    /** EXAMPLE of `tree_getFromNode` */
+    tree_getFromPackedNode(leafNode, index) {
+        const offsetBytes = this.byteLength * (index % this.itemsPerChunk);
+        return leafNode.getUintBigint(this.byteLength, offsetBytes);
+    }
+    /** Mutates node to set value */
+    tree_setToPackedNode(leafNode, index, value) {
+        const offsetBytes = this.byteLength * (index % this.itemsPerChunk);
+        // TODO: Not-optimized, copy pasted from UintNumberType
+        leafNode.setUintBigint(this.byteLength, offsetBytes, value);
+    }
+    // JSON
+    fromJson(json) {
+        if (typeof json === "bigint")
+            return json;
+        if (typeof json === "string" || typeof json === "number")
+            return BigInt(json);
+        throw Error(`JSON invalid type ${typeof json} expected bigint`);
+    }
+    toJson(value) {
+        return value.toString(10);
+    }
+}
+//# sourceMappingURL=uint.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/union.js
+/* provided dependency */ var type_union_Buffer = __webpack_require__(8287)["hp"];
+
+
+
+
+
+
+const union_VALUE_GINDEX = BigInt(2);
+const union_SELECTOR_GINDEX = BigInt(3);
+/**
+ * Union: union type containing one of the given subtypes
+ * - Notation: Union[type_0, type_1, ...], e.g. union[None, uint64, uint32]
+ */
+class union_UnionType extends composite_CompositeType {
+    types;
+    typeName;
+    depth = 1;
+    maxChunkCount = 1;
+    fixedSize = null;
+    minSize;
+    maxSize;
+    isList = true;
+    isViewMutable = true;
+    mixInLengthBlockBytes = new Uint8Array(64);
+    mixInLengthBuffer = type_union_Buffer.from(this.mixInLengthBlockBytes.buffer, this.mixInLengthBlockBytes.byteOffset, this.mixInLengthBlockBytes.byteLength);
+    maxSelector;
+    constructor(types, opts) {
+        super();
+        this.types = types;
+        if (types.length >= 128) {
+            throw Error("Must have less than 128 types");
+        }
+        if (types.length === 0) {
+            throw Error("Must have at least 1 type option");
+        }
+        if (types[0] instanceof none_NoneType && types.length < 2) {
+            throw Error("Must have at least 2 type options if the first is None");
+        }
+        for (let i = 1; i < types.length; i++) {
+            if (types[i] instanceof none_NoneType) {
+                throw Error("None may only be the first option");
+            }
+        }
+        this.typeName = opts?.typeName ?? `Union[${types.map((t) => t.typeName).join(",")}]`;
+        const minLens = [];
+        const maxLens = [];
+        for (const _type of types) {
+            minLens.push(_type.minSize);
+            maxLens.push(_type.maxSize);
+        }
+        this.minSize = 1 + Math.min(...minLens);
+        this.maxSize = 1 + Math.max(...maxLens);
+        this.maxSelector = this.types.length - 1;
+        // maxChunkCount = 1 so this.blocksBuffer.length = 32 in this case
+        this.blocksBuffer = new Uint8Array(32);
+    }
+    static named(types, opts) {
+        return new (named_namedClass(union_UnionType, opts.typeName))(types, opts);
+    }
+    defaultValue() {
+        return {
+            selector: 0,
+            value: this.types[0].defaultValue(),
+        };
+    }
+    getView(tree) {
+        return this.tree_toValue(tree.rootNode);
+    }
+    getViewDU(node) {
+        return this.tree_toValue(node);
+    }
+    cacheOfViewDU() {
+        return;
+    }
+    commitView(view) {
+        return this.value_toTree(view);
+    }
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        const node = this.value_toTree(view);
+        if (hcByLevel !== null && node.h0 === null) {
+            hashComputation_getHashComputations(node, hcOffset, hcByLevel);
+        }
+        return node;
+    }
+    value_serializedSize(value) {
+        return 1 + this.types[value.selector].value_serializedSize(value.value);
+    }
+    value_serializeToBytes(output, offset, value) {
+        output.uint8Array[offset] = value.selector;
+        return this.types[value.selector].value_serializeToBytes(output, offset + 1, value.value);
+    }
+    value_deserializeFromBytes(data, start, end) {
+        const selector = data.uint8Array[start];
+        if (selector > this.maxSelector) {
+            throw Error(`Invalid selector ${selector}`);
+        }
+        return {
+            selector,
+            value: this.types[selector].value_deserializeFromBytes(data, start + 1, end),
+        };
+    }
+    tree_serializedSize(node) {
+        const selector = arrayBasic_getLengthFromRootNode(node);
+        const valueNode = node.left;
+        return 1 + this.types[selector].value_serializedSize(valueNode);
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const selector = arrayBasic_getLengthFromRootNode(node);
+        const valueNode = node.left;
+        output.uint8Array[offset] = selector;
+        return this.types[selector].tree_serializeToBytes(output, offset + 1, valueNode);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        const selector = data.uint8Array[start];
+        if (selector > this.maxSelector) {
+            throw Error(`Invalid selector ${selector}`);
+        }
+        const valueNode = this.types[selector].tree_deserializeFromBytes(data, start + 1, end);
+        return arrayBasic_addLengthNode(valueNode, selector);
+    }
+    // Merkleization
+    hashTreeRoot(value) {
+        const root = alloc_allocUnsafe(32);
+        this.hashTreeRootInto(value, root, 0);
+        return root;
+    }
+    hashTreeRootInto(value, output, offset) {
+        super.hashTreeRootInto(value, this.mixInLengthBlockBytes, 0);
+        this.mixInLengthBuffer.writeUIntLE(value.selector, 32, 6);
+        const chunkCount = 2;
+        hasher_merkleizeBlocksBytes(this.mixInLengthBlockBytes, chunkCount, output, offset);
+    }
+    getBlocksBytes(value) {
+        this.types[value.selector].hashTreeRootInto(value.value, this.blocksBuffer, 0);
+        return this.blocksBuffer;
+    }
+    // Proofs
+    getPropertyGindex(prop) {
+        switch (prop) {
+            case "value":
+                return union_VALUE_GINDEX;
+            case "selector":
+                return union_SELECTOR_GINDEX;
+            default:
+                throw new Error(`Invalid Union type property ${prop}`);
+        }
+    }
+    getPropertyType() {
+        // a Union has multiple types
+        throw new Error("Not applicable for Union type");
+    }
+    getIndexProperty(index) {
+        if (index === 0)
+            return "value";
+        if (index === 1)
+            return "selector";
+        throw Error("Union index of out bounds");
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        if (!rootNode) {
+            throw Error("rootNode required");
+        }
+        const gindices = [gindex_concatGindices([rootGindex, union_SELECTOR_GINDEX])];
+        const selector = arrayBasic_getLengthFromRootNode(rootNode);
+        const type = this.types[selector];
+        const extendedFieldGindex = gindex_concatGindices([rootGindex, union_VALUE_GINDEX]);
+        if (type_composite_isCompositeType(type)) {
+            gindices.push(...type.tree_getLeafGindices(extendedFieldGindex, tree_getNode(rootNode, union_VALUE_GINDEX)));
+        }
+        else {
+            gindices.push(extendedFieldGindex);
+        }
+        return gindices;
+    }
+    // JSON
+    fromJson(json) {
+        if (typeof json !== "object") {
+            throw new Error("JSON must be of type object");
+        }
+        const union = json;
+        if (typeof union.selector !== "number") {
+            throw new Error("Invalid JSON Union selector must be number");
+        }
+        const type = this.types[union.selector];
+        if (!type) {
+            throw new Error("Invalid JSON Union selector out of range");
+        }
+        return {
+            selector: union.selector,
+            value: type.toJson(union.value),
+        };
+    }
+    toJson(value) {
+        return {
+            selector: value.selector,
+            value: this.types[value.selector].toJson(value.value),
+        };
+    }
+    clone(value) {
+        return {
+            selector: value.selector,
+            value: this.types[value.selector].clone(value.value),
+        };
+    }
+    equals(a, b) {
+        if (a.selector !== b.selector) {
+            return false;
+        }
+        return this.types[a.selector].equals(a.value, b.value);
+    }
+}
+//# sourceMappingURL=union.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/optional.js
+/* provided dependency */ var type_optional_Buffer = __webpack_require__(8287)["hp"];
+
+
+
+
+
+const type_optional_VALUE_GINDEX = BigInt(2);
+const type_optional_SELECTOR_GINDEX = BigInt(3);
+/**
+ * Optional: optional type containing either None or a type
+ * - Notation: Optional[type], e.g. optional[uint64]
+ * - merklizes as list of length 0 or 1, essentially acts like
+ *   - like Union[none,type] or
+ *   - list [], [type]
+ */
+class optional_OptionalType extends composite_CompositeType {
+    elementType;
+    typeName;
+    depth;
+    maxChunkCount;
+    fixedSize = null;
+    minSize;
+    maxSize;
+    isList = true;
+    isViewMutable = true;
+    mixInLengthBlockBytes = new Uint8Array(64);
+    mixInLengthBuffer = type_optional_Buffer.from(this.mixInLengthBlockBytes.buffer, this.mixInLengthBlockBytes.byteOffset, this.mixInLengthBlockBytes.byteLength);
+    constructor(elementType, opts) {
+        super();
+        this.elementType = elementType;
+        this.typeName = opts?.typeName ?? `Optional[${elementType.typeName}]`;
+        this.maxChunkCount = 1;
+        // Depth includes the extra level for the true/false node
+        this.depth = elementType.depth + 1;
+        this.minSize = 0;
+        // Max size includes prepended 0x01 byte
+        this.maxSize = elementType.maxSize + 1;
+        // maxChunkCount = 1 so this.blocksBuffer.length = 32 in this case
+        this.blocksBuffer = new Uint8Array(32);
+    }
+    static named(elementType, opts) {
+        return new (named_namedClass(optional_OptionalType, opts.typeName))(elementType, opts);
+    }
+    defaultValue() {
+        return null;
+    }
+    // TODO add an OptionalView
+    getView(tree) {
+        return this.tree_toValue(tree.rootNode);
+    }
+    // TODO add an OptionalViewDU
+    getViewDU(node) {
+        return this.tree_toValue(node);
+    }
+    // TODO add an OptionalView
+    commitView(view) {
+        return this.value_toTree(view);
+    }
+    // TODO add an OptionalViewDU
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        const node = this.value_toTree(view);
+        if (hcByLevel !== null && node.h0 === null) {
+            hashComputation_getHashComputations(node, hcOffset, hcByLevel);
+        }
+        return node;
+    }
+    // TODO add an OptionalViewDU
+    cacheOfViewDU() {
+        return;
+    }
+    value_serializedSize(value) {
+        return value !== null ? 1 + this.elementType.value_serializedSize(value) : 0;
+    }
+    value_serializeToBytes(output, offset, value) {
+        if (value !== null) {
+            output.uint8Array[offset] = 1;
+            return this.elementType.value_serializeToBytes(output, offset + 1, value);
+        }
+        return offset;
+    }
+    value_deserializeFromBytes(data, start, end) {
+        if (start === end)
+            return null;
+        const selector = data.uint8Array[start];
+        if (selector !== 1) {
+            throw new Error(`Invalid selector for Optional type: ${selector}`);
+        }
+        return this.elementType.value_deserializeFromBytes(data, start + 1, end);
+    }
+    tree_serializedSize(node) {
+        const selector = arrayBasic_getLengthFromRootNode(node);
+        if (selector === 0)
+            return 0;
+        if (selector === 1) {
+            return 1 + this.elementType.value_serializedSize(node.left);
+        }
+        throw new Error(`Invalid selector for Optional type: ${selector}`);
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const selector = arrayBasic_getLengthFromRootNode(node);
+        if (selector === 0)
+            return offset;
+        if (selector === 1) {
+            output.uint8Array[offset] = 1;
+            return this.elementType.tree_serializeToBytes(output, offset + 1, node.left);
+        }
+        throw new Error(`Invalid selector for Optional type: ${selector}`);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        let valueNode;
+        let selector;
+        if (start === end) {
+            selector = 0;
+            valueNode = lib_zeroNode_zeroNode(0);
+        }
+        else {
+            selector = data.uint8Array[start];
+            if (selector !== 1) {
+                throw new Error(`Invalid selector for Optional type: ${selector}`);
+            }
+            valueNode = this.elementType.tree_deserializeFromBytes(data, start + 1, end);
+        }
+        return arrayBasic_addLengthNode(valueNode, selector);
+    }
+    // Merkleization
+    hashTreeRoot(value) {
+        const root = alloc_allocUnsafe(32);
+        this.hashTreeRootInto(value, root, 0);
+        return root;
+    }
+    hashTreeRootInto(value, output, offset) {
+        super.hashTreeRootInto(value, this.mixInLengthBlockBytes, 0);
+        const selector = value === null ? 0 : 1;
+        this.mixInLengthBuffer.writeUIntLE(selector, 32, 6);
+        // one for hashTreeRoot(value), one for selector
+        const chunkCount = 2;
+        hasher_merkleizeBlocksBytes(this.mixInLengthBlockBytes, chunkCount, output, offset);
+    }
+    getBlocksBytes(value) {
+        if (value === null) {
+            this.blocksBuffer.fill(0);
+        }
+        else {
+            this.elementType.hashTreeRootInto(value, this.blocksBuffer, 0);
+        }
+        return this.blocksBuffer;
+    }
+    // Proofs
+    getPropertyGindex(prop) {
+        if (type_composite_isCompositeType(this.elementType)) {
+            const propIndex = this.elementType.getPropertyGindex(prop);
+            return propIndex === null ? propIndex : gindex_concatGindices([type_optional_VALUE_GINDEX, propIndex]);
+        }
+        throw new Error("not applicable for Optional basic type");
+    }
+    getPropertyType(prop) {
+        if (type_composite_isCompositeType(this.elementType)) {
+            return this.elementType.getPropertyType(prop);
+        }
+        throw new Error("not applicable for Optional basic type");
+    }
+    getIndexProperty(index) {
+        if (type_composite_isCompositeType(this.elementType)) {
+            return this.elementType.getIndexProperty(index);
+        }
+        throw new Error("not applicable for Optional basic type");
+    }
+    tree_createProofGindexes(node, jsonPaths) {
+        if (type_composite_isCompositeType(this.elementType)) {
+            return super.tree_createProofGindexes(node, jsonPaths);
+        }
+        throw new Error("not applicable for Optional basic type");
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        if (!rootNode) {
+            throw new Error("Optional type requires rootNode argument to get leaves");
+        }
+        const selector = arrayBasic_getLengthFromRootNode(rootNode);
+        if (type_composite_isCompositeType(this.elementType) && selector === 1) {
+            return [
+                //
+                ...this.elementType.tree_getLeafGindices(gindex_concatGindices([rootGindex, type_optional_VALUE_GINDEX]), rootNode.left),
+                gindex_concatGindices([rootGindex, type_optional_SELECTOR_GINDEX]),
+            ];
+        }
+        if (selector === 0 || selector === 1) {
+            return [
+                //
+                gindex_concatGindices([rootGindex, type_optional_VALUE_GINDEX]),
+                gindex_concatGindices([rootGindex, type_optional_SELECTOR_GINDEX]),
+            ];
+        }
+        throw new Error(`Invalid selector for Optional type: ${selector}`);
+    }
+    // JSON
+    fromJson(json) {
+        return (json === null ? null : this.elementType.fromJson(json));
+    }
+    toJson(value) {
+        return value === null ? null : this.elementType.toJson(value);
+    }
+    clone(value) {
+        return (value === null ? null : this.elementType.clone(value));
+    }
+    equals(a, b) {
+        if (a === null && b === null)
+            return true;
+        if (a === null || b === null)
+            return false;
+        return this.elementType.equals(a, b);
+    }
+}
+function optional_isOptionalType(type) {
+    return type instanceof optional_OptionalType;
+}
+function optional_toNonOptionalType(type) {
+    return (optional_isOptionalType(type) ? type.elementType : type);
+}
+//# sourceMappingURL=optional.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/vectorBasic.js
+
+
+
+
+
+
+/**
+ * Vector: Ordered fixed-length homogeneous collection, with N values
+ *
+ * Array of Basic type:
+ * - Basic types are max 32 bytes long so multiple values may be packed in the same node.
+ * - Basic types are never returned in a view wrapper, but their value representation
+ */
+class vectorBasic_VectorBasicType extends array_ArrayType {
+    elementType;
+    length;
+    typeName;
+    itemsPerChunk;
+    depth;
+    chunkDepth;
+    maxChunkCount;
+    fixedSize;
+    minSize;
+    maxSize;
+    isList = false;
+    isViewMutable = true;
+    defaultLen;
+    constructor(elementType, length, opts) {
+        super(elementType);
+        this.elementType = elementType;
+        this.length = length;
+        if (!elementType.isBasic)
+            throw Error("elementType must be basic");
+        if (length === 0)
+            throw Error("Vector length must be > 0");
+        this.typeName = opts?.typeName ?? `Vector[${elementType.typeName}, ${length}]`;
+        // TODO Check that itemsPerChunk is an integer
+        this.itemsPerChunk = 32 / elementType.byteLength;
+        this.maxChunkCount = Math.ceil((length * elementType.byteLength) / 32);
+        this.chunkDepth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        this.depth = this.chunkDepth;
+        this.fixedSize = length * elementType.byteLength;
+        this.minSize = this.fixedSize;
+        this.maxSize = this.fixedSize;
+        this.defaultLen = length;
+        this.blocksBuffer = new Uint8Array(Math.ceil(this.maxChunkCount / 2) * 64);
+    }
+    static named(elementType, limit, opts) {
+        return new (named_namedClass(vectorBasic_VectorBasicType, opts.typeName))(elementType, limit, opts);
+    }
+    getView(tree) {
+        return new arrayBasic_ArrayBasicTreeView(this, tree);
+    }
+    getViewDU(node, cache) {
+        // cache type should be validated (if applicate) in the view
+        // biome-ignore lint/suspicious/noExplicitAny: We explicity need to use `any` here
+        return new arrayBasic_ArrayBasicTreeViewDU(this, node, cache);
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        view.commit(hcOffset, hcByLevel);
+        return view.node;
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    // Serialization + deserialization
+    value_serializedSize() {
+        return this.fixedSize;
+    }
+    value_serializeToBytes(output, offset, value) {
+        return arrayBasic_value_serializeToBytesArrayBasic(this.elementType, this.length, output, offset, value);
+    }
+    value_deserializeFromBytes(data, start, end) {
+        return arrayBasic_value_deserializeFromBytesArrayBasic(this.elementType, data, start, end, this);
+    }
+    tree_serializedSize() {
+        return this.fixedSize;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        return arrayBasic_tree_serializeToBytesArrayBasic(this.elementType, this.length, this.depth, output, offset, node);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        return arrayBasic_tree_deserializeFromBytesArrayBasic(this.elementType, this.depth, data, start, end, this);
+    }
+    // Helpers for TreeView
+    tree_getLength() {
+        return this.length;
+    }
+    tree_setLength() {
+        // Vector's length is immutable, ignore this call
+    }
+    tree_getChunksNode(node) {
+        return node;
+    }
+    tree_chunksNodeOffset() {
+        return 0;
+    }
+    tree_setChunksNode(_rootNode, chunksNode) {
+        return chunksNode;
+    }
+    // Merkleization
+    getBlocksBytes(value) {
+        const uint8Array = this.blocksBuffer.subarray(0, this.fixedSize);
+        const dataView = new DataView(uint8Array.buffer, uint8Array.byteOffset, uint8Array.byteLength);
+        arrayBasic_value_serializeToBytesArrayBasic(this.elementType, this.length, { uint8Array, dataView }, 0, value);
+        // remaining bytes from this.fixedSize to this.blocksBuffer.length must be zeroed
+        return this.blocksBuffer;
+    }
+}
+//# sourceMappingURL=vectorBasic.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/vectorComposite.js
+
+
+
+
+
+
+/**
+ * Vector: Ordered fixed-length homogeneous collection, with N values
+ *
+ * Array of Composite type:
+ * - Composite types always take at least one chunk
+ * - Composite types are always returned as views
+ */
+class vectorComposite_VectorCompositeType extends array_ArrayType {
+    elementType;
+    length;
+    typeName;
+    itemsPerChunk = 1;
+    depth;
+    chunkDepth;
+    maxChunkCount;
+    fixedSize;
+    minSize;
+    maxSize;
+    isList = false;
+    isViewMutable = true;
+    defaultLen;
+    constructor(elementType, length, opts) {
+        super(elementType);
+        this.elementType = elementType;
+        this.length = length;
+        if (elementType.isBasic)
+            throw Error("elementType must not be basic");
+        if (length === 0)
+            throw Error("Vector length must be > 0");
+        this.typeName = opts?.typeName ?? `Vector[${elementType.typeName}, ${length}]`;
+        this.maxChunkCount = length;
+        this.chunkDepth = merkleize_maxChunksToDepth(this.maxChunkCount);
+        this.depth = this.chunkDepth;
+        this.fixedSize = elementType.fixedSize === null ? null : length * elementType.fixedSize;
+        this.minSize = arrayComposite_minSizeArrayComposite(elementType, length);
+        this.maxSize = arrayComposite_maxSizeArrayComposite(elementType, length);
+        this.defaultLen = length;
+        this.blocksBuffer = new Uint8Array(Math.ceil(this.maxChunkCount / 2) * 64);
+    }
+    static named(elementType, limit, opts) {
+        return new (named_namedClass(vectorComposite_VectorCompositeType, opts.typeName))(elementType, limit, opts);
+    }
+    getView(tree) {
+        return new arrayComposite_ArrayCompositeTreeView(this, tree);
+    }
+    getViewDU(node, cache) {
+        // cache type should be validated (if applicate) in the view
+        // biome-ignore lint/suspicious/noExplicitAny: We need to use `any` here explicitly
+        return new arrayComposite_ArrayCompositeTreeViewDU(this, node, cache);
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view, hcOffset = 0, hcByLevel = null) {
+        view.commit(hcOffset, hcByLevel);
+        return view.node;
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    // Serialization + deserialization
+    value_serializedSize(value) {
+        return arrayComposite_value_serializedSizeArrayComposite(this.elementType, this.length, value);
+    }
+    value_serializeToBytes(output, offset, value) {
+        return arrayComposite_value_serializeToBytesArrayComposite(this.elementType, this.length, output, offset, value);
+    }
+    value_deserializeFromBytes(data, start, end) {
+        return arrayComposite_value_deserializeFromBytesArrayComposite(this.elementType, data, start, end, this);
+    }
+    tree_serializedSize(node) {
+        return arrayComposite_tree_serializedSizeArrayComposite(this.elementType, this.length, this.depth, node);
+    }
+    tree_serializeToBytes(output, offset, node) {
+        return arrayComposite_tree_serializeToBytesArrayComposite(this.elementType, this.length, this.depth, node, output, offset);
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        return arrayComposite_tree_deserializeFromBytesArrayComposite(this.elementType, this.depth, data, start, end, this);
+    }
+    // Helpers for TreeView
+    tree_getLength() {
+        return this.length;
+    }
+    tree_setLength() {
+        // Vector's length is immutable, ignore this call
+    }
+    tree_getChunksNode(node) {
+        return node;
+    }
+    tree_chunksNodeOffset() {
+        return 0;
+    }
+    tree_setChunksNode(_rootNode, chunksNode) {
+        return chunksNode;
+    }
+    // Merkleization
+    getBlocksBytes(value) {
+        return arrayComposite_value_getBlocksBytesArrayComposite(this.elementType, this.length, value, this.blocksBuffer);
+    }
+}
+//# sourceMappingURL=vectorComposite.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/listUintNum64.js
+
+
+
+
+/**
+ * Specific implementation of ListBasicType for UintNumberType with some optimizations.
+ */
+class listUintNum64_ListUintNum64Type extends listBasic_ListBasicType {
+    constructor(limit, opts) {
+        super(new uint_UintNumberType(8), limit, opts);
+    }
+    /**
+     * Return a ListBasicTreeViewDU with nodes populated
+     */
+    toViewDU(value) {
+        // no need to serialize and deserialize like in the abstract class
+        const { treeNode, leafNodes } = this.packedUintNum64sToNode(value);
+        // cache leaf nodes in the ViewDU
+        return this.getViewDU(treeNode, {
+            nodes: leafNodes,
+            length: value.length,
+            nodesPopulated: true,
+        });
+    }
+    /**
+     * No need to serialize and deserialize like in the abstract class
+     */
+    value_toTree(value) {
+        const { treeNode } = this.packedUintNum64sToNode(value);
+        return treeNode;
+    }
+    packedUintNum64sToNode(value) {
+        if (value.length > this.limit) {
+            throw new Error(`Exceeds limit: ${value.length} > ${this.limit}`);
+        }
+        const leafNodes = packedNode_packedUintNum64sToLeafNodes(value);
+        // subtreeFillToContents mutates the leafNodes array
+        const rootNode = subtree_subtreeFillToContents([...leafNodes], this.chunkDepth);
+        const treeNode = arrayBasic_addLengthNode(rootNode, value.length);
+        return { treeNode, leafNodes };
+    }
+}
+//# sourceMappingURL=listUintNum64.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/stableContainer.js
+
+
+
+
+/**
+ * Intented usage:
+ *
+ * - Get initial BeaconState from disk.
+ * - Before applying next block, switch to mutable
+ * - Get some field, create a view in mutable mode
+ * - Do modifications of the state in the state transition function
+ * - When done, commit and apply new root node once to og BeaconState
+ * - However, keep all the caches and transfer them to the new BeaconState
+ *
+ * Questions:
+ * - Can the child views created in mutable mode switch to not mutable? If so, it seems that it needs to recursively
+ *   iterate the entire data structure and views
+ *
+ */
+class view_stableContainer_ContainerTreeView extends abstract_TreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super();
+        this.type = type;
+        this.tree = tree;
+    }
+    get node() {
+        return this.tree.rootNode;
+    }
+}
+function view_stableContainer_getContainerTreeViewClass(type) {
+    class CustomContainerTreeView extends view_stableContainer_ContainerTreeView {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType, optional } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (basic_isBasicType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    const leafNode = tree_getNodeAtDepth(this.node, this.type.depth, index);
+                    if (optional && this.type.tree_getActiveField(this.tree.rootNode, index) === false) {
+                        return null;
+                    }
+                    return fieldType.tree_getFromNode(leafNode);
+                },
+                set: function (value) {
+                    if (optional && value == null) {
+                        this.tree.setNodeAtDepth(this.type.depth, index, lib_zeroNode_zeroNode(0));
+                        // only update the active field if necessary
+                        if (this.type.tree_getActiveField(this.tree.rootNode, index)) {
+                            this.tree.rootNode = this.type.tree_setActiveField(this.tree.rootNode, index, false);
+                        }
+                        return;
+                    }
+                    const leafNodePrev = tree_getNodeAtDepth(this.node, this.type.depth, index);
+                    const leafNode = leafNodePrev.clone();
+                    fieldType.tree_setToNode(leafNode, value);
+                    this.tree.setNodeAtDepth(this.type.depth, index, leafNode);
+                    // only update the active field if necessary
+                    if (!this.type.tree_getActiveField(this.tree.rootNode, index)) {
+                        this.tree.rootNode = this.type.tree_setActiveField(this.tree.rootNode, index, true);
+                    }
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView (if not nullish). The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeView of fieldName
+                get: function () {
+                    const gindex = gindex_toGindexBitstring(this.type.depth, index);
+                    const subtree = this.tree.getSubtree(gindex);
+                    if (optional && this.type.tree_getActiveField(this.tree.rootNode, index) === false) {
+                        return null;
+                    }
+                    return fieldType.getView(subtree);
+                },
+                // Expects TreeView of fieldName
+                set: function (value) {
+                    if (optional && value == null) {
+                        this.tree.setNodeAtDepth(this.type.depth, index, lib_zeroNode_zeroNode(0));
+                        // only update the active field if necessary
+                        if (this.type.tree_getActiveField(this.tree.rootNode, index)) {
+                            this.tree.rootNode = this.type.tree_setActiveField(this.tree.rootNode, index, false);
+                        }
+                        return;
+                    }
+                    const node = fieldType.commitView(value);
+                    this.tree.setNodeAtDepth(this.type.depth, index, node);
+                    // only update the active field if necessary
+                    if (!this.type.tree_getActiveField(this.tree.rootNode, index)) {
+                        this.tree.rootNode = this.type.tree_setActiveField(this.tree.rootNode, index, false);
+                    }
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomContainerTreeView, "name", { value: type.typeName, writable: false });
+    return CustomContainerTreeView;
+}
+/**
+ * Precompute fixed and variable offsets position for faster deserialization.
+ * @throws when activeFields does not align with non-optional field types
+ * @returns Does a single pass over all fields and returns:
+ * - isFixedLen: If field index [i] is fixed length
+ * - fieldRangesFixedLen: For fields with fixed length, their range of bytes
+ * - variableOffsetsPosition: Position of the 4 bytes offset for variable size fields
+ * - fixedEnd: End of the fixed size range
+ * -
+ */
+function stableContainer_computeSerdesData(activeFields, fields) {
+    const isFixedLen = [];
+    const fieldRangesFixedLen = [];
+    const variableOffsetsPosition = [];
+    let pointerFixed = Math.ceil(activeFields.bitLen / 8);
+    for (const [i, { fieldName, fieldType, optional }] of fields.entries()) {
+        // if the field is inactive
+        if (!activeFields.get(i)) {
+            if (!optional) {
+                throw new Error(`Field "${String(fieldName)}" must be active since it is not optional`);
+            }
+            continue;
+        }
+        isFixedLen.push(fieldType.fixedSize !== null);
+        if (fieldType.fixedSize === null) {
+            // Variable length
+            variableOffsetsPosition.push(pointerFixed);
+            pointerFixed += 4;
+        }
+        else {
+            fieldRangesFixedLen.push({ start: pointerFixed, end: pointerFixed + fieldType.fixedSize });
+            pointerFixed += fieldType.fixedSize;
+        }
+    }
+    return {
+        isFixedLen,
+        fieldRangesFixedLen,
+        variableOffsetsPosition,
+        fixedEnd: pointerFixed,
+    };
+}
+//# sourceMappingURL=stableContainer.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/stableContainer.js
+
+
+
+
+
+class stableContainer_StableContainerTreeViewDU extends container_BasicContainerTreeViewDU {
+    type;
+    _rootNode;
+    /** pending active fields bitvector */
+    activeFields;
+    constructor(type, _rootNode, cache) {
+        super(type, _rootNode, cache);
+        this.type = type;
+        this._rootNode = _rootNode;
+        if (cache) {
+            this.activeFields = cache.activeFields;
+        }
+        else {
+            this.activeFields = type.tree_getActiveFields(_rootNode);
+        }
+    }
+    get cache() {
+        const result = super.cache;
+        return { ...result, activeFields: this.activeFields };
+    }
+    commit(hcOffset = 0, hcByLevel = null) {
+        super.commit(hcOffset, hcByLevel);
+        this._rootNode = this.type.tree_setActiveFields(this._rootNode, this.activeFields);
+        if (hcByLevel !== null) {
+            hcByLevel[hcOffset].push(this._rootNode.left, this._rootNode.right, this._rootNode);
+        }
+    }
+    /**
+     * Same method to `type/container.ts` that call ViewDU.serializeToBytes() of internal fields.
+     */
+    serializeToBytes(output, offset) {
+        this.commit();
+        const activeFields = this.type.tree_getActiveFields(this.node);
+        // write active fields bitvector
+        output.uint8Array.set(activeFields.uint8Array, offset);
+        const { fixedEnd } = stableContainer_computeSerdesData(activeFields, this.type.fieldsEntries);
+        const activeFieldsLen = activeFields.uint8Array.length;
+        let fixedIndex = offset + activeFieldsLen;
+        let variableIndex = offset + fixedEnd;
+        for (let index = 0; index < this.type.fieldsEntries.length; index++) {
+            const { fieldType, optional } = this.type.fieldsEntries[index];
+            if (optional && !activeFields.get(index)) {
+                continue;
+            }
+            let node = this.nodes[index];
+            if (node === undefined) {
+                node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+                this.nodes[index] = node;
+            }
+            if (fieldType.fixedSize === null) {
+                // write offset relative to the start of serialized active fields, after the Bitvector[N]
+                output.dataView.setUint32(fixedIndex, variableIndex - offset - activeFieldsLen, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                // basic types always have fixedSize
+                if (type_composite_isCompositeType(fieldType)) {
+                    const view = fieldType.getViewDU(node, this.caches[index]);
+                    if (view.serializeToBytes !== undefined) {
+                        variableIndex = view.serializeToBytes(output, variableIndex);
+                    }
+                    else {
+                        // some types don't define ViewDU as TreeViewDU, like the UnionType, in that case view.serializeToBytes = undefined
+                        variableIndex = fieldType.tree_serializeToBytes(output, variableIndex, node);
+                    }
+                }
+            }
+            else {
+                fixedIndex = fieldType.tree_serializeToBytes(output, fixedIndex, node);
+            }
+        }
+        return variableIndex;
+    }
+}
+function viewDU_stableContainer_getContainerTreeViewDUClass(type) {
+    class CustomContainerTreeViewDU extends stableContainer_StableContainerTreeViewDU {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType, optional } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (basic_isBasicType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    if (optional && this.activeFields.get(index) === false) {
+                        return null;
+                    }
+                    // First walk through the tree to get the root node for that index
+                    let node = this.nodes[index];
+                    if (node === undefined) {
+                        node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+                        this.nodes[index] = node;
+                    }
+                    return fieldType.tree_getFromNode(node);
+                },
+                set: function (value) {
+                    if (optional && value == null) {
+                        this.nodes[index] = lib_zeroNode_zeroNode(0);
+                        this.nodesChanged.add(index);
+                        this.activeFields.set(index, false);
+                        return;
+                    }
+                    // Create new node if current leafNode is not dirty
+                    let nodeChanged;
+                    if (this.nodesChanged.has(index)) {
+                        // TODO: This assumes that node has already been populated
+                        nodeChanged = this.nodes[index];
+                    }
+                    else {
+                        const nodePrev = (this.nodes[index] ?? tree_getNodeAtDepth(this._rootNode, this.type.depth, index));
+                        nodeChanged = nodePrev.clone();
+                        // Store the changed node in the nodes cache
+                        this.nodes[index] = nodeChanged;
+                        this.nodesChanged.add(index);
+                    }
+                    fieldType.tree_setToNode(nodeChanged, value);
+                    this.activeFields.set(index, true);
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView. The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomContainerTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeViewDU of fieldName
+                get: function () {
+                    if (optional && this.activeFields.get(index) === false) {
+                        return null;
+                    }
+                    const viewChanged = this.viewsChanged.get(index);
+                    if (viewChanged) {
+                        return viewChanged;
+                    }
+                    let node = this.nodes[index];
+                    if (node === undefined) {
+                        node = tree_getNodeAtDepth(this._rootNode, this.type.depth, index);
+                        this.nodes[index] = node;
+                    }
+                    // Keep a reference to the new view to call .commit on it latter, only if mutable
+                    const view = fieldType.getViewDU(node, this.caches[index]);
+                    if (fieldType.isViewMutable) {
+                        this.viewsChanged.set(index, view);
+                    }
+                    // No need to persist the child's view cache since a second get returns this view instance.
+                    // The cache is only persisted on commit where the viewsChanged map is dropped.
+                    return view;
+                },
+                // Expects TreeViewDU of fieldName
+                set: function (view) {
+                    if (optional && view == null) {
+                        this.nodes[index] = lib_zeroNode_zeroNode(0);
+                        this.nodesChanged.add(index);
+                        this.activeFields.set(index, false);
+                        return;
+                    }
+                    // When setting a view:
+                    // - Not necessary to commit node
+                    // - Not necessary to persist cache
+                    // Just keeping a reference to the view in this.viewsChanged ensures consistency
+                    this.viewsChanged.set(index, view);
+                    this.activeFields.set(index, true);
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomContainerTreeViewDU, "name", { value: type.typeName, writable: false });
+    return CustomContainerTreeViewDU;
+}
+//# sourceMappingURL=stableContainer.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/stableContainer.js
+
+
+
+
+
+
+
+
+
+/**
+ * StableContainer: ordered heterogeneous collection of values
+ * - EIP: https://eips.ethereum.org/EIPS/eip-7495
+ * - Notation: Custom name per instance
+ */
+class stableContainer_StableContainerType extends composite_CompositeType {
+    maxFields;
+    opts;
+    typeName;
+    depth;
+    maxChunkCount;
+    fixedSize;
+    minSize;
+    maxSize;
+    isList = false;
+    isViewMutable = true;
+    fields;
+    // Precomputed data for faster serdes
+    fieldsEntries;
+    /** End of fixed section of serialized Container */
+    // readonly fixedEnd: number;
+    fieldsGindex;
+    jsonKeyToFieldName;
+    /** Cached TreeView constuctor with custom prototype for this Type's properties */
+    TreeView;
+    TreeViewDU;
+    padActiveFields;
+    // temporary root to avoid memory allocation
+    tempRoot = new Uint8Array(32);
+    constructor(fields, maxFields, opts) {
+        super();
+        this.maxFields = maxFields;
+        this.opts = opts;
+        this.fields = fields;
+        // Render detailed typeName. Consumers should overwrite since it can get long
+        this.typeName = opts?.typeName ?? type_stableContainer_renderContainerTypeName(fields);
+        this.maxChunkCount = maxFields;
+        // Add 1 for the mixed-in bitvector
+        this.depth = merkleize_maxChunksToDepth(this.maxChunkCount) + 1;
+        // Precalculated data for faster serdes
+        this.fieldsEntries = [];
+        for (const fieldName of Object.keys(fields)) {
+            const fieldType = fields[fieldName];
+            this.fieldsEntries.push({
+                fieldName,
+                fieldType: optional_toNonOptionalType(fieldType),
+                jsonKey: type_stableContainer_precomputeJsonKey(fieldName, opts?.casingMap, opts?.jsonCase),
+                gindex: gindex_toGindex(this.depth, BigInt(this.fieldsEntries.length)),
+                optional: optional_isOptionalType(fieldType),
+            });
+        }
+        this.padActiveFields = Array.from({ length: this.maxChunkCount - this.fieldsEntries.length }, () => false);
+        if (this.fieldsEntries.length === 0) {
+            throw Error("StableContainer must have > 0 fields");
+        }
+        // Precalculate for Proofs API
+        this.fieldsGindex = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            this.fieldsGindex[this.fieldsEntries[i].fieldName] = gindex_toGindex(this.depth, BigInt(i));
+        }
+        // To resolve JSON paths in fieldName notation and jsonKey notation
+        this.jsonKeyToFieldName = {};
+        for (const { fieldName, jsonKey } of this.fieldsEntries) {
+            this.jsonKeyToFieldName[jsonKey] = fieldName;
+        }
+        const { minLen, maxLen, fixedSize } = type_stableContainer_precomputeSizes(this.fieldsEntries);
+        this.minSize = minLen;
+        this.maxSize = maxLen;
+        this.fixedSize = fixedSize;
+        // TODO: This options are necessary for ContainerNodeStruct to override this.
+        // Refactor this constructor to allow customization without pollutin the options
+        this.TreeView = opts?.getContainerTreeViewClass?.(this) ?? view_stableContainer_getContainerTreeViewClass(this);
+        this.TreeViewDU = opts?.getContainerTreeViewDUClass?.(this) ?? viewDU_stableContainer_getContainerTreeViewDUClass(this);
+        const fieldBytes = this.fieldsEntries.length * 32;
+        this.blocksBuffer = new Uint8Array(Math.ceil(fieldBytes / 64) * 64);
+    }
+    static named(fields, maxFields, opts) {
+        return new (named_namedClass(stableContainer_StableContainerType, opts.typeName))(fields, maxFields, opts);
+    }
+    defaultValue() {
+        const value = {};
+        for (const { fieldName, fieldType, optional } of this.fieldsEntries) {
+            value[fieldName] = (optional ? null : fieldType.defaultValue());
+        }
+        return value;
+    }
+    getView(tree) {
+        return new this.TreeView(this, tree);
+    }
+    getViewDU(node, cache) {
+        return new this.TreeViewDU(this, node, cache);
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view) {
+        view.commit();
+        return view.node;
+    }
+    // Serialization + deserialization
+    // -------------------------------
+    // Containers can mix fixed length and variable length data.
+    //
+    // Fixed part                         Variable part
+    // [field1 offset][field2 data       ][field1 data               ]
+    // [0x000000c]    [0xaabbaabbaabbaabb][0xffffffffffffffffffffffff]
+    value_serializedSize(value) {
+        let totalSize = Math.ceil(this.maxChunkCount / 8);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            // skip optional fields with nullish values
+            if (optional && value[fieldName] == null) {
+                continue;
+            }
+            // Offset (4 bytes) + size
+            totalSize +=
+                fieldType.fixedSize === null ? 4 + fieldType.value_serializedSize(value[fieldName]) : fieldType.fixedSize;
+        }
+        return totalSize;
+    }
+    value_serializeToBytes(output, offset, value) {
+        // compute active field bitvector
+        const activeFields = bitArray_BitArray.fromBoolArray([
+            ...this.fieldsEntries.map(({ fieldName }) => value[fieldName] != null),
+            ...this.padActiveFields,
+        ]);
+        // write active field bitvector
+        output.uint8Array.set(activeFields.uint8Array, offset);
+        const { fixedEnd } = stableContainer_computeSerdesData(activeFields, this.fieldsEntries);
+        const activeFieldsLen = activeFields.uint8Array.length;
+        let fixedIndex = offset + activeFieldsLen;
+        let variableIndex = offset + fixedEnd;
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            // skip optional fields with nullish values
+            if (optional && value[fieldName] == null) {
+                continue;
+            }
+            if (fieldType.fixedSize === null) {
+                // write offset relative to the start of serialized active fields, after the Bitvector[N]
+                output.dataView.setUint32(fixedIndex, variableIndex - offset - activeFieldsLen, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                variableIndex = fieldType.value_serializeToBytes(output, variableIndex, value[fieldName]);
+            }
+            else {
+                fixedIndex = fieldType.value_serializeToBytes(output, fixedIndex, value[fieldName]);
+            }
+        }
+        return variableIndex;
+    }
+    value_deserializeFromBytes(data, start, end) {
+        const { activeFields, fieldRanges } = this.getFieldRanges(data, start, end);
+        const value = {};
+        for (let i = 0, rangesIx = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            if (optional && !activeFields.get(i)) {
+                value[fieldName] = null;
+                continue;
+            }
+            const fieldRange = fieldRanges[rangesIx++];
+            value[fieldName] = fieldType.value_deserializeFromBytes(data, start + fieldRange.start, start + fieldRange.end);
+        }
+        return value;
+    }
+    tree_serializedSize(node) {
+        const activeFields = this.tree_getActiveFields(node);
+        let totalSize = Math.ceil(activeFields.bitLen / 8);
+        const nodes = tree_getNodesAtDepth(node, this.depth, 0, this.fieldsEntries.length);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType, optional } = this.fieldsEntries[i];
+            const node = nodes[i];
+            if (optional && !activeFields.get(i)) {
+                continue;
+            }
+            // Offset (4 bytes) + size
+            totalSize += fieldType.fixedSize === null ? 4 + fieldType.tree_serializedSize(node) : fieldType.fixedSize;
+        }
+        return totalSize;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        // compute active field bitvector
+        const activeFields = this.tree_getActiveFields(node);
+        // write active field bitvector
+        output.uint8Array.set(activeFields.uint8Array, offset);
+        const { fixedEnd } = stableContainer_computeSerdesData(activeFields, this.fieldsEntries);
+        const activeFieldsLen = activeFields.uint8Array.length;
+        let fixedIndex = offset + activeFieldsLen;
+        let variableIndex = offset + fixedEnd;
+        const nodes = tree_getNodesAtDepth(node, this.depth, 0, this.fieldsEntries.length);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType, optional } = this.fieldsEntries[i];
+            if (optional && !activeFields.get(i)) {
+                continue;
+            }
+            const node = nodes[i];
+            if (fieldType.fixedSize === null) {
+                // write offset relative to the start of serialized active fields, after the Bitvector[N]
+                output.dataView.setUint32(fixedIndex, variableIndex - offset - activeFieldsLen, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                variableIndex = fieldType.tree_serializeToBytes(output, variableIndex, node);
+            }
+            else {
+                fixedIndex = fieldType.tree_serializeToBytes(output, fixedIndex, node);
+            }
+        }
+        return variableIndex;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        const { activeFields, fieldRanges } = this.getFieldRanges(data, start, end);
+        const nodes = new Array(this.fieldsEntries.length);
+        for (let i = 0, rangesIx = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType, optional } = this.fieldsEntries[i];
+            if (optional && !activeFields.get(i)) {
+                nodes[i] = lib_zeroNode_zeroNode(0);
+                continue;
+            }
+            const fieldRange = fieldRanges[rangesIx++];
+            nodes[i] = fieldType.tree_deserializeFromBytes(data, start + fieldRange.start, start + fieldRange.end);
+        }
+        const rootNode = new lib_node_BranchNode(subtree_subtreeFillToContents(nodes, this.depth - 1), lib_zeroNode_zeroNode(0));
+        return this.tree_setActiveFields(rootNode, activeFields);
+    }
+    // Merkleization
+    // hashTreeRoot is the same to parent as it call hashTreeRootInto()
+    hashTreeRootInto(value, output, offset, safeCache = false) {
+        // Return cached mutable root if any
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                output.set(cachedRoot, offset);
+                return;
+            }
+        }
+        const blockBytes = this.getBlocksBytes(value);
+        hasher_merkleizeBlocksBytes(blockBytes, this.maxChunkCount, this.tempRoot, 0);
+        // compute active field bitvector
+        const activeFields = bitArray_BitArray.fromBoolArray([
+            ...this.fieldsEntries.map(({ fieldName }) => value[fieldName] != null),
+            ...this.padActiveFields,
+        ]);
+        stableContainer_mixInActiveFields(this.tempRoot, activeFields, output, offset);
+        if (this.cachePermanentRootStruct) {
+            merkleize_cacheRoot(value, output, offset, safeCache);
+        }
+    }
+    getBlocksBytes(struct) {
+        this.blocksBuffer.fill(0);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            if (optional && struct[fieldName] == null) {
+                this.blocksBuffer.set(lib_zeroHash_zeroHash(0), i * 32);
+            }
+            else {
+                fieldType.hashTreeRootInto(struct[fieldName], this.blocksBuffer, i * 32);
+            }
+        }
+        return this.blocksBuffer;
+    }
+    // Proofs
+    getPropertyGindex(prop) {
+        const gindex = this.fieldsGindex[prop] ?? this.fieldsGindex[this.jsonKeyToFieldName[prop]];
+        if (gindex === undefined)
+            throw Error(`Unknown container property ${prop}`);
+        return gindex;
+    }
+    getPropertyType(prop) {
+        const fieldName = this.fields[prop] ? prop : this.jsonKeyToFieldName[prop];
+        const entry = this.fieldsEntries.find((entry) => entry.fieldName === fieldName);
+        if (entry === undefined)
+            throw Error(`Unknown container property ${prop}`);
+        return entry.fieldType;
+    }
+    getIndexProperty(index) {
+        if (index >= this.fieldsEntries.length) {
+            return null;
+        }
+        return this.fieldsEntries[index].fieldName;
+    }
+    tree_createProofGindexes(node, jsonPaths) {
+        const gindexes = [];
+        const activeFields = this.tree_getActiveFields(node);
+        for (const jsonPath of jsonPaths) {
+            const prop = jsonPath[0];
+            if (prop == null) {
+                continue;
+            }
+            const fieldIndex = this.fieldsEntries.findIndex((entry) => entry.fieldName === prop);
+            if (fieldIndex === -1)
+                throw Error(`Unknown container property ${prop}`);
+            const entry = this.fieldsEntries[fieldIndex];
+            if (entry.optional && !activeFields.get(fieldIndex)) {
+                // field is inactive and doesn't count as a leaf
+                continue;
+            }
+            // same to Composite
+            const { type, gindex } = this.getPathInfo(jsonPath);
+            if (!type_composite_isCompositeType(type)) {
+                gindexes.push(gindex);
+            }
+            else {
+                // if the path subtype is composite, include the gindices of all the leaves
+                const leafGindexes = type.tree_getLeafGindices(gindex, type.fixedSize === null ? tree_getNode(node, gindex) : undefined);
+                for (const gindex of leafGindexes) {
+                    gindexes.push(gindex);
+                }
+            }
+        }
+        return gindexes;
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        const gindices = [];
+        if (!rootNode) {
+            throw new Error("StableContainer.tree_getLeafGindices requires tree argument to get leaves");
+        }
+        const activeFields = this.tree_getActiveFields(rootNode);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            if (optional && !activeFields.get(i)) {
+                // field is inactive and doesn't count as a leaf
+                continue;
+            }
+            const fieldGindex = this.fieldsGindex[fieldName];
+            const fieldGindexFromRoot = gindex_concatGindices([rootGindex, fieldGindex]);
+            if (fieldType.isBasic) {
+                gindices.push(fieldGindexFromRoot);
+            }
+            else {
+                const compositeType = fieldType;
+                if (fieldType.fixedSize === null) {
+                    if (!rootNode) {
+                        throw new Error("variable type requires tree argument to get leaves");
+                    }
+                    gindices.push(...compositeType.tree_getLeafGindices(fieldGindexFromRoot, tree_getNode(rootNode, fieldGindex)));
+                }
+                else {
+                    gindices.push(...compositeType.tree_getLeafGindices(fieldGindexFromRoot));
+                }
+            }
+        }
+        return gindices;
+    }
+    // JSON
+    fromJson(json) {
+        if (typeof json !== "object") {
+            throw Error("JSON must be of type object");
+        }
+        if (json === null) {
+            throw Error("JSON must not be null");
+        }
+        const value = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, jsonKey, optional } = this.fieldsEntries[i];
+            const jsonValue = json[jsonKey];
+            if (optional && jsonValue == null) {
+                value[fieldName] = null;
+                continue;
+            }
+            if (jsonValue === undefined) {
+                throw Error(`JSON expected key ${jsonKey} is undefined`);
+            }
+            value[fieldName] = fieldType.fromJson(jsonValue);
+        }
+        return value;
+    }
+    toJson(value) {
+        const json = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, jsonKey, optional } = this.fieldsEntries[i];
+            if (optional && value[fieldName] == null) {
+                json[jsonKey] = null;
+                continue;
+            }
+            json[jsonKey] = fieldType.toJson(value[fieldName]);
+        }
+        return json;
+    }
+    clone(value) {
+        const newValue = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            if (optional && value[fieldName] == null) {
+                newValue[fieldName] = null;
+                continue;
+            }
+            newValue[fieldName] = fieldType.clone(value[fieldName]);
+        }
+        return newValue;
+    }
+    equals(a, b) {
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            if (optional) {
+                if (a[fieldName] == null && b[fieldName] == null) {
+                    continue;
+                }
+                if (a[fieldName] == null || b[fieldName] == null) {
+                    return false;
+                }
+            }
+            if (!fieldType.equals(a[fieldName], b[fieldName])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * `activeFields` is a bitvector prepended to the serialized data.
+     */
+    getFieldRanges(data, start, end) {
+        // this.maxChunkCount = maxFields
+        const activeFieldsByteLen = Math.ceil(this.maxChunkCount / 8);
+        // active fields bitvector, do not mutate
+        const activeFields = new bitArray_BitArray(data.uint8Array.subarray(start, start + activeFieldsByteLen), this.maxChunkCount);
+        const { variableOffsetsPosition, fixedEnd, fieldRangesFixedLen, isFixedLen } = stableContainer_computeSerdesData(activeFields, this.fieldsEntries);
+        if (variableOffsetsPosition.length === 0) {
+            // Validate fixed length container
+            const size = end - start;
+            if (size !== fixedEnd) {
+                throw Error(`${this.typeName} size ${size} not equal fixed size ${fixedEnd}`);
+            }
+            return { activeFields, fieldRanges: fieldRangesFixedLen };
+        }
+        // Read offsets in one pass
+        const offsets = type_stableContainer_readVariableOffsets(data.dataView, start, end, activeFieldsByteLen, fixedEnd, variableOffsetsPosition);
+        offsets.push(end - start); // The offsets are relative to the start
+        // Merge fieldRangesFixedLen + offsets in one array
+        let variableIdx = 0;
+        let fixedIdx = 0;
+        const fieldRanges = new Array(isFixedLen.length);
+        for (let i = 0; i < isFixedLen.length; i++) {
+            if (isFixedLen[i]) {
+                // push from fixLen ranges ++
+                fieldRanges[i] = fieldRangesFixedLen[fixedIdx++];
+            }
+            else {
+                // push from varLen ranges ++
+                fieldRanges[i] = { start: offsets[variableIdx], end: offsets[variableIdx + 1] };
+                variableIdx++;
+            }
+        }
+        return { activeFields, fieldRanges };
+    }
+    // helpers for the active fields
+    tree_getActiveFields(rootNode) {
+        // this.maxChunkCount = maxFields
+        return stableContainer_getActiveFields(rootNode, this.maxChunkCount);
+    }
+    tree_setActiveFields(rootNode, activeFields) {
+        return stableContainer_setActiveFields(rootNode, activeFields);
+    }
+    tree_getActiveField(rootNode, fieldIndex) {
+        return stableContainer_getActiveField(rootNode, this.maxChunkCount, fieldIndex);
+    }
+    tree_setActiveField(rootNode, fieldIndex, value) {
+        return stableContainer_setActiveField(rootNode, this.maxChunkCount, fieldIndex, value);
+    }
+}
+/**
+ * Returns the byte ranges of all variable size fields.
+ */
+function type_stableContainer_readVariableOffsets(data, start, end, activeFieldsEnd, fixedEnd, variableOffsetsPosition) {
+    // Since variable-sized values can be interspersed with fixed-sized values, we precalculate
+    // the offset indices so we can more easily deserialize the fields in once pass first we get the fixed sizes
+    // Note: `fixedSizes[i] = null` if that field has variable length
+    const size = end - start;
+    const activeFieldsByteLen = activeFieldsEnd - start;
+    // with the fixed sizes, we can read the offsets, and store for our single pass
+    const offsets = new Array(variableOffsetsPosition.length);
+    for (let i = 0; i < variableOffsetsPosition.length; i++) {
+        const offset = data.getUint32(start + variableOffsetsPosition[i], true) + activeFieldsByteLen;
+        // Validate offsets. If the list is empty the offset points to the end of the buffer, offset == size
+        if (offset > size) {
+            throw new Error(`Offset out of bounds ${offset} > ${size}`);
+        }
+        if (i === 0) {
+            if (offset !== fixedEnd) {
+                throw new Error(`First offset must equal to fixedEnd ${offset} != ${fixedEnd}`);
+            }
+        }
+        else {
+            if (offset < offsets[i - 1]) {
+                throw new Error(`Offsets must be increasing ${offset} < ${offsets[i - 1]}`);
+            }
+        }
+        offsets[i] = offset;
+    }
+    return offsets;
+}
+/**
+ * Precompute sizes of the Container doing one pass over fields
+ */
+function type_stableContainer_precomputeSizes(fields) {
+    // at a minimum, the active fields bitvector is prepended
+    const activeFieldsLen = Math.ceil(fields.length / 8);
+    let minLen = activeFieldsLen;
+    let maxLen = activeFieldsLen;
+    const fixedSize = null;
+    for (const { fieldType, optional } of fields) {
+        minLen += optional ? 0 : fieldType.minSize;
+        maxLen += fieldType.maxSize;
+        if (fieldType.fixedSize === null) {
+            // +4 for the offset
+            minLen += optional ? 0 : 4;
+            maxLen += 4;
+        }
+    }
+    return { minLen, maxLen, fixedSize };
+}
+/**
+ * Compute the JSON key for each fieldName. There will exist a single JSON representation for each type.
+ * To transform JSON payloads to a casing that is different from the type's defined use external tooling.
+ */
+function type_stableContainer_precomputeJsonKey(fieldName, casingMap, jsonCase) {
+    if (casingMap) {
+        const keyFromCaseMap = casingMap[fieldName];
+        if (keyFromCaseMap === undefined) {
+            throw Error(`casingMap[${String(fieldName)}] not defined`);
+        }
+        return keyFromCaseMap;
+    }
+    if (jsonCase)
+        return strings_Case[jsonCase](fieldName);
+    return fieldName;
+}
+/**
+ * Render field typeNames for a detailed typeName of this Container
+ */
+function type_stableContainer_renderContainerTypeName(fields, prefix = "StableContainer") {
+    const fieldNames = Object.keys(fields);
+    const fieldTypeNames = fieldNames
+        .map((fieldName) => `${String(fieldName)}: ${fields[fieldName].typeName}`)
+        .join(", ");
+    return `${prefix}({${fieldTypeNames}})`;
+}
+/**
+ * Get the active field bitvector, given the root of the tree and # of fields
+ */
+function stableContainer_getActiveFields(rootNode, bitLen) {
+    // fast path for depth 1, the bitvector fits in one chunk
+    if (bitLen <= 256) {
+        return new bitArray_BitArray(rootNode.right.root.subarray(0, Math.ceil(bitLen / 8)), bitLen);
+    }
+    const activeFieldsBuf = new Uint8Array(Math.ceil(bitLen / 8));
+    const depth = gindex_countToDepth(BigInt(Math.ceil(activeFieldsBuf.length / 32)));
+    const nodes = tree_getNodesAtDepth(rootNode.right, depth, 0, Math.ceil(bitLen / 256));
+    for (let i = 0; i < nodes.length; i++) {
+        activeFieldsBuf.set(nodes[i].root, i * 32);
+    }
+    return new bitArray_BitArray(activeFieldsBuf, bitLen);
+}
+// This is a global buffer to avoid creating a new one for each call to getActiveFields
+const stableContainer_singleChunkActiveFieldsBuf = new Uint8Array(32);
+function stableContainer_setActiveFields(rootNode, activeFields) {
+    // fast path for depth 1, the bitvector fits in one chunk
+    if (activeFields.bitLen <= 256) {
+        stableContainer_singleChunkActiveFieldsBuf.fill(0);
+        stableContainer_singleChunkActiveFieldsBuf.set(activeFields.uint8Array);
+        return new lib_node_BranchNode(rootNode.left, node_LeafNode.fromRoot(stableContainer_singleChunkActiveFieldsBuf));
+    }
+    const activeFieldsChunkCount = Math.ceil(activeFields.bitLen / 256);
+    const nodes = [];
+    for (let i = 0; i < activeFieldsChunkCount; i++) {
+        const activeFieldsBuf = new Uint8Array(32);
+        activeFieldsBuf.set(activeFields.uint8Array.subarray(i * 32, (i + 1) * 32));
+        nodes.push(node_LeafNode.fromRoot(activeFieldsBuf));
+    }
+    return new lib_node_BranchNode(rootNode.left, subtree_subtreeFillToContents(nodes, Math.ceil(Math.log2(activeFieldsChunkCount))));
+}
+function stableContainer_getActiveField(rootNode, bitLen, fieldIndex) {
+    const hIndex = Math.floor(fieldIndex / 32);
+    const hBitIndex = fieldIndex % 32;
+    // fast path for depth 1, the bitvector fits in one chunk
+    if (bitLen <= 256) {
+        const h = node_getNodeH(rootNode.right, hIndex);
+        return Boolean(h & (1 << hBitIndex));
+    }
+    const chunkCount = Math.ceil(bitLen / 256);
+    const chunkIx = bitLen % 256;
+    const depth = Math.ceil(Math.log2(chunkCount));
+    const chunk = tree_getNode(rootNode, gindex_toGindex(depth, BigInt(chunkIx)));
+    const h = node_getNodeH(chunk, hIndex);
+    return Boolean(h & (1 << hBitIndex));
+}
+function stableContainer_setActiveField(rootNode, bitLen, fieldIndex, value) {
+    const byteIx = Math.floor(fieldIndex / 8);
+    const bitIx = fieldIndex % 8;
+    // fast path for depth 1, the bitvector fits in one chunk
+    if (bitLen <= 256) {
+        const activeFieldsBuf = rootNode.right.root;
+        activeFieldsBuf[byteIx] |= (value ? 1 : 0) << bitIx;
+        const activeFieldGindex = BigInt(3);
+        return tree_setNode(rootNode, activeFieldGindex, node_LeafNode.fromRoot(activeFieldsBuf));
+    }
+    const chunkCount = Math.ceil(bitLen / 256);
+    const chunkIx = bitLen % 256;
+    const depth = Math.ceil(Math.log2(chunkCount));
+    const activeFieldsNode = rootNode.right;
+    const newActiveFieldsNode = tree_setNodeWithFn(activeFieldsNode, BigInt(2 * depth + chunkIx), (node) => {
+        const chunkBuf = node.root;
+        chunkBuf[byteIx] |= (value ? 1 : 0) << bitIx;
+        return node_LeafNode.fromRoot(chunkBuf);
+    });
+    return new lib_node_BranchNode(rootNode.left, newActiveFieldsNode);
+}
+// This is a global buffer to avoid creating a new one for each call to getBlocksBytes
+const stableContainer_mixInActiveFieldsBlockBytes = new Uint8Array(64);
+const stableContainer_activeFieldsSingleChunk = stableContainer_mixInActiveFieldsBlockBytes.subarray(32);
+function stableContainer_mixInActiveFields(root, activeFields, output, offset) {
+    // fast path for depth 1, the bitvector fits in one chunk
+    stableContainer_mixInActiveFieldsBlockBytes.set(root, 0);
+    if (activeFields.bitLen <= 256) {
+        stableContainer_activeFieldsSingleChunk.fill(0);
+        stableContainer_activeFieldsSingleChunk.set(activeFields.uint8Array);
+        // 1 chunk for root, 1 chunk for activeFields
+        const chunkCount = 2;
+        hasher_merkleizeBlocksBytes(stableContainer_mixInActiveFieldsBlockBytes, chunkCount, output, offset);
+        return;
+    }
+    const chunkCount = Math.ceil(activeFields.uint8Array.length / 32);
+    hasher_merkleizeBlocksBytes(activeFields.uint8Array, chunkCount, stableContainer_activeFieldsSingleChunk, 0);
+    // 1 chunk for root, 1 chunk for activeFields
+    hasher_merkleizeBlocksBytes(stableContainer_mixInActiveFieldsBlockBytes, 2, output, offset);
+}
+//# sourceMappingURL=stableContainer.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/view/profile.js
+
+
+
+
+/**
+ * Intented usage:
+ *
+ * - Get initial BeaconState from disk.
+ * - Before applying next block, switch to mutable
+ * - Get some field, create a view in mutable mode
+ * - Do modifications of the state in the state transition function
+ * - When done, commit and apply new root node once to og BeaconState
+ * - However, keep all the caches and transfer them to the new BeaconState
+ *
+ * Questions:
+ * - Can the child views created in mutable mode switch to not mutable? If so, it seems that it needs to recursively
+ *   iterate the entire data structure and views
+ *
+ */
+class profile_ProfileTreeView extends abstract_TreeView {
+    type;
+    tree;
+    constructor(type, tree) {
+        super();
+        this.type = type;
+        this.tree = tree;
+    }
+    get node() {
+        return this.tree.rootNode;
+    }
+}
+function profile_getProfileTreeViewClass(type) {
+    class CustomProfileTreeView extends profile_ProfileTreeView {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType, chunkIndex, optional } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (basic_isBasicType(fieldType)) {
+            Object.defineProperty(CustomProfileTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    const leafNode = tree_getNodeAtDepth(this.node, this.type.depth, chunkIndex);
+                    if (optional && leafNode === lib_zeroNode_zeroNode(0)) {
+                        return null;
+                    }
+                    return fieldType.tree_getFromNode(leafNode);
+                },
+                set: function (value) {
+                    if (optional && value == null) {
+                        const leafNode = lib_zeroNode_zeroNode(0);
+                        this.tree.setNodeAtDepth(this.type.depth, chunkIndex, leafNode);
+                        return;
+                    }
+                    const leafNodePrev = tree_getNodeAtDepth(this.node, this.type.depth, chunkIndex);
+                    const leafNode = leafNodePrev.clone();
+                    fieldType.tree_setToNode(leafNode, value);
+                    this.tree.setNodeAtDepth(this.type.depth, chunkIndex, leafNode);
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView. The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomProfileTreeView.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeView of fieldName
+                get: function () {
+                    const gindex = gindex_toGindexBitstring(this.type.depth, chunkIndex);
+                    const tree = this.tree.getSubtree(gindex);
+                    if (optional && tree.rootNode === lib_zeroNode_zeroNode(0)) {
+                        return null;
+                    }
+                    return fieldType.getView(tree);
+                },
+                // Expects TreeView of fieldName
+                set: function (value) {
+                    if (optional && value == null) {
+                        this.tree.setNodeAtDepth(this.type.depth, chunkIndex, lib_zeroNode_zeroNode(0));
+                    }
+                    const node = fieldType.commitView(value);
+                    this.tree.setNodeAtDepth(this.type.depth, chunkIndex, node);
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomProfileTreeView, "name", { value: type.typeName, writable: false });
+    return CustomProfileTreeView;
+}
+/**
+ * Precompute fixed and variable offsets position for faster deserialization.
+ * @returns Does a single pass over all fields and returns:
+ * - isFixedLen: If field index [i] is fixed length
+ * - fieldRangesFixedLen: For fields with fixed length, their range of bytes
+ * - variableOffsetsPosition: Position of the 4 bytes offset for variable size fields
+ * - fixedEnd: End of the fixed size range
+ * - offsets are relative to the start of serialized active fields, after the Bitvector[N] of optional fields
+ */
+function view_profile_computeSerdesData(optionalFields, fields) {
+    const isFixedLen = [];
+    const fieldRangesFixedLen = [];
+    const variableOffsetsPosition = [];
+    // should not be optionalFields.uint8Array.length because offsets are relative to the start of serialized active fields
+    let pointerFixed = 0;
+    let optionalIndex = 0;
+    for (const { optional, fieldType } of fields) {
+        if (optional && !optionalFields.get(optionalIndex++)) {
+            continue;
+        }
+        isFixedLen.push(fieldType.fixedSize !== null);
+        if (fieldType.fixedSize === null) {
+            // Variable length
+            variableOffsetsPosition.push(pointerFixed);
+            pointerFixed += 4;
+        }
+        else {
+            fieldRangesFixedLen.push({ start: pointerFixed, end: pointerFixed + fieldType.fixedSize });
+            pointerFixed += fieldType.fixedSize;
+        }
+    }
+    return {
+        isFixedLen,
+        fieldRangesFixedLen,
+        variableOffsetsPosition,
+        fixedEnd: pointerFixed,
+    };
+}
+//# sourceMappingURL=profile.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/viewDU/profile.js
+
+
+
+
+
+
+class profile_ProfileTreeViewDU extends container_BasicContainerTreeViewDU {
+    type;
+    _rootNode;
+    constructor(type, _rootNode, cache) {
+        super(type, _rootNode, cache);
+        this.type = type;
+        this._rootNode = _rootNode;
+    }
+    parseNodesChanged(nodesArray) {
+        const indexes = new Array(nodesArray.length);
+        const nodes = new Array(nodesArray.length);
+        for (const [i, change] of nodesArray.entries()) {
+            const { index, node } = change;
+            const chunkIndex = this.type.fieldsEntries[index].chunkIndex;
+            indexes[i] = chunkIndex;
+            nodes[i] = node;
+        }
+        return { indexes, nodes };
+    }
+    /**
+     * Same method to `type/profile.ts` that call ViewDU.serializeToBytes() of internal fields.
+     */
+    serializeToBytes(output, offset) {
+        this.commit();
+        const optionalArr = [];
+        for (let index = 0; index < this.type.fieldsEntries.length; index++) {
+            const { chunkIndex, optional } = this.type.fieldsEntries[index];
+            let node = this.nodes[index];
+            if (node === undefined) {
+                node = tree_getNodeAtDepth(this._rootNode, this.type.depth, chunkIndex);
+                this.nodes[index] = node;
+            }
+            if (optional) {
+                optionalArr.push(node !== lib_zeroNode_zeroNode(0));
+            }
+        }
+        const optionalFields = bitArray_BitArray.fromBoolArray(optionalArr);
+        output.uint8Array.set(optionalFields.uint8Array, offset);
+        const { fixedEnd } = view_profile_computeSerdesData(optionalFields, this.type.fieldsEntries);
+        const optionalFieldsLen = optionalFields.uint8Array.length;
+        let fixedIndex = offset + optionalFieldsLen;
+        let variableIndex = offset + fixedEnd + optionalFieldsLen;
+        for (let index = 0; index < this.type.fieldsEntries.length; index++) {
+            const { fieldType, optional } = this.type.fieldsEntries[index];
+            const node = this.nodes[index];
+            // all nodes are populated above
+            if (optional && node === lib_zeroNode_zeroNode(0)) {
+                continue;
+            }
+            if (fieldType.fixedSize === null) {
+                // write offset relative to the start of serialized active fields, after the Bitvector[N]
+                output.dataView.setUint32(fixedIndex, variableIndex - offset - optionalFieldsLen, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                // basic types always have fixedSize
+                if (type_composite_isCompositeType(fieldType)) {
+                    const view = fieldType.getViewDU(node, this.caches[index]);
+                    if (view.serializeToBytes !== undefined) {
+                        variableIndex = view.serializeToBytes(output, variableIndex);
+                    }
+                    else {
+                        // some types don't define ViewDU as TreeViewDU, like the UnionType, in that case view.serializeToBytes = undefined
+                        variableIndex = fieldType.tree_serializeToBytes(output, variableIndex, node);
+                    }
+                }
+            }
+            else {
+                fixedIndex = fieldType.tree_serializeToBytes(output, fixedIndex, node);
+            }
+        }
+        return variableIndex;
+    }
+}
+function profile_getProfileTreeViewDUClass(type) {
+    class CustomProfileTreeViewDU extends profile_ProfileTreeViewDU {
+    }
+    // Dynamically define prototype methods
+    for (let index = 0; index < type.fieldsEntries.length; index++) {
+        const { fieldName, fieldType, chunkIndex, optional } = type.fieldsEntries[index];
+        // If the field type is basic, the value to get and set will be the actual 'struct' value (i.e. a JS number).
+        // The view must use the tree_getFromNode() and tree_setToNode() methods to persist the struct data to the node,
+        // and use the cached views array to store the new node.
+        if (basic_isBasicType(fieldType)) {
+            Object.defineProperty(CustomProfileTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // TODO: Review the memory cost of this closures
+                get: function () {
+                    // First walk through the tree to get the root node for that index
+                    let node = this.nodes[index];
+                    if (node === undefined) {
+                        node = tree_getNodeAtDepth(this._rootNode, this.type.depth, chunkIndex);
+                        this.nodes[index] = node;
+                    }
+                    if (optional && node === lib_zeroNode_zeroNode(0)) {
+                        return null;
+                    }
+                    return fieldType.tree_getFromNode(node);
+                },
+                set: function (value) {
+                    if (optional && value == null) {
+                        this.nodes[index] = lib_zeroNode_zeroNode(0);
+                        this.nodesChanged.add(index);
+                        return;
+                    }
+                    // Create new node if current leafNode is not dirty
+                    let nodeChanged;
+                    if (this.nodesChanged.has(index)) {
+                        // TODO: This assumes that node has already been populated
+                        nodeChanged = this.nodes[index];
+                    }
+                    else {
+                        const nodePrev = (this.nodes[index] ??
+                            tree_getNodeAtDepth(this._rootNode, this.type.depth, chunkIndex));
+                        nodeChanged = nodePrev.clone();
+                        // Store the changed node in the nodes cache
+                        this.nodes[index] = nodeChanged;
+                        this.nodesChanged.add(index);
+                    }
+                    fieldType.tree_setToNode(nodeChanged, value);
+                },
+            });
+        }
+        // If the field type is composite, the value to get and set will be another TreeView. The parent TreeView must
+        // cache the view itself to retain the caches of the child view. To set a value the view must return a node to
+        // set it to the parent tree in the field gindex.
+        else if (type_composite_isCompositeType(fieldType)) {
+            Object.defineProperty(CustomProfileTreeViewDU.prototype, fieldName, {
+                configurable: false,
+                enumerable: true,
+                // Returns TreeViewDU of fieldName
+                get: function () {
+                    const viewChanged = this.viewsChanged.get(index);
+                    if (viewChanged) {
+                        return viewChanged;
+                    }
+                    let node = this.nodes[index];
+                    if (node === undefined) {
+                        node = tree_getNodeAtDepth(this._rootNode, this.type.depth, chunkIndex);
+                        this.nodes[index] = node;
+                    }
+                    if (optional && node === lib_zeroNode_zeroNode(0)) {
+                        return null;
+                    }
+                    // Keep a reference to the new view to call .commit on it latter, only if mutable
+                    const view = fieldType.getViewDU(node, this.caches[index]);
+                    if (fieldType.isViewMutable) {
+                        this.viewsChanged.set(index, view);
+                    }
+                    // No need to persist the child's view cache since a second get returns this view instance.
+                    // The cache is only persisted on commit where the viewsChanged map is dropped.
+                    return view;
+                },
+                // Expects TreeViewDU of fieldName
+                set: function (view) {
+                    if (optional && view == null) {
+                        this.nodes[index] = lib_zeroNode_zeroNode(0);
+                        this.nodesChanged.add(index);
+                        return;
+                    }
+                    // When setting a view:
+                    // - Not necessary to commit node
+                    // - Not necessary to persist cache
+                    // Just keeping a reference to the view in this.viewsChanged ensures consistency
+                    this.viewsChanged.set(index, view);
+                },
+            });
+        }
+        // Should never happen
+        else {
+            /* istanbul ignore next - unreachable code */
+            throw Error(`Unknown fieldType ${fieldType.typeName} for fieldName ${String(fieldName)}`);
+        }
+    }
+    // Change class name
+    Object.defineProperty(CustomProfileTreeViewDU, "name", { value: type.typeName, writable: false });
+    return CustomProfileTreeViewDU;
+}
+//# sourceMappingURL=profile.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/type/profile.js
+
+
+
+
+
+
+
+
+
+
+/**
+ * Profile: ordered heterogeneous collection of values that inherits merkleization from a base stable container
+ * - EIP: https://eips.ethereum.org/EIPS/eip-7495
+ * - No reordering of fields for merkleization
+ */
+class profile_ProfileType extends composite_CompositeType {
+    fields;
+    opts;
+    typeName;
+    depth;
+    maxChunkCount;
+    fixedSize;
+    minSize;
+    maxSize;
+    isList = false;
+    isViewMutable = true;
+    activeFields;
+    // Precomputed data for faster serdes
+    fieldsEntries;
+    /** End of fixed section of serialized Container */
+    fieldsGindex;
+    jsonKeyToFieldName;
+    /** Cached TreeView constuctor with custom prototype for this Type's properties */
+    TreeView;
+    TreeViewDU;
+    optionalFieldsCount;
+    // temporary root to avoid memory allocation
+    tempRoot = new Uint8Array(32);
+    constructor(fields, activeFields, opts) {
+        super();
+        this.fields = fields;
+        this.opts = opts;
+        // Render detailed typeName. Consumers should overwrite since it can get long
+        this.typeName = opts?.typeName ?? type_profile_renderContainerTypeName(fields);
+        if (activeFields.getTrueBitIndexes().length !== Object.keys(fields).length) {
+            throw new Error("activeFields must have the same number of true bits as fields");
+        }
+        this.activeFields = activeFields;
+        this.maxChunkCount = this.activeFields.bitLen;
+        this.depth = merkleize_maxChunksToDepth(this.maxChunkCount) + 1;
+        // Precalculated data for faster serdes
+        this.fieldsEntries = [];
+        const fieldNames = Object.keys(fields);
+        this.optionalFieldsCount = 0;
+        for (let i = 0, fieldIx = 0; i < this.activeFields.bitLen; i++) {
+            if (!this.activeFields.get(i)) {
+                continue;
+            }
+            const fieldName = fieldNames[fieldIx++];
+            const fieldType = fields[fieldName];
+            const optional = optional_isOptionalType(fieldType);
+            this.fieldsEntries.push({
+                fieldName,
+                fieldType: optional_toNonOptionalType(fieldType),
+                jsonKey: type_profile_precomputeJsonKey(fieldName, opts?.casingMap, opts?.jsonCase),
+                gindex: gindex_toGindex(this.depth, BigInt(i)),
+                chunkIndex: i,
+                optional,
+            });
+            if (optional) {
+                this.optionalFieldsCount++;
+            }
+        }
+        if (this.fieldsEntries.length === 0) {
+            throw Error("Container must have > 0 fields");
+        }
+        // Precalculate for Proofs API
+        this.fieldsGindex = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, chunkIndex } = this.fieldsEntries[i];
+            this.fieldsGindex[fieldName] = gindex_toGindex(this.depth, BigInt(chunkIndex));
+        }
+        // To resolve JSON paths in fieldName notation and jsonKey notation
+        this.jsonKeyToFieldName = {};
+        for (const { fieldName, jsonKey } of this.fieldsEntries) {
+            this.jsonKeyToFieldName[jsonKey] = fieldName;
+        }
+        const { minLen, maxLen, fixedSize } = type_profile_precomputeSizes(fields);
+        this.minSize = minLen;
+        this.maxSize = maxLen;
+        this.fixedSize = fixedSize;
+        // TODO: This options are necessary for ContainerNodeStruct to override this.
+        // Refactor this constructor to allow customization without pollutin the options
+        this.TreeView = opts?.getProfileTreeViewClass?.(this) ?? profile_getProfileTreeViewClass(this);
+        this.TreeViewDU = opts?.getProfileTreeViewDUClass?.(this) ?? profile_getProfileTreeViewDUClass(this);
+        const fieldBytes = this.activeFields.bitLen * 32;
+        this.blocksBuffer = new Uint8Array(Math.ceil(fieldBytes / 64) * 64);
+    }
+    static named(fields, activeFields, opts) {
+        return new (named_namedClass(profile_ProfileType, opts.typeName))(fields, activeFields, opts);
+    }
+    defaultValue() {
+        const value = {};
+        for (const { fieldName, fieldType, optional } of this.fieldsEntries) {
+            value[fieldName] = (optional ? null : fieldType.defaultValue());
+        }
+        return value;
+    }
+    getView(tree) {
+        return new this.TreeView(this, tree);
+    }
+    getViewDU(node, cache) {
+        return new this.TreeViewDU(this, node, cache);
+    }
+    cacheOfViewDU(view) {
+        return view.cache;
+    }
+    commitView(view) {
+        return view.node;
+    }
+    commitViewDU(view) {
+        view.commit();
+        return view.node;
+    }
+    // Serialization + deserialization
+    // -------------------------------
+    // Containers can mix fixed length and variable length data.
+    //
+    // Fixed part                         Variable part
+    // [field1 offset][field2 data       ][field1 data               ]
+    // [0x000000c]    [0xaabbaabbaabbaabb][0xffffffffffffffffffffffff]
+    value_serializedSize(value) {
+        let totalSize = Math.ceil(this.optionalFieldsCount / 8);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            if (optional && value[fieldName] == null) {
+                continue;
+            }
+            // Offset (4 bytes) + size
+            totalSize +=
+                fieldType.fixedSize === null ? 4 + fieldType.value_serializedSize(value[fieldName]) : fieldType.fixedSize;
+        }
+        return totalSize;
+    }
+    value_serializeToBytes(output, offset, value) {
+        const optionalFields = bitArray_BitArray.fromBitLen(this.optionalFieldsCount);
+        let optionalIndex = 0;
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, optional } = this.fieldsEntries[i];
+            if (optional) {
+                optionalFields.set(optionalIndex++, value[fieldName] !== null);
+            }
+        }
+        output.uint8Array.set(optionalFields.uint8Array, offset);
+        const { fixedEnd } = view_profile_computeSerdesData(optionalFields, this.fieldsEntries);
+        const optionalFieldsLen = optionalFields.uint8Array.length;
+        let fixedIndex = offset + optionalFieldsLen;
+        let variableIndex = offset + fixedEnd + optionalFieldsLen;
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            // skip optional fields with nullish values
+            if (optional && value[fieldName] == null) {
+                continue;
+            }
+            if (fieldType.fixedSize === null) {
+                // write offset relative to the start of serialized active fields, after the Bitvector[N]
+                output.dataView.setUint32(fixedIndex, variableIndex - offset - optionalFieldsLen, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                variableIndex = fieldType.value_serializeToBytes(output, variableIndex, value[fieldName]);
+            }
+            else {
+                fixedIndex = fieldType.value_serializeToBytes(output, fixedIndex, value[fieldName]);
+            }
+        }
+        return variableIndex;
+    }
+    value_deserializeFromBytes(data, start, end) {
+        const { optionalFields, fieldRanges } = this.getFieldRanges(data, start, end);
+        const value = {};
+        const optionalFieldsLen = optionalFields.uint8Array.length;
+        start += optionalFieldsLen;
+        let optionalIndex = 0;
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, optional } = this.fieldsEntries[i];
+            if (optional && !optionalFields.get(optionalIndex++)) {
+                value[fieldName] = null;
+                continue;
+            }
+            const fieldRange = fieldRanges[i];
+            value[fieldName] = fieldType.value_deserializeFromBytes(data, start + fieldRange.start, start + fieldRange.end);
+        }
+        return value;
+    }
+    tree_serializedSize(node) {
+        let totalSize = Math.ceil(this.optionalFieldsCount / 8);
+        const nodes = tree_getNodesAtDepth(node, this.depth, 0, this.activeFields.bitLen);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType, chunkIndex, optional } = this.fieldsEntries[i];
+            const node = nodes[chunkIndex];
+            // zeroNode() means optional field is null, it's different from a node with all zeros
+            if (optional && node === lib_zeroNode_zeroNode(0)) {
+                continue;
+            }
+            // Offset (4 bytes) + size
+            totalSize += fieldType.fixedSize === null ? 4 + fieldType.tree_serializedSize(node) : fieldType.fixedSize;
+        }
+        return totalSize;
+    }
+    tree_serializeToBytes(output, offset, node) {
+        const optionalFields = bitArray_BitArray.fromBitLen(this.optionalFieldsCount);
+        const optionalFieldsLen = optionalFields.uint8Array.length;
+        const nodes = tree_getNodesAtDepth(node, this.depth, 0, this.activeFields.bitLen);
+        let optionalIndex = -1;
+        if (this.optionalFieldsCount > 0) {
+            // 1st loop to compute optional fields
+            for (let i = 0; i < this.fieldsEntries.length; i++) {
+                const { chunkIndex, optional } = this.fieldsEntries[i];
+                const node = nodes[chunkIndex];
+                if (optional) {
+                    optionalIndex++;
+                    if (node !== lib_zeroNode_zeroNode(0)) {
+                        optionalFields.set(optionalIndex, true);
+                    }
+                }
+            }
+        }
+        output.uint8Array.set(optionalFields.uint8Array, offset);
+        const { fixedEnd } = view_profile_computeSerdesData(optionalFields, this.fieldsEntries);
+        let fixedIndex = offset + optionalFieldsLen;
+        let variableIndex = offset + fixedEnd + optionalFieldsLen;
+        // 2nd loop to serialize fields
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType, chunkIndex, optional } = this.fieldsEntries[i];
+            const node = nodes[chunkIndex];
+            if (optional && node === lib_zeroNode_zeroNode(0)) {
+                continue;
+            }
+            if (fieldType.fixedSize === null) {
+                // write offset relative to the start of serialized active fields, after the Bitvector[N]
+                output.dataView.setUint32(fixedIndex, variableIndex - offset - optionalFieldsLen, true);
+                fixedIndex += 4;
+                // write serialized element to variable section
+                variableIndex = fieldType.tree_serializeToBytes(output, variableIndex, node);
+            }
+            else {
+                fixedIndex = fieldType.tree_serializeToBytes(output, fixedIndex, node);
+            }
+        }
+        return variableIndex;
+    }
+    tree_deserializeFromBytes(data, start, end) {
+        const { optionalFields, fieldRanges } = this.getFieldRanges(data, start, end);
+        const nodes = new Array(this.activeFields.bitLen).fill(lib_zeroNode_zeroNode(0));
+        const optionalFieldsLen = optionalFields.uint8Array.length;
+        start += optionalFieldsLen;
+        let optionalIndex = -1;
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldType, chunkIndex, optional } = this.fieldsEntries[i];
+            if (optional) {
+                optionalIndex++;
+                if (!optionalFields.get(optionalIndex)) {
+                    continue;
+                }
+            }
+            const fieldRange = fieldRanges[i];
+            nodes[chunkIndex] = fieldType.tree_deserializeFromBytes(data, start + fieldRange.start, start + fieldRange.end);
+        }
+        const root = new lib_node_BranchNode(subtree_subtreeFillToContents(nodes, this.depth - 1), lib_zeroNode_zeroNode(0));
+        return stableContainer_setActiveFields(root, this.activeFields);
+    }
+    // Merkleization
+    // hashTreeRoot is the same to parent as it call hashTreeRootInto()
+    hashTreeRootInto(value, output, offset, safeCache = false) {
+        // Return cached mutable root if any
+        if (this.cachePermanentRootStruct) {
+            const cachedRoot = value[merkleize_symbolCachedPermanentRoot];
+            if (cachedRoot) {
+                output.set(cachedRoot, offset);
+                return;
+            }
+        }
+        const blocksBytes = this.getBlocksBytes(value);
+        hasher_merkleizeBlocksBytes(blocksBytes, this.maxChunkCount, this.tempRoot, 0);
+        stableContainer_mixInActiveFields(this.tempRoot, this.activeFields, output, offset);
+        if (this.cachePermanentRootStruct) {
+            merkleize_cacheRoot(value, output, offset, safeCache);
+        }
+    }
+    getBlocksBytes(struct) {
+        this.blocksBuffer.fill(0);
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, chunkIndex, optional } = this.fieldsEntries[i];
+            if (optional && struct[fieldName] == null) {
+                this.blocksBuffer.set(lib_zeroHash_zeroHash(0), chunkIndex * 32);
+            }
+            else {
+                fieldType.hashTreeRootInto(struct[fieldName], this.blocksBuffer, chunkIndex * 32);
+            }
+        }
+        // remaining bytes are zeroed as we never write them
+        return this.blocksBuffer;
+    }
+    // Proofs
+    /** INTERNAL METHOD: For view's API, create proof from a tree */
+    getPropertyGindex(prop) {
+        const gindex = this.fieldsGindex[prop] ?? this.fieldsGindex[this.jsonKeyToFieldName[prop]];
+        if (gindex === undefined)
+            throw Error(`Unknown container property ${prop}`);
+        return gindex;
+    }
+    getPropertyType(prop) {
+        const type = this.fields[prop] ?? this.fields[this.jsonKeyToFieldName[prop]];
+        if (type === undefined)
+            throw Error(`Unknown container property ${prop}`);
+        return type;
+    }
+    getIndexProperty(index) {
+        if (index >= this.fieldsEntries.length) {
+            return null;
+        }
+        return this.fieldsEntries[index].fieldName;
+    }
+    tree_getLeafGindices(rootGindex, rootNode) {
+        const gindices = [];
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            const fieldGindex = this.fieldsGindex[fieldName];
+            const fieldGindexFromRoot = gindex_concatGindices([rootGindex, fieldGindex]);
+            if (fieldType.isBasic) {
+                gindices.push(fieldGindexFromRoot);
+            }
+            else {
+                const compositeType = fieldType;
+                if (fieldType.fixedSize === null) {
+                    if (!rootNode) {
+                        throw new Error("variable type requires tree argument to get leaves");
+                    }
+                    gindices.push(...compositeType.tree_getLeafGindices(fieldGindexFromRoot, tree_getNode(rootNode, fieldGindex)));
+                }
+                else {
+                    gindices.push(...compositeType.tree_getLeafGindices(fieldGindexFromRoot));
+                }
+            }
+        }
+        return gindices;
+    }
+    // JSON
+    fromJson(json) {
+        if (typeof json !== "object") {
+            throw Error("JSON must be of type object");
+        }
+        if (json === null) {
+            throw Error("JSON must not be null");
+        }
+        const value = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, jsonKey } = this.fieldsEntries[i];
+            const jsonValue = json[jsonKey];
+            if (jsonValue === undefined) {
+                throw Error(`JSON expected key ${jsonKey} is undefined`);
+            }
+            value[fieldName] = fieldType.fromJson(jsonValue);
+        }
+        return value;
+    }
+    toJson(value) {
+        const json = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType, jsonKey } = this.fieldsEntries[i];
+            json[jsonKey] = fieldType.toJson(value[fieldName]);
+        }
+        return json;
+    }
+    clone(value) {
+        const newValue = {};
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            newValue[fieldName] = fieldType.clone(value[fieldName]);
+        }
+        return newValue;
+    }
+    equals(a, b) {
+        for (let i = 0; i < this.fieldsEntries.length; i++) {
+            const { fieldName, fieldType } = this.fieldsEntries[i];
+            if (!fieldType.equals(a[fieldName], b[fieldName])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * Deserializer helper: Returns the bytes ranges of all fields, both variable and fixed size.
+     * Fields may not be contiguous in the serialized bytes, so the returned ranges are [start, end].
+     * - For fixed size fields re-uses the pre-computed values this.fieldRangesFixedLen
+     * - For variable size fields does a first pass over the fixed section to read offsets
+     * - offsets are relative to the start of serialized active fields, after the Bitvector[N]
+     */
+    getFieldRanges(data, start, end) {
+        const optionalFieldsByteLen = Math.ceil(this.optionalFieldsCount / 8);
+        const optionalFields = new bitArray_BitArray(data.uint8Array.subarray(start, start + optionalFieldsByteLen), this.optionalFieldsCount);
+        const { variableOffsetsPosition, fixedEnd, fieldRangesFixedLen, isFixedLen } = view_profile_computeSerdesData(optionalFields, this.fieldsEntries);
+        if (variableOffsetsPosition.length === 0) {
+            // Validate fixed length container
+            const size = end - start;
+            if (size !== fixedEnd + optionalFieldsByteLen) {
+                throw Error(`${this.typeName} size ${size} not equal fixed end plus optionalFieldsByteLen ${fixedEnd + optionalFieldsByteLen}`);
+            }
+            return { optionalFields, fieldRanges: fieldRangesFixedLen };
+        }
+        // Read offsets in one pass
+        const offsets = type_profile_readVariableOffsets(data.dataView, start, end, optionalFieldsByteLen, fixedEnd, variableOffsetsPosition);
+        offsets.push(end - start - optionalFieldsByteLen); // The offsets are relative to the start of serialized optional fields
+        // Merge fieldRangesFixedLen + offsets in one array
+        let variableIdx = 0;
+        let fixedIdx = 0;
+        const fieldRanges = new Array(isFixedLen.length);
+        for (let i = 0; i < isFixedLen.length; i++) {
+            if (isFixedLen[i]) {
+                // push from fixLen ranges ++
+                fieldRanges[i] = fieldRangesFixedLen[fixedIdx++];
+            }
+            else {
+                // push from varLen ranges ++
+                fieldRanges[i] = { start: offsets[variableIdx], end: offsets[variableIdx + 1] };
+                variableIdx++;
+            }
+        }
+        return { optionalFields, fieldRanges };
+    }
+}
+/**
+ * Returns the byte ranges of all variable size fields.
+ * Offsets are relative to the start of serialized active fields, after the Bitvector[N]
+ */
+function type_profile_readVariableOffsets(data, start, end, optionalFieldsEnd, fixedEnd, variableOffsetsPosition) {
+    // Since variable-sized values can be interspersed with fixed-sized values, we precalculate
+    // the offset indices so we can more easily deserialize the fields in once pass first we get the fixed sizes
+    // Note: `fixedSizes[i] = null` if that field has variable length
+    const size = end - start;
+    const optionalFieldsByteLen = optionalFieldsEnd - start;
+    // with the fixed sizes, we can read the offsets, and store for our single pass
+    const offsets = new Array(variableOffsetsPosition.length);
+    for (let i = 0; i < variableOffsetsPosition.length; i++) {
+        const offset = data.getUint32(start + variableOffsetsPosition[i] + optionalFieldsByteLen, true);
+        // Validate offsets. If the list is empty the offset points to the end of the buffer, offset == size
+        if (offset > size) {
+            throw new Error(`Offset out of bounds ${offset} > ${size}`);
+        }
+        if (i === 0) {
+            if (offset !== fixedEnd) {
+                throw new Error(`First offset must equal to fixedEnd ${offset} != ${fixedEnd}`);
+            }
+        }
+        else {
+            if (offset < offsets[i - 1]) {
+                throw new Error(`Offsets must be increasing ${offset} < ${offsets[i - 1]}`);
+            }
+        }
+        offsets[i] = offset;
+    }
+    return offsets;
+}
+/**
+ * Precompute sizes of the Container doing one pass over fields
+ */
+function type_profile_precomputeSizes(fields) {
+    let minLen = 0;
+    let maxLen = 0;
+    let fixedSize = 0;
+    for (const fieldType of Object.values(fields)) {
+        minLen += fieldType.minSize;
+        maxLen += fieldType.maxSize;
+        if (fieldType.fixedSize === null) {
+            // +4 for the offset
+            minLen += 4;
+            maxLen += 4;
+            fixedSize = null;
+        }
+        else if (fixedSize !== null) {
+            fixedSize += fieldType.fixedSize;
+        }
+    }
+    return { minLen, maxLen, fixedSize };
+}
+/**
+ * Compute the JSON key for each fieldName. There will exist a single JSON representation for each type.
+ * To transform JSON payloads to a casing that is different from the type's defined use external tooling.
+ */
+function type_profile_precomputeJsonKey(fieldName, casingMap, jsonCase) {
+    if (casingMap) {
+        const keyFromCaseMap = casingMap[fieldName];
+        if (keyFromCaseMap === undefined) {
+            throw Error(`casingMap[${String(fieldName)}] not defined`);
+        }
+        return keyFromCaseMap;
+    }
+    if (jsonCase)
+        return strings_Case[jsonCase](fieldName);
+    return fieldName;
+}
+/**
+ * Render field typeNames for a detailed typeName of this Container
+ */
+function type_profile_renderContainerTypeName(fields, prefix = "Profile") {
+    const fieldNames = Object.keys(fields);
+    const fieldTypeNames = fieldNames
+        .map((fieldName) => `${String(fieldName)}: ${fields[fieldName].typeName}`)
+        .join(", ");
+    return `${prefix}({${fieldTypeNames}})`;
+}
+//# sourceMappingURL=profile.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/util/upgrade.js
+
+/** Upgrade the current View/ViewDU to a root node of new type */
+// biome-ignore lint/suspicious/noExplicitAny: We need to use `any` here explicitly
+function upgrade_upgradeToNewType(rootNode, oldType, newType) {
+    const newFieldsCount = newType.fieldsEntries.length;
+    const currentFieldsCount = oldType.fieldsEntries.length;
+    if (newFieldsCount < currentFieldsCount) {
+        throw Error(`Cannot convert to a type with fewer fields: ${newFieldsCount} < ${currentFieldsCount}`);
+    }
+    if (newType.depth === oldType.depth) {
+        // no need to grow the tree
+        return rootNode;
+    }
+    // grow the tree
+    let node = rootNode;
+    for (let depth = oldType.depth; depth < newType.depth; depth++) {
+        node = new BranchNode(node, zeroNode(depth));
+    }
+    return node;
+}
+//# sourceMappingURL=upgrade.js.map
+;// ./node_modules/@lodestar/types/node_modules/@chainsafe/ssz/lib/index.js
+// Types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Base types
+
+
+
+// Base type clases
+
+
+
+
+
+
+
+
+// Values
+
+// Utils
+
+
+
+// others
+
+//# sourceMappingURL=index.js.map
+;// ./node_modules/@noble/hashes/esm/_assert.js
+function number(n) {
+    if (!Number.isSafeInteger(n) || n < 0)
+        throw new Error(`positive integer expected, not ${n}`);
+}
+function _assert_bool(b) {
+    if (typeof b !== 'boolean')
+        throw new Error(`boolean expected, not ${b}`);
+}
+// copied from utils
+function _assert_isBytes(a) {
+    return (a instanceof Uint8Array ||
+        (a != null && typeof a === 'object' && a.constructor.name === 'Uint8Array'));
+}
+function bytes(b, ...lengths) {
+    if (!_assert_isBytes(b))
+        throw new Error('Uint8Array expected');
+    if (lengths.length > 0 && !lengths.includes(b.length))
+        throw new Error(`Uint8Array expected of length ${lengths}, not of length=${b.length}`);
+}
+function hash(h) {
+    if (typeof h !== 'function' || typeof h.create !== 'function')
+        throw new Error('Hash should be wrapped by utils.wrapConstructor');
+    number(h.outputLen);
+    number(h.blockLen);
+}
+function exists(instance, checkFinished = true) {
+    if (instance.destroyed)
+        throw new Error('Hash instance has been destroyed');
+    if (checkFinished && instance.finished)
+        throw new Error('Hash#digest() has already been called');
+}
+function output(out, instance) {
+    bytes(out);
+    const min = instance.outputLen;
+    if (out.length < min) {
+        throw new Error(`digestInto() expects output buffer of length at least ${min}`);
+    }
+}
+
+const assert = { number, bool: _assert_bool, bytes, hash, exists, output };
+/* harmony default export */ const _assert = (assert);
+//# sourceMappingURL=_assert.js.map
+;// ./node_modules/@noble/hashes/esm/_u64.js
+const esm_u64_U32_MASK64 = /* @__PURE__ */ BigInt(2 ** 32 - 1);
+const esm_u64_32n = /* @__PURE__ */ BigInt(32);
+// We are not using BigUint64Array, because they are extremely slow as per 2022
+function esm_u64_fromBig(n, le = false) {
+    if (le)
+        return { h: Number(n & esm_u64_U32_MASK64), l: Number((n >> esm_u64_32n) & esm_u64_U32_MASK64) };
+    return { h: Number((n >> esm_u64_32n) & esm_u64_U32_MASK64) | 0, l: Number(n & esm_u64_U32_MASK64) | 0 };
+}
+function esm_u64_split(lst, le = false) {
+    let Ah = new Uint32Array(lst.length);
+    let Al = new Uint32Array(lst.length);
+    for (let i = 0; i < lst.length; i++) {
+        const { h, l } = esm_u64_fromBig(lst[i], le);
+        [Ah[i], Al[i]] = [h, l];
+    }
+    return [Ah, Al];
+}
+const esm_u64_toBig = (h, l) => (BigInt(h >>> 0) << esm_u64_32n) | BigInt(l >>> 0);
+// for Shift in [0, 32)
+const esm_u64_shrSH = (h, _l, s) => h >>> s;
+const esm_u64_shrSL = (h, l, s) => (h << (32 - s)) | (l >>> s);
+// Right rotate for Shift in [1, 32)
+const esm_u64_rotrSH = (h, l, s) => (h >>> s) | (l << (32 - s));
+const esm_u64_rotrSL = (h, l, s) => (h << (32 - s)) | (l >>> s);
+// Right rotate for Shift in (32, 64), NOTE: 32 is special case.
+const esm_u64_rotrBH = (h, l, s) => (h << (64 - s)) | (l >>> (s - 32));
+const esm_u64_rotrBL = (h, l, s) => (h >>> (s - 32)) | (l << (64 - s));
+// Right rotate for shift===32 (just swaps l&h)
+const esm_u64_rotr32H = (_h, l) => l;
+const esm_u64_rotr32L = (h, _l) => h;
+// Left rotate for Shift in [1, 32)
+const esm_u64_rotlSH = (h, l, s) => (h << s) | (l >>> (32 - s));
+const esm_u64_rotlSL = (h, l, s) => (l << s) | (h >>> (32 - s));
+// Left rotate for Shift in (32, 64), NOTE: 32 is special case.
+const esm_u64_rotlBH = (h, l, s) => (l << (s - 32)) | (h >>> (64 - s));
+const esm_u64_rotlBL = (h, l, s) => (h << (s - 32)) | (l >>> (64 - s));
+// JS uses 32-bit signed integers for bitwise operations which means we cannot
+// simple take carry out of low bit sum by shift, we need to use division.
+function esm_u64_add(Ah, Al, Bh, Bl) {
+    const l = (Al >>> 0) + (Bl >>> 0);
+    return { h: (Ah + Bh + ((l / 2 ** 32) | 0)) | 0, l: l | 0 };
+}
+// Addition with more than 2 elements
+const esm_u64_add3L = (Al, Bl, Cl) => (Al >>> 0) + (Bl >>> 0) + (Cl >>> 0);
+const esm_u64_add3H = (low, Ah, Bh, Ch) => (Ah + Bh + Ch + ((low / 2 ** 32) | 0)) | 0;
+const esm_u64_add4L = (Al, Bl, Cl, Dl) => (Al >>> 0) + (Bl >>> 0) + (Cl >>> 0) + (Dl >>> 0);
+const esm_u64_add4H = (low, Ah, Bh, Ch, Dh) => (Ah + Bh + Ch + Dh + ((low / 2 ** 32) | 0)) | 0;
+const esm_u64_add5L = (Al, Bl, Cl, Dl, El) => (Al >>> 0) + (Bl >>> 0) + (Cl >>> 0) + (Dl >>> 0) + (El >>> 0);
+const esm_u64_add5H = (low, Ah, Bh, Ch, Dh, Eh) => (Ah + Bh + Ch + Dh + Eh + ((low / 2 ** 32) | 0)) | 0;
+// prettier-ignore
+
+// prettier-ignore
+const esm_u64_u64 = {
+    fromBig: esm_u64_fromBig, split: esm_u64_split, toBig: esm_u64_toBig,
+    shrSH: esm_u64_shrSH, shrSL: esm_u64_shrSL,
+    rotrSH: esm_u64_rotrSH, rotrSL: esm_u64_rotrSL, rotrBH: esm_u64_rotrBH, rotrBL: esm_u64_rotrBL,
+    rotr32H: esm_u64_rotr32H, rotr32L: esm_u64_rotr32L,
+    rotlSH: esm_u64_rotlSH, rotlSL: esm_u64_rotlSL, rotlBH: esm_u64_rotlBH, rotlBL: esm_u64_rotlBL,
+    add: esm_u64_add, add3L: esm_u64_add3L, add3H: esm_u64_add3H, add4L: esm_u64_add4L, add4H: esm_u64_add4H, add5H: esm_u64_add5H, add5L: esm_u64_add5L,
+};
+/* harmony default export */ const hashes_esm_u64 = ((/* unused pure expression or super */ null && (esm_u64_u64)));
+//# sourceMappingURL=_u64.js.map
 ;// ./node_modules/@noble/hashes/esm/utils.js
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // We use WebCrypto aka globalThis.crypto, which exists in browsers and node.js 16+.
@@ -35747,62 +47114,62 @@ const _u64_u64 = {
 
 // export { isBytes } from './_assert.js';
 // We can't reuse isBytes from _assert, because somehow this causes huge perf issues
-function utils_isBytes(a) {
+function esm_utils_isBytes(a) {
     return (a instanceof Uint8Array ||
         (a != null && typeof a === 'object' && a.constructor.name === 'Uint8Array'));
 }
 // Cast array to different type
-const utils_u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
-const utils_u32 = (arr) => new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
+const esm_utils_u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
+const esm_utils_u32 = (arr) => new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
 // Cast array to view
-const utils_createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
+const esm_utils_createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
 // The rotate right (circular right shift) operation for uint32
-const utils_rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
+const esm_utils_rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
 // The rotate left (circular left shift) operation for uint32
-const utils_rotl = (word, shift) => (word << shift) | ((word >>> (32 - shift)) >>> 0);
-const utils_isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
+const esm_utils_rotl = (word, shift) => (word << shift) | ((word >>> (32 - shift)) >>> 0);
+const esm_utils_isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
 // The byte swap operation for uint32
-const utils_byteSwap = (word) => ((word << 24) & 0xff000000) |
+const esm_utils_byteSwap = (word) => ((word << 24) & 0xff000000) |
     ((word << 8) & 0xff0000) |
     ((word >>> 8) & 0xff00) |
     ((word >>> 24) & 0xff);
 // Conditionally byte swap if on a big-endian platform
-const utils_byteSwapIfBE = (/* unused pure expression or super */ null && (utils_isLE ? (n) => n : (n) => utils_byteSwap(n)));
+const esm_utils_byteSwapIfBE = (/* unused pure expression or super */ null && (esm_utils_isLE ? (n) => n : (n) => esm_utils_byteSwap(n)));
 // In place byte swap for Uint32Array
-function utils_byteSwap32(arr) {
+function esm_utils_byteSwap32(arr) {
     for (let i = 0; i < arr.length; i++) {
-        arr[i] = utils_byteSwap(arr[i]);
+        arr[i] = esm_utils_byteSwap(arr[i]);
     }
 }
 // Array where index 0xf0 (240) is mapped to string 'f0'
-const utils_hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
+const esm_utils_hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
 /**
  * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
  */
-function utils_bytesToHex(bytes) {
+function esm_utils_bytesToHex(bytes) {
     abytes(bytes);
     // pre-caching improves the speed 6x
     let hex = '';
     for (let i = 0; i < bytes.length; i++) {
-        hex += utils_hexes[bytes[i]];
+        hex += esm_utils_hexes[bytes[i]];
     }
     return hex;
 }
 // We use optimized technique to convert hex string to byte array
-const utils_asciis = { _0: 48, _9: 57, _A: 65, _F: 70, _a: 97, _f: 102 };
-function utils_asciiToBase16(char) {
-    if (char >= utils_asciis._0 && char <= utils_asciis._9)
-        return char - utils_asciis._0;
-    if (char >= utils_asciis._A && char <= utils_asciis._F)
-        return char - (utils_asciis._A - 10);
-    if (char >= utils_asciis._a && char <= utils_asciis._f)
-        return char - (utils_asciis._a - 10);
+const esm_utils_asciis = { _0: 48, _9: 57, _A: 65, _F: 70, _a: 97, _f: 102 };
+function esm_utils_asciiToBase16(char) {
+    if (char >= esm_utils_asciis._0 && char <= esm_utils_asciis._9)
+        return char - esm_utils_asciis._0;
+    if (char >= esm_utils_asciis._A && char <= esm_utils_asciis._F)
+        return char - (esm_utils_asciis._A - 10);
+    if (char >= esm_utils_asciis._a && char <= esm_utils_asciis._f)
+        return char - (esm_utils_asciis._a - 10);
     return;
 }
 /**
  * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
-function utils_hexToBytes(hex) {
+function esm_utils_hexToBytes(hex) {
     if (typeof hex !== 'string')
         throw new Error('hex string expected, got ' + typeof hex);
     const hl = hex.length;
@@ -35811,8 +47178,8 @@ function utils_hexToBytes(hex) {
         throw new Error('padded hex string expected, got unpadded hex of length ' + hl);
     const array = new Uint8Array(al);
     for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
-        const n1 = utils_asciiToBase16(hex.charCodeAt(hi));
-        const n2 = utils_asciiToBase16(hex.charCodeAt(hi + 1));
+        const n1 = esm_utils_asciiToBase16(hex.charCodeAt(hi));
+        const n2 = esm_utils_asciiToBase16(hex.charCodeAt(hi + 1));
         if (n1 === undefined || n2 === undefined) {
             const char = hex[hi] + hex[hi + 1];
             throw new Error('hex string expected, got non-hex character "' + char + '" at index ' + hi);
@@ -35824,9 +47191,9 @@ function utils_hexToBytes(hex) {
 // There is no setImmediate in browser and setTimeout is slow.
 // call of async fn will return Promise, which will be fullfiled only on
 // next scheduler queue processing step and this is exactly what we need.
-const utils_nextTick = async () => { };
+const esm_utils_nextTick = async () => { };
 // Returns control to thread each 'tick' ms to avoid blocking
-async function utils_asyncLoop(iters, tick, cb) {
+async function esm_utils_asyncLoop(iters, tick, cb) {
     let ts = Date.now();
     for (let i = 0; i < iters; i++) {
         cb(i);
@@ -35834,14 +47201,14 @@ async function utils_asyncLoop(iters, tick, cb) {
         const diff = Date.now() - ts;
         if (diff >= 0 && diff < tick)
             continue;
-        await utils_nextTick();
+        await esm_utils_nextTick();
         ts += diff;
     }
 }
 /**
  * @example utf8ToBytes('abc') // new Uint8Array([97, 98, 99])
  */
-function utils_utf8ToBytes(str) {
+function esm_utils_utf8ToBytes(str) {
     if (typeof str !== 'string')
         throw new Error(`utf8ToBytes expected string, got ${typeof str}`);
     return new Uint8Array(new TextEncoder().encode(str)); // https://bugzil.la/1681809
@@ -35851,16 +47218,16 @@ function utils_utf8ToBytes(str) {
  * Warning: when Uint8Array is passed, it would NOT get copied.
  * Keep in mind for future mutable operations.
  */
-function utils_toBytes(data) {
+function esm_utils_toBytes(data) {
     if (typeof data === 'string')
-        data = utils_utf8ToBytes(data);
+        data = esm_utils_utf8ToBytes(data);
     bytes(data);
     return data;
 }
 /**
  * Copies several Uint8Arrays into one.
  */
-function utils_concatBytes(...arrays) {
+function esm_utils_concatBytes(...arrays) {
     let sum = 0;
     for (let i = 0; i < arrays.length; i++) {
         const a = arrays[i];
@@ -35876,37 +47243,37 @@ function utils_concatBytes(...arrays) {
     return res;
 }
 // For runtime check if class implements interface
-class utils_Hash {
+class esm_utils_Hash {
     // Safe version that clones internal state
     clone() {
         return this._cloneInto();
     }
 }
 const toStr = {}.toString;
-function utils_checkOpts(defaults, opts) {
+function esm_utils_checkOpts(defaults, opts) {
     if (opts !== undefined && toStr.call(opts) !== '[object Object]')
         throw new Error('Options should be object or undefined');
     const merged = Object.assign(defaults, opts);
     return merged;
 }
-function utils_wrapConstructor(hashCons) {
-    const hashC = (msg) => hashCons().update(utils_toBytes(msg)).digest();
+function esm_utils_wrapConstructor(hashCons) {
+    const hashC = (msg) => hashCons().update(esm_utils_toBytes(msg)).digest();
     const tmp = hashCons();
     hashC.outputLen = tmp.outputLen;
     hashC.blockLen = tmp.blockLen;
     hashC.create = () => hashCons();
     return hashC;
 }
-function utils_wrapConstructorWithOpts(hashCons) {
-    const hashC = (msg, opts) => hashCons(opts).update(utils_toBytes(msg)).digest();
+function esm_utils_wrapConstructorWithOpts(hashCons) {
+    const hashC = (msg, opts) => hashCons(opts).update(esm_utils_toBytes(msg)).digest();
     const tmp = hashCons({});
     hashC.outputLen = tmp.outputLen;
     hashC.blockLen = tmp.blockLen;
     hashC.create = (opts) => hashCons(opts);
     return hashC;
 }
-function esm_utils_wrapXOFConstructorWithOpts(hashCons) {
-    const hashC = (msg, opts) => hashCons(opts).update(utils_toBytes(msg)).digest();
+function hashes_esm_utils_wrapXOFConstructorWithOpts(hashCons) {
+    const hashC = (msg, opts) => hashCons(opts).update(esm_utils_toBytes(msg)).digest();
     const tmp = hashCons({});
     hashC.outputLen = tmp.outputLen;
     hashC.blockLen = tmp.blockLen;
@@ -35916,7 +47283,7 @@ function esm_utils_wrapXOFConstructorWithOpts(hashCons) {
 /**
  * Secure PRNG. Uses `crypto.getRandomValues`, which defers to OS.
  */
-function utils_randomBytes(bytesLength = 32) {
+function esm_utils_randomBytes(bytesLength = 32) {
     if (crypto && typeof crypto.getRandomValues === 'function') {
         return crypto.getRandomValues(new Uint8Array(bytesLength));
     }
@@ -35954,10 +47321,10 @@ for (let round = 0, R = _1n, x = 1, y = 0; round < 24; round++) {
     }
     _SHA3_IOTA.push(t);
 }
-const [SHA3_IOTA_H, SHA3_IOTA_L] = /* @__PURE__ */ _u64_split(_SHA3_IOTA, true);
+const [SHA3_IOTA_H, SHA3_IOTA_L] = /* @__PURE__ */ esm_u64_split(_SHA3_IOTA, true);
 // Left rotation (without 0, 32, 64)
-const rotlH = (h, l, s) => (s > 32 ? _u64_rotlBH(h, l, s) : _u64_rotlSH(h, l, s));
-const rotlL = (h, l, s) => (s > 32 ? _u64_rotlBL(h, l, s) : _u64_rotlSL(h, l, s));
+const rotlH = (h, l, s) => (s > 32 ? esm_u64_rotlBH(h, l, s) : esm_u64_rotlSH(h, l, s));
+const rotlL = (h, l, s) => (s > 32 ? esm_u64_rotlBL(h, l, s) : esm_u64_rotlSL(h, l, s));
 // Same as keccakf1600, but allows to skip some rounds
 function keccakP(s, rounds = 24) {
     const B = new Uint32Array(5 * 2);
@@ -36004,7 +47371,7 @@ function keccakP(s, rounds = 24) {
     }
     B.fill(0);
 }
-class Keccak extends utils_Hash {
+class Keccak extends esm_utils_Hash {
     // NOTE: we accept arguments in bytes instead of bits here.
     constructor(blockLen, suffix, outputLen, enableXOF = false, rounds = 24) {
         super();
@@ -36023,21 +47390,21 @@ class Keccak extends utils_Hash {
         if (0 >= this.blockLen || this.blockLen >= 200)
             throw new Error('Sha3 supports only keccak-f1600 function');
         this.state = new Uint8Array(200);
-        this.state32 = utils_u32(this.state);
+        this.state32 = esm_utils_u32(this.state);
     }
     keccak() {
-        if (!utils_isLE)
-            utils_byteSwap32(this.state32);
+        if (!esm_utils_isLE)
+            esm_utils_byteSwap32(this.state32);
         keccakP(this.state32, this.rounds);
-        if (!utils_isLE)
-            utils_byteSwap32(this.state32);
+        if (!esm_utils_isLE)
+            esm_utils_byteSwap32(this.state32);
         this.posOut = 0;
         this.pos = 0;
     }
     update(data) {
         exists(this);
         const { blockLen, state } = this;
-        data = utils_toBytes(data);
+        data = esm_utils_toBytes(data);
         const len = data.length;
         for (let pos = 0; pos < len;) {
             const take = Math.min(blockLen - this.pos, len - pos);
@@ -36117,7 +47484,7 @@ class Keccak extends utils_Hash {
         return to;
     }
 }
-const gen = (suffix, blockLen, outputLen) => utils_wrapConstructor(() => new Keccak(blockLen, suffix, outputLen));
+const gen = (suffix, blockLen, outputLen) => esm_utils_wrapConstructor(() => new Keccak(blockLen, suffix, outputLen));
 const sha3_224 = /* @__PURE__ */ (/* unused pure expression or super */ null && (gen(0x06, 144, 224 / 8)));
 /**
  * SHA3-256 hash function
@@ -36146,13 +47513,13 @@ const assertBytes = _assert.bytes;
 
 
 // buf.toString('utf8') -> bytesToUtf8(buf)
-function utils_bytesToUtf8(data) {
+function esm_utils_bytesToUtf8(data) {
     if (!(data instanceof Uint8Array)) {
         throw new TypeError(`bytesToUtf8 expected Uint8Array, got ${typeof data}`);
     }
     return new TextDecoder().decode(data);
 }
-function esm_utils_hexToBytes(data) {
+function ethereum_cryptography_esm_utils_hexToBytes(data) {
     const sliced = data.startsWith("0x") ? data.substring(2) : data;
     return _hexToBytes(sliced);
 }
@@ -36202,7 +47569,7 @@ const keccak512 = wrapHash(keccak_512);
 ;// ./node_modules/@lodestar/types/lib/utils/executionAddress.js
 
 
-class ExecutionAddressType extends ByteVectorType {
+class ExecutionAddressType extends byteVector_ByteVectorType {
     constructor() {
         super(20, { typeName: "ExecutionAddress" });
     }
@@ -36244,22 +47611,22 @@ function toChecksumAddress(address) {
 
 
 // biome-ignore lint/suspicious/noShadowRestrictedNames: We explicitly want this name for variable
-const sszTypes_Boolean = new BooleanType();
-const Byte = new UintNumberType(1);
-const Bytes4 = new ByteVectorType(4);
-const Bytes8 = new ByteVectorType(8);
-const Bytes20 = new ByteVectorType(20);
-const Bytes32 = new ByteVectorType(32);
-const Bytes48 = new ByteVectorType(48);
-const Bytes96 = new ByteVectorType(96);
-const Uint8 = new UintNumberType(1);
-const Uint16 = new UintNumberType(2);
-const Uint32 = new UintNumberType(4);
-const UintNum64 = new UintNumberType(8);
-const UintNumInf64 = new UintNumberType(8, { clipInfinity: true });
-const UintBn64 = new UintBigintType(8);
-const UintBn128 = new UintBigintType(16);
-const UintBn256 = new UintBigintType(32);
+const sszTypes_Boolean = new boolean_BooleanType();
+const Byte = new uint_UintNumberType(1);
+const Bytes4 = new byteVector_ByteVectorType(4);
+const Bytes8 = new byteVector_ByteVectorType(8);
+const Bytes20 = new byteVector_ByteVectorType(20);
+const Bytes32 = new byteVector_ByteVectorType(32);
+const Bytes48 = new byteVector_ByteVectorType(48);
+const Bytes96 = new byteVector_ByteVectorType(96);
+const Uint8 = new uint_UintNumberType(1);
+const Uint16 = new uint_UintNumberType(2);
+const Uint32 = new uint_UintNumberType(4);
+const UintNum64 = new uint_UintNumberType(8);
+const UintNumInf64 = new uint_UintNumberType(8, { clipInfinity: true });
+const UintBn64 = new uint_UintBigintType(8);
+const UintBn128 = new uint_UintBigintType(16);
+const UintBn256 = new uint_UintBigintType(32);
 // Custom types, defined for type hinting and readability
 /**
  * Use JS Number for performance, values must be limited to 2**52-1.
@@ -36294,7 +47661,7 @@ const WithdrawalIndex = UintNum64;
 const DepositIndex = UintBn64;
 const Gwei = UintBn64;
 const Wei = UintBn256;
-const Root = new ByteVectorType(32);
+const Root = new byteVector_ByteVectorType(32);
 const BlobIndex = UintNum64;
 const Version = Bytes4;
 const DomainType = Bytes4;
@@ -36302,7 +47669,7 @@ const ForkDigest = Bytes4;
 const BLSPubkey = Bytes48;
 const BLSSignature = Bytes96;
 const Domain = Bytes32;
-const ParticipationFlags = new UintNumberType(1, { setBitwiseOR: true });
+const ParticipationFlags = new uint_UintNumberType(1, { setBitwiseOR: true });
 const ExecutionAddress = new ExecutionAddressType();
 const ColumnIndex = UintNum64;
 const CustodyIndex = UintNum64;
@@ -36335,7 +47702,7 @@ const ValidatorType = {
 /**
  * Improve serialization performance for state.validators.serialize();
  */
-class ValidatorNodeStructType extends ContainerNodeStructType {
+class ValidatorNodeStructType extends containerNodeStruct_ContainerNodeStructType {
     constructor() {
         super(ValidatorType, { typeName: "Validator", jsonCase: "eth2" });
     }
@@ -36385,9 +47752,9 @@ const ValidatorNodeStruct = new ValidatorNodeStructType();
 const { /* Bytes32 */ "Xn": sszTypes_Bytes32, /* UintNum64 */ "Dh": sszTypes_UintNum64, /* UintBn64 */ "Te": sszTypes_UintBn64, /* Slot */ "DX": sszTypes_Slot, /* Epoch */ "UE": sszTypes_Epoch, /* CommitteeIndex */ "Oz": sszTypes_CommitteeIndex, /* ValidatorIndex */ "vq": sszTypes_ValidatorIndex, /* Root */ "bL": sszTypes_Root, /* Version */ "Rx": sszTypes_Version, /* ForkDigest */ "nL": sszTypes_ForkDigest, /* BLSPubkey */ "kK": sszTypes_BLSPubkey, /* BLSSignature */ "GH": sszTypes_BLSSignature, /* Domain */ "$n": sszTypes_Domain, } = sszTypes_namespaceObject;
 // Misc types
 // ==========
-const AttestationSubnets = new BitVectorType(ATTESTATION_SUBNET_COUNT);
+const AttestationSubnets = new bitVector_BitVectorType(ATTESTATION_SUBNET_COUNT);
 /** BeaconBlockHeader where slot is bounded by the clock, and values above it are invalid */
-const BeaconBlockHeader = new ContainerType({
+const BeaconBlockHeader = new container_ContainerType({
     slot: sszTypes_Slot,
     proposerIndex: sszTypes_ValidatorIndex,
     parentRoot: sszTypes_Root,
@@ -36395,86 +47762,86 @@ const BeaconBlockHeader = new ContainerType({
     bodyRoot: sszTypes_Root,
 }, { typeName: "BeaconBlockHeader", jsonCase: "eth2", cachePermanentRootStruct: true });
 /** BeaconBlockHeader where slot is NOT bounded by the clock, i.e. slashings. So slot is a bigint. */
-const BeaconBlockHeaderBigint = new ContainerType({
+const BeaconBlockHeaderBigint = new container_ContainerType({
     slot: sszTypes_UintBn64,
     proposerIndex: sszTypes_ValidatorIndex,
     parentRoot: sszTypes_Root,
     stateRoot: sszTypes_Root,
     bodyRoot: sszTypes_Root,
 }, { typeName: "BeaconBlockHeader", jsonCase: "eth2", cachePermanentRootStruct: true });
-const SignedBeaconBlockHeader = new ContainerType({
+const SignedBeaconBlockHeader = new container_ContainerType({
     message: BeaconBlockHeader,
     signature: sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlockHeader", jsonCase: "eth2" });
 /** Same as `SignedBeaconBlockHeader` but slot is not bounded by the clock and must be a bigint */
-const SignedBeaconBlockHeaderBigint = new ContainerType({
+const SignedBeaconBlockHeaderBigint = new container_ContainerType({
     message: BeaconBlockHeaderBigint,
     signature: sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlockHeader", jsonCase: "eth2" });
 /** Checkpoint where epoch is bounded by the clock, and values above it are invalid */
-const Checkpoint = new ContainerType({
+const Checkpoint = new container_ContainerType({
     epoch: sszTypes_Epoch,
     root: sszTypes_Root,
 }, { typeName: "Checkpoint", jsonCase: "eth2" });
 /** Checkpoint where epoch is NOT bounded by the clock, so must be a bigint */
-const CheckpointBigint = new ContainerType({
+const CheckpointBigint = new container_ContainerType({
     epoch: sszTypes_UintBn64,
     root: sszTypes_Root,
 }, { typeName: "Checkpoint", jsonCase: "eth2" });
-const CommitteeBits = new BitListType(MAX_VALIDATORS_PER_COMMITTEE);
-const CommitteeIndices = new ListBasicType(sszTypes_ValidatorIndex, MAX_VALIDATORS_PER_COMMITTEE);
-const DepositMessage = new ContainerType({
+const CommitteeBits = new bitList_BitListType(MAX_VALIDATORS_PER_COMMITTEE);
+const CommitteeIndices = new listBasic_ListBasicType(sszTypes_ValidatorIndex, MAX_VALIDATORS_PER_COMMITTEE);
+const DepositMessage = new container_ContainerType({
     pubkey: sszTypes_BLSPubkey,
     withdrawalCredentials: sszTypes_Bytes32,
     amount: sszTypes_UintNum64,
 }, { typeName: "DepositMessage", jsonCase: "eth2" });
-const DepositData = new ContainerType({
+const DepositData = new container_ContainerType({
     pubkey: sszTypes_BLSPubkey,
     withdrawalCredentials: sszTypes_Bytes32,
     amount: sszTypes_UintNum64,
     signature: sszTypes_BLSSignature,
 }, { typeName: "DepositData", jsonCase: "eth2" });
-const DepositDataRootList = new ListCompositeType(sszTypes_Root, 2 ** DEPOSIT_CONTRACT_TREE_DEPTH);
-const DepositEvent = new ContainerType({
+const DepositDataRootList = new listComposite_ListCompositeType(sszTypes_Root, 2 ** DEPOSIT_CONTRACT_TREE_DEPTH);
+const DepositEvent = new container_ContainerType({
     depositData: DepositData,
     blockNumber: sszTypes_UintNum64,
     index: sszTypes_UintNum64,
 }, { typeName: "DepositEvent", jsonCase: "eth2" });
-const Eth1Data = new ContainerType({
+const Eth1Data = new container_ContainerType({
     depositRoot: sszTypes_Root,
     depositCount: sszTypes_UintNum64,
     blockHash: sszTypes_Bytes32,
 }, { typeName: "Eth1Data", jsonCase: "eth2" });
-const Eth1DataVotes = new ListCompositeType(Eth1Data, EPOCHS_PER_ETH1_VOTING_PERIOD * SLOTS_PER_EPOCH);
-const Eth1DataOrdered = new ContainerType({
+const Eth1DataVotes = new listComposite_ListCompositeType(Eth1Data, EPOCHS_PER_ETH1_VOTING_PERIOD * SLOTS_PER_EPOCH);
+const Eth1DataOrdered = new container_ContainerType({
     depositRoot: sszTypes_Root,
     depositCount: sszTypes_UintNum64,
     blockHash: sszTypes_Bytes32,
     blockNumber: sszTypes_UintNum64,
 }, { typeName: "Eth1DataOrdered", jsonCase: "eth2" });
 /** Spec'ed but only used in lodestar as a type */
-const Eth1Block = new ContainerType({
+const Eth1Block = new container_ContainerType({
     timestamp: sszTypes_UintNum64,
     depositRoot: sszTypes_Root,
     depositCount: sszTypes_UintNum64,
 }, { typeName: "Eth1Block", jsonCase: "eth2" });
-const Fork = new ContainerType({
+const Fork = new container_ContainerType({
     previousVersion: sszTypes_Version,
     currentVersion: sszTypes_Version,
     epoch: sszTypes_Epoch,
 }, { typeName: "Fork", jsonCase: "eth2" });
-const ForkData = new ContainerType({
+const ForkData = new container_ContainerType({
     currentVersion: sszTypes_Version,
     genesisValidatorsRoot: sszTypes_Root,
 }, { typeName: "ForkData", jsonCase: "eth2" });
-const ENRForkID = new ContainerType({
+const ENRForkID = new container_ContainerType({
     forkDigest: sszTypes_ForkDigest,
     nextForkVersion: sszTypes_Version,
     nextForkEpoch: sszTypes_Epoch,
 }, { typeName: "ENRForkID", jsonCase: "eth2" });
-const HistoricalBlockRoots = new VectorCompositeType(sszTypes_Root, SLOTS_PER_HISTORICAL_ROOT);
-const HistoricalStateRoots = new VectorCompositeType(sszTypes_Root, SLOTS_PER_HISTORICAL_ROOT);
-const HistoricalBatch = new ContainerType({
+const HistoricalBlockRoots = new vectorComposite_VectorCompositeType(sszTypes_Root, SLOTS_PER_HISTORICAL_ROOT);
+const HistoricalStateRoots = new vectorComposite_VectorCompositeType(sszTypes_Root, SLOTS_PER_HISTORICAL_ROOT);
+const HistoricalBatch = new container_ContainerType({
     blockRoots: HistoricalBlockRoots,
     stateRoots: HistoricalStateRoots,
 }, { typeName: "HistoricalBatch", jsonCase: "eth2" });
@@ -36482,17 +47849,17 @@ const HistoricalBatch = new ContainerType({
  * Non-spec'ed helper type to allow efficient hashing in epoch transition.
  * This type is like a 'Header' of HistoricalBatch where its fields are hashed.
  */
-const HistoricalBatchRoots = new ContainerType({
+const HistoricalBatchRoots = new container_ContainerType({
     blockRoots: sszTypes_Root, // Hashed HistoricalBlockRoots
     stateRoots: sszTypes_Root, // Hashed HistoricalStateRoots
 }, { typeName: "HistoricalBatchRoots", jsonCase: "eth2" });
 // The main Validator type is the 'ContainerNodeStructType' version
 const Validator = ValidatorNodeStruct;
 // Export as stand-alone for direct tree optimizations
-const Validators = new ListCompositeType(ValidatorNodeStruct, VALIDATOR_REGISTRY_LIMIT);
+const Validators = new listComposite_ListCompositeType(ValidatorNodeStruct, VALIDATOR_REGISTRY_LIMIT);
 // this ListUintNum64Type is used to cache Leaf Nodes of BeaconState.balances after epoch transition
-const Balances = new ListUintNum64Type(VALIDATOR_REGISTRY_LIMIT);
-const RandaoMixes = new VectorCompositeType(sszTypes_Bytes32, EPOCHS_PER_HISTORICAL_VECTOR);
+const Balances = new listUintNum64_ListUintNum64Type(VALIDATOR_REGISTRY_LIMIT);
+const RandaoMixes = new vectorComposite_VectorCompositeType(sszTypes_Bytes32, EPOCHS_PER_HISTORICAL_VECTOR);
 /**
  * This is initially a Gwei (BigInt) vector, however since Nov 2023 it's converted to UintNum64 (number) vector in the state transition because:
  * - state.slashings[nextEpoch % EPOCHS_PER_SLASHINGS_VECTOR] is reset per epoch in processSlashingsReset()
@@ -36500,10 +47867,10 @@ const RandaoMixes = new VectorCompositeType(sszTypes_Bytes32, EPOCHS_PER_HISTORI
  * - with that and 32_000_000_000 MAX_EFFECTIVE_BALANCE or 2048_000_000_000 MAX_EFFECTIVE_BALANCE_ELECTRA, it still fits in a number given that Math.floor(Number.MAX_SAFE_INTEGER / 32_000_000_000) = 281474
  * - we don't need to compute the total slashings from state.slashings, it's handled by totalSlashingsByIncrement in EpochCache
  */
-const Slashings = new VectorBasicType(sszTypes_UintNum64, EPOCHS_PER_SLASHINGS_VECTOR);
-const JustificationBits = new BitVectorType(JUSTIFICATION_BITS_LENGTH);
+const Slashings = new vectorBasic_VectorBasicType(sszTypes_UintNum64, EPOCHS_PER_SLASHINGS_VECTOR);
+const JustificationBits = new bitVector_BitVectorType(JUSTIFICATION_BITS_LENGTH);
 // Misc dependants
-const AttestationData = new ContainerType({
+const AttestationData = new container_ContainerType({
     slot: sszTypes_Slot,
     index: sszTypes_CommitteeIndex,
     beaconBlockRoot: sszTypes_Root,
@@ -36511,94 +47878,94 @@ const AttestationData = new ContainerType({
     target: Checkpoint,
 }, { typeName: "AttestationData", jsonCase: "eth2", cachePermanentRootStruct: true });
 /** Same as `AttestationData` but epoch, slot and index are not bounded and must be a bigint */
-const AttestationDataBigint = new ContainerType({
+const AttestationDataBigint = new container_ContainerType({
     slot: sszTypes_UintBn64,
     index: sszTypes_UintBn64,
     beaconBlockRoot: sszTypes_Root,
     source: CheckpointBigint,
     target: CheckpointBigint,
 }, { typeName: "AttestationData", jsonCase: "eth2", cachePermanentRootStruct: true });
-const IndexedAttestation = new ContainerType({
+const IndexedAttestation = new container_ContainerType({
     attestingIndices: CommitteeIndices,
     data: AttestationData,
     signature: sszTypes_BLSSignature,
 }, { typeName: "IndexedAttestation", jsonCase: "eth2" });
 /** Same as `IndexedAttestation` but epoch, slot and index are not bounded and must be a bigint */
-const IndexedAttestationBigint = new ContainerType({
+const IndexedAttestationBigint = new container_ContainerType({
     attestingIndices: CommitteeIndices,
     data: AttestationDataBigint,
     signature: sszTypes_BLSSignature,
 }, { typeName: "IndexedAttestation", jsonCase: "eth2" });
-const PendingAttestation = new ContainerType({
+const PendingAttestation = new container_ContainerType({
     aggregationBits: CommitteeBits,
     data: AttestationData,
     inclusionDelay: sszTypes_Slot,
     proposerIndex: sszTypes_ValidatorIndex,
 }, { typeName: "PendingAttestation", jsonCase: "eth2" });
-const SigningData = new ContainerType({
+const SigningData = new container_ContainerType({
     objectRoot: sszTypes_Root,
     domain: sszTypes_Domain,
 }, { typeName: "SigningData", jsonCase: "eth2" });
 // Operations types
 // ================
-const Attestation = new ContainerType({
+const Attestation = new container_ContainerType({
     aggregationBits: CommitteeBits,
     data: AttestationData,
     signature: sszTypes_BLSSignature,
 }, { typeName: "Attestation", jsonCase: "eth2" });
 const SingleAttestation = Attestation;
-const AttesterSlashing = new ContainerType({
+const AttesterSlashing = new container_ContainerType({
     // In state transition, AttesterSlashing attestations are only partially validated. Their slot and epoch could
     // be higher than the clock and the slashing would still be valid. Same applies to attestation data index, which
     // can be any arbitrary value. Must use bigint variants to hash correctly to all possible values
     attestation1: IndexedAttestationBigint,
     attestation2: IndexedAttestationBigint,
 }, { typeName: "AttesterSlashing", jsonCase: "eth2" });
-const Deposit = new ContainerType({
-    proof: new VectorCompositeType(sszTypes_Bytes32, DEPOSIT_CONTRACT_TREE_DEPTH + 1),
+const Deposit = new container_ContainerType({
+    proof: new vectorComposite_VectorCompositeType(sszTypes_Bytes32, DEPOSIT_CONTRACT_TREE_DEPTH + 1),
     data: DepositData,
 }, { typeName: "Deposit", jsonCase: "eth2" });
-const ProposerSlashing = new ContainerType({
+const ProposerSlashing = new container_ContainerType({
     // In state transition, ProposerSlashing headers are only partially validated. Their slot could be higher than the
     // clock and the slashing would still be valid. Must use bigint variants to hash correctly to all possible values
     signedHeader1: SignedBeaconBlockHeaderBigint,
     signedHeader2: SignedBeaconBlockHeaderBigint,
 }, { typeName: "ProposerSlashing", jsonCase: "eth2" });
-const VoluntaryExit = new ContainerType({
+const VoluntaryExit = new container_ContainerType({
     epoch: sszTypes_Epoch,
     validatorIndex: sszTypes_ValidatorIndex,
 }, { typeName: "VoluntaryExit", jsonCase: "eth2", cachePermanentRootStruct: true });
-const SignedVoluntaryExit = new ContainerType({
+const SignedVoluntaryExit = new container_ContainerType({
     message: VoluntaryExit,
     signature: sszTypes_BLSSignature,
 }, { typeName: "SignedVoluntaryExit", jsonCase: "eth2" });
 // Block types
 // ===========
-const BeaconBlockBody = new ContainerType({
+const BeaconBlockBody = new container_ContainerType({
     randaoReveal: sszTypes_BLSSignature,
     eth1Data: Eth1Data,
     graffiti: sszTypes_Bytes32,
-    proposerSlashings: new ListCompositeType(ProposerSlashing, MAX_PROPOSER_SLASHINGS),
-    attesterSlashings: new ListCompositeType(AttesterSlashing, MAX_ATTESTER_SLASHINGS),
-    attestations: new ListCompositeType(Attestation, MAX_ATTESTATIONS),
-    deposits: new ListCompositeType(Deposit, MAX_DEPOSITS),
-    voluntaryExits: new ListCompositeType(SignedVoluntaryExit, MAX_VOLUNTARY_EXITS),
+    proposerSlashings: new listComposite_ListCompositeType(ProposerSlashing, MAX_PROPOSER_SLASHINGS),
+    attesterSlashings: new listComposite_ListCompositeType(AttesterSlashing, MAX_ATTESTER_SLASHINGS),
+    attestations: new listComposite_ListCompositeType(Attestation, MAX_ATTESTATIONS),
+    deposits: new listComposite_ListCompositeType(Deposit, MAX_DEPOSITS),
+    voluntaryExits: new listComposite_ListCompositeType(SignedVoluntaryExit, MAX_VOLUNTARY_EXITS),
 }, { typeName: "BeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const BeaconBlock = new ContainerType({
+const BeaconBlock = new container_ContainerType({
     slot: sszTypes_Slot,
     proposerIndex: sszTypes_ValidatorIndex,
     parentRoot: sszTypes_Root,
     stateRoot: sszTypes_Root,
     body: BeaconBlockBody,
 }, { typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const SignedBeaconBlock = new ContainerType({
+const SignedBeaconBlock = new container_ContainerType({
     message: BeaconBlock,
     signature: sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlock", jsonCase: "eth2" });
 // State types
 // ===========
-const EpochAttestations = new ListCompositeType(PendingAttestation, MAX_ATTESTATIONS * SLOTS_PER_EPOCH);
-const BeaconState = new ContainerType({
+const EpochAttestations = new listComposite_ListCompositeType(PendingAttestation, MAX_ATTESTATIONS * SLOTS_PER_EPOCH);
+const BeaconState = new container_ContainerType({
     // Misc
     genesisTime: sszTypes_UintNum64,
     genesisValidatorsRoot: sszTypes_Root,
@@ -36608,7 +47975,7 @@ const BeaconState = new ContainerType({
     latestBlockHeader: BeaconBlockHeader,
     blockRoots: HistoricalBlockRoots,
     stateRoots: HistoricalStateRoots,
-    historicalRoots: new ListCompositeType(sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
+    historicalRoots: new listComposite_ListCompositeType(sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
     // Eth1
     eth1Data: Eth1Data,
     eth1DataVotes: Eth1DataVotes,
@@ -36630,23 +47997,23 @@ const BeaconState = new ContainerType({
 }, { typeName: "BeaconState", jsonCase: "eth2" });
 // Validator types
 // ===============
-const CommitteeAssignment = new ContainerType({
+const CommitteeAssignment = new container_ContainerType({
     validators: CommitteeIndices,
     committeeIndex: sszTypes_CommitteeIndex,
     slot: sszTypes_Slot,
 }, { typeName: "CommitteeAssignment", jsonCase: "eth2" });
-const AggregateAndProof = new ContainerType({
+const AggregateAndProof = new container_ContainerType({
     aggregatorIndex: sszTypes_ValidatorIndex,
     aggregate: Attestation,
     selectionProof: sszTypes_BLSSignature,
 }, { typeName: "AggregateAndProof", jsonCase: "eth2", cachePermanentRootStruct: true });
-const SignedAggregateAndProof = new ContainerType({
+const SignedAggregateAndProof = new container_ContainerType({
     message: AggregateAndProof,
     signature: sszTypes_BLSSignature,
 }, { typeName: "SignedAggregateAndProof", jsonCase: "eth2" });
 // ReqResp types
 // =============
-const Status = new ContainerType({
+const Status = new container_ContainerType({
     forkDigest: sszTypes_ForkDigest,
     finalizedRoot: sszTypes_Root,
     finalizedEpoch: sszTypes_Epoch,
@@ -36655,19 +48022,18 @@ const Status = new ContainerType({
 }, { typeName: "Status", jsonCase: "eth2" });
 const Goodbye = sszTypes_UintBn64;
 const Ping = sszTypes_UintBn64;
-const Metadata = new ContainerType({
+const Metadata = new container_ContainerType({
     seqNumber: sszTypes_UintBn64,
     attnets: AttestationSubnets,
 }, { typeName: "Metadata", jsonCase: "eth2" });
-const BeaconBlocksByRangeRequest = new ContainerType({
+const BeaconBlocksByRangeRequest = new container_ContainerType({
     startSlot: sszTypes_Slot,
     count: sszTypes_UintNum64,
     step: sszTypes_UintNum64,
 }, { typeName: "BeaconBlocksByRangeRequest", jsonCase: "eth2" });
-const BeaconBlocksByRootRequest = new ListCompositeType(sszTypes_Root, MAX_REQUEST_BLOCKS);
 // Api types
 // =========
-const Genesis = new ContainerType({
+const Genesis = new container_ContainerType({
     genesisValidatorsRoot: sszTypes_Root,
     genesisTime: sszTypes_UintNum64,
     genesisForkVersion: sszTypes_Version,
@@ -36685,70 +48051,70 @@ const Genesis = new ContainerType({
 
 
 const { /* Bytes32 */ "Xn": altair_sszTypes_Bytes32, /* UintNum64 */ "Dh": altair_sszTypes_UintNum64, /* UintBn64 */ "Te": altair_sszTypes_UintBn64, /* Slot */ "DX": altair_sszTypes_Slot, /* SubcommitteeIndex */ "uF": sszTypes_SubcommitteeIndex, /* ValidatorIndex */ "vq": altair_sszTypes_ValidatorIndex, /* Root */ "bL": altair_sszTypes_Root, /* BLSPubkey */ "kK": altair_sszTypes_BLSPubkey, /* BLSSignature */ "GH": altair_sszTypes_BLSSignature, /* ParticipationFlags */ "XB": sszTypes_ParticipationFlags, } = sszTypes_namespaceObject;
-const SyncSubnets = new BitVectorType(SYNC_COMMITTEE_SUBNET_COUNT);
-const FinalityBranch = new VectorCompositeType(altair_sszTypes_Bytes32, FINALIZED_ROOT_DEPTH);
-const CurrentSyncCommitteeBranch = new VectorCompositeType(altair_sszTypes_Bytes32, CURRENT_SYNC_COMMITTEE_DEPTH);
-const NextSyncCommitteeBranch = new VectorCompositeType(altair_sszTypes_Bytes32, NEXT_SYNC_COMMITTEE_DEPTH);
-const sszTypes_Metadata = new ContainerType({
+const SyncSubnets = new bitVector_BitVectorType(SYNC_COMMITTEE_SUBNET_COUNT);
+const FinalityBranch = new vectorComposite_VectorCompositeType(altair_sszTypes_Bytes32, FINALIZED_ROOT_DEPTH);
+const CurrentSyncCommitteeBranch = new vectorComposite_VectorCompositeType(altair_sszTypes_Bytes32, CURRENT_SYNC_COMMITTEE_DEPTH);
+const NextSyncCommitteeBranch = new vectorComposite_VectorCompositeType(altair_sszTypes_Bytes32, NEXT_SYNC_COMMITTEE_DEPTH);
+const sszTypes_Metadata = new container_ContainerType({
     seqNumber: altair_sszTypes_UintBn64,
     attnets: AttestationSubnets,
     syncnets: SyncSubnets,
 }, { typeName: "Metadata", jsonCase: "eth2" });
-const SyncCommittee = new ContainerType({
-    pubkeys: new VectorCompositeType(altair_sszTypes_BLSPubkey, SYNC_COMMITTEE_SIZE),
+const SyncCommittee = new container_ContainerType({
+    pubkeys: new vectorComposite_VectorCompositeType(altair_sszTypes_BLSPubkey, SYNC_COMMITTEE_SIZE),
     aggregatePubkey: altair_sszTypes_BLSPubkey,
 }, { typeName: "SyncCommittee", jsonCase: "eth2" });
-const SyncCommitteeMessage = new ContainerType({
+const SyncCommitteeMessage = new container_ContainerType({
     slot: altair_sszTypes_Slot,
     beaconBlockRoot: altair_sszTypes_Root,
     validatorIndex: altair_sszTypes_ValidatorIndex,
     signature: altair_sszTypes_BLSSignature,
 }, { typeName: "SyncCommitteeMessage", jsonCase: "eth2" });
-const SyncCommitteeContribution = new ContainerType({
+const SyncCommitteeContribution = new container_ContainerType({
     slot: altair_sszTypes_Slot,
     beaconBlockRoot: altair_sszTypes_Root,
     subcommitteeIndex: sszTypes_SubcommitteeIndex,
-    aggregationBits: new BitVectorType(SYNC_COMMITTEE_SIZE / SYNC_COMMITTEE_SUBNET_COUNT),
+    aggregationBits: new bitVector_BitVectorType(SYNC_COMMITTEE_SIZE / SYNC_COMMITTEE_SUBNET_COUNT),
     signature: altair_sszTypes_BLSSignature,
 }, { typeName: "SyncCommitteeContribution", jsonCase: "eth2" });
-const ContributionAndProof = new ContainerType({
+const ContributionAndProof = new container_ContainerType({
     aggregatorIndex: altair_sszTypes_ValidatorIndex,
     contribution: SyncCommitteeContribution,
     selectionProof: altair_sszTypes_BLSSignature,
 }, { typeName: "ContributionAndProof", jsonCase: "eth2", cachePermanentRootStruct: true });
-const SignedContributionAndProof = new ContainerType({
+const SignedContributionAndProof = new container_ContainerType({
     message: ContributionAndProof,
     signature: altair_sszTypes_BLSSignature,
 }, { typeName: "SignedContributionAndProof", jsonCase: "eth2" });
-const SyncAggregatorSelectionData = new ContainerType({
+const SyncAggregatorSelectionData = new container_ContainerType({
     slot: altair_sszTypes_Slot,
     subcommitteeIndex: sszTypes_SubcommitteeIndex,
 }, { typeName: "SyncAggregatorSelectionData", jsonCase: "eth2" });
-const SyncCommitteeBits = new BitVectorType(SYNC_COMMITTEE_SIZE);
-const SyncAggregate = new ContainerType({
+const SyncCommitteeBits = new bitVector_BitVectorType(SYNC_COMMITTEE_SIZE);
+const SyncAggregate = new container_ContainerType({
     syncCommitteeBits: SyncCommitteeBits,
     syncCommitteeSignature: altair_sszTypes_BLSSignature,
 }, { typeName: "SyncCommitteeBits", jsonCase: "eth2" });
-const sszTypes_BeaconBlockBody = new ContainerType({
+const sszTypes_BeaconBlockBody = new container_ContainerType({
     ...BeaconBlockBody.fields,
     syncAggregate: SyncAggregate,
 }, { typeName: "BeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const sszTypes_BeaconBlock = new ContainerType({
+const sszTypes_BeaconBlock = new container_ContainerType({
     slot: altair_sszTypes_Slot,
     proposerIndex: altair_sszTypes_ValidatorIndex,
     parentRoot: altair_sszTypes_Root,
     stateRoot: altair_sszTypes_Root,
     body: sszTypes_BeaconBlockBody,
 }, { typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const sszTypes_SignedBeaconBlock = new ContainerType({
+const sszTypes_SignedBeaconBlock = new container_ContainerType({
     message: sszTypes_BeaconBlock,
     signature: altair_sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlock", jsonCase: "eth2" });
-const EpochParticipation = new ListBasicType(sszTypes_ParticipationFlags, VALIDATOR_REGISTRY_LIMIT);
-const InactivityScores = new ListBasicType(altair_sszTypes_UintNum64, VALIDATOR_REGISTRY_LIMIT);
+const EpochParticipation = new listBasic_ListBasicType(sszTypes_ParticipationFlags, VALIDATOR_REGISTRY_LIMIT);
+const InactivityScores = new listBasic_ListBasicType(altair_sszTypes_UintNum64, VALIDATOR_REGISTRY_LIMIT);
 // we don't reuse phase0.BeaconState fields since we need to replace some keys
 // and we cannot keep order doing that
-const sszTypes_BeaconState = new ContainerType({
+const sszTypes_BeaconState = new container_ContainerType({
     genesisTime: altair_sszTypes_UintNum64,
     genesisValidatorsRoot: altair_sszTypes_Root,
     slot: altair_sszTypes_Slot,
@@ -36757,7 +48123,7 @@ const sszTypes_BeaconState = new ContainerType({
     latestBlockHeader: BeaconBlockHeader,
     blockRoots: HistoricalBlockRoots,
     stateRoots: HistoricalStateRoots,
-    historicalRoots: new ListCompositeType(altair_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
+    historicalRoots: new listComposite_ListCompositeType(altair_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
     // Eth1
     eth1Data: Eth1Data,
     eth1DataVotes: Eth1DataVotes,
@@ -36782,15 +48148,15 @@ const sszTypes_BeaconState = new ContainerType({
     currentSyncCommittee: SyncCommittee,
     nextSyncCommittee: SyncCommittee,
 }, { typeName: "BeaconState", jsonCase: "eth2" });
-const LightClientHeader = new ContainerType({
+const LightClientHeader = new container_ContainerType({
     beacon: BeaconBlockHeader,
 }, { typeName: "LightClientHeader", jsonCase: "eth2" });
-const LightClientBootstrap = new ContainerType({
+const LightClientBootstrap = new container_ContainerType({
     header: LightClientHeader,
     currentSyncCommittee: SyncCommittee,
     currentSyncCommitteeBranch: CurrentSyncCommitteeBranch,
 }, { typeName: "LightClientBootstrap", jsonCase: "eth2" });
-const LightClientUpdate = new ContainerType({
+const LightClientUpdate = new container_ContainerType({
     attestedHeader: LightClientHeader,
     nextSyncCommittee: SyncCommittee,
     nextSyncCommitteeBranch: NextSyncCommitteeBranch,
@@ -36799,25 +48165,25 @@ const LightClientUpdate = new ContainerType({
     syncAggregate: SyncAggregate,
     signatureSlot: altair_sszTypes_Slot,
 }, { typeName: "LightClientUpdate", jsonCase: "eth2" });
-const LightClientFinalityUpdate = new ContainerType({
+const LightClientFinalityUpdate = new container_ContainerType({
     attestedHeader: LightClientHeader,
     finalizedHeader: LightClientHeader,
     finalityBranch: FinalityBranch,
     syncAggregate: SyncAggregate,
     signatureSlot: altair_sszTypes_Slot,
 }, { typeName: "LightClientFinalityUpdate", jsonCase: "eth2" });
-const LightClientOptimisticUpdate = new ContainerType({
+const LightClientOptimisticUpdate = new container_ContainerType({
     attestedHeader: LightClientHeader,
     syncAggregate: SyncAggregate,
     signatureSlot: altair_sszTypes_Slot,
 }, { typeName: "LightClientOptimisticUpdate", jsonCase: "eth2" });
-const LightClientUpdatesByRange = new ContainerType({
+const LightClientUpdatesByRange = new container_ContainerType({
     startPeriod: altair_sszTypes_UintNum64,
     count: altair_sszTypes_UintNum64,
 }, { typeName: "LightClientUpdatesByRange", jsonCase: "eth2" });
-const LightClientStore = new ContainerType({
+const LightClientStore = new container_ContainerType({
     snapshot: LightClientBootstrap,
-    validUpdates: new ListCompositeType(LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
+    validUpdates: new listComposite_ListCompositeType(LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
 }, { typeName: "LightClientStore", jsonCase: "eth2" });
 //# sourceMappingURL=sszTypes.js.map
 ;// ./node_modules/@lodestar/types/lib/altair/index.js
@@ -36833,7 +48199,7 @@ const LightClientStore = new ContainerType({
 //# sourceMappingURL=index.js.map
 ;// ./node_modules/@lodestar/types/lib/utils/stringType.js
 
-class StringType extends BasicType {
+class StringType extends basic_BasicType {
     constructor() {
         super(...arguments);
         this.typeName = "string";
@@ -36897,42 +48263,42 @@ const { /* Bytes32 */ "Xn": bellatrix_sszTypes_Bytes32, /* UintNum64 */ "Dh": be
  *
  * Spec v1.0.1
  */
-const Transaction = new ByteListType(MAX_BYTES_PER_TRANSACTION);
+const Transaction = new byteList_ByteListType(MAX_BYTES_PER_TRANSACTION);
 /**
  * Union[OpaqueTransaction]
  *
  * Spec v1.0.1
  */
-const Transactions = new ListCompositeType(Transaction, MAX_TRANSACTIONS_PER_PAYLOAD);
-const CommonExecutionPayloadType = new ContainerType({
+const Transactions = new listComposite_ListCompositeType(Transaction, MAX_TRANSACTIONS_PER_PAYLOAD);
+const CommonExecutionPayloadType = new container_ContainerType({
     parentHash: bellatrix_sszTypes_Root,
     feeRecipient: sszTypes_ExecutionAddress,
     stateRoot: bellatrix_sszTypes_Bytes32,
     receiptsRoot: bellatrix_sszTypes_Bytes32,
-    logsBloom: new ByteVectorType(BYTES_PER_LOGS_BLOOM),
+    logsBloom: new byteVector_ByteVectorType(BYTES_PER_LOGS_BLOOM),
     prevRandao: bellatrix_sszTypes_Bytes32,
     blockNumber: bellatrix_sszTypes_UintNum64,
     gasLimit: bellatrix_sszTypes_UintNum64,
     gasUsed: bellatrix_sszTypes_UintNum64,
     timestamp: bellatrix_sszTypes_UintNum64,
     // TODO: if there is perf issue, consider making ByteListType
-    extraData: new ByteListType(MAX_EXTRA_DATA_BYTES),
+    extraData: new byteList_ByteListType(MAX_EXTRA_DATA_BYTES),
     baseFeePerGas: Uint256,
     blockHash: bellatrix_sszTypes_Root,
 });
-const ExecutionPayload = new ContainerType({
+const ExecutionPayload = new container_ContainerType({
     ...CommonExecutionPayloadType.fields,
     transactions: Transactions,
 }, { typeName: "ExecutionPayload", jsonCase: "eth2" });
-const ExecutionPayloadHeader = new ContainerType({
+const ExecutionPayloadHeader = new container_ContainerType({
     ...CommonExecutionPayloadType.fields,
     transactionsRoot: bellatrix_sszTypes_Root,
 }, { typeName: "ExecutionPayloadHeader", jsonCase: "eth2" });
-const bellatrix_sszTypes_BeaconBlockBody = new ContainerType({
+const bellatrix_sszTypes_BeaconBlockBody = new container_ContainerType({
     ...sszTypes_BeaconBlockBody.fields,
     executionPayload: ExecutionPayload,
 }, { typeName: "BeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const bellatrix_sszTypes_BeaconBlock = new ContainerType({
+const bellatrix_sszTypes_BeaconBlock = new container_ContainerType({
     slot: bellatrix_sszTypes_Slot,
     proposerIndex: bellatrix_sszTypes_ValidatorIndex,
     // Reclare expandedType() with altair block and altair state
@@ -36940,18 +48306,18 @@ const bellatrix_sszTypes_BeaconBlock = new ContainerType({
     stateRoot: bellatrix_sszTypes_Root,
     body: bellatrix_sszTypes_BeaconBlockBody,
 }, { typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const bellatrix_sszTypes_SignedBeaconBlock = new ContainerType({
+const bellatrix_sszTypes_SignedBeaconBlock = new container_ContainerType({
     message: bellatrix_sszTypes_BeaconBlock,
     signature: bellatrix_sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlock", jsonCase: "eth2" });
-const PowBlock = new ContainerType({
+const PowBlock = new container_ContainerType({
     blockHash: bellatrix_sszTypes_Root,
     parentHash: bellatrix_sszTypes_Root,
     totalDifficulty: Uint256,
 }, { typeName: "PowBlock", jsonCase: "eth2" });
 // we don't reuse phase0.BeaconState fields since we need to replace some keys
 // and we cannot keep order doing that
-const bellatrix_sszTypes_BeaconState = new ContainerType({
+const bellatrix_sszTypes_BeaconState = new container_ContainerType({
     genesisTime: bellatrix_sszTypes_UintNum64,
     genesisValidatorsRoot: bellatrix_sszTypes_Root,
     slot: Slot,
@@ -36960,7 +48326,7 @@ const bellatrix_sszTypes_BeaconState = new ContainerType({
     latestBlockHeader: BeaconBlockHeader,
     blockRoots: HistoricalBlockRoots,
     stateRoots: HistoricalStateRoots,
-    historicalRoots: new ListCompositeType(bellatrix_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
+    historicalRoots: new listComposite_ListCompositeType(bellatrix_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
     // Eth1
     eth1Data: Eth1Data,
     eth1DataVotes: Eth1DataVotes,
@@ -36987,11 +48353,11 @@ const bellatrix_sszTypes_BeaconState = new ContainerType({
     // Execution
     latestExecutionPayloadHeader: ExecutionPayloadHeader, // [New in Merge]
 }, { typeName: "BeaconState", jsonCase: "eth2" });
-const BlindedBeaconBlockBody = new ContainerType({
+const BlindedBeaconBlockBody = new container_ContainerType({
     ...sszTypes_BeaconBlockBody.fields,
     executionPayloadHeader: ExecutionPayloadHeader,
 }, { typeName: "BlindedBeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const BlindedBeaconBlock = new ContainerType({
+const BlindedBeaconBlock = new container_ContainerType({
     slot: bellatrix_sszTypes_Slot,
     proposerIndex: bellatrix_sszTypes_ValidatorIndex,
     // Reclare expandedType() with altair block and altair state
@@ -36999,39 +48365,39 @@ const BlindedBeaconBlock = new ContainerType({
     stateRoot: bellatrix_sszTypes_Root,
     body: BlindedBeaconBlockBody,
 }, { typeName: "BlindedBeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const SignedBlindedBeaconBlock = new ContainerType({
+const SignedBlindedBeaconBlock = new container_ContainerType({
     message: BlindedBeaconBlock,
     signature: bellatrix_sszTypes_BLSSignature,
 }, { typeName: "SignedBlindedBeaconBlock", jsonCase: "eth2" });
-const ValidatorRegistrationV1 = new ContainerType({
+const ValidatorRegistrationV1 = new container_ContainerType({
     feeRecipient: sszTypes_ExecutionAddress,
     gasLimit: bellatrix_sszTypes_UintNum64,
     timestamp: bellatrix_sszTypes_UintNum64,
     pubkey: bellatrix_sszTypes_BLSPubkey,
 }, { typeName: "ValidatorRegistrationV1", jsonCase: "eth2" });
-const SignedValidatorRegistrationV1 = new ContainerType({
+const SignedValidatorRegistrationV1 = new container_ContainerType({
     message: ValidatorRegistrationV1,
     signature: bellatrix_sszTypes_BLSSignature,
 }, { typeName: "SignedValidatorRegistrationV1", jsonCase: "eth2" });
-const BuilderBid = new ContainerType({
+const BuilderBid = new container_ContainerType({
     header: ExecutionPayloadHeader,
     value: Uint256,
     pubkey: bellatrix_sszTypes_BLSPubkey,
 }, { typeName: "BuilderBid", jsonCase: "eth2" });
-const SignedBuilderBid = new ContainerType({
+const SignedBuilderBid = new container_ContainerType({
     message: BuilderBid,
     signature: bellatrix_sszTypes_BLSSignature,
 }, { typeName: "SignedBuilderBid", jsonCase: "eth2" });
 // PayloadAttributes primarily for SSE event
-const PayloadAttributes = new ContainerType({ timestamp: bellatrix_sszTypes_UintNum64, prevRandao: bellatrix_sszTypes_Bytes32, suggestedFeeRecipient: stringType }, { typeName: "PayloadAttributes", jsonCase: "eth2" });
-const SSEPayloadAttributesCommon = new ContainerType({
+const PayloadAttributes = new container_ContainerType({ timestamp: bellatrix_sszTypes_UintNum64, prevRandao: bellatrix_sszTypes_Bytes32, suggestedFeeRecipient: stringType }, { typeName: "PayloadAttributes", jsonCase: "eth2" });
+const SSEPayloadAttributesCommon = new container_ContainerType({
     proposerIndex: bellatrix_sszTypes_UintNum64,
     proposalSlot: bellatrix_sszTypes_Slot,
     parentBlockNumber: bellatrix_sszTypes_UintNum64,
     parentBlockRoot: bellatrix_sszTypes_Root,
     parentBlockHash: bellatrix_sszTypes_Root,
 }, { typeName: "SSEPayloadAttributesCommon", jsonCase: "eth2" });
-const SSEPayloadAttributes = new ContainerType({
+const SSEPayloadAttributes = new container_ContainerType({
     ...SSEPayloadAttributesCommon.fields,
     payloadAttributes: PayloadAttributes,
 }, { typeName: "SSEPayloadAttributes", jsonCase: "eth2" });
@@ -37050,38 +48416,38 @@ const SSEPayloadAttributes = new ContainerType({
 
 
 const { /* UintNum64 */ "Dh": capella_sszTypes_UintNum64, /* Slot */ "DX": capella_sszTypes_Slot, /* ValidatorIndex */ "vq": capella_sszTypes_ValidatorIndex, /* WithdrawalIndex */ "yR": sszTypes_WithdrawalIndex, /* Root */ "bL": capella_sszTypes_Root, /* BLSSignature */ "GH": capella_sszTypes_BLSSignature, /* BLSPubkey */ "kK": capella_sszTypes_BLSPubkey, /* ExecutionAddress */ "Jz": capella_sszTypes_ExecutionAddress, /* Gwei */ "XR": sszTypes_Gwei, /* UintBn256 */ "iT": sszTypes_UintBn256, /* Bytes32 */ "Xn": capella_sszTypes_Bytes32, } = sszTypes_namespaceObject;
-const ExecutionBranch = new VectorCompositeType(capella_sszTypes_Bytes32, BLOCK_BODY_EXECUTION_PAYLOAD_DEPTH);
-const Withdrawal = new ContainerType({
+const ExecutionBranch = new vectorComposite_VectorCompositeType(capella_sszTypes_Bytes32, BLOCK_BODY_EXECUTION_PAYLOAD_DEPTH);
+const Withdrawal = new container_ContainerType({
     index: sszTypes_WithdrawalIndex,
     validatorIndex: capella_sszTypes_ValidatorIndex,
     address: capella_sszTypes_ExecutionAddress,
     amount: sszTypes_Gwei,
 }, { typeName: "Withdrawal", jsonCase: "eth2" });
-const BLSToExecutionChange = new ContainerType({
+const BLSToExecutionChange = new container_ContainerType({
     validatorIndex: capella_sszTypes_ValidatorIndex,
     fromBlsPubkey: capella_sszTypes_BLSPubkey,
     toExecutionAddress: capella_sszTypes_ExecutionAddress,
 }, { typeName: "BLSToExecutionChange", jsonCase: "eth2" });
-const SignedBLSToExecutionChange = new ContainerType({
+const SignedBLSToExecutionChange = new container_ContainerType({
     message: BLSToExecutionChange,
     signature: capella_sszTypes_BLSSignature,
 }, { typeName: "SignedBLSToExecutionChange", jsonCase: "eth2" });
-const Withdrawals = new ListCompositeType(Withdrawal, MAX_WITHDRAWALS_PER_PAYLOAD);
-const sszTypes_ExecutionPayload = new ContainerType({
+const Withdrawals = new listComposite_ListCompositeType(Withdrawal, MAX_WITHDRAWALS_PER_PAYLOAD);
+const sszTypes_ExecutionPayload = new container_ContainerType({
     ...ExecutionPayload.fields,
     withdrawals: Withdrawals, // New in capella
 }, { typeName: "ExecutionPayload", jsonCase: "eth2" });
-const sszTypes_ExecutionPayloadHeader = new ContainerType({
+const sszTypes_ExecutionPayloadHeader = new container_ContainerType({
     ...ExecutionPayloadHeader.fields,
     withdrawalsRoot: capella_sszTypes_Root, // New in capella
 }, { typeName: "ExecutionPayloadHeader", jsonCase: "eth2" });
-const BLSToExecutionChanges = new ListCompositeType(SignedBLSToExecutionChange, MAX_BLS_TO_EXECUTION_CHANGES);
-const capella_sszTypes_BeaconBlockBody = new ContainerType({
+const BLSToExecutionChanges = new listComposite_ListCompositeType(SignedBLSToExecutionChange, MAX_BLS_TO_EXECUTION_CHANGES);
+const capella_sszTypes_BeaconBlockBody = new container_ContainerType({
     ...sszTypes_BeaconBlockBody.fields,
     executionPayload: sszTypes_ExecutionPayload, // Modified in capella
     blsToExecutionChanges: BLSToExecutionChanges,
 }, { typeName: "BeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const capella_sszTypes_BeaconBlock = new ContainerType({
+const capella_sszTypes_BeaconBlock = new container_ContainerType({
     slot: capella_sszTypes_Slot,
     proposerIndex: capella_sszTypes_ValidatorIndex,
     // Reclare expandedType() with altair block and altair state
@@ -37089,29 +48455,29 @@ const capella_sszTypes_BeaconBlock = new ContainerType({
     stateRoot: capella_sszTypes_Root,
     body: capella_sszTypes_BeaconBlockBody, // Modified in Capella
 }, { typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const capella_sszTypes_SignedBeaconBlock = new ContainerType({
+const capella_sszTypes_SignedBeaconBlock = new container_ContainerType({
     message: capella_sszTypes_BeaconBlock, // Modified in capella
     signature: capella_sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlock", jsonCase: "eth2" });
-const sszTypes_BuilderBid = new ContainerType({
+const sszTypes_BuilderBid = new container_ContainerType({
     header: sszTypes_ExecutionPayloadHeader,
     value: sszTypes_UintBn256,
     pubkey: capella_sszTypes_BLSPubkey,
 }, { typeName: "BuilderBid", jsonCase: "eth2" });
-const sszTypes_SignedBuilderBid = new ContainerType({
+const sszTypes_SignedBuilderBid = new container_ContainerType({
     message: sszTypes_BuilderBid,
     signature: capella_sszTypes_BLSSignature,
 }, { typeName: "SignedBuilderBid", jsonCase: "eth2" });
-const HistoricalSummary = new ContainerType({
+const HistoricalSummary = new container_ContainerType({
     blockSummaryRoot: capella_sszTypes_Root,
     stateSummaryRoot: capella_sszTypes_Root,
 }, { typeName: "HistoricalSummary", jsonCase: "eth2" });
-const HistoricalSummaries = new ListCompositeType(HistoricalSummary, HISTORICAL_ROOTS_LIMIT, {
+const HistoricalSummaries = new listComposite_ListCompositeType(HistoricalSummary, HISTORICAL_ROOTS_LIMIT, {
     typeName: "HistoricalSummaries",
 });
 // we don't reuse bellatrix.BeaconState fields since we need to replace some keys
 // and we cannot keep order doing that
-const capella_sszTypes_BeaconState = new ContainerType({
+const capella_sszTypes_BeaconState = new container_ContainerType({
     genesisTime: capella_sszTypes_UintNum64,
     genesisValidatorsRoot: capella_sszTypes_Root,
     slot: Slot,
@@ -37121,7 +48487,7 @@ const capella_sszTypes_BeaconState = new ContainerType({
     blockRoots: HistoricalBlockRoots,
     stateRoots: HistoricalStateRoots,
     // historical_roots Frozen in Capella, replaced by historical_summaries
-    historicalRoots: new ListCompositeType(capella_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
+    historicalRoots: new listComposite_ListCompositeType(capella_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
     // Eth1
     eth1Data: Eth1Data,
     eth1DataVotes: Eth1DataVotes,
@@ -37153,30 +48519,30 @@ const capella_sszTypes_BeaconState = new ContainerType({
     // Deep history valid from Capella onwards
     historicalSummaries: HistoricalSummaries, // [New in Capella]
 }, { typeName: "BeaconState", jsonCase: "eth2" });
-const sszTypes_BlindedBeaconBlockBody = new ContainerType({
+const sszTypes_BlindedBeaconBlockBody = new container_ContainerType({
     ...sszTypes_BeaconBlockBody.fields,
     executionPayloadHeader: sszTypes_ExecutionPayloadHeader, // Modified in capella
     blsToExecutionChanges: BLSToExecutionChanges, // New in capella
 }, { typeName: "BlindedBeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const sszTypes_BlindedBeaconBlock = new ContainerType({
+const sszTypes_BlindedBeaconBlock = new container_ContainerType({
     ...BlindedBeaconBlock.fields,
     body: sszTypes_BlindedBeaconBlockBody, // Modified in capella
 }, { typeName: "BlindedBeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const sszTypes_SignedBlindedBeaconBlock = new ContainerType({
+const sszTypes_SignedBlindedBeaconBlock = new container_ContainerType({
     message: sszTypes_BlindedBeaconBlock, // Modified in capella
     signature: capella_sszTypes_BLSSignature,
 }, { typeName: "SignedBlindedBeaconBlock", jsonCase: "eth2" });
-const sszTypes_LightClientHeader = new ContainerType({
+const sszTypes_LightClientHeader = new container_ContainerType({
     beacon: BeaconBlockHeader,
     execution: sszTypes_ExecutionPayloadHeader,
     executionBranch: ExecutionBranch,
 }, { typeName: "LightClientHeader", jsonCase: "eth2" });
-const sszTypes_LightClientBootstrap = new ContainerType({
+const sszTypes_LightClientBootstrap = new container_ContainerType({
     header: sszTypes_LightClientHeader,
     currentSyncCommittee: SyncCommittee,
     currentSyncCommitteeBranch: LightClientBootstrap.fields.currentSyncCommitteeBranch,
 }, { typeName: "LightClientBootstrap", jsonCase: "eth2" });
-const sszTypes_LightClientUpdate = new ContainerType({
+const sszTypes_LightClientUpdate = new container_ContainerType({
     attestedHeader: sszTypes_LightClientHeader,
     nextSyncCommittee: SyncCommittee,
     nextSyncCommitteeBranch: LightClientUpdate.fields.nextSyncCommitteeBranch,
@@ -37185,28 +48551,28 @@ const sszTypes_LightClientUpdate = new ContainerType({
     syncAggregate: SyncAggregate,
     signatureSlot: capella_sszTypes_Slot,
 }, { typeName: "LightClientUpdate", jsonCase: "eth2" });
-const sszTypes_LightClientFinalityUpdate = new ContainerType({
+const sszTypes_LightClientFinalityUpdate = new container_ContainerType({
     attestedHeader: sszTypes_LightClientHeader,
     finalizedHeader: sszTypes_LightClientHeader,
     finalityBranch: LightClientFinalityUpdate.fields.finalityBranch,
     syncAggregate: SyncAggregate,
     signatureSlot: capella_sszTypes_Slot,
 }, { typeName: "LightClientFinalityUpdate", jsonCase: "eth2" });
-const sszTypes_LightClientOptimisticUpdate = new ContainerType({
+const sszTypes_LightClientOptimisticUpdate = new container_ContainerType({
     attestedHeader: sszTypes_LightClientHeader,
     syncAggregate: SyncAggregate,
     signatureSlot: capella_sszTypes_Slot,
 }, { typeName: "LightClientOptimisticUpdate", jsonCase: "eth2" });
-const sszTypes_LightClientStore = new ContainerType({
+const sszTypes_LightClientStore = new container_ContainerType({
     snapshot: sszTypes_LightClientBootstrap,
-    validUpdates: new ListCompositeType(sszTypes_LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
+    validUpdates: new listComposite_ListCompositeType(sszTypes_LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
 }, { typeName: "LightClientStore", jsonCase: "eth2" });
 // PayloadAttributes primarily for SSE event
-const sszTypes_PayloadAttributes = new ContainerType({
+const sszTypes_PayloadAttributes = new container_ContainerType({
     ...PayloadAttributes.fields,
     withdrawals: Withdrawals,
 }, { typeName: "PayloadAttributes", jsonCase: "eth2" });
-const sszTypes_SSEPayloadAttributes = new ContainerType({
+const sszTypes_SSEPayloadAttributes = new container_ContainerType({
     ...SSEPayloadAttributesCommon.fields,
     payloadAttributes: sszTypes_PayloadAttributes,
 }, { typeName: "SSEPayloadAttributes", jsonCase: "eth2" });
@@ -37238,52 +48604,52 @@ const KZGProof = sszTypes_Bytes48;
 // Beacon chain
 // Custom types
 // https://github.com/ethereum/consensus-specs/blob/dev/specs/eip4844/beacon-chain.md#custom-types
-const sszTypes_Blob = new ByteVectorType(BYTES_PER_FIELD_ELEMENT * FIELD_ELEMENTS_PER_BLOB);
-const Blobs = new ListCompositeType(sszTypes_Blob, MAX_BLOB_COMMITMENTS_PER_BLOCK);
+const sszTypes_Blob = new byteVector_ByteVectorType(BYTES_PER_FIELD_ELEMENT * FIELD_ELEMENTS_PER_BLOB);
+const Blobs = new listComposite_ListCompositeType(sszTypes_Blob, MAX_BLOB_COMMITMENTS_PER_BLOCK);
 const BlindedBlob = deneb_sszTypes_Bytes32;
-const BlindedBlobs = new ListCompositeType(BlindedBlob, MAX_BLOB_COMMITMENTS_PER_BLOCK);
+const BlindedBlobs = new listComposite_ListCompositeType(BlindedBlob, MAX_BLOB_COMMITMENTS_PER_BLOCK);
 const VersionedHash = deneb_sszTypes_Bytes32;
-const BlobKzgCommitments = new ListCompositeType(KZGCommitment, MAX_BLOB_COMMITMENTS_PER_BLOCK);
-const KZGProofs = new ListCompositeType(KZGProof, MAX_BLOB_COMMITMENTS_PER_BLOCK);
+const BlobKzgCommitments = new listComposite_ListCompositeType(KZGCommitment, MAX_BLOB_COMMITMENTS_PER_BLOCK);
+const KZGProofs = new listComposite_ListCompositeType(KZGProof, MAX_BLOB_COMMITMENTS_PER_BLOCK);
 // ReqResp types
 // =============
-const BlobSidecarsByRangeRequest = new ContainerType({
+const BlobSidecarsByRangeRequest = new container_ContainerType({
     startSlot: deneb_sszTypes_Slot,
     count: deneb_sszTypes_UintNum64,
 }, { typeName: "BlobSidecarsByRangeRequest", jsonCase: "eth2" });
-const BlobIdentifier = new ContainerType({
+const BlobIdentifier = new container_ContainerType({
     blockRoot: deneb_sszTypes_Root,
     index: sszTypes_BlobIndex,
 }, { typeName: "BlobIdentifier", jsonCase: "eth2" });
 // Beacon Chain types
 // https://github.com/ethereum/consensus-specs/blob/dev/specs/eip4844/beacon-chain.md#containers
-const deneb_sszTypes_ExecutionPayload = new ContainerType({
+const deneb_sszTypes_ExecutionPayload = new container_ContainerType({
     ...sszTypes_ExecutionPayload.fields,
     blobGasUsed: deneb_sszTypes_UintBn64, // New in DENEB
     excessBlobGas: deneb_sszTypes_UintBn64, // New in DENEB
 }, { typeName: "ExecutionPayload", jsonCase: "eth2" });
-const deneb_sszTypes_ExecutionPayloadHeader = new ContainerType({
+const deneb_sszTypes_ExecutionPayloadHeader = new container_ContainerType({
     ...sszTypes_ExecutionPayloadHeader.fields,
     blobGasUsed: deneb_sszTypes_UintBn64, // New in DENEB
     excessBlobGas: deneb_sszTypes_UintBn64, // New in DENEB
 }, { typeName: "ExecutionPayloadHeader", jsonCase: "eth2" });
 // We have to preserve Fields ordering while changing the type of ExecutionPayload
-const deneb_sszTypes_BeaconBlockBody = new ContainerType({
+const deneb_sszTypes_BeaconBlockBody = new container_ContainerType({
     ...sszTypes_BeaconBlockBody.fields,
     executionPayload: deneb_sszTypes_ExecutionPayload, // Modified in DENEB
     blsToExecutionChanges: capella_sszTypes_BeaconBlockBody.fields.blsToExecutionChanges,
     blobKzgCommitments: BlobKzgCommitments, // New in DENEB
 }, { typeName: "BeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const deneb_sszTypes_BeaconBlock = new ContainerType({
+const deneb_sszTypes_BeaconBlock = new container_ContainerType({
     ...capella_sszTypes_BeaconBlock.fields,
     body: deneb_sszTypes_BeaconBlockBody, // Modified in DENEB
 }, { typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const deneb_sszTypes_SignedBeaconBlock = new ContainerType({
+const deneb_sszTypes_SignedBeaconBlock = new container_ContainerType({
     message: deneb_sszTypes_BeaconBlock, // Modified in DENEB
     signature: deneb_sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlock", jsonCase: "eth2" });
-const KzgCommitmentInclusionProof = new VectorCompositeType(deneb_sszTypes_Bytes32, KZG_COMMITMENT_INCLUSION_PROOF_DEPTH);
-const BlobSidecar = new ContainerType({
+const KzgCommitmentInclusionProof = new vectorComposite_VectorCompositeType(deneb_sszTypes_Bytes32, KZG_COMMITMENT_INCLUSION_PROOF_DEPTH);
+const BlobSidecar = new container_ContainerType({
     index: sszTypes_BlobIndex,
     blob: sszTypes_Blob,
     kzgCommitment: KZGCommitment,
@@ -37291,43 +48657,43 @@ const BlobSidecar = new ContainerType({
     signedBlockHeader: SignedBeaconBlockHeader,
     kzgCommitmentInclusionProof: KzgCommitmentInclusionProof,
 }, { typeName: "BlobSidecar", jsonCase: "eth2" });
-const BlobSidecars = new ListCompositeType(BlobSidecar, MAX_BLOB_COMMITMENTS_PER_BLOCK);
-const BlobsBundle = new ContainerType({
+const BlobSidecars = new listComposite_ListCompositeType(BlobSidecar, MAX_BLOB_COMMITMENTS_PER_BLOCK);
+const BlobsBundle = new container_ContainerType({
     commitments: BlobKzgCommitments,
     proofs: KZGProofs,
     blobs: Blobs,
 }, { typeName: "BlobsBundle", jsonCase: "eth2" });
-const deneb_sszTypes_BlindedBeaconBlockBody = new ContainerType({
+const deneb_sszTypes_BlindedBeaconBlockBody = new container_ContainerType({
     ...sszTypes_BeaconBlockBody.fields,
     executionPayloadHeader: deneb_sszTypes_ExecutionPayloadHeader, // Modified in DENEB
     blsToExecutionChanges: capella_sszTypes_BeaconBlockBody.fields.blsToExecutionChanges,
     blobKzgCommitments: BlobKzgCommitments, // New in DENEB
 }, { typeName: "BlindedBeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const deneb_sszTypes_BlindedBeaconBlock = new ContainerType({
+const deneb_sszTypes_BlindedBeaconBlock = new container_ContainerType({
     ...sszTypes_BlindedBeaconBlock.fields,
     body: deneb_sszTypes_BlindedBeaconBlockBody, // Modified in DENEB
 }, { typeName: "BlindedBeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const deneb_sszTypes_SignedBlindedBeaconBlock = new ContainerType({
+const deneb_sszTypes_SignedBlindedBeaconBlock = new container_ContainerType({
     message: deneb_sszTypes_BlindedBeaconBlock, // Modified in DENEB
     signature: deneb_sszTypes_BLSSignature,
 }, { typeName: "SignedBlindedBeaconBlock", jsonCase: "eth2" });
-const deneb_sszTypes_BuilderBid = new ContainerType({
+const deneb_sszTypes_BuilderBid = new container_ContainerType({
     header: deneb_sszTypes_ExecutionPayloadHeader,
     blobKzgCommitments: BlobKzgCommitments,
     value: deneb_sszTypes_UintBn256,
     pubkey: deneb_sszTypes_BLSPubkey,
 }, { typeName: "BuilderBid", jsonCase: "eth2" });
-const deneb_sszTypes_SignedBuilderBid = new ContainerType({
+const deneb_sszTypes_SignedBuilderBid = new container_ContainerType({
     message: deneb_sszTypes_BuilderBid,
     signature: deneb_sszTypes_BLSSignature,
 }, { typeName: "SignedBuilderBid", jsonCase: "eth2" });
-const ExecutionPayloadAndBlobsBundle = new ContainerType({
+const ExecutionPayloadAndBlobsBundle = new container_ContainerType({
     executionPayload: deneb_sszTypes_ExecutionPayload,
     blobsBundle: BlobsBundle,
 }, { typeName: "ExecutionPayloadAndBlobsBundle", jsonCase: "eth2" });
 // We don't spread capella.BeaconState fields since we need to replace
 // latestExecutionPayloadHeader and we cannot keep order doing that
-const deneb_sszTypes_BeaconState = new ContainerType({
+const deneb_sszTypes_BeaconState = new container_ContainerType({
     genesisTime: deneb_sszTypes_UintNum64,
     genesisValidatorsRoot: deneb_sszTypes_Root,
     slot: Slot,
@@ -37337,7 +48703,7 @@ const deneb_sszTypes_BeaconState = new ContainerType({
     blockRoots: HistoricalBlockRoots,
     stateRoots: HistoricalStateRoots,
     // historical_roots Frozen in Capella, replaced by historical_summaries
-    historicalRoots: new ListCompositeType(deneb_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
+    historicalRoots: new listComposite_ListCompositeType(deneb_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
     // Eth1
     eth1Data: Eth1Data,
     eth1DataVotes: Eth1DataVotes,
@@ -37369,17 +48735,17 @@ const deneb_sszTypes_BeaconState = new ContainerType({
     // Deep history valid from Capella onwards
     historicalSummaries: capella_sszTypes_BeaconState.fields.historicalSummaries,
 }, { typeName: "BeaconState", jsonCase: "eth2" });
-const deneb_sszTypes_LightClientHeader = new ContainerType({
+const deneb_sszTypes_LightClientHeader = new container_ContainerType({
     beacon: BeaconBlockHeader,
     execution: deneb_sszTypes_ExecutionPayloadHeader,
     executionBranch: sszTypes_LightClientHeader.fields.executionBranch,
 }, { typeName: "LightClientHeader", jsonCase: "eth2" });
-const deneb_sszTypes_LightClientBootstrap = new ContainerType({
+const deneb_sszTypes_LightClientBootstrap = new container_ContainerType({
     header: deneb_sszTypes_LightClientHeader,
     currentSyncCommittee: SyncCommittee,
     currentSyncCommitteeBranch: LightClientBootstrap.fields.currentSyncCommitteeBranch,
 }, { typeName: "LightClientBootstrap", jsonCase: "eth2" });
-const deneb_sszTypes_LightClientUpdate = new ContainerType({
+const deneb_sszTypes_LightClientUpdate = new container_ContainerType({
     attestedHeader: deneb_sszTypes_LightClientHeader,
     nextSyncCommittee: SyncCommittee,
     nextSyncCommitteeBranch: LightClientUpdate.fields.nextSyncCommitteeBranch,
@@ -37388,37 +48754,37 @@ const deneb_sszTypes_LightClientUpdate = new ContainerType({
     syncAggregate: SyncAggregate,
     signatureSlot: deneb_sszTypes_Slot,
 }, { typeName: "LightClientUpdate", jsonCase: "eth2" });
-const deneb_sszTypes_LightClientFinalityUpdate = new ContainerType({
+const deneb_sszTypes_LightClientFinalityUpdate = new container_ContainerType({
     attestedHeader: deneb_sszTypes_LightClientHeader,
     finalizedHeader: deneb_sszTypes_LightClientHeader,
     finalityBranch: LightClientFinalityUpdate.fields.finalityBranch,
     syncAggregate: SyncAggregate,
     signatureSlot: deneb_sszTypes_Slot,
 }, { typeName: "LightClientFinalityUpdate", jsonCase: "eth2" });
-const deneb_sszTypes_LightClientOptimisticUpdate = new ContainerType({
+const deneb_sszTypes_LightClientOptimisticUpdate = new container_ContainerType({
     attestedHeader: deneb_sszTypes_LightClientHeader,
     syncAggregate: SyncAggregate,
     signatureSlot: deneb_sszTypes_Slot,
 }, { typeName: "LightClientOptimisticUpdate", jsonCase: "eth2" });
-const deneb_sszTypes_LightClientStore = new ContainerType({
+const deneb_sszTypes_LightClientStore = new container_ContainerType({
     snapshot: deneb_sszTypes_LightClientBootstrap,
-    validUpdates: new ListCompositeType(deneb_sszTypes_LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
+    validUpdates: new listComposite_ListCompositeType(deneb_sszTypes_LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
 }, { typeName: "LightClientStore", jsonCase: "eth2" });
 // PayloadAttributes primarily for SSE event
-const deneb_sszTypes_PayloadAttributes = new ContainerType({
+const deneb_sszTypes_PayloadAttributes = new container_ContainerType({
     ...sszTypes_PayloadAttributes.fields,
     parentBeaconBlockRoot: deneb_sszTypes_Root,
 }, { typeName: "PayloadAttributes", jsonCase: "eth2" });
-const deneb_sszTypes_SSEPayloadAttributes = new ContainerType({
+const deneb_sszTypes_SSEPayloadAttributes = new container_ContainerType({
     ...SSEPayloadAttributesCommon.fields,
     payloadAttributes: deneb_sszTypes_PayloadAttributes,
 }, { typeName: "SSEPayloadAttributes", jsonCase: "eth2" });
-const BlockContents = new ContainerType({
+const BlockContents = new container_ContainerType({
     block: deneb_sszTypes_BeaconBlock,
     kzgProofs: KZGProofs,
     blobs: Blobs,
 }, { typeName: "BlockContents", jsonCase: "eth2" });
-const SignedBlockContents = new ContainerType({
+const SignedBlockContents = new container_ContainerType({
     signedBlock: deneb_sszTypes_SignedBeaconBlock,
     kzgProofs: KZGProofs,
     blobs: Blobs,
@@ -37440,52 +48806,52 @@ const SignedBlockContents = new ContainerType({
 
 
 const { /* Epoch */ "UE": electra_sszTypes_Epoch, /* Gwei */ "XR": electra_sszTypes_Gwei, /* UintNum64 */ "Dh": electra_sszTypes_UintNum64, /* Slot */ "DX": electra_sszTypes_Slot, /* Root */ "bL": electra_sszTypes_Root, /* BLSSignature */ "GH": electra_sszTypes_BLSSignature, /* UintBn256 */ "iT": electra_sszTypes_UintBn256, /* Bytes32 */ "Xn": electra_sszTypes_Bytes32, /* BLSPubkey */ "kK": electra_sszTypes_BLSPubkey, /* DepositIndex */ "JL": sszTypes_DepositIndex, /* UintBn64 */ "Te": electra_sszTypes_UintBn64, /* ExecutionAddress */ "Jz": electra_sszTypes_ExecutionAddress, /* ValidatorIndex */ "vq": electra_sszTypes_ValidatorIndex, /* CommitteeIndex */ "Oz": electra_sszTypes_CommitteeIndex, } = sszTypes_namespaceObject;
-const sszTypes_CurrentSyncCommitteeBranch = new VectorCompositeType(electra_sszTypes_Bytes32, CURRENT_SYNC_COMMITTEE_DEPTH_ELECTRA);
-const sszTypes_FinalityBranch = new VectorCompositeType(electra_sszTypes_Bytes32, lib_FINALIZED_ROOT_DEPTH_ELECTRA);
-const sszTypes_NextSyncCommitteeBranch = new VectorCompositeType(electra_sszTypes_Bytes32, NEXT_SYNC_COMMITTEE_DEPTH_ELECTRA);
-const AggregationBits = new BitListType(MAX_VALIDATORS_PER_COMMITTEE * MAX_COMMITTEES_PER_SLOT);
+const sszTypes_CurrentSyncCommitteeBranch = new vectorComposite_VectorCompositeType(electra_sszTypes_Bytes32, CURRENT_SYNC_COMMITTEE_DEPTH_ELECTRA);
+const sszTypes_FinalityBranch = new vectorComposite_VectorCompositeType(electra_sszTypes_Bytes32, lib_FINALIZED_ROOT_DEPTH_ELECTRA);
+const sszTypes_NextSyncCommitteeBranch = new vectorComposite_VectorCompositeType(electra_sszTypes_Bytes32, NEXT_SYNC_COMMITTEE_DEPTH_ELECTRA);
+const AggregationBits = new bitList_BitListType(MAX_VALIDATORS_PER_COMMITTEE * MAX_COMMITTEES_PER_SLOT);
 // This CommitteeBits serves a different purpose than CommitteeBits in phase0
 // TODO Electra: Rename phase0.CommitteeBits to ParticipationBits to avoid confusion
-const sszTypes_CommitteeBits = new BitVectorType(MAX_COMMITTEES_PER_SLOT);
-const AttestingIndices = new ListBasicType(electra_sszTypes_ValidatorIndex, MAX_VALIDATORS_PER_COMMITTEE * MAX_COMMITTEES_PER_SLOT);
-const sszTypes_Attestation = new ContainerType({
+const sszTypes_CommitteeBits = new bitVector_BitVectorType(MAX_COMMITTEES_PER_SLOT);
+const AttestingIndices = new listBasic_ListBasicType(electra_sszTypes_ValidatorIndex, MAX_VALIDATORS_PER_COMMITTEE * MAX_COMMITTEES_PER_SLOT);
+const sszTypes_Attestation = new container_ContainerType({
     aggregationBits: AggregationBits, // Modified in ELECTRA
     data: AttestationData,
     signature: electra_sszTypes_BLSSignature,
     committeeBits: sszTypes_CommitteeBits, // New in ELECTRA
 }, { typeName: "Attestation", jsonCase: "eth2" });
 // New type in ELECTRA
-const sszTypes_SingleAttestation = new ContainerType({
+const sszTypes_SingleAttestation = new container_ContainerType({
     committeeIndex: electra_sszTypes_CommitteeIndex,
     attesterIndex: electra_sszTypes_ValidatorIndex,
     data: AttestationData,
     signature: electra_sszTypes_BLSSignature,
 }, { typeName: "SingleAttestation", jsonCase: "eth2" });
-const sszTypes_IndexedAttestation = new ContainerType({
+const sszTypes_IndexedAttestation = new container_ContainerType({
     attestingIndices: AttestingIndices, // Modified in ELECTRA
     data: AttestationData,
     signature: electra_sszTypes_BLSSignature,
 }, { typeName: "IndexedAttestation", jsonCase: "eth2" });
 /** Same as `IndexedAttestation` but epoch, slot and index are not bounded and must be a bigint */
-const sszTypes_IndexedAttestationBigint = new ContainerType({
+const sszTypes_IndexedAttestationBigint = new container_ContainerType({
     attestingIndices: AttestingIndices, // Modified in ELECTRA
     data: AttestationDataBigint,
     signature: electra_sszTypes_BLSSignature,
 }, { typeName: "IndexedAttestation", jsonCase: "eth2" });
-const sszTypes_AttesterSlashing = new ContainerType({
+const sszTypes_AttesterSlashing = new container_ContainerType({
     attestation1: sszTypes_IndexedAttestationBigint, // Modified in ELECTRA
     attestation2: sszTypes_IndexedAttestationBigint, // Modified in ELECTRA
 }, { typeName: "AttesterSlashing", jsonCase: "eth2" });
-const sszTypes_AggregateAndProof = new ContainerType({
+const sszTypes_AggregateAndProof = new container_ContainerType({
     aggregatorIndex: electra_sszTypes_ValidatorIndex,
     aggregate: sszTypes_Attestation, // Modified in ELECTRA
     selectionProof: electra_sszTypes_BLSSignature,
 }, { typeName: "AggregateAndProof", jsonCase: "eth2", cachePermanentRootStruct: true });
-const sszTypes_SignedAggregateAndProof = new ContainerType({
+const sszTypes_SignedAggregateAndProof = new container_ContainerType({
     message: sszTypes_AggregateAndProof, // Modified in ELECTRA
     signature: electra_sszTypes_BLSSignature,
 }, { typeName: "SignedAggregateAndProof", jsonCase: "eth2" });
-const DepositRequest = new ContainerType({
+const DepositRequest = new container_ContainerType({
     pubkey: electra_sszTypes_BLSPubkey,
     withdrawalCredentials: electra_sszTypes_Bytes32,
     // this is actually gwei uintbn64 type, but super unlikely to get a high amount here
@@ -37494,20 +48860,20 @@ const DepositRequest = new ContainerType({
     signature: electra_sszTypes_BLSSignature,
     index: sszTypes_DepositIndex,
 }, { typeName: "DepositRequest", jsonCase: "eth2" });
-const DepositRequests = new ListCompositeType(DepositRequest, MAX_DEPOSIT_REQUESTS_PER_PAYLOAD);
-const WithdrawalRequest = new ContainerType({
+const DepositRequests = new listComposite_ListCompositeType(DepositRequest, MAX_DEPOSIT_REQUESTS_PER_PAYLOAD);
+const WithdrawalRequest = new container_ContainerType({
     sourceAddress: electra_sszTypes_ExecutionAddress,
     validatorPubkey: electra_sszTypes_BLSPubkey,
     amount: electra_sszTypes_Gwei,
 }, { typeName: "WithdrawalRequest", jsonCase: "eth2" });
-const WithdrawalRequests = new ListCompositeType(WithdrawalRequest, MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD);
-const ConsolidationRequest = new ContainerType({
+const WithdrawalRequests = new listComposite_ListCompositeType(WithdrawalRequest, MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD);
+const ConsolidationRequest = new container_ContainerType({
     sourceAddress: electra_sszTypes_ExecutionAddress,
     sourcePubkey: electra_sszTypes_BLSPubkey,
     targetPubkey: electra_sszTypes_BLSPubkey,
 }, { typeName: "ConsolidationRequest", jsonCase: "eth2" });
-const ConsolidationRequests = new ListCompositeType(ConsolidationRequest, MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD);
-const ExecutionRequests = new ContainerType({
+const ConsolidationRequests = new listComposite_ListCompositeType(ConsolidationRequest, MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD);
+const ExecutionRequests = new container_ContainerType({
     deposits: DepositRequests,
     withdrawals: WithdrawalRequests,
     consolidations: ConsolidationRequests,
@@ -37516,13 +48882,13 @@ const ExecutionRequests = new ContainerType({
 const electra_sszTypes_ExecutionPayloadHeader = deneb_sszTypes_ExecutionPayloadHeader;
 const electra_sszTypes_ExecutionPayload = deneb_sszTypes_ExecutionPayload;
 // We have to preserve Fields ordering while changing the type of ExecutionPayload
-const electra_sszTypes_BeaconBlockBody = new ContainerType({
+const electra_sszTypes_BeaconBlockBody = new container_ContainerType({
     randaoReveal: BeaconBlockBody.fields.randaoReveal,
     eth1Data: BeaconBlockBody.fields.eth1Data,
     graffiti: BeaconBlockBody.fields.graffiti,
     proposerSlashings: BeaconBlockBody.fields.proposerSlashings,
-    attesterSlashings: new ListCompositeType(sszTypes_AttesterSlashing, MAX_ATTESTER_SLASHINGS_ELECTRA), // Modified in ELECTRA
-    attestations: new ListCompositeType(sszTypes_Attestation, MAX_ATTESTATIONS_ELECTRA), // Modified in ELECTRA
+    attesterSlashings: new listComposite_ListCompositeType(sszTypes_AttesterSlashing, MAX_ATTESTER_SLASHINGS_ELECTRA), // Modified in ELECTRA
+    attestations: new listComposite_ListCompositeType(sszTypes_Attestation, MAX_ATTESTATIONS_ELECTRA), // Modified in ELECTRA
     deposits: BeaconBlockBody.fields.deposits,
     voluntaryExits: BeaconBlockBody.fields.voluntaryExits,
     syncAggregate: sszTypes_BeaconBlockBody.fields.syncAggregate,
@@ -37531,21 +48897,21 @@ const electra_sszTypes_BeaconBlockBody = new ContainerType({
     blobKzgCommitments: deneb_sszTypes_BeaconBlockBody.fields.blobKzgCommitments,
     executionRequests: ExecutionRequests, // New in ELECTRA:EIP7251
 }, { typeName: "BeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const electra_sszTypes_BeaconBlock = new ContainerType({
+const electra_sszTypes_BeaconBlock = new container_ContainerType({
     ...deneb_sszTypes_BeaconBlock.fields,
     body: electra_sszTypes_BeaconBlockBody, // Modified in ELECTRA
 }, { typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const electra_sszTypes_SignedBeaconBlock = new ContainerType({
+const electra_sszTypes_SignedBeaconBlock = new container_ContainerType({
     message: electra_sszTypes_BeaconBlock, // Modified in ELECTRA
     signature: electra_sszTypes_BLSSignature,
 }, { typeName: "SignedBeaconBlock", jsonCase: "eth2" });
-const electra_sszTypes_BlindedBeaconBlockBody = new ContainerType({
+const electra_sszTypes_BlindedBeaconBlockBody = new container_ContainerType({
     randaoReveal: BeaconBlockBody.fields.randaoReveal,
     eth1Data: BeaconBlockBody.fields.eth1Data,
     graffiti: BeaconBlockBody.fields.graffiti,
     proposerSlashings: BeaconBlockBody.fields.proposerSlashings,
-    attesterSlashings: new ListCompositeType(sszTypes_AttesterSlashing, MAX_ATTESTER_SLASHINGS_ELECTRA), // Modified in ELECTRA
-    attestations: new ListCompositeType(sszTypes_Attestation, MAX_ATTESTATIONS_ELECTRA), // Modified in ELECTRA
+    attesterSlashings: new listComposite_ListCompositeType(sszTypes_AttesterSlashing, MAX_ATTESTER_SLASHINGS_ELECTRA), // Modified in ELECTRA
+    attestations: new listComposite_ListCompositeType(sszTypes_Attestation, MAX_ATTESTATIONS_ELECTRA), // Modified in ELECTRA
     deposits: BeaconBlockBody.fields.deposits,
     voluntaryExits: BeaconBlockBody.fields.voluntaryExits,
     syncAggregate: SyncAggregate,
@@ -37554,26 +48920,26 @@ const electra_sszTypes_BlindedBeaconBlockBody = new ContainerType({
     blobKzgCommitments: deneb_sszTypes_BeaconBlockBody.fields.blobKzgCommitments,
     executionRequests: ExecutionRequests, // New in ELECTRA
 }, { typeName: "BlindedBeaconBlockBody", jsonCase: "eth2", cachePermanentRootStruct: true });
-const electra_sszTypes_BlindedBeaconBlock = new ContainerType({
+const electra_sszTypes_BlindedBeaconBlock = new container_ContainerType({
     ...deneb_sszTypes_BlindedBeaconBlock.fields,
     body: electra_sszTypes_BlindedBeaconBlockBody, // Modified in ELECTRA
 }, { typeName: "BlindedBeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true });
-const electra_sszTypes_SignedBlindedBeaconBlock = new ContainerType({
+const electra_sszTypes_SignedBlindedBeaconBlock = new container_ContainerType({
     message: electra_sszTypes_BlindedBeaconBlock, // Modified in ELECTRA
     signature: electra_sszTypes_BLSSignature,
 }, { typeName: "SignedBlindedBeaconBlock", jsonCase: "eth2" });
-const electra_sszTypes_BuilderBid = new ContainerType({
+const electra_sszTypes_BuilderBid = new container_ContainerType({
     header: electra_sszTypes_ExecutionPayloadHeader, // Modified in ELECTRA
     blobKzgCommitments: BlobKzgCommitments,
     executionRequests: ExecutionRequests, // New in ELECTRA
     value: electra_sszTypes_UintBn256,
     pubkey: electra_sszTypes_BLSPubkey,
 }, { typeName: "BuilderBid", jsonCase: "eth2" });
-const electra_sszTypes_SignedBuilderBid = new ContainerType({
+const electra_sszTypes_SignedBuilderBid = new container_ContainerType({
     message: electra_sszTypes_BuilderBid,
     signature: electra_sszTypes_BLSSignature,
 }, { typeName: "SignedBuilderBid", jsonCase: "eth2" });
-const PendingDeposit = new ContainerType({
+const PendingDeposit = new container_ContainerType({
     pubkey: electra_sszTypes_BLSPubkey,
     withdrawalCredentials: electra_sszTypes_Bytes32,
     // this is actually gwei uintbn64 type, but super unlikely to get a high amount here
@@ -37582,20 +48948,20 @@ const PendingDeposit = new ContainerType({
     signature: electra_sszTypes_BLSSignature,
     slot: electra_sszTypes_Slot,
 }, { typeName: "PendingDeposit", jsonCase: "eth2" });
-const PendingDeposits = new ListCompositeType(PendingDeposit, PENDING_DEPOSITS_LIMIT);
-const PendingPartialWithdrawal = new ContainerType({
+const PendingDeposits = new listComposite_ListCompositeType(PendingDeposit, PENDING_DEPOSITS_LIMIT);
+const PendingPartialWithdrawal = new container_ContainerType({
     validatorIndex: electra_sszTypes_ValidatorIndex,
     amount: electra_sszTypes_Gwei,
     withdrawableEpoch: electra_sszTypes_Epoch,
 }, { typeName: "PendingPartialWithdrawal", jsonCase: "eth2" });
-const PendingPartialWithdrawals = new ListCompositeType(PendingPartialWithdrawal, PENDING_PARTIAL_WITHDRAWALS_LIMIT);
-const PendingConsolidation = new ContainerType({
+const PendingPartialWithdrawals = new listComposite_ListCompositeType(PendingPartialWithdrawal, PENDING_PARTIAL_WITHDRAWALS_LIMIT);
+const PendingConsolidation = new container_ContainerType({
     sourceIndex: electra_sszTypes_ValidatorIndex,
     targetIndex: electra_sszTypes_ValidatorIndex,
 }, { typeName: "PendingConsolidation", jsonCase: "eth2" });
-const PendingConsolidations = new ListCompositeType(PendingConsolidation, PENDING_CONSOLIDATIONS_LIMIT);
+const PendingConsolidations = new listComposite_ListCompositeType(PendingConsolidation, PENDING_CONSOLIDATIONS_LIMIT);
 // In EIP-7251, we spread deneb fields as new fields are appended at the end
-const electra_sszTypes_BeaconState = new ContainerType({
+const electra_sszTypes_BeaconState = new container_ContainerType({
     genesisTime: electra_sszTypes_UintNum64,
     genesisValidatorsRoot: electra_sszTypes_Root,
     slot: Slot,
@@ -37605,7 +48971,7 @@ const electra_sszTypes_BeaconState = new ContainerType({
     blockRoots: HistoricalBlockRoots,
     stateRoots: HistoricalStateRoots,
     // historical_roots Frozen in Capella, replaced by historical_summaries
-    historicalRoots: new ListCompositeType(electra_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
+    historicalRoots: new listComposite_ListCompositeType(electra_sszTypes_Root, HISTORICAL_ROOTS_LIMIT),
     // Eth1
     eth1Data: Eth1Data,
     eth1DataVotes: Eth1DataVotes,
@@ -37646,12 +49012,12 @@ const electra_sszTypes_BeaconState = new ContainerType({
     pendingPartialWithdrawals: PendingPartialWithdrawals, // New in ELECTRA:EIP7251
     pendingConsolidations: PendingConsolidations, // New in ELECTRA:EIP7251
 }, { typeName: "BeaconState", jsonCase: "eth2" });
-const electra_sszTypes_LightClientBootstrap = new ContainerType({
+const electra_sszTypes_LightClientBootstrap = new container_ContainerType({
     header: deneb_sszTypes_LightClientHeader,
     currentSyncCommittee: SyncCommittee,
     currentSyncCommitteeBranch: sszTypes_CurrentSyncCommitteeBranch,
 }, { typeName: "LightClientBootstrap", jsonCase: "eth2" });
-const electra_sszTypes_LightClientUpdate = new ContainerType({
+const electra_sszTypes_LightClientUpdate = new container_ContainerType({
     attestedHeader: deneb_sszTypes_LightClientHeader,
     nextSyncCommittee: SyncCommittee,
     nextSyncCommitteeBranch: sszTypes_NextSyncCommitteeBranch, // Modified in ELECTRA
@@ -37660,37 +49026,37 @@ const electra_sszTypes_LightClientUpdate = new ContainerType({
     syncAggregate: SyncAggregate,
     signatureSlot: electra_sszTypes_Slot,
 }, { typeName: "LightClientUpdate", jsonCase: "eth2" });
-const electra_sszTypes_LightClientFinalityUpdate = new ContainerType({
+const electra_sszTypes_LightClientFinalityUpdate = new container_ContainerType({
     attestedHeader: deneb_sszTypes_LightClientHeader,
     finalizedHeader: deneb_sszTypes_LightClientHeader,
     finalityBranch: sszTypes_FinalityBranch, // Modified in ELECTRA
     syncAggregate: SyncAggregate,
     signatureSlot: electra_sszTypes_Slot,
 }, { typeName: "LightClientFinalityUpdate", jsonCase: "eth2" });
-const electra_sszTypes_LightClientOptimisticUpdate = new ContainerType({
+const electra_sszTypes_LightClientOptimisticUpdate = new container_ContainerType({
     attestedHeader: deneb_sszTypes_LightClientHeader,
     syncAggregate: SyncAggregate,
     signatureSlot: electra_sszTypes_Slot,
 }, { typeName: "LightClientOptimisticUpdate", jsonCase: "eth2" });
-const electra_sszTypes_LightClientStore = new ContainerType({
+const electra_sszTypes_LightClientStore = new container_ContainerType({
     snapshot: electra_sszTypes_LightClientBootstrap,
-    validUpdates: new ListCompositeType(electra_sszTypes_LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
+    validUpdates: new listComposite_ListCompositeType(electra_sszTypes_LightClientUpdate, EPOCHS_PER_SYNC_COMMITTEE_PERIOD * SLOTS_PER_EPOCH),
 }, { typeName: "LightClientStore", jsonCase: "eth2" });
 // PayloadAttributes primarily for SSE event
-const electra_sszTypes_PayloadAttributes = new ContainerType({
+const electra_sszTypes_PayloadAttributes = new container_ContainerType({
     ...sszTypes_PayloadAttributes.fields,
     parentBeaconBlockRoot: electra_sszTypes_Root,
 }, { typeName: "PayloadAttributes", jsonCase: "eth2" });
-const electra_sszTypes_SSEPayloadAttributes = new ContainerType({
+const electra_sszTypes_SSEPayloadAttributes = new container_ContainerType({
     ...SSEPayloadAttributesCommon.fields,
     payloadAttributes: electra_sszTypes_PayloadAttributes,
 }, { typeName: "SSEPayloadAttributes", jsonCase: "eth2" });
-const sszTypes_BlockContents = new ContainerType({
+const sszTypes_BlockContents = new container_ContainerType({
     block: electra_sszTypes_BeaconBlock,
     kzgProofs: KZGProofs,
     blobs: Blobs,
 }, { typeName: "BlockContents", jsonCase: "eth2" });
-const sszTypes_SignedBlockContents = new ContainerType({
+const sszTypes_SignedBlockContents = new container_ContainerType({
     signedBlock: electra_sszTypes_SignedBeaconBlock,
     kzgProofs: KZGProofs,
     blobs: Blobs,
@@ -37711,16 +49077,24 @@ const sszTypes_SignedBlockContents = new ContainerType({
 
 
 const { /* Root */ "bL": fulu_sszTypes_Root, /* ColumnIndex */ "lk": sszTypes_ColumnIndex, /* RowIndex */ "Vw": sszTypes_RowIndex, /* Bytes32 */ "Xn": fulu_sszTypes_Bytes32, /* Slot */ "DX": fulu_sszTypes_Slot, /* UintNum64 */ "Dh": fulu_sszTypes_UintNum64, /* ValidatorIndex */ "vq": fulu_sszTypes_ValidatorIndex } = sszTypes_namespaceObject;
-const fulu_sszTypes_Metadata = new ContainerType({
+const sszTypes_KZGProof = KZGProof;
+const fulu_sszTypes_Blob = sszTypes_Blob;
+const fulu_sszTypes_Metadata = new container_ContainerType({
     ...sszTypes_Metadata.fields,
     custodyGroupCount: fulu_sszTypes_UintNum64,
 }, { typeName: "Metadata", jsonCase: "eth2" });
-const Cell = new ByteVectorType(BYTES_PER_FIELD_ELEMENT * FIELD_ELEMENTS_PER_CELL);
-const DataColumn = new ListCompositeType(Cell, MAX_BLOB_COMMITMENTS_PER_BLOCK);
-const ExtendedMatrix = new ListCompositeType(Cell, MAX_BLOB_COMMITMENTS_PER_BLOCK * NUMBER_OF_COLUMNS);
-const KzgCommitmentsInclusionProof = new VectorCompositeType(fulu_sszTypes_Bytes32, KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH);
-const ProposerLookahead = new VectorBasicType(fulu_sszTypes_ValidatorIndex, (MIN_SEED_LOOKAHEAD + 1) * SLOTS_PER_EPOCH);
-const DataColumnSidecar = new ContainerType({
+const sszTypes_Status = new container_ContainerType({
+    ...Status.fields,
+    earliestAvailableSlot: fulu_sszTypes_Slot,
+}, { typeName: "Status", jsonCase: "eth2" });
+const Cell = new byteVector_ByteVectorType(BYTES_PER_FIELD_ELEMENT * FIELD_ELEMENTS_PER_CELL);
+const DataColumn = new listComposite_ListCompositeType(Cell, MAX_BLOB_COMMITMENTS_PER_BLOCK);
+const DataColumns = new listComposite_ListCompositeType(DataColumn, NUMBER_OF_COLUMNS);
+const ExtendedMatrix = new listComposite_ListCompositeType(Cell, MAX_BLOB_COMMITMENTS_PER_BLOCK * NUMBER_OF_COLUMNS);
+const KzgCommitmentsInclusionProof = new vectorComposite_VectorCompositeType(fulu_sszTypes_Bytes32, KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH);
+const sszTypes_KZGProofs = new listComposite_ListCompositeType(KZGProof, FIELD_ELEMENTS_PER_EXT_BLOB * MAX_BLOB_COMMITMENTS_PER_BLOCK);
+const ProposerLookahead = new vectorBasic_VectorBasicType(fulu_sszTypes_ValidatorIndex, (MIN_SEED_LOOKAHEAD + 1) * SLOTS_PER_EPOCH);
+const DataColumnSidecar = new container_ContainerType({
     index: sszTypes_ColumnIndex,
     column: DataColumn,
     kzgCommitments: BlobKzgCommitments,
@@ -37728,27 +49102,47 @@ const DataColumnSidecar = new ContainerType({
     signedBlockHeader: SignedBeaconBlockHeader,
     kzgCommitmentsInclusionProof: KzgCommitmentsInclusionProof,
 }, { typeName: "DataColumnSidecar", jsonCase: "eth2" });
-const DataColumnSidecars = new ListCompositeType(DataColumnSidecar, NUMBER_OF_COLUMNS);
-const MatrixEntry = new ContainerType({
+const DataColumnSidecars = new listComposite_ListCompositeType(DataColumnSidecar, NUMBER_OF_COLUMNS);
+const MatrixEntry = new container_ContainerType({
     cell: Cell,
     kzgProof: KZGProof,
     columnIndex: sszTypes_ColumnIndex,
     rowIndex: sszTypes_RowIndex,
 }, { typeName: "MatrixEntry", jsonCase: "eth2" });
-const DataColumnIdentifier = new ContainerType({
+// ReqResp types
+// =============
+const DataColumnsByRootIdentifier = new container_ContainerType({
     blockRoot: fulu_sszTypes_Root,
-    index: sszTypes_ColumnIndex,
-}, { typeName: "DataColumnIdentifier", jsonCase: "eth2" });
-const DataColumnSidecarsByRootRequest = new ListCompositeType(DataColumnIdentifier, MAX_REQUEST_DATA_COLUMN_SIDECARS);
-const DataColumnSidecarsByRangeRequest = new ContainerType({
+    columns: new listBasic_ListBasicType(sszTypes_ColumnIndex, NUMBER_OF_COLUMNS),
+}, { typeName: "DataColumnsByRootIdentifier", jsonCase: "eth2" });
+const DataColumnSidecarsByRangeRequest = new container_ContainerType({
     startSlot: fulu_sszTypes_Slot,
     count: fulu_sszTypes_UintNum64,
-    columns: new ListBasicType(sszTypes_ColumnIndex, NUMBER_OF_COLUMNS),
+    columns: new listBasic_ListBasicType(sszTypes_ColumnIndex, NUMBER_OF_COLUMNS),
 }, { typeName: "DataColumnSidecarsByRangeRequest", jsonCase: "eth2" });
-const fulu_sszTypes_BeaconState = new ContainerType({
+// Explicit aliases for a few common types
+const fulu_sszTypes_BeaconBlock = electra_sszTypes_BeaconBlock;
+const fulu_sszTypes_SignedBeaconBlock = electra_sszTypes_SignedBeaconBlock;
+// Containers
+const sszTypes_BlobsBundle = new container_ContainerType({
+    commitments: BlobKzgCommitments,
+    proofs: sszTypes_KZGProofs,
+    blobs: Blobs,
+}, { typeName: "BlobsBundle", jsonCase: "eth2" });
+const fulu_sszTypes_BeaconState = new container_ContainerType({
     ...electra_sszTypes_BeaconState.fields,
     proposerLookahead: ProposerLookahead, // New in FULU:EIP7917
 }, { typeName: "BeaconState", jsonCase: "eth2" });
+const fulu_sszTypes_BlockContents = new container_ContainerType({
+    block: electra_sszTypes_BeaconBlock,
+    kzgProofs: sszTypes_KZGProofs,
+    blobs: Blobs,
+}, { typeName: "BlockContents", jsonCase: "eth2" });
+const fulu_sszTypes_SignedBlockContents = new container_ContainerType({
+    signedBlock: electra_sszTypes_SignedBeaconBlock,
+    kzgProofs: sszTypes_KZGProofs,
+    blobs: Blobs,
+}, { typeName: "SignedBlockContents", jsonCase: "eth2" });
 //# sourceMappingURL=sszTypes.js.map
 ;// ./node_modules/@lodestar/types/lib/fulu/index.js
 
@@ -37756,7 +49150,20 @@ const fulu_sszTypes_BeaconState = new ContainerType({
 
 
 //# sourceMappingURL=index.js.map
+;// ./node_modules/@lodestar/types/lib/gloas/sszTypes.js
+
+const gloas_sszTypes_BeaconState = fulu_sszTypes_BeaconState;
+const gloas_sszTypes_BeaconBlock = fulu_sszTypes_BeaconBlock;
+const gloas_sszTypes_SignedBeaconBlock = fulu_sszTypes_SignedBeaconBlock;
+//# sourceMappingURL=sszTypes.js.map
+;// ./node_modules/@lodestar/types/lib/gloas/index.js
+
+
+
+
+//# sourceMappingURL=index.js.map
 ;// ./node_modules/@lodestar/types/lib/types.js
+
 
 
 
@@ -37783,6 +49190,7 @@ var ProducedBlockSource;
 
 
 
+
 /**
  * Index the ssz types that differ by fork
  * A record of AllForksSSZTypes indexed by fork
@@ -37795,6 +49203,16 @@ const typesByFork = {
     [ForkName.deneb]: { ...phase0_sszTypes_namespaceObject, ...altair_sszTypes_namespaceObject, ...bellatrix_sszTypes_namespaceObject, ...capella_sszTypes_namespaceObject, ...deneb_sszTypes_namespaceObject },
     [ForkName.electra]: { ...phase0_sszTypes_namespaceObject, ...altair_sszTypes_namespaceObject, ...bellatrix_sszTypes_namespaceObject, ...capella_sszTypes_namespaceObject, ...deneb_sszTypes_namespaceObject, ...electra_sszTypes_namespaceObject },
     [ForkName.fulu]: { ...phase0_sszTypes_namespaceObject, ...altair_sszTypes_namespaceObject, ...bellatrix_sszTypes_namespaceObject, ...capella_sszTypes_namespaceObject, ...deneb_sszTypes_namespaceObject, ...electra_sszTypes_namespaceObject, ...fulu_sszTypes_namespaceObject },
+    [ForkName.gloas]: {
+        ...phase0_sszTypes_namespaceObject,
+        ...altair_sszTypes_namespaceObject,
+        ...bellatrix_sszTypes_namespaceObject,
+        ...capella_sszTypes_namespaceObject,
+        ...deneb_sszTypes_namespaceObject,
+        ...electra_sszTypes_namespaceObject,
+        ...fulu_sszTypes_namespaceObject,
+        ...gloas_sszTypes_namespaceObject,
+    },
 };
 // Export these types to ensure that each fork is a superset of the previous one (with overridden types obviously)
 // This allows us to only declare types that change in each fork in each fork subdirectory
@@ -37805,6 +49223,7 @@ const capella = typesByFork[ForkName.capella];
 const deneb = typesByFork[ForkName.deneb];
 const electra = typesByFork[ForkName.electra];
 const fulu = typesByFork[ForkName.fulu];
+const gloas = typesByFork[ForkName.gloas];
 function sszTypesFor(fork, typeName) {
     const sszTypes = typesByFork[fork];
     if (sszTypes === undefined) {
@@ -37837,10 +49256,10 @@ function isBlindedSignedBeaconBlock(signedBlock) {
 function isBlindedBeaconBlockBody(body) {
     return body.executionPayloadHeader !== undefined;
 }
-function isBlockContents(data) {
+function isDenebBlockContents(data) {
     return data.kzgProofs !== undefined;
 }
-function isSignedBlockContents(data) {
+function isDenebSignedBlockContents(data) {
     return data.kzgProofs !== undefined;
 }
 function isElectraAttestation(attestation) {
@@ -37948,13 +49367,15 @@ var types_phase0 = phase0,
   types_electra = electra,
   types_fulu = fulu,
   types_sszTypesFor = sszTypesFor,
-  primitive = types_objectWithoutProperties(lib_sszTypes_namespaceObject, ["phase0", "altair", "bellatrix", "capella", "deneb", "electra", "fulu", "sszTypesFor"]);
+  types_gloas = gloas,
+  primitive = types_objectWithoutProperties(lib_sszTypes_namespaceObject, ["phase0", "altair", "bellatrix", "capella", "deneb", "electra", "fulu", "sszTypesFor", "gloas"]);
 types_phase0 = patchSszTypes(types_phase0);
 types_altair = patchSszTypes(types_altair);
 types_bellatrix = patchSszTypes(types_bellatrix);
 types_capella = patchSszTypes(types_capella);
 types_deneb = patchSszTypes(types_deneb);
 types_electra = patchSszTypes(types_electra);
+types_fulu = patchSszTypes(types_fulu);
 primitive = patchSszTypes(primitive);
 var forks = {
   phase0: _objectSpread(_objectSpread({}, types_phase0), primitive),
@@ -37962,7 +49383,8 @@ var forks = {
   bellatrix: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, types_phase0), types_altair), types_bellatrix), primitive),
   capella: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, types_phase0), types_altair), types_bellatrix), types_capella), primitive),
   deneb: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, types_phase0), types_altair), types_bellatrix), types_capella), types_deneb), primitive),
-  electra: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, types_phase0), types_altair), types_bellatrix), types_capella), types_deneb), types_electra), primitive)
+  electra: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, types_phase0), types_altair), types_bellatrix), types_capella), types_deneb), types_electra), primitive),
+  fulu: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, types_phase0), types_altair), types_bellatrix), types_capella), types_deneb), types_electra), types_fulu), primitive)
 };
 function typeNames(types) {
   return Object.keys(types).sort();
@@ -38082,7 +49504,7 @@ function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf 
 
 
 var initialType = "BeaconBlock";
-var DEFAULT_FORK = "electra";
+var DEFAULT_FORK = "fulu";
 var Input = /*#__PURE__*/function (_React$Component) {
   function Input(props) {
     var _this;
