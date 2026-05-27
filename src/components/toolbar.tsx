@@ -1,16 +1,25 @@
-import {type ForkName, forkNames, forks, typeNames} from "../lib/types";
+import {type ForkName, forkNames} from "../lib/types";
 
 type ToolbarProps = {
   forkName: string;
   typeName: string;
+  typeOptions: string[];
   serializeMode: boolean;
   onForkChange: (fork: ForkName) => void;
   onTypeChange: (type: string) => void;
   onModeChange: (serialize: boolean) => void;
 };
 
-export function Toolbar({forkName, typeName, serializeMode, onForkChange, onTypeChange, onModeChange}: ToolbarProps) {
-  const types = typeNames(forks[forkName]);
+export function Toolbar({
+  forkName,
+  typeName,
+  typeOptions,
+  serializeMode,
+  onForkChange,
+  onTypeChange,
+  onModeChange,
+}: ToolbarProps) {
+  const types = typeOptions;
 
   return (
     <div className="border-b border-[var(--color-border)] bg-[var(--color-surface-raised)]/40 px-5 py-2.5">
@@ -68,13 +77,18 @@ export function Toolbar({forkName, typeName, serializeMode, onForkChange, onType
           <select
             value={typeName}
             onChange={(e) => onTypeChange(e.target.value)}
-            className="bg-[var(--color-surface-overlay)] text-[var(--color-text-primary)] text-[12px] font-mono rounded-md px-2.5 py-1 border border-[var(--color-border)] focus:border-[var(--color-border-focus)] focus:outline-none cursor-pointer max-w-[280px]"
+            disabled={types.length === 0}
+            className="bg-[var(--color-surface-overlay)] text-[var(--color-text-primary)] text-[12px] font-mono rounded-md px-2.5 py-1 border border-[var(--color-border)] focus:border-[var(--color-border-focus)] focus:outline-none cursor-pointer max-w-[280px] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {types.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
+            {types.length === 0 ? (
+              <option value="">—</option>
+            ) : (
+              types.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))
+            )}
           </select>
         </div>
       </div>

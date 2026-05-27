@@ -50,9 +50,11 @@ export const forks = {
   fulu: {...phase0, ...altair, ...bellatrix, ...capella, ...deneb, ...electra, ...fulu, ...primitive},
 } as unknown as Record<string, Record<string, Type<unknown>>>;
 
-export type ForkName = keyof typeof forks;
+export type ForkName = keyof typeof forks | "custom";
 
-export const forkNames = Object.keys(forks);
+export const CUSTOM_FORK = "custom";
+
+export const forkNames = [...Object.keys(forks), CUSTOM_FORK];
 
 export function typeNames(types: Record<string, Type<unknown>>): string[] {
   return Object.keys(types).sort();
