@@ -16,6 +16,7 @@
 	},
 	"dependencies": {
 		"@chainsafe/ssz": "^1.2.1",
+		"@lodestar/params": "^1.34.0",
 		"@lodestar/types": "^1.34.0",
 		"comlink": "^4.4.2",
 		"js-yaml": "^4.1.0",

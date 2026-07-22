@@ -1,15 +1,18 @@
 import type {Type} from "@chainsafe/ssz";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
+import {CustomTypeEditor} from "./components/custom-type-editor";
 import {Footer} from "./components/footer";
 import {Header} from "./components/header";
 import {InputPanel} from "./components/input-panel";
 import {OutputPanel} from "./components/output-panel";
 import {StructureView} from "./components/structure-view/structure-view";
 import {Toolbar} from "./components/toolbar";
+import {useDebounce} from "./hooks/use-debounce";
 import {useSsz} from "./hooks/use-ssz";
 import {useWorker} from "./hooks/use-worker";
+import {type CompileResult, compileCustomDsl} from "./lib/custom-type";
 import {inputFormats, serializeOutputFormats} from "./lib/formats";
-import {type ForkName, forks, typeNames} from "./lib/types";
+import {CUSTOM_FORK, type ForkName, forks, typeNames} from "./lib/types";
 
 const DEFAULT_FORK = "fulu";
 const DEFAULT_TYPE = "BeaconBlock";
@@ -25,6 +28,11 @@ export default function App() {
   const [parsedValue, setParsedValue] = useState<unknown>(null);
   const [inputMode, setInputMode] = useState<"editor" | "builder">("builder");
 
+  // Custom-type DSL state
+  const [customDsl, setCustomDsl] = useState("");
+  const [customCompile, setCustomCompile] = useState<CompileResult | null>(null);
+  const debouncedDsl = useDebounce(customDsl, 300);
+
   // Worker
   const worker = useWorker();
 
@@ -32,7 +40,41 @@ export default function App() {
   const result = useSsz(worker, serializeMode ? "serialize" : "deserialize", forkName, typeName, input, inputFormat);
 
   // Get current SSZ type
-  const sszType: Type<unknown> | null = forks[forkName]?.[typeName] ?? null;
+  const sszType: Type<unknown> | null = useMemo(() => {
+    if (forkName === CUSTOM_FORK) {
+      return customCompile?.ok ? (customCompile.types.get(typeName) ?? null) : null;
+    }
+    return forks[forkName]?.[typeName] ?? null;
+  }, [forkName, typeName, customCompile]);
+
+  // TYPE dropdown options
+  const typeOptions = useMemo(() => {
+    if (forkName === CUSTOM_FORK) {
+      return customCompile?.ok ? customCompile.order : [];
+    }
+    return typeNames(forks[forkName] ?? {});
+  }, [forkName, customCompile]);
+
+  // Compile custom DSL (main thread for UI, worker for serialize/deserialize)
+  useEffect(() => {
+    if (forkName !== CUSTOM_FORK) return;
+    if (!debouncedDsl.trim()) {
+      setCustomCompile(null);
+      return;
+    }
+    const local = compileCustomDsl(debouncedDsl);
+    setCustomCompile(local);
+    if (worker) worker.compileCustom(debouncedDsl);
+  }, [debouncedDsl, forkName, worker]);
+
+  // Keep typeName valid after custom compile changes
+  useEffect(() => {
+    if (forkName !== CUSTOM_FORK) return;
+    if (!customCompile?.ok) return;
+    if (!customCompile.types.has(typeName)) {
+      setTypeName(customCompile.order.at(-1) ?? "");
+    }
+  }, [forkName, customCompile, typeName]);
 
   // Generate default value — callable from button and auto-trigger
   const generateDefault = useCallback(async () => {
@@ -109,12 +151,19 @@ export default function App() {
   const handleForkChange = useCallback(
     (newFork: ForkName) => {
       setForkName(newFork);
+      if (newFork === CUSTOM_FORK) {
+        const order = customCompile?.ok ? customCompile.order : [];
+        if (!order.includes(typeName)) {
+          setTypeName(order.at(-1) ?? "");
+        }
+        return;
+      }
       const types = typeNames(forks[newFork]);
       if (!types.includes(typeName)) {
         setTypeName(DEFAULT_TYPE);
       }
     },
-    [typeName]
+    [typeName, customCompile]
   );
 
   // Handle builder value change — sync to text input
@@ -185,11 +234,21 @@ export default function App() {
       <Toolbar
         forkName={forkName}
         typeName={typeName}
+        typeOptions={typeOptions}
         serializeMode={serializeMode}
         onForkChange={handleForkChange}
         onTypeChange={setTypeName}
         onModeChange={handleModeChange}
       />
+
+      {forkName === CUSTOM_FORK && (
+        <CustomTypeEditor
+          dsl={customDsl}
+          onDslChange={setCustomDsl}
+          error={customCompile && !customCompile.ok ? customCompile.error : null}
+          parsedNames={customCompile?.ok ? customCompile.order : []}
+        />
+      )}
 
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-2.5 p-2.5 max-w-[1800px] mx-auto w-full">
         {/* Left: Input */}
